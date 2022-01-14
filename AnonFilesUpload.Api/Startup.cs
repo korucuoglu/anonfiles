@@ -1,3 +1,4 @@
+using AnonFilesUpload.Api.Hubs;
 using AnonFilesUpload.Api.Services;
 using AnonFilesUpload.Data.Entity;
 using Microsoft.AspNetCore.Builder;
@@ -27,6 +28,8 @@ namespace AnonFilesUpload.Api
 
             services.AddHttpClient<FileService>();
 
+            services.AddSignalR();
+
             // services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("testDb"));
 
             services.AddDbContext<DataContext>(opt => {
@@ -49,6 +52,16 @@ namespace AnonFilesUpload.Api
             });
 
 
+            services.AddCors(opt =>
+            {
+
+                opt.AddPolicy("CorsPolicy", builder =>
+                {
+
+                    builder.WithOrigins("https://localhost:44361").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +72,8 @@ namespace AnonFilesUpload.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("CorsPolicy");
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -68,6 +83,8 @@ namespace AnonFilesUpload.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHub<MyHub>("/myhub");
             });
         }
     }

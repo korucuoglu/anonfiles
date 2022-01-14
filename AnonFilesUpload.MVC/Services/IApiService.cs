@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AnonFilesUpload.Data.Models;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -11,8 +13,7 @@ namespace AnonFilesUpload.MVC.Services
         Task<string> GetAsync(string uri);
         Task<T> GetAllAsync<T>(string uri);
 
-
-        //	Task<T> AddAsync(T dto);
+        Task<Response<List<string>>> Upload(IFormFile file, string uri);
 
         //	Task<bool> Remove(int id);
         //	Task<bool> Update(T dto);

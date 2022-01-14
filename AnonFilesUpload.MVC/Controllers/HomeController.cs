@@ -1,13 +1,15 @@
 ﻿using AnonFilesUpload.MVC.Models;
 using AnonFilesUpload.MVC.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 
 namespace AnonFilesUpload.MVC.Controllers
 {
@@ -27,15 +29,35 @@ namespace AnonFilesUpload.MVC.Controllers
 
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            // return View("Privacy");
-
-            var data = await _apiService.GetAllAsync<IEnumerable<Data.Entity.Data>>("data");
-
-            return View(data);
+            return await Task.FromResult(View());
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Upload(IFormFile file)
+        {
+            var data = await _apiService.Upload(file, "data");
+           
+            return Ok(data.Data);
+
+            // return Json(data);
+
+            // return Json(new { success = true, responseText = "Deleted Scussefully" });
+
+            // return Json(new { success = true});
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> List()
+        {
+            var data = await _apiService.GetAllAsync<Data.Models.DataViewModel>("data");
+
+            return await Task.FromResult(View(data));
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetLink(string id)
         {
 

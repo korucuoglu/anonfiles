@@ -1,0 +1,41 @@
+﻿@model AnonFilesUpload.Data.Models.DataViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>File Id</th>
+            <th>File Name</th>
+            <th>Direct Link</th>
+        </tr>
+
+        @foreach (var item in Model.DataModel)
+        {
+            <tr>
+                <td>@item.FileId</td>
+                <td>@item.FileName</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="GetLink" asp-controller="Home" asp-route-id="@item.FileId">Home</a>
+
+                </td>
+            </tr>
+        }
+
+
+    </table>
+
+    <p>
+        Kullanılan Alan: <b>@Model.UsedSpace</b>
+    </p>
+
+    <p>
+        Kalan Alanı: <b>@Model.RemainingSpace</b>
+    </p>
+
+</div>
+
+

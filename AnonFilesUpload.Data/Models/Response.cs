@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace AnonFilesUpload.Api.Models
+namespace AnonFilesUpload.Data.Models
 {
     public class Response<T>
     {

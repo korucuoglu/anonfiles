@@ -1,35 +1,106 @@
-﻿@model IEnumerable<AnonFilesUpload.Data.Entity.Data>
-
+﻿
+@addTagHelper * ,Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="container">
-
-    <table class="table table-striped table-bordered">
-        <tr>
-            <th>File Id</th>
-            <th>File Name</th>
-            <th>Direct Link</th>
-        </tr>
+    <form draggable="true" id="form" name="form" asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data">
+        <input id="file" name="file" type="file" size="1" />
+        <button type="submit" id="btn" class="btn btn-primary" onclick="uploadFiles('file')">Gönder</button>
+    </form>
+</div>
 
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.MetaDataId</td>
-                <td>@item.Name</td>
-                <td>
-                    <a class = "btn btn-sm btn-primary" asp-action="GetLink" asp-controller="Home" asp-route-id="@item.MetaDataId">Home</a>
 
-                </td>
-            </tr>
+
+
+@section Scripts {
+
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js" integrity="sha512-lTLt+W7MrmDfKam+r3D2LURu0F47a3QaW5nF0c6Hl0JDZ57ruei+ovbg7BrZ+0bjVJ5YgzsAWE+RreERbpPE1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script type="text/javascript">
+
+        function uploadFiles(inputId) {
+            var input = document.getElementById(inputId);
+            var files = input.files;
+            var formData = new FormData();
+
+          
+
+            for (var i = 0; i != files.length; i++) {
+                formData.append("file", files[i]);
+            }
+
+            axios.post("/home/upload", formData)
+                .then(res => {
+                    console.log(res.data);
+                }).catch(err => {
+                    console.log(err);
+                });
+
+
+            //$.ajax(
+            //    {
+            //        url: "/Home/Upload",
+            //        data: formData,
+            //        processData: false,
+            //        // contentType: "multipart/form-data",
+            //        dataType: 'text',
+            //        type: "POST",
+            //        success: function (data) {
+            //            alert("başarılı");
+            //            console.log(data);
+            //        },
+            //        error: function () {
+            //            alert("hata");
+            //        }
+            //    }
+            //);
         }
 
 
-
-    </table>
-
+        
 
 
-</div>
+            //$("#btn").click(() => {
+            //    alert("ada");
+            //    $.ajax({
+            //        type: "POST",
+            //        url: /Deneme/Index,
+            //        data: { file: $("#file").val()},
+            //        success: success,
+            //        dataType: dataType
+            //    });
+            //});
+
+
+    </script>
+
+
+    @*<script type="text/javascript">
+            $(document).ready(() => {
+                var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:44391/MyHub").build();
+
+                $("#conStatus").text(connection.connectionState);
+
+                connection.start().then(() => {
+                    $("#conStatus").text(connection.connectionState);
+                }).catch((err) => { console.log(err) });
+
+                $("#conStatus").text(connection.connectionState);
+
+                $("#btnNameSave").click(() => {
+                    connection.invoke("SendMessageAsync", $("#txtName").val()).catch((err) => console.log(err))
+                })
+
+                connection.on("receiveMessage", (name) => {
+                    $("#namesList").append(`<li class="list-group-item"> ${name}</li>`)
+                })
+            })
+        </script>*@
+
+}
+

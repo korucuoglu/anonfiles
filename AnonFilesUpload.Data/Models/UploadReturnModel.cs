@@ -1,4 +1,4 @@
-﻿namespace AnonFilesUpload.Api.Models
+﻿namespace AnonFilesUpload.Data.Models
 {
 
     public class UploadReturnModel
