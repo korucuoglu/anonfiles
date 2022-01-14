@@ -1,0 +1,35 @@
+﻿@model IEnumerable<AnonFilesUpload.Data.Entity.Data>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>File Id</th>
+            <th>File Name</th>
+            <th>Direct Link</th>
+        </tr>
+
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MetaDataId</td>
+                <td>@item.Name</td>
+                <td>
+                    <a class = "btn btn-sm btn-primary" asp-action="GetLink" asp-controller="Home" asp-route-id="@item.MetaDataId">Home</a>
+
+                </td>
+            </tr>
+        }
+
+
+
+    </table>
+
+
+
+</div>
