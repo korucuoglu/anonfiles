@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
@@ -34,64 +33,56 @@ namespace AnonFilesUpload.Api.Services
         {
             using (var ms = new MemoryStream())
             {
-                await file.CopyToAsync(ms);
                 var multipartContent = new MultipartFormDataContent();
+                await file.CopyToAsync(ms);
                 multipartContent.Add(new ByteArrayContent(ms.ToArray()), key, file.FileName);
 
                 return multipartContent;
             };
         }
 
-        public async Task<List<string>> UploadAsync(IFormFile[] files)
+        public async Task<AjaxReturningModel> UploadAsync(IFormFile file)
         {
             var token = configuration.GetSection("token").Value;
 
-            var message = new List<string>();
-           
-
-            List<Data.Entity.Data> listData = new();
-
-            foreach (var file in files)
+            if (file == null || file.Length < 0)
             {
-                if (file == null || file.Length < 0)
-                {
-                    message.Add($"{file.FileName} verinin içeriği boş olamaz.");
-                    return message;
-                }
+                var model = new AjaxReturningModel() { fileName = file.FileName, success = false , message = $"{file.FileName} boş olamaz" };
 
-                var multipartContent = await GetMultipartContentAsync(file, "file");
-
-                var response = await _client.PostAsync($"https://api.anonfiles.com/upload?token={token}", multipartContent);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var successData = JsonConvert.DeserializeObject<UploadReturnModel>(await response.Content.ReadAsStringAsync());
-
-                    Data.Entity.Data dataEntity = new()
-                    {
-                        MetaDataId = successData.data.file.metadata.id,
-                        Name = successData.data.file.metadata.name,
-                        ShortUri = successData.data.file.url.@short,
-                        Size = successData.data.file.metadata.size.bytes
-                    };
-
-                    listData.Add(dataEntity);
-
-                    message.Add($"{file.FileName} başarıyla eklendi. ID: {dataEntity.MetaDataId}");
-
-                }
-                else
-                {
-                    var faiedData = JsonConvert.DeserializeObject<UploadReturnFailModel>(await response.Content.ReadAsStringAsync());
-
-                    message.Add($"{file.FileName} eklenirken hata oluştu. Hata mesajı: {faiedData.error.message}");
-                }
+                return model;
             }
 
-            await _context.Data.AddRangeAsync(listData);
-            await _context.SaveChangesAsync();
+            var multipartContent = await GetMultipartContentAsync(file, "file");
 
-            return message;
+            var response = await _client.PostAsync($"https://api.anonfiles.com/upload?token={token}", multipartContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var successData = JsonConvert.DeserializeObject<UploadReturnModel>(await response.Content.ReadAsStringAsync());
+
+                Data.Entity.Data dataEntity = new()
+                {
+                    MetaDataId = successData.data.file.metadata.id,
+                    Name = successData.data.file.metadata.name,
+                    ShortUri = successData.data.file.url.@short,
+                    Size = successData.data.file.metadata.size.bytes
+                };
+
+                await _context.Data.AddAsync(dataEntity);
+                await _context.SaveChangesAsync();
+
+                var model = new AjaxReturningModel() { fileId = dataEntity.MetaDataId, fileName = dataEntity.Name, success = true, message = $"{file.FileName} başarıyla yüklendi." };
+                return model;
+
+            }
+            else
+            {
+                var faiedData = JsonConvert.DeserializeObject<UploadReturnFailModel>(await response.Content.ReadAsStringAsync());
+
+                var model = new AjaxReturningModel() { fileName = file.FileName, success = false, message = faiedData.error.message };
+                return model;
+            }
+           
         }
 
         public async Task<string> GetDirectLinkAsync(string shortUri)

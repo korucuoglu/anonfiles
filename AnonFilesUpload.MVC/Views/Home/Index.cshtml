@@ -5,14 +5,98 @@
 }
 
 <div class="container">
-    <form draggable="true" id="form" name="form" asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data">
-        <input id="file" name="file" type="file" size="1" />
-        <button type="submit" id="btn" class="btn btn-primary" onclick="uploadFiles('file')">Gönder</button>
+    @*<form draggable="true" id="form" name="form" asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data">*@
+    <form draggable="true" id="form" name="form" enctype="multipart/form-data">
+        <input id="files" name="files" type="file" size="1" multiple />
+        <button id="submit" class="btn btn-primary">Gönder</button>
+
     </form>
+
+    <button id="btn" class="btn btn-primary">Gönder Deneme</button>
+
+    <table class="table table-bordered table-striped mt-5" id="myTable">
+
+        <thead>
+            <tr>
+                <th>File Id</th>
+                <th>File Name</th>
+                <th>Durum</th>
+                <th>Mesaj</th>
+                <th>İndir</th>
+            </tr>
+        </thead>
+
+
+        <tbody>
+        </tbody>
+
+    </table>
+
+
+    @*<table class="table table-bordered table-striped mt-5" id="myTable">
+
+            <thead>
+                <tr>
+                    <th>File Id</th>
+                    <th>File Name</th>
+                    <th>Durum</th>
+                    <th>Mesaj</th>
+                    <th>İndir</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            </tbody>
+
+        </table>*@
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Launch demo modal
+        </button>*@
+
+    <!-- Modal -->
+    @*<div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Yükleme Özeti</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered table-striped mt-5" id="myTable">
+
+                                    <thead>
+                                        <tr>
+                                            <th>File Id</th>
+                                            <th>File Name</th>
+                                            <th>Durum</th>
+                                            <th>Mesaj</th>
+                                            <th>İndir</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
 </div>
-
-
-
 
 
 @section Scripts {
@@ -23,84 +107,214 @@
 
     <script type="text/javascript">
 
-        function uploadFiles(inputId) {
-            var input = document.getElementById(inputId);
-            var files = input.files;
-            var formData = new FormData();
+        document.addEventListener('DOMContentLoaded', function () {
 
-          
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/hubtest")
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
 
-            for (var i = 0; i != files.length; i++) {
-                formData.append("file", files[i]);
-            }
+            var tbodyRef = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+            var content = '';
 
-            axios.post("/home/upload", formData)
-                .then(res => {
-                    console.log(res.data);
-                }).catch(err => {
-                    console.log(err);
+            connection.on('filesUploaded', function (message) {
+
+                console.log(message);
+
+                content +=
+                    ` <tr>
+                                            <td>${message.fileId}</td>
+                                            <td>${message.fileName}</td>
+                                            <td>${message.success}</td>
+                                            <td>${message.message}</td>
+                                            <td> <a href="https://localhost:44361/Home/GetLink/${message.fileId}" class = "btn btn-primary btn-sm">İndir</a></td>
+                                        </tr>
+                                                `;
+
+
+                tbodyRef.innerHTML = content;
+
+            });
+
+            var deneme = "";
+
+            document.getElementById("btn").addEventListener('click', function (e) {
+
+
+                deneme += ` <tr>
+                                            <td></td>
+                                            <td>betul.txt</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                                `;
+
+                tbodyRef.innerHTML = deneme;
+
+
+
+            });
+
+
+
+            connection.start()
+                .then(function () {
+
+                    document.getElementById('submit').addEventListener('click', function (event) {
+
+                        event.preventDefault();
+
+                        var files = document.getElementById("files").files;
+                        var formData = new FormData();
+
+                        var data = "";
+
+                        for (var i = 0; i != files.length; i++) {
+                            formData.append("files", files[i]);
+
+                            data += ` <tr>
+                                            <td></td>
+                                            <td>${files[i].name}</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                                `;
+                        }
+
+                        tbodyRef.innerHTML = data;
+
+                        axios({
+                            method: 'post',
+                            url: '/home/upload',
+                            data: formData,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                        }).then(function (response) {
+
+                            if (response.data.finish) {
+                                alert("tamamlandı");
+                            }
+
+                        });
+
+                    });
+
+
+                })
+                .catch(error => {
+                    console.error(error.message);
                 });
 
 
-            //$.ajax(
-            //    {
-            //        url: "/Home/Upload",
+
+            //const btn = document.getElementById("btn");
+
+            // btn.addEventListener('click', () => {
+
+            //    var files = document.getElementById("files").files;
+            //    var formData = new FormData();
+
+            //    var tbodyRef = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+
+
+            //    for (var i = 0; i < files.length; i++) {
+
+            //        formData.append("files", files[i]);
+
+            //        var newRow = tbodyRef.insertRow(tbodyRef.rows.length);
+            //        var newCell1 = newRow.insertCell(0);
+            //        var newCell2 = newRow.insertCell(1);
+            //        var newCell3 = newRow.insertCell(2);
+            //        var newCell4 = newRow.insertCell(3);
+            //        var newCell5 = newRow.insertCell(4);
+            //        newCell1.innerHTML = "";
+            //        newCell2.innerHTML = files[i].name
+            //        newCell3.innerHTML = "";
+            //        newCell4.innerHTML = "";
+
+            //        // var link = `<a class="btn btn-sm btn-primary" href="https://localhost:44361/Home/GetLink/${files[i].name}">İndir<a/>`
+
+            //        ////var link = document.createElement('a');
+            //        ////link.classList.add("btn", "btn-sm", "btn-primary");
+            //        ////link.setAttribute('href', "https://localhost:44361/Home/GetLink/" + "");
+            //        ////link.innerHTML = "İndir";
+
+            //        //newCell5.appendChild(link);
+
+            //        newCell5.innerHTML = "";
+
+            //    }
+
+
+            //})
+
+
+
+            //const submitButton = document.getElementById("submit");
+
+            //submitButton.addEventListener("click", (e) => {
+
+            //    e.preventDefault();
+
+            //    var files = document.getElementById("files").files;
+            //    var formData = new FormData();
+
+            //    for (var i = 0; i != files.length; i++) {
+            //        formData.append("files", files[i]);
+            //    }
+
+            //    axios({
+            //        method: 'post',
+            //        url: '/home/upload',
             //        data: formData,
-            //        processData: false,
-            //        // contentType: "multipart/form-data",
-            //        dataType: 'text',
-            //        type: "POST",
-            //        success: function (data) {
-            //            alert("başarılı");
-            //            console.log(data);
-            //        },
-            //        error: function () {
-            //            alert("hata");
+            //        contentType: "application/json; charset=utf-8",
+            //        dataType: "json",
+            //    }).then(function (response) {
+
+            //        var data = response.data.data;
+            //        var tbodyRef = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+
+
+            //        for (var i = 0; i < data.length; i++) {
+
+
+            //            var newRow = tbodyRef.insertRow(tbodyRef.rows.length);
+            //            var newCell1 = newRow.insertCell(0);
+            //            var newCell2 = newRow.insertCell(1);
+            //            var newCell3 = newRow.insertCell(2);
+            //            var newCell4 = newRow.insertCell(3);
+            //            var newCell5 = newRow.insertCell(4);
+            //            newCell1.innerHTML = data[i].fileId
+            //            newCell2.innerHTML = data[i].fileName
+
+            //            if (data[i].success) {
+            //                newCell3.innerHTML = `<i style="color:green" class="fas fa-check-circle"></i>`;
+            //            } else {
+            //                newCell3.innerHTML = `<i style="color:red" class="fas fa-times"></i>`;
+            //            }
+
+
+            //            newCell4.innerHTML = data[i].message
+
+            //            var link = document.createElement('a');
+            //            link.classList.add("btn", "btn-sm", "btn-primary");
+            //            link.setAttribute('href', "https://localhost:44361/Home/GetLink/" + data[i].fileId);
+            //            link.innerHTML = "İndir";
+
+            //            newCell5.appendChild(link);
             //        }
             //    }
-            //);
-        }
+            //    );
 
+            //})
 
-        
-
-
-            //$("#btn").click(() => {
-            //    alert("ada");
-            //    $.ajax({
-            //        type: "POST",
-            //        url: /Deneme/Index,
-            //        data: { file: $("#file").val()},
-            //        success: success,
-            //        dataType: dataType
-            //    });
-            //});
+        });
 
 
     </script>
 
-
-    @*<script type="text/javascript">
-            $(document).ready(() => {
-                var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:44391/MyHub").build();
-
-                $("#conStatus").text(connection.connectionState);
-
-                connection.start().then(() => {
-                    $("#conStatus").text(connection.connectionState);
-                }).catch((err) => { console.log(err) });
-
-                $("#conStatus").text(connection.connectionState);
-
-                $("#btnNameSave").click(() => {
-                    connection.invoke("SendMessageAsync", $("#txtName").val()).catch((err) => console.log(err))
-                })
-
-                connection.on("receiveMessage", (name) => {
-                    $("#namesList").append(`<li class="list-group-item"> ${name}</li>`)
-                })
-            })
-        </script>*@
 
 }
 

@@ -1,15 +1,11 @@
+using AnonFilesUpload.MVC.Hubs;
 using AnonFilesUpload.MVC.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace AnonFilesUpload.MVC
 {
@@ -32,6 +28,8 @@ namespace AnonFilesUpload.MVC
                 opt.BaseAddress = new Uri(Configuration["baseUrl"].ToString());
 
             });
+
+            services.AddSignalR();
 
             services.AddSingleton(typeof(IApiService), typeof(ApiService));
 
@@ -62,6 +60,8 @@ namespace AnonFilesUpload.MVC
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapHub<HubTest>("/hubtest");
             });
         }
     }

@@ -23,27 +23,11 @@ namespace AnonFilesUpload.Api.Controllers
             _context = context;
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> UploadAsync(IFormFile file)
-        //{
-        //    if (file == null || file.Length < 0)
-        //        return BadRequest("Boş veri girilemez");
-
-        //    var data = await _fileService.UploadAsync(file);
-
-        //    return Ok(data);
-        //}
-
-        // [HttpPost("range")]
-
 
         [HttpPost]
-        public async Task<IActionResult> UploadRangeAsync(IFormFile[] files)
+        public async Task<IActionResult> UploadRangeAsync(IFormFile file)
         {
-            if (files.Count() < 0)
-                return BadRequest("Boş veri girilemez");
-
-            var data = await _fileService.UploadAsync(files);
+            var data = await _fileService.UploadAsync(file);
 
             return Ok(data);
         }

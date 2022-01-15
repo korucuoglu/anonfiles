@@ -4,6 +4,8 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AnonFilesUpload.MVC.Services
@@ -39,41 +41,6 @@ namespace AnonFilesUpload.MVC.Services
             return dtos;
         }
 
-        //private async Task<MultipartContent> GetMultipartContentAsync(IFormFile[] files, string key)
-        //{
-        //    using (var ms = new MemoryStream())
-        //    {
-        //        var multipartContent = new MultipartFormDataContent();
-
-        //        foreach (var file in files)
-        //        {
-        //            await file.CopyToAsync(ms);
-        //            multipartContent.Add(new ByteArrayContent(ms.ToArray()), key, file.FileName);
-        //        }
-
-        //        return multipartContent;
-        //    };
-        //}
-
-        //public async Task<object> Upload(IFormFile[] files, string uri)
-        //{
-        //    var dto = new
-        //    {
-        //        message = new List<string>(),
-        //    };
-
-        //    var multipartContent = await GetMultipartContentAsync(files, "file");
-
-        //    var response = await HttpClient.PostAsync($"{uri}", multipartContent);
-
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        var data = JsonConvert.DeserializeObject<object>(await response.Content.ReadAsStringAsync());
-        //        return data;
-        //    }
-
-        //    return "";
-        //}
 
         private async Task<MultipartContent> GetMultipartContentAsync(IFormFile file, string key)
         {
@@ -84,24 +51,44 @@ namespace AnonFilesUpload.MVC.Services
                 await file.CopyToAsync(ms);
                 multipartContent.Add(new ByteArrayContent(ms.ToArray()), key, file.FileName);
 
+
                 return multipartContent;
             };
         }
 
-        public async Task<Response<List<string>>> Upload(IFormFile file, string uri)
+        public async Task<Response<AjaxReturningModel>> Upload(IFormFile file, string uri)
         {
-            
-            var multipartContent = await GetMultipartContentAsync(file, "files");
+
+            var multipartContent = await GetMultipartContentAsync(file, "file");
 
             var response = await HttpClient.PostAsync($"{uri}", multipartContent);
 
             if (response.IsSuccessStatusCode)
             {
-                var data = JsonConvert.DeserializeObject<List<string>>(await response.Content.ReadAsStringAsync());
-                return Response<List<string>>.Success(data, 200);
+                var data = JsonConvert.DeserializeObject<AjaxReturningModel>(await response.Content.ReadAsStringAsync());
+                return Response<AjaxReturningModel>.Success(data, 200);
             }
 
-            return Response<List<string>>.Fail("Upload yapılırken hata meydana geldi", 500);
+            return Response<AjaxReturningModel>.Fail("Upload yapılırken hata meydana geldi", 500);
+        }
+
+        public async Task<string> UploadTest(IFormFile file)
+        {
+            Thread.Sleep(1000);
+            return await Task.FromResult(file.FileName);
+        }
+
+
+        public async Task<HttpResponseMessage> UploadImageNew(string url, byte[] ImageData)
+        {
+            var requestContent = new MultipartFormDataContent();
+            //    here you can specify boundary if you need---^
+            var imageContent = new ByteArrayContent(ImageData);
+            imageContent.Headers.ContentType =
+                MediaTypeHeaderValue.Parse("image/jpeg");
+            requestContent.Add(imageContent, "image", "image.jpg");
+
+            return await HttpClient.PostAsync(url, requestContent);
         }
 
         //public async Task<bool> Remove(int id)

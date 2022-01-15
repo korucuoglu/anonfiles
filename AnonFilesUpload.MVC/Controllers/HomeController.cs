@@ -1,12 +1,14 @@
-﻿using AnonFilesUpload.MVC.Models;
+﻿using AnonFilesUpload.Data.Models;
+using AnonFilesUpload.MVC.Hubs;
+using AnonFilesUpload.MVC.Models;
 using AnonFilesUpload.MVC.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -19,14 +21,14 @@ namespace AnonFilesUpload.MVC.Controllers
 
         private readonly IApiService _apiService;
 
-        public HomeController(ILogger<HomeController> logger, IHttpClientFactory iHttpClientFactory, IApiService apiService)
+        private IHubContext<HubTest> _hubContext;
+
+        public HomeController(ILogger<HomeController> logger, IHttpClientFactory iHttpClientFactory, IApiService apiService, IHubContext<HubTest> hubContext)
         {
             _logger = logger;
-
             apiService.HttpClient = iHttpClientFactory.CreateClient("ApiServiceClient");
-
             _apiService = apiService;
-
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -35,25 +37,41 @@ namespace AnonFilesUpload.MVC.Controllers
             return await Task.FromResult(View());
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> Upload(IFormFile[] files)
+        //{
+        //    foreach (var file in files)
+        //    {
+        //        var data = await _apiService.UploadTest(file);
+        //        await _hubContext.Clients.All.SendAsync("filesUploaded", data);
+        //    }
+
+        //    return Json(new { success = true});
+
+        //}
+
+
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public async Task<IActionResult> Upload(IFormFile[] files)
         {
-            var data = await _apiService.Upload(file, "data");
-           
-            return Ok(data.Data);
 
-            // return Json(data);
+            var model = new List<AjaxReturningModel>();
 
-            // return Json(new { success = true, responseText = "Deleted Scussefully" });
+            foreach (var file in files)
+            {
+                var data = await _apiService.Upload(file, "data");
+                model.Add(data.Data);
+                await _hubContext.Clients.All.SendAsync("filesUploaded", data.Data);
+            }
 
-            // return Json(new { success = true});
+            return Json(new { finish = true });
+
         }
 
         [HttpGet]
         public async Task<IActionResult> List()
         {
-            var data = await _apiService.GetAllAsync<Data.Models.DataViewModel>("data");
-
+            var data = await _apiService.GetAllAsync<DataViewModel>("data");
             return await Task.FromResult(View(data));
         }
 

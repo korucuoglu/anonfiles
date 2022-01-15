@@ -13,7 +13,8 @@ namespace AnonFilesUpload.MVC.Services
         Task<string> GetAsync(string uri);
         Task<T> GetAllAsync<T>(string uri);
 
-        Task<Response<List<string>>> Upload(IFormFile file, string uri);
+        Task<Response<AjaxReturningModel>> Upload(IFormFile file, string uri);
+        Task<string> UploadTest(IFormFile file);
 
         //	Task<bool> Remove(int id);
         //	Task<bool> Update(T dto);

@@ -1,4 +1,3 @@
-using AnonFilesUpload.Api.Hubs;
 using AnonFilesUpload.Api.Services;
 using AnonFilesUpload.Data.Entity;
 using Microsoft.AspNetCore.Builder;
@@ -27,10 +26,6 @@ namespace AnonFilesUpload.Api
             services.AddControllers();
 
             services.AddHttpClient<FileService>();
-
-            services.AddSignalR();
-
-            // services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("testDb"));
 
             services.AddDbContext<DataContext>(opt => {
 
@@ -83,8 +78,6 @@ namespace AnonFilesUpload.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-
-                endpoints.MapHub<MyHub>("/myhub");
             });
         }
     }
