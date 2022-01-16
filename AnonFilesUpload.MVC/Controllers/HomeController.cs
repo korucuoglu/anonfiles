@@ -37,19 +37,6 @@ namespace AnonFilesUpload.MVC.Controllers
             return await Task.FromResult(View());
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Upload(IFormFile[] files)
-        //{
-        //    foreach (var file in files)
-        //    {
-        //        var data = await _apiService.UploadTest(file);
-        //        await _hubContext.Clients.All.SendAsync("filesUploaded", data);
-        //    }
-
-        //    return Json(new { success = true});
-
-        //}
-
 
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile[] files)
@@ -59,6 +46,7 @@ namespace AnonFilesUpload.MVC.Controllers
 
             foreach (var file in files)
             {
+                await _hubContext.Clients.All.SendAsync("filesUploadedStarting", file.FileName);
                 var data = await _apiService.Upload(file, "data");
                 model.Add(data.Data);
                 await _hubContext.Clients.All.SendAsync("filesUploaded", data.Data);
