@@ -76,7 +76,7 @@ namespace AnonFilesUpload.Api.Controllers
 
             var data = await _fileService.GetDirectLinkAsync(shortUri);
 
-            return Ok(data);
+            return Redirect(data);
         }
 
 

@@ -14,7 +14,6 @@ namespace AnonFilesUpload.Api.Hubs
         {
             await Clients.All.SendAsync("filesUploaded", model);
         }
-
         public async Task UploadStarting(string fileName)
         {
             await Clients.All.SendAsync("filesUploadedStarting", fileName);
