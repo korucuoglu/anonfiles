@@ -92,6 +92,7 @@ const deleteFile = (file) => {
   inputFiles.value = [...inputFiles.value].filter((inputFile) => inputFile != file);
 };
 
+
 const addDocs = (e) => {
   e.preventDefault();
 
@@ -103,14 +104,15 @@ const addDocs = (e) => {
 
   axios({
     method: "post",
-    url: "https://localhost:5010/home/test",
+    url: "https://localhost:5001/api/test",
     data: formData,
     contentType: "application/json; charset=utf-8",
     dataType: "json",
   }).then(function (response) {
-    console.log(response);
+    console.log(response.data);
   });
 };
+
 </script>
 
 <style>

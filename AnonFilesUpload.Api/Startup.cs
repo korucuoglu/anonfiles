@@ -27,9 +27,11 @@ namespace AnonFilesUpload.Api
 
             services.AddHttpClient<FileService>();
 
-            services.AddDbContext<DataContext>(opt => {
+            services.AddDbContext<DataContext>(opt =>
+            {
 
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), configure => {
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), configure =>
+                {
 
                     configure.MigrationsAssembly("AnonFilesUpload.Api");
 
@@ -53,7 +55,7 @@ namespace AnonFilesUpload.Api
                 opt.AddPolicy("CorsPolicy", builder =>
                 {
 
-                    builder.WithOrigins("https://localhost:44361").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                    builder.WithOrigins("https://localhost:44361", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
             });
 
