@@ -1,3 +1,4 @@
+using AnonFilesUpload.Api.Hubs;
 using AnonFilesUpload.Api.Services;
 using AnonFilesUpload.Data.Entity;
 using Microsoft.AspNetCore.Builder;
@@ -39,7 +40,6 @@ namespace AnonFilesUpload.Api
 
             });
 
-            // services.AddDbContext<DataContext>();
 
             services.Configure<FormOptions>(o =>
             {
@@ -58,6 +58,8 @@ namespace AnonFilesUpload.Api
                     builder.WithOrigins("https://localhost:44361", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
             });
+
+            services.AddSignalR();
 
         }
 
@@ -80,6 +82,7 @@ namespace AnonFilesUpload.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<HubTestApi>("/hub");
             });
         }
     }
