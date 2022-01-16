@@ -29,6 +29,16 @@ namespace AnonFilesUpload.MVC
 
             });
 
+            services.AddCors(opt =>
+            {
+
+                opt.AddPolicy("CorsPolicy", builder =>
+                {
+
+                    builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                });
+            });
+
             services.AddSignalR();
 
             services.AddSingleton(typeof(IApiService), typeof(ApiService));
@@ -50,6 +60,8 @@ namespace AnonFilesUpload.MVC
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+             app.UseCors("CorsPolicy");
 
             app.UseRouting();
 

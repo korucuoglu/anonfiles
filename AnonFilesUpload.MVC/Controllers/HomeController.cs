@@ -40,7 +40,9 @@ namespace AnonFilesUpload.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Test(IFormFile[] files){
 
-            return Json(new { finish = true });
+            
+
+            return Json(files.Length);
         }
 
 
