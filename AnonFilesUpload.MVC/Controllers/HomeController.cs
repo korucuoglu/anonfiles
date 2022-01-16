@@ -37,6 +37,12 @@ namespace AnonFilesUpload.MVC.Controllers
             return await Task.FromResult(View());
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Test(IFormFile[] files){
+
+            return Json(new { finish = true });
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile[] files)
