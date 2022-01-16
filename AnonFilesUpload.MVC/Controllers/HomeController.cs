@@ -38,11 +38,26 @@ namespace AnonFilesUpload.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Test(IFormFile[] files){
+        public async Task<IActionResult> Test(IFormFile[] files)
+        {
+            var ListModel = new List<AjaxReturningModel>();
 
-            
+            Random _random = new Random();
 
-            return Json(files.Length);
+            foreach (var file in files)
+            {
+                var model = new AjaxReturningModel()
+                {
+                    fileId = _random.Next(111111, 999999).ToString(),
+                    fileName = file.FileName,
+                    success = true,
+                    message = $"{file.FileName} başarıyla yüklendi",
+                };
+
+                ListModel.Add(model);
+            }
+
+            return await Task.FromResult(Json(ListModel));
         }
 
 

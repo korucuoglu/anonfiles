@@ -51,6 +51,7 @@ const deleteFile = (file) => {
   );
 };
 
+
 const addDocs = (e) => {
   e.preventDefault();
 
@@ -58,19 +59,19 @@ const addDocs = (e) => {
 
   for (var i = 0; i < inputFiles.value.length; i++) {
     formData.append("files", inputFiles.value[i]);
-    console.log(inputFiles.value);
   }
 
   axios({
     method: "post",
-    url: "https://localhost:5010/home/test",
+    url: "https://localhost:5001/api/test",
     data: formData,
     contentType: "application/json; charset=utf-8",
     dataType: "json",
   }).then(function (response) {
-    console.log(response);
+    console.log(response.data);
   });
 };
+
 </script>
 
 <style>

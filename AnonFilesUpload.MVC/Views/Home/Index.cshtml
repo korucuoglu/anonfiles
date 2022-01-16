@@ -47,7 +47,8 @@
                 <td>{{data.message}}</td>
                 <td>
 
-                    <a class="btn btn-sm btn-primary" :class="{'disabled':!data.success}" :href="'https://localhost:44361/Home/GetLink/' + data.fileId">İndir</a>
+                    <a class="btn btn-sm btn-primary" :class="{'disabled':!data.success}"
+                        :href="'https://localhost:44361/Home/GetLink/' + data.fileId">İndir</a>
 
                 </td>
             </tr>
@@ -56,8 +57,8 @@
     </table>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-          integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+        integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </div>
 
@@ -65,137 +66,135 @@
 @section Scripts {
 
 
-    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 
-    <environment names="Staging,Production">
-        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"
-                integrity="sha512-lTLt+W7MrmDfKam+r3D2LURu0F47a3QaW5nF0c6Hl0JDZ57ruei+ovbg7BrZ+0bjVJ5YgzsAWE+RreERbpPE1g=="
-                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    </environment>
+<environment names="Staging,Production">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"
+        integrity="sha512-lTLt+W7MrmDfKam+r3D2LURu0F47a3QaW5nF0c6Hl0JDZ57ruei+ovbg7BrZ+0bjVJ5YgzsAWE+RreERbpPE1g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</environment>
 
-    <environment names="Development">
-        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.js"
-                integrity="sha512-un2apco0rYUiZXxbURvZ7oBq4u0cGrXaIbC4C1k5nAio6WRMyYvj8xKua3NqALOuu0F83zDha7nKoFCZzx26rg=="
-                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    </environment>
+<environment names="Development">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.js"
+        integrity="sha512-un2apco0rYUiZXxbURvZ7oBq4u0cGrXaIbC4C1k5nAio6WRMyYvj8xKua3NqALOuu0F83zDha7nKoFCZzx26rg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</environment>
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        var app = new Vue({
-            el: '#app',
-            data: {
-                dataList: [
-
-
-                ],
-            },
-
-            methods: {
-
-                submit(event) {
-                    event.preventDefault();
-                    var files = document.getElementById("files").files;
-                    var formData = new FormData();
-                    this.dataList = [];
-
-                    for (var i = 0; i != files.length; i++) {
-                        formData.append("files", files[i]);
+    var app = new Vue({
+        el: '#app',
+        data: {
+            dataList: [
 
 
+            ],
+        },
 
-                        this.dataList.push({
+        methods: {
 
-                            index: i,
-                            fileId: "",
-                            fileName: files[i].name,
-                            success: 'Unstarted',
-                            message: ""
+            submit(event) {
+                event.preventDefault();
+                var files = document.getElementById("files").files;
+                var formData = new FormData();
+                this.dataList = [];
 
-                        });
+                for (var i = 0; i != files.length; i++) {
+                    formData.append("files", files[i]);
 
 
-                    }
 
-                    axios({
-                        method: 'post',
-                        url: '/home/upload',
-                        data: formData,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                    }).then(function (response) {
+                    this.dataList.push({
 
-                        if (response.data.finish) {
+                        index: i,
+                        fileId: "",
+                        fileName: files[i].name,
+                        success: 'Unstarted',
+                        message: ""
 
-                        }
                     });
 
 
                 }
 
-            },
+                axios({
+                    method: 'post',
+                    url: '/home/test',
+                    data: formData,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                }).then(function (response) {
 
-            mounted() {
-
-                const connection = new signalR.HubConnectionBuilder()
-                    .withUrl("/hubtest")
-                    .configureLogging(signalR.LogLevel.Information)
-                    .build();
-
-
-                const filesUploadedFunction = (message) => {
-                    const data = this.dataList.find(data => data.fileName == message.fileName);
-
-                    data.fileId = message.fileId;
-                    data.fileName = message.fileName;
-                    data.message = message.message;
-
-                    if (message.success) {
-                        data.success = 'Loaded';
-                    } else {
-                        data.success = 'Error';
-                    }
-
-
-                }
-
-                const startFileUploading = (fileName) => {
-
-                    const data = this.dataList.find(data => data.fileName == fileName);
-                    data.success = "Started";
-                }
-
-                connection.on('filesUploadedStarting', function (fileName) {
-
-                    startFileUploading(fileName);
-
-                    console.log(fileName + " yüklenmeye başlandı");
-
+                    console.log(response.data);
                 });
 
-                connection.on('filesUploaded', function (message) {
-
-                    console.log(message.fileName + " yüklendi");
-                    filesUploadedFunction(message);
-
-                });
-
-
-                connection.start()
-                    .then(function () {
-
-                    })
-                    .catch(error => {
-                        console.error(error.message);
-                    });
 
             }
 
-        });
+        },
+
+        mounted() {
+
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/hubtest")
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
 
 
-    </script>
+            const filesUploadedFunction = (message) => {
+                const data = this.dataList.find(data => data.fileName == message.fileName);
+
+                data.fileId = message.fileId;
+                data.fileName = message.fileName;
+                data.message = message.message;
+
+                if (message.success) {
+                    data.success = 'Loaded';
+                } else {
+                    data.success = 'Error';
+                }
+
+
+            }
+
+            const startFileUploading = (fileName) => {
+
+                const data = this.dataList.find(data => data.fileName == fileName);
+                data.success = "Started";
+            }
+
+            connection.on('filesUploadedStarting', function (fileName) {
+
+                startFileUploading(fileName);
+
+                console.log(fileName + " yüklenmeye başlandı");
+
+            });
+
+            connection.on('filesUploaded', function (message) {
+
+                console.log(message.fileName + " yüklendi");
+                filesUploadedFunction(message);
+
+            });
+
+
+            connection.start()
+                .then(function () {
+
+                })
+                .catch(error => {
+                    console.error(error.message);
+                });
+
+        }
+
+    });
+
+
+</script>
 
 
 

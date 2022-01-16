@@ -80,7 +80,7 @@ namespace AnonFilesUpload.Api.Controllers
         }
 
 
-        [HttpDelete("{id}")] 
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var data = await _fileService.DeleteByIdAsync<Data.Entity.Data>(id);
