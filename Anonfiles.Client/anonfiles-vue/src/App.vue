@@ -14,9 +14,9 @@
       <table style="border: 1px solid black">
         <thead>
           <tr>
-            <td style="border: 1px solid black">File Name</td>
-            <td style="border: 1px solid black">kaldir</td>
-            <td style="border: 1px solid black">boyut</td>
+            <th style="border: 1px solid black">File Name</th>
+            <th style="border: 1px solid black">kaldir</th>
+            <th style="border: 1px solid black">boyut</th>
           </tr>
         </thead>
         <tbody>
@@ -36,43 +36,62 @@
 </template>
 
 <script setup>
-import axios from "axios";
-import { ref } from "vue";
+import axios from 'axios'
+import {
+  HubConnection,
+  HubConnectionBuilder,
+  LogLevel,
+} from '@microsoft/signalr'
+import { ref } from 'vue'
 
-let inputFiles = ref();
+let inputFiles = ref()
+
+const connection = new HubConnectionBuilder()
+  .withUrl('https://localhost:5001/hub')
+  .build()
+
+connection.on('receiveMessage', function (message) {
+  console.log(message)
+})
+
+connection
+  .start()
+  .then(function () {
+    console.log('başarılı')
+  })
+  .catch((error) => {
+    console.error(error.message)
+  })
 
 const getInputFiles = (event) => {
-  inputFiles.value = event.target.files;
-};
+  inputFiles.value = event.target.files
+}
 
 const deleteFile = (file) => {
   inputFiles.value = [...inputFiles.value].filter(
     (inputFile) => inputFile != file
-  );
-};
-
+  )
+}
 
 const addDocs = (e) => {
-  e.preventDefault();
+  e.preventDefault()
 
-  var formData = new FormData();
+  var formData = new FormData()
 
   for (var i = 0; i < inputFiles.value.length; i++) {
-    formData.append("files", inputFiles.value[i]);
+    formData.append('files', inputFiles.value[i])
   }
 
   axios({
-    method: "post",
-    url: "https://localhost:5001/api/test",
+    method: 'post',
+    url: 'https://localhost:5001/api/test',
     data: formData,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
   }).then(function (response) {
-    console.log(response.data);
-  });
-};
-
+    console.log(response.data)
+  })
+}
 </script>
 
-<style>
-</style>
+<style></style>
