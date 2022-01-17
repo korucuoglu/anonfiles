@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace AnonFilesUpload.IdentityServer.Models
+namespace AnonFilesUpload.Data.Models
 {
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
-
         public string City { get; set; }
     }
 }

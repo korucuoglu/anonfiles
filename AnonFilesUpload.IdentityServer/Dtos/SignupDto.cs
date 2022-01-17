@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 
-namespace AnonFilesUpload.IdentityServer.Models
+namespace AnonFilesUpload.IdentityServer.Dtos
 {
     public class SignupDto
     {

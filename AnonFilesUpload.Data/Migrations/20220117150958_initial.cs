@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace AnonFilesUpload.IdentityServer.Migrations
+namespace AnonFilesUpload.Data.Migrations
 {
     public partial class initial : Migration
     {
@@ -45,6 +45,22 @@ namespace AnonFilesUpload.IdentityServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Data",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MetaDataId = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    ShortUri = table.Column<string>(nullable: true),
+                    Size = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Data", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -209,6 +225,9 @@ namespace AnonFilesUpload.IdentityServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Data");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

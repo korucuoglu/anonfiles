@@ -2,12 +2,12 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using AnonFilesUpload.IdentityServer.Data;
-using AnonFilesUpload.IdentityServer.Models;
+
+using AnonFilesUpload.Data.Entity;
+using AnonFilesUpload.Data.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -47,9 +47,9 @@ namespace AnonFilesUpload.IdentityServer
                 {
                     var serviceProvider = scope.ServiceProvider;
 
-                    var applicationDbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+                    var applicationDbContext = serviceProvider.GetRequiredService<DataContext>();
 
-                    applicationDbContext.Database.Migrate();
+                    // applicationDbContext.Database.Migrate();
 
                     var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 

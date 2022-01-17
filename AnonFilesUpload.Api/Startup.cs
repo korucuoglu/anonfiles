@@ -1,6 +1,7 @@
 using AnonFilesUpload.Api.Hubs;
 using AnonFilesUpload.Api.Services;
 using AnonFilesUpload.Data.Entity;
+using AnonFilesUpload.Data.Registiration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
@@ -17,6 +18,7 @@ namespace AnonFilesUpload.Api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+           
         }
 
         public IConfiguration Configuration { get; }
@@ -28,26 +30,7 @@ namespace AnonFilesUpload.Api
 
             services.AddHttpClient<FileService>();
 
-            services.AddDbContext<DataContext>(opt =>
-            {
-
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), configure =>
-                {
-
-                    configure.MigrationsAssembly("AnonFilesUpload.Api");
-
-                });
-
-            });
-
-
-            services.Configure<FormOptions>(o =>
-            {
-                o.ValueLengthLimit = int.MaxValue;
-                o.MultipartBodyLengthLimit = int.MaxValue;
-                o.MemoryBufferThreshold = int.MaxValue;
-            });
-
+            services.AddDataContext(Configuration);
 
             services.AddCors(opt =>
             {

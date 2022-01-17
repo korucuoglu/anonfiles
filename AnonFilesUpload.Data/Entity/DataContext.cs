@@ -1,39 +1,38 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AnonFilesUpload.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace AnonFilesUpload.Data.Entity
 {
-    public class DataContext: DbContext
+    public class DataContext : IdentityDbContext<ApplicationUser>
     {
 
         public DbSet<Data> Data { get; set; }
 
-        public string DbPath { get; private set; }
-
-        //public DataContext()
-        //{
-        //    var folder = Environment.SpecialFolder.LocalApplicationData;
-        //    var path = Environment.GetFolderPath(folder);
-        //    DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}AnnonFile.db";
-        //}
-
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        public DataContext()
         {
 
+        }
+        
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        {
+           
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=anonfiles;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                // optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
+            }
+
             optionsBuilder.EnableSensitiveDataLogging();
-            // optionsBuilder.UseSqlite($"Data Source={DbPath}");
-
-            //var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = "MyDb.db" };
-            //var connectionString = connectionStringBuilder.ToString();
-            //var connection = new SqliteConnection(connectionString);
-
-            //optionsBuilder.UseSqlite(connection);
-
-
-
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
         }
 
     }
