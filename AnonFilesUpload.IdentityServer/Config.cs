@@ -14,7 +14,7 @@ namespace AnonFilesUpload.IdentityServer
         public static IEnumerable<ApiResource> ApiResources = new ApiResource[]
         {
 
-                new ApiResource("resource_uploadapi"){Scopes = {"api"}}
+                new ApiResource("resource_api"){Scopes = {"api"}}
 
                 // [2] Daha sonra Resource oluşturarak buna ait scope tanımladık. 
         };
