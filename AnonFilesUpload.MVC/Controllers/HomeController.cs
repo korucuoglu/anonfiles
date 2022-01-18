@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -46,6 +47,8 @@ namespace AnonFilesUpload.MVC.Controllers
 
             foreach (var file in files)
             {
+
+                await _hubContext.Clients.All.SendAsync("filesUploadedStarting", file.FileName);
                 var model = new AjaxReturningModel()
                 {
                     fileId = _random.Next(111111, 999999).ToString(),
@@ -55,6 +58,10 @@ namespace AnonFilesUpload.MVC.Controllers
                 };
 
                 ListModel.Add(model);
+
+                Thread.Sleep(500);
+
+                await _hubContext.Clients.All.SendAsync("filesUploaded", model);
             }
 
             return await Task.FromResult(Json(ListModel));
@@ -90,7 +97,7 @@ namespace AnonFilesUpload.MVC.Controllers
         public async Task<IActionResult> GetLink(string id)
         {
 
-            var data = await _apiService.GetAsync($"data/direct/{id}");
+            var data = await _apiService.GetAsync($"data/getdirect/{id}");
 
             if (String.IsNullOrEmpty(data))
             {

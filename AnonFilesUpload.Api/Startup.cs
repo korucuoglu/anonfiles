@@ -49,7 +49,7 @@ namespace AnonFilesUpload.Api
                 opt.AddPolicy("CorsPolicy", builder =>
                 {
 
-                    builder.WithOrigins("https://localhost:44361", "https://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                    builder.WithOrigins(Configuration.GetSection("VueClient").Value).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
             });
 

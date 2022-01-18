@@ -30,6 +30,16 @@ namespace AnonFilesUpload.IdentityServer
 
             services.AddDataContext(Configuration);
 
+            services.AddCors(opt =>
+            {
+
+                opt.AddPolicy("CorsPolicy", builder =>
+                {
+
+                    builder.WithOrigins(Configuration.GetSection("VueClient").Value).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                });
+            });
+
             //services.AddIdentity<ApplicationUser, IdentityRole>()
             //    .AddEntityFrameworkStores<DataContext>()
             //    .AddDefaultTokenProviders();
@@ -57,7 +67,7 @@ namespace AnonFilesUpload.IdentityServer
                 .AddGoogle(options =>
                 {
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    
+
                     // register your IdentityServer with Google at https://console.developers.google.com
                     // enable the Google+ API
                     // set the redirect URI to https://localhost:5001/signin-google
@@ -76,6 +86,7 @@ namespace AnonFilesUpload.IdentityServer
                 app.UseDatabaseErrorPage();
             }
 
+            app.UseCors("CorsPolicy");
             app.UseStaticFiles();
 
             app.UseRouting();

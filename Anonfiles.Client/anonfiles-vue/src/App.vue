@@ -67,6 +67,25 @@
 <script setup>
 import axios from "axios";
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+
+let user = {
+  client_id: "VueJsClient",
+  client_secret: "secret",
+  grant_type: "client_credentials",
+};
+
+axios({
+  url: "https://localhost:5010/connect/token",
+  method: "post",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+  },
+  dataType: "json",
+  data: user,
+}).then((response) => {
+  console.log(response);
+});
+
 import { computed, ref } from "vue";
 
 let datas = ref([]);
@@ -123,7 +142,7 @@ const addDocs = (e) => {
 
   axios({
     method: "post",
-    url: "https://localhost:5001/api/test/upload",
+    url: "https://localhost:5001/api/test/test",
     data: formData,
     contentType: "application/json; charset=utf-8",
     dataType: "json",

@@ -47,8 +47,11 @@
                 <td>{{data.message}}</td>
                 <td>
 
-                    <a class="btn btn-sm btn-primary" :class="{'disabled':!data.success}"
-                        :href="'https://localhost:44361/Home/GetLink/' + data.fileId">İndir</a>
+                    @*<a class="btn btn-sm btn-primary" :class="{'disabled':!data.success}"
+                        :href="'https://localhost:44361/Home/GetLink/' + data.fileId">İndir</a>*@
+
+                        <a class="btn btn-sm btn-primary" :class="{'disabled':!data.success}"
+                        :href="`${BaseAddress}Home/GetLink/${data.fileId}`">İndir</a>
 
                 </td>
             </tr>
@@ -91,6 +94,9 @@
 
 
             ],
+            BaseAddress: "https://localhost:5003/",
+            PostAddress: "/home/upload"
+
         },
 
         methods: {
@@ -121,7 +127,7 @@
 
                 axios({
                     method: 'post',
-                    url: '/home/test',
+                    url: this.PostAddress,
                     data: formData,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",

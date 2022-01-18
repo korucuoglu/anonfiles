@@ -25,19 +25,10 @@ namespace AnonFilesUpload.MVC
 
             services.AddHttpClient("ApiServiceClient", opt =>
             {
-                opt.BaseAddress = new Uri(Configuration["baseUrl"].ToString());
+                opt.BaseAddress = new Uri(Configuration["ApibaseUrl"].ToString());
 
             });
 
-            services.AddCors(opt =>
-            {
-
-                opt.AddPolicy("CorsPolicy", builder =>
-                {
-
-                    builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-                });
-            });
 
             services.AddSignalR();
 
@@ -60,8 +51,6 @@ namespace AnonFilesUpload.MVC
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-             app.UseCors("CorsPolicy");
 
             app.UseRouting();
 

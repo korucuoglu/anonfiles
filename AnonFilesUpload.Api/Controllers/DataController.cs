@@ -26,7 +26,7 @@ namespace AnonFilesUpload.Api.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> UploadRangeAsync(IFormFile file)
+        public async Task<IActionResult> Upload(IFormFile file)
         {
             var data = await _fileService.UploadAsync(file);
 
@@ -68,7 +68,7 @@ namespace AnonFilesUpload.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("direct/{id}")]
-        public async Task<IActionResult> GetDirectLinkByMetaDataIdAsync(string id)
+        public async Task<IActionResult> ReturnDirectLinkByMetaDataIdAsync(string id)
         {
             // MetaData Id üzerinden ShortUri elde edilir. 
             // Short Üri üzerinden DirectLink elde edilierek geriye dönülür. 
@@ -79,6 +79,21 @@ namespace AnonFilesUpload.Api.Controllers
             var data = await _fileService.GetDirectLinkAsync(shortUri);
 
             return Redirect(data);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("getdirect/{id}")]
+        public async Task<IActionResult> GetDirectLinkByMetaDataIdAsync(string id)
+        {
+            // MetaData Id üzerinden ShortUri elde edilir. 
+            // Short Üri üzerinden DirectLink elde edilierek geriye dönülür. 
+
+
+            string shortUri = "https://anonfiles.com/" + id;
+
+            var data = await _fileService.GetDirectLinkAsync(shortUri);
+
+            return Ok(data);
         }
 
 

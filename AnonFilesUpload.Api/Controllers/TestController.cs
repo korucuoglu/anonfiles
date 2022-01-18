@@ -48,35 +48,43 @@ namespace AnonFilesUpload.Api.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Test(IFormFile[] files)
         {
-            var ListModel = new List<AjaxReturningModel>();
 
-            Random _random = new Random();
-            foreach (var file in files)
-            {
-                await _hubContext.Clients.All.SendAsync("filesUploadedStarting", file.FileName);
+            return await Task.FromResult(Ok(files.Length));
 
-                Thread.Sleep(1000);
-
-                var model = new AjaxReturningModel()
-                {
-                    fileId = _random.Next(111111, 999999).ToString(),
-                    fileName = file.FileName,
-                    success = true,
-                    message = $"{file.FileName} başarıyla yüklendi",
-                };
-
-                ListModel.Add(model);
-
-                // var data = await _fileService.UploadAsync(file);
-                // model.Add(data);
-                await _hubContext.Clients.All.SendAsync("filesUploaded", model);
-            }
-
-            return await Task.FromResult(Ok(ListModel));
         }
+
+        // [HttpPost]
+        // [AllowAnonymous]
+        // public async Task<IActionResult> Test(IFormFile[] files)
+        // {
+        //     var ListModel = new List<AjaxReturningModel>();
+
+        //     Random _random = new Random();
+        //     foreach (var file in files)
+        //     {
+        //         await _hubContext.Clients.All.SendAsync("filesUploadedStarting", file.FileName);
+
+        //         Thread.Sleep(1000);
+
+        //         var model = new AjaxReturningModel()
+        //         {
+        //             fileId = _random.Next(111111, 999999).ToString(),
+        //             fileName = file.FileName,
+        //             success = true,
+        //             message = $"{file.FileName} başarıyla yüklendi",
+        //         };
+
+        //         ListModel.Add(model);
+
+        //         // var data = await _fileService.UploadAsync(file);
+        //         // model.Add(data);
+        //         await _hubContext.Clients.All.SendAsync("filesUploaded", model);
+        //     }
+
+        //     return await Task.FromResult(Ok(ListModel));
+        // }
 
     }
 }
