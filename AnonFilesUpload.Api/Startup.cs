@@ -1,7 +1,6 @@
 using AnonFilesUpload.Api.Hubs;
 using AnonFilesUpload.Api.Services;
 using AnonFilesUpload.Data.Registiration;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -50,11 +49,11 @@ namespace AnonFilesUpload.Api
                 opt.AddPolicy("CorsPolicy", builder =>
                 {
 
-                    builder.WithOrigins("https://localhost:44361", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                    builder.WithOrigins("https://localhost:44361", "https://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
             });
 
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

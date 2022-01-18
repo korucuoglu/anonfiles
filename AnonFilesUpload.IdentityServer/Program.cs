@@ -49,7 +49,7 @@ namespace AnonFilesUpload.IdentityServer
 
                     var applicationDbContext = serviceProvider.GetRequiredService<DataContext>();
 
-                    // applicationDbContext.Database.Migrate();
+                    applicationDbContext.Database.Migrate();
 
                     var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 

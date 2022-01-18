@@ -123,7 +123,7 @@ const addDocs = (e) => {
 
   axios({
     method: "post",
-    url: "https://localhost:5001/api/test",
+    url: "https://localhost:5001/api/test/upload",
     data: formData,
     contentType: "application/json; charset=utf-8",
     dataType: "json",
