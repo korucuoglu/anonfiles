@@ -28,7 +28,6 @@ namespace AnonFilesUpload.Api.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Upload(IFormFile[] files)
         {
             var ListModel = new List<AjaxReturningModel>();

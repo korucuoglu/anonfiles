@@ -66,7 +66,6 @@ namespace AnonFilesUpload.Api.Controllers
             return Ok(data);
         }
 
-        [AllowAnonymous]
         [HttpGet("direct/{id}")]
         public async Task<IActionResult> ReturnDirectLinkByMetaDataIdAsync(string id)
         {
@@ -81,7 +80,6 @@ namespace AnonFilesUpload.Api.Controllers
             return Redirect(data);
         }
 
-        [AllowAnonymous]
         [HttpGet("getdirect/{id}")]
         public async Task<IActionResult> GetDirectLinkByMetaDataIdAsync(string id)
         {

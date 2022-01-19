@@ -2,6 +2,7 @@
 using AnonFilesUpload.MVC.Hubs;
 using AnonFilesUpload.MVC.Models;
 using AnonFilesUpload.MVC.Services;
+using AnonFilesUpload.MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -24,10 +25,9 @@ namespace AnonFilesUpload.MVC.Controllers
 
         private IHubContext<HubTest> _hubContext;
 
-        public HomeController(ILogger<HomeController> logger, IHttpClientFactory iHttpClientFactory, IApiService apiService, IHubContext<HubTest> hubContext)
+        public HomeController(ILogger<HomeController> logger, IApiService apiService, IHubContext<HubTest> hubContext)
         {
             _logger = logger;
-            apiService.HttpClient = iHttpClientFactory.CreateClient("ApiServiceClient");
             _apiService = apiService;
             _hubContext = hubContext;
         }

@@ -40,10 +40,6 @@ namespace AnonFilesUpload.IdentityServer
                 });
             });
 
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<DataContext>()
-            //    .AddDefaultTokenProviders();
-
             var builder = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -91,7 +87,7 @@ namespace AnonFilesUpload.IdentityServer
 
             app.UseRouting();
             app.UseIdentityServer();
-            app.UseAuthentication(); // 
+            app.UseAuthentication(); 
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

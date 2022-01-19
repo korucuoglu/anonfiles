@@ -5,11 +5,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace AnonFilesUpload.MVC.Services
+namespace AnonFilesUpload.MVC.Services.Interfaces
 {
     public interface IApiService
     {
-        HttpClient HttpClient { get; set; }
         Task<string> GetAsync(string uri);
         Task<T> GetAllAsync<T>(string uri);
 

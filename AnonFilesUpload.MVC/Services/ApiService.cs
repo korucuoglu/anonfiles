@@ -1,7 +1,7 @@
 ﻿using AnonFilesUpload.Data.Models;
+using AnonFilesUpload.MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -12,11 +12,16 @@ namespace AnonFilesUpload.MVC.Services
 {
     public class ApiService : IApiService
     {
-        public HttpClient HttpClient { get; set; }
+        private readonly HttpClient _client;
+
+        public ApiService(HttpClient client)
+        {
+            _client = client;
+        }
 
         public async Task<string> GetAsync(string uri)
         {
-            var response = await HttpClient.GetAsync(uri);
+            var response = await _client.GetAsync(uri);
 
             if (response.IsSuccessStatusCode)
             {
@@ -31,7 +36,7 @@ namespace AnonFilesUpload.MVC.Services
         {
             T dtos = default(T);
 
-            var response = await HttpClient.GetAsync(uri);
+            var response = await _client.GetAsync(uri);
 
             if (response.IsSuccessStatusCode)
             {
@@ -61,7 +66,7 @@ namespace AnonFilesUpload.MVC.Services
 
             var multipartContent = await GetMultipartContentAsync(file, "file");
 
-            var response = await HttpClient.PostAsync($"{uri}", multipartContent);
+            var response = await _client.PostAsync($"{uri}", multipartContent);
 
             if (response.IsSuccessStatusCode)
             {
@@ -88,7 +93,7 @@ namespace AnonFilesUpload.MVC.Services
                 MediaTypeHeaderValue.Parse("image/jpeg");
             requestContent.Add(imageContent, "image", "image.jpg");
 
-            return await HttpClient.PostAsync(url, requestContent);
+            return await _client.PostAsync(url, requestContent);
         }
 
         //public async Task<bool> Remove(int id)

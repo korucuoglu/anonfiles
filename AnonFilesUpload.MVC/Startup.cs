@@ -1,5 +1,9 @@
+using AnonFilesUpload.MVC.Extensions;
+using AnonFilesUpload.MVC.Handler;
 using AnonFilesUpload.MVC.Hubs;
+using AnonFilesUpload.MVC.Models;
 using AnonFilesUpload.MVC.Services;
+using AnonFilesUpload.MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,18 +25,17 @@ namespace AnonFilesUpload.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+           
+
+            services.AddHttpClientServices(Configuration);
+
             services.AddControllersWithViews();
 
-            services.AddHttpClient("ApiServiceClient", opt =>
-            {
-                opt.BaseAddress = new Uri(Configuration["ApibaseUrl"].ToString());
-
-            });
 
 
             services.AddSignalR();
 
-            services.AddSingleton(typeof(IApiService), typeof(ApiService));
+           
 
         }
 
@@ -54,6 +57,7 @@ namespace AnonFilesUpload.MVC
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
