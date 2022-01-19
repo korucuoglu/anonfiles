@@ -4,6 +4,7 @@
 
 using AnonFilesUpload.Data.Models;
 using AnonFilesUpload.Data.Registiration;
+using AnonFilesUpload.IdentityServer.Services;
 using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -58,6 +59,7 @@ namespace AnonFilesUpload.IdentityServer
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
+            builder.AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>();
 
             services.AddAuthentication()
                 .AddGoogle(options =>
