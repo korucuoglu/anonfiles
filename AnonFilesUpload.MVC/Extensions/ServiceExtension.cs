@@ -2,6 +2,7 @@
 using AnonFilesUpload.MVC.Models;
 using AnonFilesUpload.MVC.Services;
 using AnonFilesUpload.MVC.Services.Interfaces;
+using AnonFilesUpload.Shared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -23,20 +24,25 @@ namespace AnonFilesUpload.MVC.Extensions
             services.AddScoped<ResourceOwnerPasswordTokenHandler>();
              
 
-            // services.AddScoped(typeof(IApiService), typeof(ApiService));
+            
 
             services.AddHttpClient<IClientCredentialTokenService, ClientCredentialTokenService>();
             services.AddHttpClient<IIdentityService, IdentityService>();
 
+            services.AddScoped<IUserService, UserService>();
+
+
             var serviceApiSettings = Configuration.GetSection("ServiceApiSettings").Get<ServiceApiSettings>();
 
-            services.AddHttpClient<IUserService, UserService>(opt => {
-                
+            services.AddHttpClient<IApiService, ApiService>(opt =>
+            {
                 opt.BaseAddress = new Uri(serviceApiSettings.ApiBaseUri);
 
             }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
-            
+
+
+
         }
     }
 }

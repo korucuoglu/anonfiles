@@ -1,4 +1,4 @@
-﻿using AnonFilesUpload.Data.Models;
+﻿using AnonFilesUpload.Shared.Models;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 

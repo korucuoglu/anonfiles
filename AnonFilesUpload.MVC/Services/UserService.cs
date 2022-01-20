@@ -1,38 +1,21 @@
-﻿using AnonFilesUpload.Data.Entity;
-using AnonFilesUpload.Data.Models;
+﻿using AnonFilesUpload.Shared.Models;
 using AnonFilesUpload.MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace AnonFilesUpload.MVC.Services
 {
     public class UserService : IUserService
     {
-        private readonly HttpClient _client;
        
-        public UserService(HttpClient client)
+        private readonly IApiService _apiService;
+      
+        public UserService(IApiService apiService)
         {
-            _client = client;
-            
-        }
-
-        public async Task<string> GetGenericAsync(string uri)
-        {
-            var response = await _client.GetAsync(uri);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadAsStringAsync();
-              
-            }
-
-
-            return "";
+            _apiService = apiService;
         }
 
         private async Task<MultipartContent> GetMultipartContentAsync(IFormFile file)
@@ -49,28 +32,31 @@ namespace AnonFilesUpload.MVC.Services
             };
         }
 
-        public async Task<Response<AjaxReturningModel>> Upload(IFormFile file, string uri)
+        public async Task<Response<AjaxReturningModel>> Upload(IFormFile file)
         {
             var multipartContent = await GetMultipartContentAsync(file);
 
-            var response = await _client.PostAsync($"{uri}", multipartContent);
+            var deserializeData = await _apiService.PostAsync("data", multipartContent);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var data = JsonConvert.DeserializeObject<AjaxReturningModel>(await response.Content.ReadAsStringAsync());
+            var serializeData = JsonConvert.DeserializeObject<AjaxReturningModel>(deserializeData);
 
-                return Response<AjaxReturningModel>.Success(data, 200);
-            }
-
-            return Response<AjaxReturningModel>.Fail("Upload yapılırken hata meydana geldi", 500);
+            return Response<AjaxReturningModel>.Success(serializeData, 200);
         }
-
-        public async Task<string> UploadTest(IFormFile file)
+        
+        public async Task<Response<DataViewModel>> GetMyFiles()
         {
-            Thread.Sleep(1000);
-            return await Task.FromResult(file.FileName);
+            var deserializeData = await _apiService.GetAsync("data/myfiles");
+            var serializeData = JsonConvert.DeserializeObject<DataViewModel>(deserializeData);
+
+            return Response<DataViewModel>.Success(serializeData, 200);
+
         }
 
-       
+        public async Task<Response<string>> GetDirectLink(string id)
+        {
+            var deserializeData = await _apiService.GetAsync($"data/getdirect/{id}");
+
+            return Response<string>.Success(deserializeData, 200);
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 using AnonFilesUpload.Api.Services;
 using AnonFilesUpload.Data.Entity;
-using AnonFilesUpload.Data.Models;
+using AnonFilesUpload.Shared.Models;
 using AnonFilesUpload.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

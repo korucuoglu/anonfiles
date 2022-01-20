@@ -1,4 +1,4 @@
-using AnonFilesUpload.Data.Registiration;
+
 using AnonFilesUpload.MVC.Extensions;
 using AnonFilesUpload.MVC.Handler;
 using AnonFilesUpload.MVC.Hubs;
@@ -29,7 +29,6 @@ namespace AnonFilesUpload.MVC
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddScoped<ISharedIdentityService, SharedIdentityService>();
 
             services.AddHttpClientServices(Configuration);
 

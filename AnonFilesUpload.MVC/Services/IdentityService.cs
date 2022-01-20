@@ -33,7 +33,6 @@ namespace AnonFilesUpload.MVC.Services
             _serviceApiSettings = serviceApiSettings.Value;
         }
 
-        public string GetUserId => _httpContextAccessor.HttpContext.User.FindFirst("sub").Value;
 
         public async Task<TokenResponse> GetAccessTokenByRefreshToken()
         {

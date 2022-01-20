@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnonFilesUpload.Data.Models
+namespace AnonFilesUpload.Shared.Models
 {
     public class UploadHttpClient
     {

@@ -1,19 +1,12 @@
-﻿using AnonFilesUpload.Data.Models;
+﻿using AnonFilesUpload.Shared.Models;
 using AnonFilesUpload.MVC.Hubs;
 using AnonFilesUpload.MVC.Models;
-using AnonFilesUpload.MVC.Services;
 using AnonFilesUpload.MVC.Services.Interfaces;
-using AnonFilesUpload.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -22,16 +15,12 @@ namespace AnonFilesUpload.MVC.Controllers
     public class HomeController : Controller
     {
         private readonly IUserService _userService;
-      
-        private readonly ISharedIdentityService _sharedIdentityService;
-
         private IHubContext<HubTest> _hubContext;
 
-        public HomeController(IUserService userService, IHubContext<HubTest> hubContext, ISharedIdentityService sharedIdentityService)
+        public HomeController(IUserService userService, IHubContext<HubTest> hubContext)
         {
             _userService = userService;
             _hubContext = hubContext;
-            _sharedIdentityService = sharedIdentityService;
         }
 
         [HttpGet]
@@ -50,7 +39,7 @@ namespace AnonFilesUpload.MVC.Controllers
             foreach (var file in files)
             {
                 await _hubContext.Clients.All.SendAsync("filesUploadedStarting", file.FileName);
-                var data = await _userService.Upload(file, "data");
+                var data = await _userService.Upload(file);
                 model.Add(data.Data);
                 await _hubContext.Clients.All.SendAsync("filesUploaded", data.Data);
             }
@@ -59,35 +48,24 @@ namespace AnonFilesUpload.MVC.Controllers
 
         }
 
-        [HttpGet]
-        public async Task<IActionResult> List()
-        {
-            var deserializeData = await _userService.GetGenericAsync("data");
-            var serializeData = JsonConvert.DeserializeObject<DataViewModel>(deserializeData);
-
-            
-            return await Task.FromResult(View(serializeData));
-        }
-
+        
         public async Task<IActionResult> Files()
         {
-            var deserializeData = await _userService.GetGenericAsync("data/myfiles");
-            var serializeData = JsonConvert.DeserializeObject<DataViewModel>(deserializeData);
-
-            return await Task.FromResult(View("List", serializeData));
+            var data = await _userService.GetMyFiles();
+            return await Task.FromResult(View("List", data.Data));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetLink(string id)
         {
-            var data = await _userService.GetGenericAsync($"data/getdirect/{id}");
+            var data = await _userService.GetDirectLink(id);
 
-            if (String.IsNullOrEmpty(data))
+            if (!data.IsSuccessful)
             {
                 return RedirectToAction("Error");
             }
 
-            return Redirect(data);
+            return Redirect(data.Data);
         }
 
         public IActionResult Privacy()

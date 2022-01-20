@@ -1,11 +1,12 @@
 using AnonFilesUpload.Api.Hubs;
 using AnonFilesUpload.Api.Services;
-using AnonFilesUpload.Data.Registiration;
+using AnonFilesUpload.Data.Entity;
 using AnonFilesUpload.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -51,7 +52,15 @@ namespace AnonFilesUpload.Api
 
             services.AddHttpClient<FileService>();
 
-            services.AddDataContext(Configuration);
+            services.AddDbContext<DataContext>(opt =>
+            {
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), configure =>
+                {
+                    configure.MigrationsAssembly("AnonFilesUpload.Data");
+
+                });
+
+            });
 
             services.AddCors(opt =>
             {

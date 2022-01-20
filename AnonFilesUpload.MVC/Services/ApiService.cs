@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AnonFilesUpload.MVC.Services.Interfaces;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace AnonFilesUpload.Shared
+namespace AnonFilesUpload.MVC.Services
 {
-    public interface IApiService
-    {
-        Task<string> GetAsync(string uri);
-        Task<string> DeleteAsync(string uri);
-        Task<string> PutAsync(string uri, HttpContent content);
-        Task<string> PostAsync(string uri, HttpContent content);
-    }
-
     public class ApiService : IApiService
     {
         private HttpClient _client;

@@ -1,6 +1,6 @@
 ﻿
 using AnonFilesUpload.Data.Entity;
-using AnonFilesUpload.Data.Models;
+using AnonFilesUpload.Shared.Models;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
