@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Ports.txt = Ports.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6A222276-0120-40E3-9EE6-BF188A36DF6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnonFilesUpload.Shared", "AnonFilesUpload.Shared\AnonFilesUpload.Shared.csproj", "{2F7F0322-09EA-41DA-B2AD-F96BC89A7DA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,9 +42,16 @@ Global
 		{67FA6BC2-3159-44BF-9B04-2D7D0260177F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67FA6BC2-3159-44BF-9B04-2D7D0260177F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67FA6BC2-3159-44BF-9B04-2D7D0260177F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F7F0322-09EA-41DA-B2AD-F96BC89A7DA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F7F0322-09EA-41DA-B2AD-F96BC89A7DA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F7F0322-09EA-41DA-B2AD-F96BC89A7DA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F7F0322-09EA-41DA-B2AD-F96BC89A7DA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6A222276-0120-40E3-9EE6-BF188A36DF6F} = {05C31F32-47B0-4291-9F1E-939F3E5BC53B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E6FF9DC-FA88-43CB-9600-94F3D301ABBB}

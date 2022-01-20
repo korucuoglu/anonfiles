@@ -10,33 +10,33 @@ namespace AnonFilesUpload.Api.Services
     {
         public static string GetUsedSpace(double size)
         {
-            var maxSize = ByteSize.FromBytes(size);
+            var UsedByte = ByteSize.FromBytes(size);
 
-            if (maxSize.GigaBytes > 1)
+            if (UsedByte.GigaBytes > 1)
             {
-                return $"{maxSize.GigaBytes} GB";
+                return $"{Math.Round(UsedByte.GigaBytes, 2)} GB";
             }
 
-            if (maxSize.MegaBytes > 1)
+            if (UsedByte.MegaBytes > 1)
             {
-                return $"{maxSize.MegaBytes} MB";
+                return $"{Math.Round(UsedByte.MegaBytes, 2)} MB";
             }
 
-            if (maxSize.KiloBytes > 1)
+            if (UsedByte.KiloBytes > 1)
             {
-                return $"{maxSize.KibiBytes} KB";
+                return $"{Math.Round(UsedByte.KiloBytes, 2)} KB";
             }
 
-            return $"{maxSize.Bytes} Byte";
+            return $"{Math.Round(UsedByte.KiloBytes, 2)} Byte";
 
-            
+
         }
 
         public static string GetRemainingSpace(double size)
         {
             var maxSizeForByte = ByteSize.FromGigaBytes(100).Bytes;
 
-            var remainingSpace = (size * 100) / maxSizeForByte;
+            var remainingSpace = Math.Floor((size * 100) / maxSizeForByte);
 
             return $"% {remainingSpace}";
         }

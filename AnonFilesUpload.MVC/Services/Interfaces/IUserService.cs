@@ -7,18 +7,14 @@ using System.Threading.Tasks;
 
 namespace AnonFilesUpload.MVC.Services.Interfaces
 {
-    public interface IApiService
+    public interface IUserService
     {
-        //Task<string> GetAsync(string uri);
-        //Task<T> GetAllAsync<T>(string uri);
         Task<string> GetGenericAsync(string uri);
-
 
         Task<Response<AjaxReturningModel>> Upload(IFormFile file, string uri);
       
 
-        //	Task<bool> Remove(int id);
-        //	Task<bool> Update(T dto);
+       
 
 
 

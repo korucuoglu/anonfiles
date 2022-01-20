@@ -1,6 +1,7 @@
 using AnonFilesUpload.Api.Hubs;
 using AnonFilesUpload.Api.Services;
 using AnonFilesUpload.Data.Registiration;
+using AnonFilesUpload.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace AnonFilesUpload.Api
 {
@@ -22,6 +24,11 @@ namespace AnonFilesUpload.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ISharedIdentityService, SharedIdentityService>();
+            services.AddHttpContextAccessor();
+
+            
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub"); // Api içerisinden UserId deðerlerini okuyabilmek için bunu ekledik. 
 
             services.AddAuthentication().AddJwtBearer(options =>
             {

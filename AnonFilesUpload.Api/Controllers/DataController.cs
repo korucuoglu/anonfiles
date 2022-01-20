@@ -2,10 +2,12 @@
 using AnonFilesUpload.Api.Services;
 using AnonFilesUpload.Data.Entity;
 using AnonFilesUpload.Data.Models;
+using AnonFilesUpload.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,51 +19,30 @@ namespace AnonFilesUpload.Api.Controllers
     {
         private readonly FileService _fileService;
         private readonly DataContext _context;
+        private readonly ISharedIdentityService _sharedIdentityService;
 
-
-        public DataController(FileService fileService, DataContext context)
+        public DataController(FileService fileService, DataContext context, ISharedIdentityService sharedIdentityService)
         {
             _fileService = fileService;
             _context = context;
-
+            _sharedIdentityService = sharedIdentityService;
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file, string UserId)
+        public async Task<IActionResult> Upload(IFormFile file)
         {
-            var data = await _fileService.UploadAsync(file, UserId);
+
+            var data = await _fileService.UploadAsync(file, _sharedIdentityService.GetUserId);
 
             return Ok(data);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+
+        [HttpGet("myfiles")]
+        public async Task<IActionResult> GetFilesByUserId()
         {
-            var data = await _context.Data.Select(x => new DataModel()
-            {
-                FileId = x.MetaDataId,
-                FileName = x.Name,
-                Size = x.Size
 
-            }).ToListAsync();
-
-            DataViewModel model = new()
-            {
-                DataModel = data,
-                TotalSize = data.Sum(x => x.Size),
-                UsedSpace = Helper.GetUsedSpace(data.Sum(x => x.Size)),
-                RemainingSpace = Helper.GetRemainingSpace(data.Sum(x => x.Size)),
-
-            };
-            return Ok(model);
-        }
-
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetByUserIdAsync(string UserId)
-        {
-            var data = await _context.Data.Where(x => x.UserId == UserId).Select(x => new DataModel()
+            var data = await _context.Data.Where(x => x.UserId == _sharedIdentityService.GetUserId).Select(x => new DataModel()
             {
                 FileId = x.MetaDataId,
                 FileName = x.Name,
@@ -79,20 +60,7 @@ namespace AnonFilesUpload.Api.Controllers
             };
 
             return Ok(model);
-        }
 
-        [HttpGet("direct/{id}")]
-        public async Task<IActionResult> ReturnDirectLinkByMetaDataIdAsync(string id)
-        {
-            // MetaData Id üzerinden ShortUri elde edilir. 
-            // Short Üri üzerinden DirectLink elde edilierek geriye dönülür. 
-
-
-            string shortUri = "https://anonfiles.com/" + id;
-
-            var data = await _fileService.GetDirectLinkAsync(shortUri);
-
-            return Redirect(data);
         }
 
         [HttpGet("getdirect/{id}")]
@@ -109,25 +77,6 @@ namespace AnonFilesUpload.Api.Controllers
             return Ok(data);
         }
 
-
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    var data = await _fileService.DeleteByIdAsync<Data.Entity.Data>(id);
-        //    return NotFound(data);
-
-        //}
-
-
-        //[HttpGet("control/{id}")]
-        //public async Task<IActionResult> ControlAsync(string id)
-        //{
-        //    // MetaDataId üzerinden DirectLinkControl edilir. 
-        //    // Kontrol sonucunda link güncel değilse güncellenir. 
-
-        //    var DataEntity = await _context.Data.Where(x => x.MetaDataId == id).FirstOrDefaultAsync();
-        //    var data = await _fileService.DirectLinkControl(DataEntity);
-        //    return Ok(data);
-        //}
+       
     }
 }

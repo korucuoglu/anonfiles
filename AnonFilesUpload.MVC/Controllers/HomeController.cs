@@ -3,6 +3,7 @@ using AnonFilesUpload.MVC.Hubs;
 using AnonFilesUpload.MVC.Models;
 using AnonFilesUpload.MVC.Services;
 using AnonFilesUpload.MVC.Services.Interfaces;
+using AnonFilesUpload.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -20,19 +21,17 @@ namespace AnonFilesUpload.MVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        private readonly IApiService _apiService;
-        private readonly IIdentityService _identityService;
+        private readonly IUserService _userService;
+      
+        private readonly ISharedIdentityService _sharedIdentityService;
 
         private IHubContext<HubTest> _hubContext;
 
-        public HomeController(ILogger<HomeController> logger, IApiService apiService, IHubContext<HubTest> hubContext, IIdentityService identityService)
+        public HomeController(IUserService userService, IHubContext<HubTest> hubContext, ISharedIdentityService sharedIdentityService)
         {
-            _logger = logger;
-            _apiService = apiService;
+            _userService = userService;
             _hubContext = hubContext;
-            _identityService = identityService;
+            _sharedIdentityService = sharedIdentityService;
         }
 
         [HttpGet]
@@ -51,7 +50,7 @@ namespace AnonFilesUpload.MVC.Controllers
             foreach (var file in files)
             {
                 await _hubContext.Clients.All.SendAsync("filesUploadedStarting", file.FileName);
-                var data = await _apiService.Upload(file, $"data?UserId={_identityService.GetUserId}");
+                var data = await _userService.Upload(file, "data");
                 model.Add(data.Data);
                 await _hubContext.Clients.All.SendAsync("filesUploaded", data.Data);
             }
@@ -63,7 +62,7 @@ namespace AnonFilesUpload.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> List()
         {
-            var deserializeData = await _apiService.GetGenericAsync("data");
+            var deserializeData = await _userService.GetGenericAsync("data");
             var serializeData = JsonConvert.DeserializeObject<DataViewModel>(deserializeData);
 
             
@@ -72,7 +71,7 @@ namespace AnonFilesUpload.MVC.Controllers
 
         public async Task<IActionResult> Files()
         {
-            var deserializeData = await _apiService.GetGenericAsync($"data/?UserId={_identityService.GetUserId}");
+            var deserializeData = await _userService.GetGenericAsync("data/myfiles");
             var serializeData = JsonConvert.DeserializeObject<DataViewModel>(deserializeData);
 
             return await Task.FromResult(View("List", serializeData));
@@ -81,7 +80,7 @@ namespace AnonFilesUpload.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetLink(string id)
         {
-            var data = await _apiService.GetGenericAsync($"data/getdirect/{id}");
+            var data = await _userService.GetGenericAsync($"data/getdirect/{id}");
 
             if (String.IsNullOrEmpty(data))
             {

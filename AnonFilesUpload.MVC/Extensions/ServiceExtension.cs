@@ -30,7 +30,7 @@ namespace AnonFilesUpload.MVC.Extensions
 
             var serviceApiSettings = Configuration.GetSection("ServiceApiSettings").Get<ServiceApiSettings>();
 
-            services.AddHttpClient<IApiService, ApiService>(opt => {
+            services.AddHttpClient<IUserService, UserService>(opt => {
                 
                 opt.BaseAddress = new Uri(serviceApiSettings.ApiBaseUri);
 

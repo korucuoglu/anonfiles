@@ -11,28 +11,15 @@ using System.Threading.Tasks;
 
 namespace AnonFilesUpload.MVC.Services
 {
-    public class ApiService : IApiService
+    public class UserService : IUserService
     {
         private readonly HttpClient _client;
        
-        public ApiService(HttpClient client)
+        public UserService(HttpClient client)
         {
             _client = client;
             
         }
-
-        //public async Task<string> GetAsync(string uri)
-        //{
-        //    var response = await _client.GetAsync(uri);
-
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        var data = await response.Content.ReadAsStringAsync();
-        //        return await Task.FromResult(data);
-        //    }
-
-        //    return await Task.FromResult("");
-        //}
 
         public async Task<string> GetGenericAsync(string uri)
         {
@@ -40,7 +27,6 @@ namespace AnonFilesUpload.MVC.Services
 
             if (response.IsSuccessStatusCode)
             {
-                // dtos = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
                 return await response.Content.ReadAsStringAsync();
               
             }
@@ -48,20 +34,6 @@ namespace AnonFilesUpload.MVC.Services
 
             return "";
         }
-
-        //public async Task<T> GetAllAsync<T>(string uri)
-        //{
-        //    T dtos = default(T);
-
-        //    var response = await _client.GetAsync(uri);
-
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        dtos = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
-        //    }
-
-        //    return dtos;
-        //}
 
         private async Task<MultipartContent> GetMultipartContentAsync(IFormFile file)
         {
@@ -97,19 +69,6 @@ namespace AnonFilesUpload.MVC.Services
         {
             Thread.Sleep(1000);
             return await Task.FromResult(file.FileName);
-        }
-
-
-        public async Task<HttpResponseMessage> UploadImageNew(string url, byte[] ImageData)
-        {
-            var requestContent = new MultipartFormDataContent();
-            //    here you can specify boundary if you need---^
-            var imageContent = new ByteArrayContent(ImageData);
-            imageContent.Headers.ContentType =
-                MediaTypeHeaderValue.Parse("image/jpeg");
-            requestContent.Add(imageContent, "image", "image.jpg");
-
-            return await _client.PostAsync(url, requestContent);
         }
 
        
