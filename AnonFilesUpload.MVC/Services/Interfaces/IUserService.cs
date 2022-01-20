@@ -9,7 +9,7 @@ namespace AnonFilesUpload.MVC.Services.Interfaces
         Task<Response<UploadModel>> Upload(IFormFile file);
         Task<Response<DataViewModel>> GetMyFiles();
         Task<Response<string>> GetDirectLink(string id);
-        Task<Response<NoContent>> DeleteFile(string id);
+        Task<Response<bool>> DeleteFile(string id);
       
 
        

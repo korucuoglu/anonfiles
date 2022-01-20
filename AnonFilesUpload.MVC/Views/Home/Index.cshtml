@@ -11,50 +11,46 @@
                     <label class="block self-start">
                         <span class="sr-only">Dosya Seç</span>
                         <input type="file" multiple @@change="getInputFiles($event)"
-                            class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-200 file:text-green-600 hover:file:bg-green-600 hover:file:text-white" />
+                               class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-200 file:text-green-600 hover:file:bg-green-600 hover:file:text-white" />
                     </label>
                 </form>
             </div>
             <table class="border-collapse table-fixed lg:w-1/2 w-full text-sm">
                 <thead>
                     <tr>
-                        <th
-                            class="border-b dark:border-slate-600 font-medium md:p-4 p-2 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                            File Name</th>
-                        <th
-                            class="border-b dark:border-slate-600 font-medium md:p-4 p-2 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                            Size</th>
-                        <th
-                            class="border-b dark:border-slate-600 font-medium md:p-4 p-2 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
-                            Status</th>
-                        <th
-                            class="border-b dark:border-slate-600 font-medium md:p-4 p-2 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                        <th class="border-b dark:border-slate-600 font-medium md:p-4 p-2 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                            File Name
+                        </th>
+                        <th class="border-b dark:border-slate-600 font-medium md:p-4 p-2 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                            Size
+                        </th>
+                        <th class="border-b dark:border-slate-600 font-medium md:p-4 p-2 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
+                            Status
+                        </th>
+                        <th class="border-b dark:border-slate-600 font-medium md:p-4 p-2 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item in datas" :key="item.file.name">
-                        <td
-                            class="border-b border-slate-100 dark:border-slate-700 md:p-4 p-2 text-slate-500 dark:text-slate-400 pl-2">
+                        <td class="border-b border-slate-100 dark:border-slate-700 md:p-4 p-2 text-slate-500 dark:text-slate-400 pl-2">
                             {{ item.file.name }}
                         </td>
-                        <td
-                            class="border-b border-slate-100 dark:border-slate-700 md:p-4 p-2 text-slate-500 dark:text-slate-400">
-                            {{ item.file.size }} byte</td>
-                        <td
-                            class="border-b border-slate-100 dark:border-slate-700 md:p-4 p-2 text-slate-500 dark:text-slate-400">
+                        <td class="border-b border-slate-100 dark:border-slate-700 md:p-4 p-2 text-slate-500 dark:text-slate-400">
+                            {{ item.file.size }} byte
+                        </td>
+                        <td class="border-b border-slate-100 dark:border-slate-700 md:p-4 p-2 text-slate-500 dark:text-slate-400">
                             {{ item.status }}
                         </td>
-                        <td
-                            class="border-b border-slate-100 dark:border-slate-700 md:p-4 p-2 text-slate-500 dark:text-slate-400 overflow text-right">
+                        <td class="border-b border-slate-100 dark:border-slate-700 md:p-4 p-2 text-slate-500 dark:text-slate-400 overflow text-right">
                             <button v-if="item.status != 'Loaded'" @@click.prevent="deleteFile(item)"
-                                :disabled="item.status == 'Starting'"
-                                class="px-4 py-1 text-md text-red-600 font-semibold rounded-sm border border-red-600 hover:text-white hover:bg-red-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 disabled:bg-red-100">
+                                    :disabled="item.status == 'Starting'"
+                                    class="px-4 py-1 text-md text-red-600 font-semibold rounded-sm border border-red-600 hover:text-white hover:bg-red-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 disabled:bg-red-100">
                                 Delete
                             </button>
 
                             <a v-if="item.status == 'Loaded'" :href="BaseAddress + 'home/getlink/' + item.fileId"
-                                class="px-4 py-1 text-md text-green-600 font-semibold rounded-sm border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2">
+                               class="px-4 py-1 text-md text-green-600 font-semibold rounded-sm border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2">
                                 Indir
                             </a>
                         </td>
@@ -63,7 +59,7 @@
             </table>
             <div class="flex lg:w-1/2 w-full justify-end mt-10 mb-16">
                 <button @@click.prevent="addDocs" v-if="datas.length > 0"
-                    class="px-4 py-1 text-md text-blue-400 font-semibold rounded-sm border border-blue-400 hover:text-white hover:bg-blue-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">
+                        class="px-4 py-1 text-md text-blue-400 font-semibold rounded-sm border border-blue-400 hover:text-white hover:bg-blue-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">
                     Upload ({{ datas.length }})
                 </button>
             </div>
@@ -80,16 +76,12 @@
 
 <environment names="Staging,Production">
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"
-        integrity="sha512-lTLt+W7MrmDfKam+r3D2LURu0F47a3QaW5nF0c6Hl0JDZ57ruei+ovbg7BrZ+0bjVJ5YgzsAWE+RreERbpPE1g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"></script>
 </environment>
 
 <environment names="Development">
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.js"
-        integrity="sha512-un2apco0rYUiZXxbURvZ7oBq4u0cGrXaIbC4C1k5nAio6WRMyYvj8xKua3NqALOuu0F83zDha7nKoFCZzx26rg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.js"> </script>
 </environment>
 
 <script type="text/javascript">
@@ -191,111 +183,6 @@
 </script>
 
 
-
-
 }
 
 
-
-@*//const btn = document.getElementById("btn");
-
-    // btn.addEventListener('click', () => {
-
-    // var files = document.getElementById("files").files;
-    // var formData = new FormData();
-
-    // var tbodyRef = document.getElementById('myTable').getElementsByTagName('tbody')[0];
-
-
-    // for (var i = 0; i < files.length; i++) {
-
-    // formData.append("files", files[i]);
-
-    // var newRow = tbodyRef.insertRow(tbodyRef.rows.length);
-    // var newCell1 = newRow.insertCell(0);
-    // var newCell2 = newRow.insertCell(1);
-    // var newCell3 = newRow.insertCell(2);
-    // var newCell4 = newRow.insertCell(3);
-    // var newCell5 = newRow.insertCell(4);
-    // newCell1.innerHTML = "";
-    // newCell2.innerHTML = files[i].name
-    // newCell3.innerHTML = "";
-    // newCell4.innerHTML = "";
-
-    // // var link = `<a class="btn btn-sm btn-primary" href="https://localhost:44361/Home/GetLink/${files[i].name}">
-    İndir<a />`
-
-    // ////var link = document.createElement('a');
-    // ////link.classList.add("btn", "btn-sm", "btn-primary");
-    // ////link.setAttribute('href', "https://localhost:44361/Home/GetLink/" + "");
-    // ////link.innerHTML = "İndir";
-
-    // //newCell5.appendChild(link);
-
-    // newCell5.innerHTML = "";
-
-    // }
-
-
-    //})
-
-
-
-    //const submitButton = document.getElementById("submit");
-
-    //submitButton.addEventListener("click", (e) => {
-
-    // e.preventDefault();
-
-    // var files = document.getElementById("files").files;
-    // var formData = new FormData();
-
-    // for (var i = 0; i != files.length; i++) {
-    // formData.append("files", files[i]);
-    // }
-
-    // axios({
-    // method: 'post',
-    // url: '/home/upload',
-    // data: formData,
-    // contentType: "application/json; charset=utf-8",
-    // dataType: "json",
-    // }).then(function (response) {
-
-    // var data = response.data.data;
-    // var tbodyRef = document.getElementById('myTable').getElementsByTagName('tbody')[0];
-
-
-    // for (var i = 0; i < data.length; i++) {
-
-
-
-    // var newRow = tbodyRef.insertRow(tbodyRef.rows.length);
-    // var newCell1 = newRow.insertCell(0);
-    // var newCell2 = newRow.insertCell(1);
-    // var newCell3 = newRow.insertCell(2);
-    // var newCell4 = newRow.insertCell(3);
-    // var newCell5 = newRow.insertCell(4);
-    // newCell1.innerHTML = data[i].fileId
-    // newCell2.innerHTML = data[i].fileName
-
-    // if (data[i].success) {
-    // newCell3.innerHTML = `<i style="color:green" class="fas fa-check-circle"></i>`;
-    // } else {
-    // newCell3.innerHTML = `<i style="color:red" class="fas fa-times"></i>`;
-    // }
-
-
-    // newCell4.innerHTML = data[i].message
-
-    // var link = document.createElement('a');
-    // link.classList.add("btn", "btn-sm", "btn-primary");
-    // link.setAttribute('href', "https://localhost:44361/Home/GetLink/" + data[i].fileId);
-    // link.innerHTML = "İndir";
-
-    // newCell5.appendChild(link);
-    // }
-    // }
-    // );
-
-    //})*@

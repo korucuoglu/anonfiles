@@ -1,14 +1,7 @@
 ﻿
 using AnonFilesUpload.Api.Services;
-using AnonFilesUpload.Data.Entity;
-using AnonFilesUpload.Shared.Models;
-using AnonFilesUpload.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AnonFilesUpload.Api.Controllers
@@ -57,10 +50,10 @@ namespace AnonFilesUpload.Api.Controllers
 
         }
 
-        [HttpDelete("{MetaId}")]
-        public async Task<IActionResult> Delete(string MetaId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
         {
-            var data = await _fileService.DeleteAsyncByMetaId(MetaId);
+            var data = await _fileService.DeleteAsyncByMetaId(id);
 
             return new ObjectResult(data)
             {

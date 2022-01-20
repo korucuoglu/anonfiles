@@ -19,8 +19,8 @@ namespace AnonFilesUpload.Api.Services
         public Task<Response<UploadModel>> UploadAsync(IFormFile file);
         public Task<Response<DataViewModel>> GetFilesByUserId();
         public Task<Response<string>> GetDirectLinkByMetaId(string metaId);
-        public Task<Response<NoContent>> DeleteAsyncByMetaId(string metaId);
-      
+        public Task<Response<bool>> DeleteAsyncByMetaId(string metaId);
+
     }
 
     public class FileService : IFileService
@@ -37,11 +37,11 @@ namespace AnonFilesUpload.Api.Services
             _sharedIdentityService = sharedIdentityService;
         }
 
-        public async Task<Response<NoContent>> DeleteAsyncByMetaId(string metaId)
+        public async Task<Response<bool>> DeleteAsyncByMetaId(string metaId)
         {
             if (!_context.Data.Any(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId))
             {
-                return Response<NoContent>.Fail("Böyle bir dosya bulunamadı", 404);
+                return Response<bool>.Fail(false, 404);
             }
 
             var data = await _context.Data.Where(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId).FirstOrDefaultAsync();
@@ -49,7 +49,7 @@ namespace AnonFilesUpload.Api.Services
             _context.Remove(data);
             await _context.SaveChangesAsync();
 
-            return Response<NoContent>.Success(204);
+            return Response<bool>.Success(true, 200);
         }
 
         public async Task<Response<string>> GetDirectLinkByMetaId(string metaId)
@@ -68,7 +68,7 @@ namespace AnonFilesUpload.Api.Services
                 return Response<string>.Fail("Geçersiz URL", 500);
             }
 
-            HtmlWeb web = new HtmlWeb();
+            HtmlWeb web = new();
             var document = web.Load(shortUri);
 
             var xpath = "//*[@id='download-url']";
@@ -102,7 +102,7 @@ namespace AnonFilesUpload.Api.Services
 
         public async Task<Response<UploadModel>> UploadAsync(IFormFile file)
         {
-            if (!(file.Length > 0 && file != null))
+            if (file.Length < 0 || file == null)
             {
                 return Response<UploadModel>.Fail($"Gönderilen dosya boş olamaz", 500);
             }
@@ -114,11 +114,11 @@ namespace AnonFilesUpload.Api.Services
 
             if (!response.IsSuccessStatusCode)
             {
-               
+
                 var failedModel = new UploadModel() { fileName = file.FileName, success = false };
 
                 return Response<UploadModel>.Fail(failedModel, 500);
-               
+
 
 
             }
@@ -145,6 +145,6 @@ namespace AnonFilesUpload.Api.Services
 
 
 
-  
-   
+
+
 }

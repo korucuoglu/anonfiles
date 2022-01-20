@@ -10,7 +10,6 @@ namespace AnonFilesUpload.Shared.Models
         [JsonIgnore]
         public int StatusCode { get; set; }
 
-        [JsonIgnore]
         public bool IsSuccessful { get; set; }
 
         public List<string> Errors { get; set; }
@@ -23,7 +22,7 @@ namespace AnonFilesUpload.Shared.Models
 
         public static Response<T> Success(int statusCode)
         {
-            return new Response<T> { Data = default(T), StatusCode = statusCode, IsSuccessful = true };
+            return new Response<T> { Data = default, StatusCode = statusCode, IsSuccessful = true };
         }
 
         public static Response<T> Fail(List<string> errors, int statusCode)

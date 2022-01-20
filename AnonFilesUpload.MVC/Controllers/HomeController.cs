@@ -15,7 +15,7 @@ namespace AnonFilesUpload.MVC.Controllers
     public class HomeController : Controller
     {
         private readonly IUserService _userService;
-        private IHubContext<HubTest> _hubContext;
+        private readonly IHubContext<HubTest> _hubContext;
 
         public HomeController(IUserService userService, IHubContext<HubTest> hubContext)
         {
@@ -52,10 +52,17 @@ namespace AnonFilesUpload.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Files()
         {
+            return await Task.FromResult(View());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyFiles()
+        {
             var data = await _userService.GetMyFiles();
 
-            return await Task.FromResult(View(data.Data));
+            return Json(data);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetLink(string id)
@@ -71,7 +78,10 @@ namespace AnonFilesUpload.MVC.Controllers
         {
             var data = await _userService.DeleteFile(id);
 
-            return RedirectToAction("Files");
+            return new ObjectResult(data)
+            {
+                StatusCode = data.StatusCode
+            };
         }
 
         public IActionResult Privacy()

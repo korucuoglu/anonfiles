@@ -18,8 +18,6 @@ namespace AnonFilesUpload.MVC.Services
             _apiService = apiService;
         }
 
-       
-
         public async Task<Response<UploadModel>> Upload(IFormFile file)
         {
             var content = await Helper.GetMultipartContentAsync(file);
@@ -51,11 +49,11 @@ namespace AnonFilesUpload.MVC.Services
             return serializeData;
         }
 
-        public async Task<Response<NoContent>> DeleteFile(string id)
+        public async Task<Response<bool>> DeleteFile(string id)
         {
             var deserializeData = await _apiService.DeleteAsync($"data/{id}");
 
-            var serializeData = JsonConvert.DeserializeObject<Response<NoContent>>(deserializeData);
+            var serializeData = JsonConvert.DeserializeObject<Response<bool>>(deserializeData);
 
             return serializeData;
         }

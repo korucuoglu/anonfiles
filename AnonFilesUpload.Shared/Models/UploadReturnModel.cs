@@ -15,7 +15,7 @@
 
     public class Size
     {
-        public int bytes { get; set; }
+        public long bytes { get; set; }
         public string readable { get; set; }
     }
 
