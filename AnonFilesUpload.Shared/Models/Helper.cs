@@ -1,10 +1,11 @@
 ﻿using ByteSizeLib;
+using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace AnonFilesUpload.Api.Services
+namespace AnonFilesUpload.Shared.Models
 {
     public static class Helper
     {
@@ -39,6 +40,18 @@ namespace AnonFilesUpload.Api.Services
             var remainingSpace = Math.Floor((size * 100) / maxSizeForByte);
 
             return $"% {remainingSpace}";
+        }
+
+        public static async Task<MultipartContent> GetMultipartContentAsync(IFormFile file)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var multipartContent = new MultipartFormDataContent();
+                await file.CopyToAsync(ms);
+                multipartContent.Add(new ByteArrayContent(ms.ToArray()), "file", file.FileName);
+
+                return multipartContent;
+            };
         }
 
     }

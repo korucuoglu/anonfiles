@@ -18,37 +18,27 @@ namespace AnonFilesUpload.MVC.Services
             _apiService = apiService;
         }
 
-        private async Task<MultipartContent> GetMultipartContentAsync(IFormFile file)
+       
+
+        public async Task<Response<UploadModel>> Upload(IFormFile file)
         {
-            using (var ms = new MemoryStream())
-            {
-                var multipartContent = new MultipartFormDataContent();
+            var content = await Helper.GetMultipartContentAsync(file);
 
-                await file.CopyToAsync(ms);
-                multipartContent.Add(new ByteArrayContent(ms.ToArray()), "file", file.FileName);
+            var deserializeData = await _apiService.PostAsync("data", content);
+
+            var serializeData = JsonConvert.DeserializeObject<Response<UploadModel>>(deserializeData);
+
+            return serializeData;
 
 
-                return multipartContent;
-            };
-        }
-
-        public async Task<Response<AjaxReturningModel>> Upload(IFormFile file)
-        {
-            var multipartContent = await GetMultipartContentAsync(file);
-
-            var deserializeData = await _apiService.PostAsync("data", multipartContent);
-
-            var serializeData = JsonConvert.DeserializeObject<AjaxReturningModel>(deserializeData);
-
-            return Response<AjaxReturningModel>.Success(serializeData, 200);
         }
         
         public async Task<Response<DataViewModel>> GetMyFiles()
         {
             var deserializeData = await _apiService.GetAsync("data/myfiles");
-            var serializeData = JsonConvert.DeserializeObject<DataViewModel>(deserializeData);
+            var serializeData = JsonConvert.DeserializeObject<Response<DataViewModel>>(deserializeData);
 
-            return Response<DataViewModel>.Success(serializeData, 200);
+            return serializeData;
 
         }
 
@@ -56,7 +46,18 @@ namespace AnonFilesUpload.MVC.Services
         {
             var deserializeData = await _apiService.GetAsync($"data/getdirect/{id}");
 
-            return Response<string>.Success(deserializeData, 200);
+            var serializeData = JsonConvert.DeserializeObject<Response<string>>(deserializeData);
+
+            return serializeData;
+        }
+
+        public async Task<Response<NoContent>> DeleteFile(string id)
+        {
+            var deserializeData = await _apiService.DeleteAsync($"data/{id}");
+
+            var serializeData = JsonConvert.DeserializeObject<Response<NoContent>>(deserializeData);
+
+            return serializeData;
         }
     }
 }

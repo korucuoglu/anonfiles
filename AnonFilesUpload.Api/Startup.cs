@@ -1,4 +1,3 @@
-using AnonFilesUpload.Api.Hubs;
 using AnonFilesUpload.Api.Services;
 using AnonFilesUpload.Data.Entity;
 using AnonFilesUpload.Shared;
@@ -26,6 +25,7 @@ namespace AnonFilesUpload.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ISharedIdentityService, SharedIdentityService>();
+            services.AddScoped<IFileService, FileService>();
             services.AddHttpContextAccessor();
 
             
@@ -40,7 +40,7 @@ namespace AnonFilesUpload.Api
                 // AUd parametresinden Identity Server, hangi akýþ tipinde olduðunu anlar ve ona göre davranýþ sergiler. 
             });
 
-            services.AddSignalR();
+          
 
             services.AddControllers(opt =>
             {
@@ -62,15 +62,6 @@ namespace AnonFilesUpload.Api
 
             });
 
-            services.AddCors(opt =>
-            {
-
-                opt.AddPolicy("CorsPolicy", builder =>
-                {
-
-                    builder.WithOrigins(Configuration.GetSection("VueClient").Value).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-                });
-            });
 
 
         }
@@ -83,7 +74,6 @@ namespace AnonFilesUpload.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("CorsPolicy");
 
             app.UseHttpsRedirection();
 
@@ -96,7 +86,7 @@ namespace AnonFilesUpload.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<HubTestApi>("/hub");
+               
             });
         }
     }

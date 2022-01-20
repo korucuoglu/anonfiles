@@ -41,6 +41,16 @@ namespace AnonFilesUpload.Shared.Models
         {
             return new Response<T> { Errors = new List<string>() { error }, StatusCode = statusCode, IsSuccessful = false };
         }
+
+        public static Response<T> Fail(T data,  int statusCode)
+        {
+            return new Response<T>
+            {
+                Data = data,
+                StatusCode = statusCode,
+                IsSuccessful = false
+            };
+        }
     }
 
     public class NoContent

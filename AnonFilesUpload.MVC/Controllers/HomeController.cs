@@ -34,7 +34,7 @@ namespace AnonFilesUpload.MVC.Controllers
         public async Task<IActionResult> Upload(IFormFile[] files)
         {
 
-            var model = new List<AjaxReturningModel>();
+            var model = new List<UploadModel>();
 
             foreach (var file in files)
             {
@@ -49,10 +49,12 @@ namespace AnonFilesUpload.MVC.Controllers
         }
 
         
+        [HttpGet]
         public async Task<IActionResult> Files()
         {
             var data = await _userService.GetMyFiles();
-            return await Task.FromResult(View("List", data.Data));
+
+            return await Task.FromResult(View(data.Data));
         }
 
         [HttpGet]
@@ -60,12 +62,16 @@ namespace AnonFilesUpload.MVC.Controllers
         {
             var data = await _userService.GetDirectLink(id);
 
-            if (!data.IsSuccessful)
-            {
-                return RedirectToAction("Error");
-            }
 
             return Redirect(data.Data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var data = await _userService.DeleteFile(id);
+
+            return RedirectToAction("Files");
         }
 
         public IActionResult Privacy()

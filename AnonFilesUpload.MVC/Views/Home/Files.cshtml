@@ -22,6 +22,7 @@
                     <td>@item.FileName</td>
                     <td>
                         <a class="btn btn-sm btn-primary" asp-action="GetLink" asp-controller="Home" asp-route-id="@item.FileId">İndir</a>
+                        <a class="btn btn-sm btn-danger" asp-action="Delete" asp-controller="Home" asp-route-id="@item.FileId">Sil</a>
 
                     </td>
                 </tr>

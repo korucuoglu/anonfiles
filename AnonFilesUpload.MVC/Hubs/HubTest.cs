@@ -12,7 +12,7 @@ namespace AnonFilesUpload.MVC.Hubs
         }
 
 
-        public async Task Upload(AjaxReturningModel model)
+        public async Task Upload(UploadModel model)
         {
             await Clients.All.SendAsync("filesUploaded", model);
         }
