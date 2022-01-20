@@ -1,11 +1,9 @@
-using System;
+
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using AnonFilesUpload.Api.Hubs;
 using AnonFilesUpload.Api.Services;
 using AnonFilesUpload.Data.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -27,24 +25,6 @@ namespace AnonFilesUpload.Api.Controllers
             _fileService = fileService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile[] files)
-        {
-            var ListModel = new List<AjaxReturningModel>();
-
-            foreach (var file in files)
-            {
-                await _hubContext.Clients.All.SendAsync("filesUploadedStarting", file.FileName);
-
-                var model = await _fileService.UploadAsync(file);
-
-                ListModel.Add(model);
-
-                await _hubContext.Clients.All.SendAsync("filesUploaded", model);
-            }
-
-            return await Task.FromResult(Ok(ListModel));
-        }
 
         [HttpPost]
         public async Task<IActionResult> Test(IFormFile[] files)

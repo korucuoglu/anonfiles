@@ -45,8 +45,8 @@ namespace AnonFilesUpload.MVC.Services
 
             var clientCredentialTokenRequest = new ClientCredentialsTokenRequest
             {
-                ClientId = _clientSettings.ClientId,
-                ClientSecret = _clientSettings.ClientSecret,
+                ClientId = _clientSettings.WebClient.ClientId,
+                ClientSecret = _clientSettings.WebClient.ClientSecret,
                 Address = disco.TokenEndpoint
             };
 

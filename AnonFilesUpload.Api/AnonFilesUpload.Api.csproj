@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\**" />
+    <Content Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ByteSize" Version="2.1.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.39" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" />
@@ -25,10 +32,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AnonFilesUpload.Data\AnonFilesUpload.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

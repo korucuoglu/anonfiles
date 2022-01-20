@@ -26,8 +26,10 @@ namespace AnonFilesUpload.Api
             services.AddAuthentication().AddJwtBearer(options =>
             {
                 options.Authority = Configuration["IdentityServerURL"];
-                options.Audience = "resource_api";
+                options.Audience = "resource_api_password"; 
                 options.RequireHttpsMetadata = false;
+
+                // AUd parametresinden Identity Server, hangi akýþ tipinde olduðunu anlar ve ona göre davranýþ sergiler. 
             });
 
             services.AddSignalR();
@@ -37,6 +39,7 @@ namespace AnonFilesUpload.Api
                 var policy = new AuthorizationPolicyBuilder("Bearer").RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));
             });
+
 
 
             services.AddHttpClient<FileService>();

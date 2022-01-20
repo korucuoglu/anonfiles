@@ -9,11 +9,13 @@ namespace AnonFilesUpload.MVC.Services.Interfaces
 {
     public interface IApiService
     {
-        Task<string> GetAsync(string uri);
-        Task<T> GetAllAsync<T>(string uri);
+        //Task<string> GetAsync(string uri);
+        //Task<T> GetAllAsync<T>(string uri);
+        Task<string> GetGenericAsync(string uri);
+
 
         Task<Response<AjaxReturningModel>> Upload(IFormFile file, string uri);
-        Task<string> UploadTest(IFormFile file);
+      
 
         //	Task<bool> Remove(int id);
         //	Task<bool> Update(T dto);

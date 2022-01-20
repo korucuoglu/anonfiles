@@ -5,6 +5,7 @@ using AnonFilesUpload.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,17 +18,19 @@ namespace AnonFilesUpload.Api.Controllers
         private readonly FileService _fileService;
         private readonly DataContext _context;
 
+
         public DataController(FileService fileService, DataContext context)
         {
             _fileService = fileService;
             _context = context;
+
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public async Task<IActionResult> Upload(IFormFile file, string UserId)
         {
-            var data = await _fileService.UploadAsync(file);
+            var data = await _fileService.UploadAsync(file, UserId);
 
             return Ok(data);
         }
@@ -56,13 +59,26 @@ namespace AnonFilesUpload.Api.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<IActionResult> GetByUserIdAsync(string UserId)
         {
-            // MetaDataId üzerinden filtreleme yapılır. 
+            var data = await _context.Data.Where(x => x.UserId == UserId).Select(x => new DataModel()
+            {
+                FileId = x.MetaDataId,
+                FileName = x.Name,
+                Size = x.Size
 
-            var data = await _fileService.GetById<Data.Entity.Data>(id);
+            }).ToListAsync();
 
-            return Ok(data);
+            DataViewModel model = new()
+            {
+                DataModel = data,
+                TotalSize = data.Sum(x => x.Size),
+                UsedSpace = Helper.GetUsedSpace(data.Sum(x => x.Size)),
+                RemainingSpace = Helper.GetRemainingSpace(data.Sum(x => x.Size)),
+
+            };
+
+            return Ok(model);
         }
 
         [HttpGet("direct/{id}")]
@@ -94,13 +110,13 @@ namespace AnonFilesUpload.Api.Controllers
         }
 
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var data = await _fileService.DeleteByIdAsync<Data.Entity.Data>(id);
-            return NotFound(data);
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var data = await _fileService.DeleteByIdAsync<Data.Entity.Data>(id);
+        //    return NotFound(data);
 
-        }
+        //}
 
 
         //[HttpGet("control/{id}")]

@@ -1,9 +1,11 @@
+using AnonFilesUpload.Data.Registiration;
 using AnonFilesUpload.MVC.Extensions;
 using AnonFilesUpload.MVC.Handler;
 using AnonFilesUpload.MVC.Hubs;
 using AnonFilesUpload.MVC.Models;
 using AnonFilesUpload.MVC.Services;
 using AnonFilesUpload.MVC.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,9 +27,16 @@ namespace AnonFilesUpload.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           
 
             services.AddHttpClientServices(Configuration);
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts =>
+            {
+                opts.LoginPath = "/Auth/SignIn";
+                opts.ExpireTimeSpan = TimeSpan.FromDays(60);
+                opts.SlidingExpiration = true;
+                opts.Cookie.Name = "anonfiled";
+            });
 
             services.AddControllersWithViews();
 

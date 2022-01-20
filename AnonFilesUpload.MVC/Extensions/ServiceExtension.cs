@@ -20,19 +20,21 @@ namespace AnonFilesUpload.MVC.Extensions
             services.AddAccessTokenManagement();
 
             services.AddScoped<ClientCredentialTokenHandler>();
+            services.AddScoped<ResourceOwnerPasswordTokenHandler>();
              
 
             // services.AddScoped(typeof(IApiService), typeof(ApiService));
 
             services.AddHttpClient<IClientCredentialTokenService, ClientCredentialTokenService>();
+            services.AddHttpClient<IIdentityService, IdentityService>();
 
             var serviceApiSettings = Configuration.GetSection("ServiceApiSettings").Get<ServiceApiSettings>();
 
-            services.AddHttpClient<IApiService, ApiService>(opt =>
-
-            {
+            services.AddHttpClient<IApiService, ApiService>(opt => {
+                
                 opt.BaseAddress = new Uri(serviceApiSettings.ApiBaseUri);
-            }).AddHttpMessageHandler<ClientCredentialTokenHandler>();
+
+            }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
             
         }

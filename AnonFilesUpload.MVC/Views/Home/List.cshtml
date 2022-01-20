@@ -13,17 +13,24 @@
             <th>Direct Link</th>
         </tr>
 
-        @foreach (var item in Model.DataModel)
+        @if (Model!= null)
         {
-            <tr>
-                <td>@item.FileId</td>
-                <td>@item.FileName</td>
-                <td>
-                    <a class="btn btn-sm btn-primary" asp-action="GetLink" asp-controller="Home" asp-route-id="@item.FileId">İndir</a>
+            foreach (var item in Model.DataModel)
+            {
+                <tr>
+                    <td>@item.FileId</td>
+                    <td>@item.FileName</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" asp-action="GetLink" asp-controller="Home" asp-route-id="@item.FileId">İndir</a>
 
-                </td>
-            </tr>
+                    </td>
+                </tr>
+            }
         }
+
+
+
+
 
 
     </table>
