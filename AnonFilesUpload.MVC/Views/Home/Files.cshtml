@@ -2,7 +2,10 @@
     ViewData["Title"] = "Home Page";
 }
 
+@model AnonFilesUpload.Shared.Models.DataViewModel
+
 <div class="container" id="app">
+
 
     <table class="table table-striped table-bordered">
         <tr>
@@ -12,15 +15,15 @@
         </tr>
 
 
-        <tr v-for="(item, index) in datas" :key="item.fileId">
+        <tr v-for="(item, index) in datas" :key="item.FileId">
             <td>{{item.fileId}}</td>
             <td>{{item.fileName}}</td>
             <td>
-                <a :href="'/home/getlink/' + item.fileId"
+                <button @@click.prevent="Download(item.fileId)"
                    class="btn btn-primary btn-sm">
                     İndir
-                </a>
-                <a class="btn btn-sm btn-danger" :href="'/home/delete/' + item.fileId" @@click.prevent="deleteFile(item.fileId, index)">Sil</a>
+                </button>
+                <button class="btn btn-sm btn-danger" @@click.prevent="deleteFile(item, item.fileId)">Sil</button>
 
             </td>
         </tr>
@@ -58,62 +61,70 @@
 
        data(){
            return {
-
-               datas: [
-
-                   {fileId: "ReHf91Cax3", fileName: "Docker.pdf", },
-                   {fileId: "Bcj2CcC5x2", fileName: "Docker.pdf", },
-                   {fileId: "V1jaC9Cfx7", fileName: "Docker.pdf", }
-               ]
+               datas : [],
            }
        },
 
         mounted(){
-             this.GetFiles();
+           
+            
+            this.GetFiles();
 
         },
 
         methods: {
 
-            deleteFile(fileId, index){
-               console.log(index);
-
+            deleteFile(file, fileId){
+              
                 axios({
-                    method: "get",
+                    method: "delete",
                     url: "/Home/Delete/"+fileId,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                 }).then(function (response) {
-                   console.log(response);
                    if(response.data.isSuccessful) {
-
-                    this.datas.splice(index, 1)
-                    console.log(this.datas);
+                    this.datas = [...this.datas].filter((data) => data != file);
                    } else{
-                        this.datas.splice(index, 1)
-                    console.log(this.datas);
+                        alert("silme sırasında hata meydana geldi");
                    }
 
                 });
 
             },
 
-              GetFiles()  {
+         
 
-                axios({
+              GetFiles()  {
+                  let dataList = '@Html.Raw(Json.Serialize(Model.DataModel))';
+                  this.datas = JSON.parse(dataList);
+                  console.log(this.datas);
+
+                //axios({
+                //    method: "get",
+                //    url: "/Home/MyFiles",
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //}).then(function (response) {
+                //    this.datas = response.data.data.dataModel;
+
+                //});
+            },
+
+            Download(fileId){
+                 axios({
                     method: "get",
-                    url: "/Home/MyFiles",
+                    url: "/Home/GetLink/" + fileId,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                 }).then(function (response) {
-                    this.datas = response.data.data.dataModel;
+                   if(response.data.isSuccessful) {
+                        window.location.href = response.data.data;
+                   }
 
                 });
-            },
-
+            }
 
         },
-
 
     }
 

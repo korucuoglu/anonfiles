@@ -49,7 +49,7 @@
                                 Delete
                             </a>
 
-                            <a v-if="item.status == 'Loaded'" :href="BaseAddress + 'home/getlink/' + item.fileId"
+                            <a v-if="item.status == 'Loaded'" :href="'/home/getlink/' + item.fileId"
                                class="px-4 py-1 text-md text-green-600 font-semibold rounded-sm border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2">
                                 Indir
                             </a>
@@ -91,7 +91,6 @@
         data(){
             return {
                 datas: [],
-                BaseAddress: "https://localhost:5003/",
                 PostAddress: "/home/upload"
             }
         },

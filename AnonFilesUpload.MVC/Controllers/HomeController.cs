@@ -52,7 +52,8 @@ namespace AnonFilesUpload.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Files()
         {
-            return await Task.FromResult(View());
+            var data = await _userService.GetMyFiles();
+            return await Task.FromResult(View(data.Data));
         }
 
         [HttpGet]
@@ -70,10 +71,10 @@ namespace AnonFilesUpload.MVC.Controllers
             var data = await _userService.GetDirectLink(id);
 
 
-            return Redirect(data.Data);
+            return Ok(data);
         }
 
-        [HttpGet]
+        [HttpDelete]
         public async Task<IActionResult> Delete(string id)
         {
             var data = await _userService.DeleteFile(id);
