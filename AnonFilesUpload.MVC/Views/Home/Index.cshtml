@@ -43,11 +43,11 @@
                             {{ item.status }}
                         </td>
                         <td class="border-b border-slate-100 dark:border-slate-700 md:p-4 p-2 text-slate-500 dark:text-slate-400 overflow text-right">
-                            <button v-if="item.status != 'Loaded'" @@click.prevent="deleteFile(item)"
+                            <a v-if="item.status != 'Loaded'" @@click.prevent="deleteFile(item)"
                                     :disabled="item.status == 'Starting'"
                                     class="px-4 py-1 text-md text-red-600 font-semibold rounded-sm border border-red-600 hover:text-white hover:bg-red-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 disabled:bg-red-100">
                                 Delete
-                            </button>
+                            </a>
 
                             <a v-if="item.status == 'Loaded'" :href="BaseAddress + 'home/getlink/' + item.fileId"
                                class="px-4 py-1 text-md text-green-600 font-semibold rounded-sm border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2">
@@ -80,20 +80,20 @@
 </environment>
 
 <environment names="Development">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>*@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.js"> </script>
 </environment>
 
 <script type="text/javascript">
 
-    var app = new Vue({
-        el: '#app',
-        data: {
-            datas: [
-
-            ],
-            BaseAddress: "https://localhost:5003/",
-            PostAddress: "/home/upload"
+    const app = {
+        data(){
+            return {
+                datas: [],
+                BaseAddress: "https://localhost:5003/",
+                PostAddress: "/home/upload"
+            }
         },
 
         methods: {
@@ -145,10 +145,12 @@
                 filesUploadedFunction(model);
             });
 
-            const filesUploadedFunction = (message) => {
-                const data = this.datas.find(data => data.file.name == message.fileName);
-                data.fileId = message.fileId;
-                if (message.success) {
+            const filesUploadedFunction = (model) => {
+
+                console.log(model);
+                const data = this.datas.find(data => data.file.name == model.data.fileName);
+                data.fileId = model.data.fileId;
+                if (model.isSuccessful) {
                     data.status = 'Loaded';
                 } else {
                     data.status = 'Error';
@@ -175,9 +177,12 @@
                     console.error(error.message);
                 });
 
-        }
+        },
 
-    });
+    }
+
+        Vue.createApp(app).mount('#app');
+
 
 
 </script>

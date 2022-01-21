@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -102,9 +103,16 @@ namespace AnonFilesUpload.Api.Services
 
         public async Task<Response<UploadModel>> UploadAsync(IFormFile file)
         {
-            if (file.Length < 0 || file == null)
+            if (file == null)
             {
-                return Response<UploadModel>.Fail($"Gönderilen dosya boş olamaz", 500);
+                var failedModel = new UploadModel() { FileName = file.FileName  };
+                return Response<UploadModel>.Fail(failedModel, 500);
+            }
+
+            if (file.Length <= 0)
+            {
+                var failedModel = new UploadModel() { FileName = file.FileName };
+                return Response<UploadModel>.Fail(failedModel, 500);
             }
 
             var token = configuration.GetSection("token").Value;
@@ -114,11 +122,9 @@ namespace AnonFilesUpload.Api.Services
 
             if (!response.IsSuccessStatusCode)
             {
+                var failedModel = new UploadModel() { FileName = file.FileName };
 
-                var failedModel = new UploadModel() { fileName = file.FileName, success = false };
-
-                return Response<UploadModel>.Fail(failedModel, 500);
-
+                return Response<UploadModel>.Fail(failedModel, (int)response.StatusCode);
 
 
             }
@@ -136,11 +142,12 @@ namespace AnonFilesUpload.Api.Services
             await _context.Data.AddAsync(dataEntity);
             await _context.SaveChangesAsync();
 
-            var model = new UploadModel() { fileId = dataEntity.MetaDataId, fileName = dataEntity.Name, success = true };
-            return Response<UploadModel>.Success(model, 200);
+            var model = new UploadModel() { FileId = dataEntity.MetaDataId, FileName = dataEntity.Name};
+            return Response<UploadModel>.Success(model, (int)response.StatusCode);
 
 
         }
+       
     }
 
 

@@ -6,15 +6,14 @@ namespace AnonFilesUpload.MVC.Hubs
 {
     public class HubTest : Hub
     {
-        public override async Task OnConnectedAsync()
-        {
-            await Clients.All.SendAsync("receiveMessage", "bağlantı geldi");
-        }
+        //public override async Task OnConnectedAsync()
+        //{
+        //    await Clients.All.SendAsync("receiveMessage", "bağlantı geldi");
+        //}
 
-
-        public async Task Upload(UploadModel model)
+        public async Task Upload(Response<UploadModel> model)
         {
-            await Clients.All.SendAsync("filesUploaded", model);
+            await Clients.All.SendAsync("filesUploaded", model.Data);
         }
 
         public async Task UploadStarting(string fileName)

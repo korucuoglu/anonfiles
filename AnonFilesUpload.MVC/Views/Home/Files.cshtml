@@ -12,15 +12,15 @@
         </tr>
 
 
-        <tr v-for="item in datas" :key="item.fileId">
+        <tr v-for="(item, index) in datas" :key="item.fileId">
             <td>{{item.fileId}}</td>
             <td>{{item.fileName}}</td>
             <td>
-                <a :href="'home/getlink/' + item.fileId"
+                <a :href="'/home/getlink/' + item.fileId"
                    class="btn btn-primary btn-sm">
                     İndir
                 </a>
-                <a class="btn btn-sm btn-danger" @@click.prevent="deleteFile(item.fileId)">Sil</a>
+                <a class="btn btn-sm btn-danger" :href="'/home/delete/' + item.fileId" @@click.prevent="deleteFile(item.fileId, index)">Sil</a>
 
             </td>
         </tr>
@@ -53,61 +53,71 @@
 
 <script type="text/javascript">
 
-        const app = {
 
-           data(){
-               return {
-                   datas: [
-                       
-                       {fileId: "F87az1C8x8", fileName: "Docker.pdf", },
-                       {fileId: "B9w9zfC9xc", fileName: "Docker.pdf", },
-                       {fileId: "P7y7z8Ccxa", fileName: "Docker.pdf", }
-                   ]
-               }
-           },
+    const app = {
 
-            mounted(){
-                 this.GetFiles();
+       data(){
+           return {
 
-            },
+               datas: [
 
-            methods: {
+                   {fileId: "ReHf91Cax3", fileName: "Docker.pdf", },
+                   {fileId: "Bcj2CcC5x2", fileName: "Docker.pdf", },
+                   {fileId: "V1jaC9Cfx7", fileName: "Docker.pdf", }
+               ]
+           }
+       },
 
-                deleteFile(fileId){
-                   
-                    axios({
-                        method: "get",
-                        url: "/Home/Delete/"+fileId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                    }).then(function (response) {
-                       console.log(response);
-                       
-                    });
+        mounted(){
+             this.GetFiles();
 
-                },
+        },
 
-                  GetFiles()  {
+        methods: {
 
-                    axios({
-                        method: "get",
-                        url: "/Home/MyFiles",
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                    }).then(function (response) {
-                        this.datas = response.data.data.dataModel;
-                       
-                    });
-                },
-                
+            deleteFile(fileId, index){
+               console.log(index);
+
+                axios({
+                    method: "get",
+                    url: "/Home/Delete/"+fileId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                }).then(function (response) {
+                   console.log(response);
+                   if(response.data.isSuccessful) {
+
+                    this.datas.splice(index, 1)
+                    console.log(this.datas);
+                   } else{
+                        this.datas.splice(index, 1)
+                    console.log(this.datas);
+                   }
+
+                });
 
             },
 
-           
-           
-        }
+              GetFiles()  {
 
-        Vue.createApp(app).mount('#app');
+                axios({
+                    method: "get",
+                    url: "/Home/MyFiles",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                }).then(function (response) {
+                    this.datas = response.data.data.dataModel;
+
+                });
+            },
+
+
+        },
+
+
+    }
+
+    Vue.createApp(app).mount('#app');
 
 
 
