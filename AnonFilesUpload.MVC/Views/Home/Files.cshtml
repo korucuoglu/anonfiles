@@ -15,28 +15,23 @@
         </tr>
 
 
-        <tr v-for="(item, index) in datas" :key="item.FileId">
+        <tr v-for="(item, index) in datas" :key="index">
             <td>{{item.fileId}}</td>
             <td>{{item.fileName}}</td>
             <td>
                 <button @@click.prevent="Download(item.fileId)"
-                   class="btn btn-primary btn-sm">
+                        class="btn btn-primary btn-sm">
                     İndir
                 </button>
                 <button class="btn btn-sm btn-danger" @@click.prevent="deleteFile(item, item.fileId)">Sil</button>
+                
+
+              
 
             </td>
         </tr>
 
     </table>
-
-    @*  <p>
-        Kullanılan Alan: <b>@Model.UsedSpace</b>
-        </p>
-
-        <p>
-        Kalan Alanı: <b>@Model.RemainingSpace</b>
-        </p>*@
 
 </div>
 
@@ -53,73 +48,50 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.js"> </script>
 </environment>
 
+<script>
 
-<script type="text/javascript">
+        const app = {
+        data(){
+            return {
+               
+                datas: JSON.parse('@Html.Raw(Json.Serialize(Model.DataModel))')
+                
 
-
-    const app = {
-
-       data(){
-           return {
-               datas : [],
-           }
-       },
-
-        mounted(){
-           
-            
-            this.GetFiles();
-
+            }
         },
 
         methods: {
-
-            deleteFile(file, fileId){
-              
+            
+            deleteFile(file, fileId) {
+                
                 axios({
                     method: "delete",
-                    url: "/Home/Delete/"+fileId,
+                    url: "/Home/Delete/" + fileId,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                }).then(function (response) {
-                   if(response.data.isSuccessful) {
-                    this.datas = [...this.datas].filter((data) => data != file);
-                   } else{
-                        alert("silme sırasında hata meydana geldi");
-                   }
-
+                }).then(response => {
+                    if(response.data.isSuccessful){
+                      this.datas = this.datas.filter(data => data.fileId != fileId);
+                    }else{
+                        alert("hata");
+                        
+                    }
                 });
 
             },
 
-         
 
-              GetFiles()  {
-                  let dataList = '@Html.Raw(Json.Serialize(Model.DataModel))';
-                  this.datas = JSON.parse(dataList);
-                  console.log(this.datas);
-
-                //axios({
-                //    method: "get",
-                //    url: "/Home/MyFiles",
-                //    contentType: "application/json; charset=utf-8",
-                //    dataType: "json",
-                //}).then(function (response) {
-                //    this.datas = response.data.data.dataModel;
-
-                //});
-            },
-
-            Download(fileId){
-                 axios({
+            Download(fileId) {
+                
+                axios({
                     method: "get",
                     url: "/Home/GetLink/" + fileId,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                }).then(function (response) {
-                   if(response.data.isSuccessful) {
+                }).then(response => {
+                    if (response.data.isSuccessful) {
                         window.location.href = response.data.data;
-                   }
+                    }
 
                 });
             }
@@ -129,8 +101,6 @@
     }
 
     Vue.createApp(app).mount('#app');
-
-
 
 
 </script>
