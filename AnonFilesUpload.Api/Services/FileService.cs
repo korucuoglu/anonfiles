@@ -4,6 +4,7 @@ using AnonFilesUpload.Shared;
 using AnonFilesUpload.Shared.Models;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -21,12 +22,14 @@ namespace AnonFilesUpload.Api.Services
         private readonly DataContext _context;
         private readonly IConfiguration configuration;
         private readonly ISharedIdentityService _sharedIdentityService;
-        public FileService(HttpClient client, DataContext context, IConfiguration configuration, ISharedIdentityService sharedIdentityService)
+        private UserManager<ApplicationUser> _userManager;
+        public FileService(HttpClient client, DataContext context, IConfiguration configuration, ISharedIdentityService sharedIdentityService, UserManager<ApplicationUser> userManager)
         {
             _client = client;
             _context = context;
             this.configuration = configuration;
             _sharedIdentityService = sharedIdentityService;
+            _userManager = userManager;
         }
 
         public async Task<Response<bool>> DeleteAsyncByMetaId(string metaId)
@@ -39,6 +42,7 @@ namespace AnonFilesUpload.Api.Services
             var data = await _context.Data.Where(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId).FirstOrDefaultAsync();
 
             _context.Remove(data);
+            (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace -= data.Size;
             await _context.SaveChangesAsync();
 
             return Response<bool>.Success(true, 200);
@@ -86,7 +90,7 @@ namespace AnonFilesUpload.Api.Services
         {
             if (file == null)
             {
-                var failedModel = new UploadModel() { FileName = file.FileName  };
+                var failedModel = new UploadModel() { FileName = file.FileName };
                 return Response<UploadModel>.Fail(failedModel, 500);
             }
 
@@ -106,9 +110,8 @@ namespace AnonFilesUpload.Api.Services
                 var failedModel = new UploadModel() { FileName = file.FileName };
 
                 return Response<UploadModel>.Fail(failedModel, (int)response.StatusCode);
-
-
             }
+
             var successData = JsonConvert.DeserializeObject<UploadReturnModel>(await response.Content.ReadAsStringAsync());
 
             Data.Entity.Data dataEntity = new()
@@ -120,15 +123,17 @@ namespace AnonFilesUpload.Api.Services
                 UserId = _sharedIdentityService.GetUserId
             };
 
+            (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace += dataEntity.Size;
+
             await _context.Data.AddAsync(dataEntity);
             await _context.SaveChangesAsync();
 
-            var model = new UploadModel() { FileId = dataEntity.MetaDataId, FileName = dataEntity.Name};
+            var model = new UploadModel() { FileId = dataEntity.MetaDataId, FileName = dataEntity.Name };
             return Response<UploadModel>.Success(model, (int)response.StatusCode);
 
 
         }
-       
+
     }
 
 

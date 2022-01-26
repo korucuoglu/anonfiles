@@ -4,6 +4,7 @@ using AnonFilesUpload.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -49,8 +50,7 @@ namespace AnonFilesUpload.Api
             });
 
 
-
-            services.AddHttpClient<FileService>();
+            services.AddHttpClient<IFileService, FileService>();
 
             services.AddDbContext<DataContext>(opt =>
             {
@@ -61,6 +61,10 @@ namespace AnonFilesUpload.Api
                 });
 
             });
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+               .AddEntityFrameworkStores<DataContext>()
+               .AddDefaultTokenProviders();
 
 
         }
