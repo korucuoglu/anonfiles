@@ -55,13 +55,6 @@ namespace AnonFilesUpload.MVC.Controllers
             return await Task.FromResult(View(data.Data));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> MyFiles()
-        {
-            var data = await _userService.GetMyFiles();
-
-            return Json(data);
-        }
 
 
         [HttpGet]
@@ -84,10 +77,6 @@ namespace AnonFilesUpload.MVC.Controllers
             };
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
