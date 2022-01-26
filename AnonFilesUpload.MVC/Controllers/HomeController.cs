@@ -34,13 +34,12 @@ namespace AnonFilesUpload.MVC.Controllers
         public async Task<IActionResult> Upload(IFormFile[] files)
         {
 
-            // var model = new List<UploadModel>();
+           
 
             foreach (var file in files)
             {
                 await _hubContext.Clients.All.SendAsync("filesUploadedStarting", file.FileName);
                 var data = await _userService.Upload(file);
-                // model.Add(data.Data);
                 await _hubContext.Clients.All.SendAsync("filesUploaded", data);
             }
 
