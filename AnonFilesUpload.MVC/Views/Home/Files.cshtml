@@ -23,7 +23,7 @@
                         class="btn btn-primary btn-sm">
                     İndir
                 </button>
-                <button class="btn btn-sm btn-danger" @@click.prevent="deleteFile(item, item.fileId)">Sil</button>
+                <button class="btn btn-sm btn-danger" @@click.prevent="deleteFile(item.fileId)">Sil</button>
                 
 
               
@@ -37,16 +37,7 @@
 
 @section Scripts {
 
-<environment names="Staging,Production">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"></script>
-</environment>
-
-<environment names="Development">
-    <script src="https://unpkg.com/vue@next"></script>
-    @*<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>*@
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.js"> </script>
-</environment>
+@await Html.PartialAsync("_VueJsPartial")
 
 <script>
 
@@ -62,7 +53,7 @@
 
         methods: {
             
-            deleteFile(file, fileId) {
+            deleteFile(fileId) {
                 
                 axios({
                     method: "delete",
@@ -101,8 +92,6 @@
     }
 
     Vue.createApp(app).mount('#app');
-
-
 </script>
 
 }
