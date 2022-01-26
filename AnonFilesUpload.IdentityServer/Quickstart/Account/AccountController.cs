@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AnonFilesUpload.Data.Models;
+using AnonFilesUpload.Data.Entity;
 
 namespace IdentityServerHost.Quickstart.UI
 {

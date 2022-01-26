@@ -24,6 +24,7 @@ namespace AnonFilesUpload.MVC.Controllers
         }
 
         [HttpGet]
+      
         public async Task<IActionResult> Index()
         {
             return await Task.FromResult(View());
@@ -49,6 +50,7 @@ namespace AnonFilesUpload.MVC.Controllers
 
         
         [HttpGet]
+        
         public async Task<IActionResult> Files()
         {
             var data = await _userService.GetMyFiles();
@@ -71,10 +73,7 @@ namespace AnonFilesUpload.MVC.Controllers
         {
             var data = await _userService.DeleteFile(id);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Ok(data);
         }
 
 

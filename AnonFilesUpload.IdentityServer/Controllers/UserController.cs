@@ -1,4 +1,4 @@
-﻿using AnonFilesUpload.Data.Models;
+﻿using AnonFilesUpload.Data.Entity;
 using AnonFilesUpload.IdentityServer.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

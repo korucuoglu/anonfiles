@@ -58,10 +58,7 @@ namespace AnonFilesUpload.Api.Controllers
         {
             var data = await _fileService.DeleteAsyncByMetaId(id);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Ok(data);
            
         }
        

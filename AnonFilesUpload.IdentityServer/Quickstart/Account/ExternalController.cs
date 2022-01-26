@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using AnonFilesUpload.Data.Models;
+using AnonFilesUpload.Data.Entity;
 
 namespace IdentityServerHost.Quickstart.UI
 {
