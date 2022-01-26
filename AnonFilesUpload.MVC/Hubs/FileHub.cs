@@ -4,13 +4,9 @@ using System.Threading.Tasks;
 
 namespace AnonFilesUpload.MVC.Hubs
 {
-    public class HubTest : Hub
+    public class FileHub : Hub
     {
-        //public override async Task OnConnectedAsync()
-        //{
-        //    await Clients.All.SendAsync("receiveMessage", "bağlantı geldi");
-        //}
-
+    
         public async Task Upload(Response<UploadModel> model)
         {
             await Clients.All.SendAsync("filesUploaded", model.Data);

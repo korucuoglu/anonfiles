@@ -77,7 +77,7 @@ namespace AnonFilesUpload.MVC
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                endpoints.MapHub<HubTest>("/hubtest");
+                endpoints.MapHub<FileHub>("/fileHub");
             });
         }
     }

@@ -135,7 +135,7 @@
         created() {
 
             const connection = new signalR.HubConnectionBuilder()
-                .withUrl("/hubtest")
+                .withUrl("/fileHub")
                 .configureLogging(signalR.LogLevel.Information)
                 .build();
 

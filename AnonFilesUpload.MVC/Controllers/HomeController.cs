@@ -15,9 +15,9 @@ namespace AnonFilesUpload.MVC.Controllers
     public class HomeController : Controller
     {
         private readonly IUserService _userService;
-        private readonly IHubContext<HubTest> _hubContext;
+        private readonly IHubContext<FileHub> _hubContext;
 
-        public HomeController(IUserService userService, IHubContext<HubTest> hubContext)
+        public HomeController(IUserService userService, IHubContext<FileHub> hubContext)
         {
             _userService = userService;
             _hubContext = hubContext;
