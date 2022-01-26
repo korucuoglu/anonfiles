@@ -1,4 +1,5 @@
-﻿using AnonFilesUpload.MVC.Services.Interfaces;
+﻿using AnonFilesUpload.MVC.Exceptions;
+using AnonFilesUpload.MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -43,7 +44,7 @@ namespace AnonFilesUpload.MVC.Handler
 
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                throw new System.Exception();
+                throw new UnAuthorizeException();
             }
 
             return response;

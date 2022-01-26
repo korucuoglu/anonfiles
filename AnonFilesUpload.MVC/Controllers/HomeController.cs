@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Diagnostics;
+using AnonFilesUpload.MVC.Exceptions;
 
 namespace AnonFilesUpload.MVC.Controllers
 {
@@ -68,6 +69,11 @@ namespace AnonFilesUpload.MVC.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            var errorFeature = HttpContext.Features.Get<IExceptionHandlerFeature>(); 
+            if (errorFeature != null && errorFeature.Error is UnAuthorizeException) 
+            { 
+                return RedirectToAction(nameof(UserController.Logout), "User"); 
+            }
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
