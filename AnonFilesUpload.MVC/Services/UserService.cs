@@ -42,7 +42,7 @@ namespace AnonFilesUpload.MVC.Services
 
         public async Task<Response<string>> GetDirectLink(string id)
         {
-            var deserializeData = await _apiService.GetAsync($"data/getdirect/{id}");
+            var deserializeData = await _apiService.GetAsync($"data/{id}");
 
             var serializeData = JsonConvert.DeserializeObject<Response<string>>(deserializeData);
 

@@ -41,7 +41,7 @@ namespace AnonFilesUpload.Api.Controllers
 
         }
 
-        [HttpGet("getdirect/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetDirectLinkByMetaDataIdAsync(string id)
         {
             var data = await _fileService.GetDirectLinkByMetaId(id);
