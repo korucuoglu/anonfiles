@@ -34,7 +34,10 @@ namespace AnonFilesUpload.Api.Controllers
 
             var data = await _fileService.GetFilesByUserId();
 
-            return Ok(data);
+            return new ObjectResult(data)
+            {
+                StatusCode = data.StatusCode
+            };
 
         }
 

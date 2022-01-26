@@ -8,7 +8,7 @@ YAPILACAKLAR LİSTESİ 23 OCAK 2022
 
 7- SignalR içerisinde bulunan ClientAll değiştirilecek. 
 8- User Login ve Register sayfaları VueJs ile tekrardan oluşturulacak. 
-9- Hub isimlerinin düzgün verilmesi gerekmekte. 
+
 10- System new Exception hatasını düzeltilecek. Bu sayede Login sayfasına yönlendirilecek. 
 11- DataController içerisinde yer alan GetFilesByUserId geriye Ok yerine new ObjectResult dönmesi gerekmektedir. 
 12 DataController içerisinde yer alan GetByDirectLink return Ok olmasına artık gerek yok. 
