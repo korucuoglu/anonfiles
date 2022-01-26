@@ -16,11 +16,13 @@ namespace AnonFilesUpload.MVC.Controllers
             _identityService = ıdentityService;
         }
 
+        [Route("[controller]/login")]
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
-
+       
         [HttpPost]
         public async Task<IActionResult> Login(SigninInput model)
         {
@@ -42,6 +44,8 @@ namespace AnonFilesUpload.MVC.Controllers
             return RedirectToAction("Index","Home");
         }
 
+        [Route("[controller]/logout")]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -49,7 +53,8 @@ namespace AnonFilesUpload.MVC.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        [HttpPost]
+        [Route("[controller]/register")]
+        [HttpGet]
         public IActionResult Register()
         {
             return View();

@@ -34,9 +34,6 @@ namespace AnonFilesUpload.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile[] files)
         {
-
-           
-
             foreach (var file in files)
             {
                 await _fileHub.Clients.All.FilesUploadStarting(file.FileName);
@@ -50,6 +47,7 @@ namespace AnonFilesUpload.MVC.Controllers
 
         
         [HttpGet]
+        [Route("myfiles")]
         
         public async Task<IActionResult> Files()
         {
@@ -57,16 +55,6 @@ namespace AnonFilesUpload.MVC.Controllers
             return await Task.FromResult(View(data.Data));
         }
 
-
-
-        [HttpGet]
-        public async Task<IActionResult> GetLink(string id)
-        {
-            var data = await _userService.GetDirectLink(id);
-
-
-            return Ok(data);
-        }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(string id)
@@ -81,6 +69,15 @@ namespace AnonFilesUpload.MVC.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetLink(string id)
+        {
+            var data = await _userService.GetDirectLink(id);
+
+
+            return Ok(data);
         }
     }
 }
