@@ -43,16 +43,16 @@
                             {{ item.status }}
                         </td>
                         <td class="border-b border-slate-100 dark:border-slate-700 md:p-4 p-2 text-slate-500 dark:text-slate-400 overflow text-right">
-                            <a v-if="item.status != 'Loaded'" @@click.prevent="deleteFile(item)"
+                            <button v-if="item.status != 'Loaded'" @@click.prevent="deleteFile(item)"
                                     :disabled="item.status == 'Starting'"
                                     class="px-4 py-1 text-md text-red-600 font-semibold rounded-sm border border-red-600 hover:text-white hover:bg-red-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 disabled:bg-red-100">
                                 Delete
-                            </a>
+                            </button>
 
-                            <a v-if="item.status == 'Loaded'" :href="'/home/getlink/' + item.fileId"
+                            <button v-if="item.status == 'Loaded'" @@click.prevent="Download(item.fileId)"
                                class="px-4 py-1 text-md text-green-600 font-semibold rounded-sm border border-green-600 hover:text-white hover:bg-green-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2">
                                 Indir
-                            </a>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
@@ -97,6 +97,21 @@
 
         methods: {
 
+              Download(fileId) {
+                
+                axios({
+                    method: "get",
+                    url: "/Home/GetLink/" + fileId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                }).then(response => {
+                    if (response.data.isSuccessful) {
+                        window.location.href = response.data.data;
+                    }
+
+                });
+            },
+
             getInputFiles(event) {
                 for (let i = 0; i < event.target.files.length; i++) {
                     this.datas.push({
@@ -126,7 +141,7 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                 }).then(function (response) {
-                    console.log(response);
+                    
                 });
             },
 
@@ -140,13 +155,12 @@
                 .build();
 
 
-            connection.on("filesUploaded", function (model) {
+            connection.on("FilesUploaded", function (model) {
                 filesUploadedFunction(model);
             });
 
             const filesUploadedFunction = (model) => {
 
-                console.log(model);
                 const data = this.datas.find(data => data.file.name == model.data.fileName);
                 data.fileId = model.data.fileId;
                 if (model.isSuccessful) {
@@ -156,7 +170,7 @@
                 }
             };
 
-            connection.on("filesUploadedStarting", function (fileName) {
+            connection.on("FilesUploadStarting", function (fileName) {
 
                 startFileUploading(fileName);
             });

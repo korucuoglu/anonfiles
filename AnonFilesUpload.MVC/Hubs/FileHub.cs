@@ -4,17 +4,17 @@ using System.Threading.Tasks;
 
 namespace AnonFilesUpload.MVC.Hubs
 {
-    public class FileHub : Hub
+    public class FileHub : Hub<IFileHub>
     {
-    
+
         public async Task Upload(Response<UploadModel> model)
         {
-            await Clients.All.SendAsync("filesUploaded", model.Data);
+            await Clients.Caller.FilesUploaded(model);
         }
 
         public async Task UploadStarting(string fileName)
         {
-            await Clients.All.SendAsync("filesUploadedStarting", fileName);
+            await Clients.Caller.FilesUploadStarting(fileName);
         }
     }
 }

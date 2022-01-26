@@ -15,12 +15,12 @@ namespace AnonFilesUpload.MVC.Controllers
     public class HomeController : Controller
     {
         private readonly IUserService _userService;
-        private readonly IHubContext<FileHub> _hubContext;
+        private readonly IHubContext<FileHub, IFileHub> _fileHub;
 
-        public HomeController(IUserService userService, IHubContext<FileHub> hubContext)
+        public HomeController(IUserService userService, IHubContext<FileHub, IFileHub> fileHub)
         {
             _userService = userService;
-            _hubContext = hubContext;
+            _fileHub = fileHub;
         }
 
         [HttpGet]
@@ -38,9 +38,9 @@ namespace AnonFilesUpload.MVC.Controllers
 
             foreach (var file in files)
             {
-                await _hubContext.Clients.All.SendAsync("filesUploadedStarting", file.FileName);
+                await _fileHub.Clients.All.FilesUploadStarting(file.FileName);
                 var data = await _userService.Upload(file);
-                await _hubContext.Clients.All.SendAsync("filesUploaded", data);
+                await _fileHub.Clients.All.FilesUploaded(data);
             }
 
             return Json(new { finish = true });
