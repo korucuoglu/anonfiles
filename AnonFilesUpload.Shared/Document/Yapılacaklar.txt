@@ -1,11 +1,11 @@
 YAPILACAKLAR LİSTESİ 23 OCAK 2022
 
-1- DeleteFile fonksiyondaki "file" değişkeni gereksiz. 
+
 2- Layout kısmındaki footer kısmı bozuk. 
 3- User Profile sayfası olacak ve buradan kişinin ne kadar alan kullandığı görülecek. 
 4- File Upload özelliği sadece kayıtlı kullanıcılara açılacak veya sadece kayıtlı kullanıcıların verileri kayıt altına alınacak. 
 5- Privacy alanı silinecek. 
-6- Script Partial oluşturulacak ve burada VueJS dev ve prod. linkleri girilecek. 
+
 7- SignalR içerisinde bulunan ClientAll değiştirilecek. 
 8- User Login ve Register sayfaları VueJs ile tekrardan oluşturulacak. 
 9- Hub isimlerinin düzgün verilmesi gerekmekte. 
@@ -20,7 +20,6 @@ YAPILACAKLAR LİSTESİ 23 OCAK 2022
 17- User Controller içerisinde Register kodla. 
 18- DataViewModel içerisinde kişinin kullandığı alan bilgisi artık gözükmeyecek. Bu bilgi kişinin profilinde gözükecek. Bu sebeple Files kısmında geriye sadece DataModel dönülecek. 
 Kullanıcıların toplam ne kadar alan kullandığını hesaplamak için SQL analizi yapılacak ve gerekirse Trigger kullanılarak View üzerinden veri alınacak. 
-19- Identity Startup.cs içerisinde yer alan CORS ayarlarını sil. 
 20- Entity içerisinden HardCode olarak verilen database yolunu düzelt ve Migration işlemleri için --startup-project kodunu kullan. bkz: (Selçuk Ermaya syf 10)
 
 

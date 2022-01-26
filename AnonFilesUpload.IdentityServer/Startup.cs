@@ -46,16 +46,7 @@ namespace AnonFilesUpload.IdentityServer
                .AddEntityFrameworkStores<DataContext>()
                .AddDefaultTokenProviders();
 
-
-            services.AddCors(opt =>
-            {
-
-                opt.AddPolicy("CorsPolicy", builder =>
-                {
-
-                    builder.WithOrigins(Configuration.GetSection("VueClient").Value).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-                });
-            });
+           
 
             var builder = services.AddIdentityServer(options =>
             {
@@ -99,8 +90,7 @@ namespace AnonFilesUpload.IdentityServer
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
-
-            app.UseCors("CorsPolicy");
+           
             app.UseStaticFiles();
 
             app.UseRouting();
