@@ -29,10 +29,10 @@ namespace AnonFilesUpload.Api.Controllers
         }
 
         [HttpGet("myfiles")]
-        public async Task<IActionResult> GetFilesByUserId()
+        public async Task<IActionResult> GetMyFiles()
         {
 
-            var data = await _fileService.GetFilesByUserId();
+            var data = await _fileService.GetMyFiles();
 
             return new ObjectResult(data)
             {

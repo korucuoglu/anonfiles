@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -69,26 +70,16 @@ namespace AnonFilesUpload.Api.Services
             return Response<string>.Success(directLink, 200);
         }
 
-        public async Task<Response<DataViewModel>> GetFilesByUserId()
+        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles()
         {
-            var data = await _context.Data.Where(x => x.UserId == _sharedIdentityService.GetUserId).Select(x => new DataModel()
+            var filesList = await _context.Data.Where(x => x.UserId == _sharedIdentityService.GetUserId).Select(x => new MyFilesViewModel()
             {
                 FileId = x.MetaDataId,
-                FileName = x.Name,
-                Size = x.Size
+                FileName = x.Name
 
             }).ToListAsync();
 
-            DataViewModel model = new()
-            {
-                DataModel = data,
-                TotalSize = data.Sum(x => x.Size),
-                UsedSpace = Helper.GetUsedSpace(data.Sum(x => x.Size)),
-                RemainingSpace = Helper.GetRemainingSpace(data.Sum(x => x.Size)),
-
-            };
-
-            return Response<DataViewModel>.Success(model, 200);
+            return Response<List<MyFilesViewModel>>.Success(filesList, 200);
         }
 
         public async Task<Response<UploadModel>> UploadAsync(IFormFile file)

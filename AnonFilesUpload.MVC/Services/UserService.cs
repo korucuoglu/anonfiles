@@ -2,9 +2,8 @@
 using AnonFilesUpload.MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System.IO;
-using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace AnonFilesUpload.MVC.Services
 {
@@ -31,10 +30,10 @@ namespace AnonFilesUpload.MVC.Services
 
         }
         
-        public async Task<Response<DataViewModel>> GetMyFiles()
+        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles()
         {
             var deserializeData = await _apiService.GetAsync("data/myfiles");
-            var serializeData = JsonConvert.DeserializeObject<Response<DataViewModel>>(deserializeData);
+            var serializeData = JsonConvert.DeserializeObject<Response<List<MyFilesViewModel>>>(deserializeData);
 
             return serializeData;
 

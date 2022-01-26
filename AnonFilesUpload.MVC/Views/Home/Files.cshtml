@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model AnonFilesUpload.Shared.Models.DataViewModel
+@model List<AnonFilesUpload.Shared.Models.MyFilesViewModel>
 
 <div class="container" id="app">
 
@@ -45,7 +45,7 @@
         data(){
             return {
                
-                datas: JSON.parse('@Html.Raw(Json.Serialize(Model.DataModel))')
+                datas: JSON.parse('@Html.Raw(Json.Serialize(Model))')
                 
 
             }
