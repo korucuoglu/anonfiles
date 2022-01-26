@@ -6,5 +6,6 @@ namespace AnonFilesUpload.Data.Entity
     public class ApplicationUser : IdentityUser
     {
         public string City { get; set; }
+        public long UsedSpace { get; set; }
     }
 }

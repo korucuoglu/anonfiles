@@ -54,7 +54,7 @@ namespace AnonFilesUpload.IdentityServer
 
                     if (!userManager.Users.Any())
                     {
-                        userManager.CreateAsync(new ApplicationUser { UserName = "fcakiroglu16", Email = "f-cakiroglu@outlook.com", City = "Bursa" }, "***REMOVED***").Wait();
+                        userManager.CreateAsync(new ApplicationUser { UserName = "***REMOVED***", Email = "***REMOVED***", City = "Bursa" }, "***REMOVED***").Wait();
                     }
                 }
 
