@@ -22,7 +22,7 @@ namespace AnonFilesUpload.MVC.Controllers
         {
             return View();
         }
-       
+
         [HttpPost]
         public async Task<IActionResult> Login(SigninInput model)
         {
@@ -35,14 +35,44 @@ namespace AnonFilesUpload.MVC.Controllers
 
             if (!response)
             {
-               
+
                 ModelState.AddModelError("", "Böyle bir kullanıcı bulunamadı");
 
                 return View();
             }
 
-            return RedirectToAction("Upload","Home");
+            return RedirectToAction("Upload", "Home");
         }
+
+        [Route("[controller]/register")]
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(SignupInput model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var data = await _identityService.SignUp(model);
+
+            if (data == true)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError(string.Empty, "Hata meydana geldi.");
+
+            return View();
+
+        }
+
+
 
         [Route("[controller]/logout")]
         [HttpGet]
@@ -53,11 +83,6 @@ namespace AnonFilesUpload.MVC.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        [Route("[controller]/register")]
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+
     }
 }

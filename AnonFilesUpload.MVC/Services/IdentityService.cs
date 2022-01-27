@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -24,13 +27,15 @@ namespace AnonFilesUpload.MVC.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ClientSettings _clientSettings;
         private readonly ServiceApiSettings _serviceApiSettings;
+        private readonly IClientCredentialTokenService _clientCredentialTokenService;
 
-        public IdentityService(HttpClient client, IHttpContextAccessor httpContextAccessor, IOptions<ClientSettings> clientSettings, IOptions<ServiceApiSettings> serviceApiSettings)
+        public IdentityService(HttpClient client, IHttpContextAccessor httpContextAccessor, IOptions<ClientSettings> clientSettings, IOptions<ServiceApiSettings> serviceApiSettings, IClientCredentialTokenService clientCredentialTokenService)
         {
             _httpClient = client;
             _httpContextAccessor = httpContextAccessor;
             _clientSettings = clientSettings.Value;
             _serviceApiSettings = serviceApiSettings.Value;
+            _clientCredentialTokenService = clientCredentialTokenService;
         }
 
 
@@ -85,6 +90,49 @@ namespace AnonFilesUpload.MVC.Services
             await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, authenticationResult.Principal, properties);
 
             return token;
+        }
+
+        public async Task<bool> SignUp(SignupInput signupInput)
+        {
+            // ilk olarak ClientId ve Secret ile birlikte ClientCredentials token alınır. Ardından request gönderilir. 
+
+            var ClientCredentialsToken = await _clientCredentialTokenService.GetToken();
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ClientCredentialsToken);
+
+            var signupInputContent = new StringContent(JsonConvert.SerializeObject(signupInput), Encoding.UTF8, "application/json");
+
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user"))
+            {
+                requestMessage.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", ClientCredentialsToken);
+
+                requestMessage.Content = signupInputContent;
+
+                var response = await _httpClient.SendAsync(requestMessage);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return false;
+                }
+            }
+
+            // Kod buraya inerse kişi başarılı bir şekilde kayıt yapmış demektir. Kişi kayıt yaptığında aynı zamanda Login işlemini de gerçekleştirebiliriz. 
+
+            SigninInput signinInput = new()
+            {
+                 Email = signupInput.Email,
+                 Password = signupInput.Password
+            };
+
+            await SignIn(signinInput);
+
+            return true;
+            
+
+           
+
+           
         }
 
         public async Task RevokeRefreshToken()

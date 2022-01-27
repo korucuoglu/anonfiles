@@ -3,6 +3,7 @@ using AnonFilesUpload.IdentityServer.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 using static IdentityServer4.IdentityServerConstants;
 
@@ -26,6 +27,7 @@ namespace AnonFilesUpload.IdentityServer.Controllers
         [HttpPost]
         public async Task<IActionResult> Signup(SignupDto dto)
         {
+
             var user = new ApplicationUser()
             {
                 UserName = dto.UserName,
@@ -37,7 +39,7 @@ namespace AnonFilesUpload.IdentityServer.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest("Hata meydana geldi");
+                return BadRequest(result.Errors.ToList());
             }
 
             return NoContent();

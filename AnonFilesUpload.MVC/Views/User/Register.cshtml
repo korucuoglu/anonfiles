@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "SignIn";
 }
-@model AnonFilesUpload.MVC.Models.User.SigninInput
+@model AnonFilesUpload.MVC.Models.User.SignupInput
 
 <div class="row">
 
@@ -12,7 +12,7 @@
 
                 <h5 class="card-title">Üye Giriş</h5>
                 <div class="text-danger" asp-validation-summary="ModelOnly"></div>
-                <form asp-controller="User" asp-action="Login" method="post">
+                <form asp-controller="User" asp-action="Register" method="post">
                     <div class="mb-3">
                         <label asp-for="Email" for="exampleInputEmail1" class="form-label"></label>
                         <input type="email" value="***REMOVED***" asp-for="Email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
@@ -23,7 +23,19 @@
                         <input type="password" value="***REMOVED***" asp-for="Password" class="form-control" id="exampleInputPassword1">
                         <span class="text-danger" asp-validation-for="Password"></span>
                     </div>
-                    <button type="submit" class="btn btn-primary">Giriş yap</button>
+
+                     <div class="mb-3">
+                        <label asp-for="City" for="city" class="form-label"></label>
+                        <input type="text" value="Bursa" asp-for="City" class="form-control" id="city">
+                        <span class="text-danger" asp-validation-for="City"></span>
+                    </div>
+
+                     <div class="mb-3">
+                        <label asp-for="UserName" for="username" class="form-label"></label>
+                        <input type="text" value="***REMOVED***" asp-for="UserName" class="form-control" id="username">
+                        <span class="text-danger" asp-validation-for="UserName"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Kayıt Ol</button>
                 </form>
             </div>
         </div>
