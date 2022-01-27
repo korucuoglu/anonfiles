@@ -41,7 +41,7 @@ namespace AnonFilesUpload.MVC.Controllers
                 return View();
             }
 
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Upload","Home");
         }
 
         [Route("[controller]/logout")]

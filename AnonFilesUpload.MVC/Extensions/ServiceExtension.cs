@@ -20,6 +20,7 @@ namespace AnonFilesUpload.MVC.Extensions
             services.AddHttpContextAccessor();
             services.AddAccessTokenManagement();
 
+            services.AddScoped<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<ClientCredentialTokenHandler>();
             services.AddScoped<ResourceOwnerPasswordTokenHandler>();
              

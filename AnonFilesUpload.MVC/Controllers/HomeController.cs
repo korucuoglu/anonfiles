@@ -10,6 +10,9 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using AnonFilesUpload.MVC.Exceptions;
+using Microsoft.AspNetCore.Authorization;
+using AnonFilesUpload.Shared;
+using System.Linq;
 
 namespace AnonFilesUpload.MVC.Controllers
 {
@@ -17,16 +20,27 @@ namespace AnonFilesUpload.MVC.Controllers
     {
         private readonly IUserService _userService;
         private readonly IHubContext<FileHub, IFileHub> _fileHub;
+        private readonly ISharedIdentityService _sharedIdentityService;
 
-        public HomeController(IUserService userService, IHubContext<FileHub, IFileHub> fileHub)
+        public HomeController(IUserService userService, IHubContext<FileHub, IFileHub> fileHub, ISharedIdentityService sharedIdentityService)
         {
             _userService = userService;
             _fileHub = fileHub;
+            _sharedIdentityService = sharedIdentityService;
         }
 
         [HttpGet]
-      
+
         public async Task<IActionResult> Index()
+        {
+            return await Task.FromResult(View());
+        }
+
+
+        [HttpGet]
+        [Route("upload")]
+        [Authorize]
+        public async Task<IActionResult> Upload()
         {
             return await Task.FromResult(View());
         }
@@ -35,21 +49,24 @@ namespace AnonFilesUpload.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile[] files)
         {
+            var ConnectionId = HubData.ClientsData.Where(x => x.UserId == _sharedIdentityService.GetUserId).Select(x => x.ConnectionId).FirstOrDefault();
+
             foreach (var file in files)
             {
-                await _fileHub.Clients.All.FilesUploadStarting(file.FileName);
+
+                await _fileHub.Clients.Client(ConnectionId).FilesUploadStarting(file.FileName);
                 var data = await _userService.Upload(file);
-                await _fileHub.Clients.All.FilesUploaded(data);
+                await _fileHub.Clients.Client(ConnectionId).FilesUploaded(data);
             }
 
             return Json(new { finish = true });
 
         }
 
-        
+
         [HttpGet]
         [Route("myfiles")]
-        
+
         public async Task<IActionResult> Files()
         {
             var data = await _userService.GetMyFiles();
@@ -69,10 +86,10 @@ namespace AnonFilesUpload.MVC.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            var errorFeature = HttpContext.Features.Get<IExceptionHandlerFeature>(); 
-            if (errorFeature != null && errorFeature.Error is UnAuthorizeException) 
-            { 
-                return RedirectToAction(nameof(UserController.Logout), "User"); 
+            var errorFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            if (errorFeature != null && errorFeature.Error is UnAuthorizeException)
+            {
+                return RedirectToAction(nameof(UserController.Logout), "User");
             }
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

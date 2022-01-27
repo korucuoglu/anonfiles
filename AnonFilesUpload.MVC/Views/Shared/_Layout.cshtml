@@ -38,6 +38,10 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Upload">Upload</a>
+                            </li>
+
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Files">Dosyalarım</a>
                             </li>
                         }
@@ -53,7 +57,7 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" asp-controller="User" asp-action="Index">Profil</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Basket" asp-action="Index">Dosyalarım</a></li>
+                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Info">Dosyalarım</a></li>
                                     <li><a class="dropdown-item" asp-controller="User" asp-action="Logout">Çıkış</a></li>
                                 </ul>
                             </li>
