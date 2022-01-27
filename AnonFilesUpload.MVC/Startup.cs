@@ -44,7 +44,6 @@ namespace AnonFilesUpload.MVC
             services.AddControllersWithViews();
 
 
-
             services.AddSignalR();
 
            
@@ -56,7 +55,9 @@ namespace AnonFilesUpload.MVC
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                // app.UseDeveloperExceptionPage();
+
+                app.UseExceptionHandler("/Home/Error");
             }
             else
             {

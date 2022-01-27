@@ -49,6 +49,11 @@ namespace AnonFilesUpload.MVC.Services
 
             var refreshToken = await _httpContextAccessor.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
 
+            if (refreshToken==null)
+            {
+                return null;
+            }
+
             RefreshTokenRequest refreshTokenRequest = new()
             {
                 ClientId = _clientSettings.WebClientForUser.ClientId,
@@ -136,11 +141,7 @@ namespace AnonFilesUpload.MVC.Services
             {
 
                 return false;
-                //var responseContent = await token.HttpResponse.Content.ReadAsStringAsync();
-
-                //var errorDto = JsonSerializer.Deserialize<ErrorDto>(responseContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                //return Response<bool>.Fail(errorDto.Errors, 400);
+              
             }
 
             var userInfoRequest = new UserInfoRequest

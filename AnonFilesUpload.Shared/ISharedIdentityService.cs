@@ -8,7 +8,7 @@ namespace AnonFilesUpload.Shared
     }
     public class SharedIdentityService : ISharedIdentityService
     {
-        private IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public SharedIdentityService(IHttpContextAccessor httpContextAccessor)
         {
@@ -16,5 +16,7 @@ namespace AnonFilesUpload.Shared
         }
 
         public string GetUserId => _httpContextAccessor.HttpContext.User.FindFirst("sub").Value;
+            
+
     }
 }

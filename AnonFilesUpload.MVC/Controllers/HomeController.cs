@@ -89,7 +89,7 @@ namespace AnonFilesUpload.MVC.Controllers
             var errorFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
             if (errorFeature != null && errorFeature.Error is UnAuthorizeException)
             {
-                return RedirectToAction(nameof(UserController.Logout), "User");
+                return RedirectToAction(nameof(UserController.Login), "User");
             }
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
