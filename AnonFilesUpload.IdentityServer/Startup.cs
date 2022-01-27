@@ -33,7 +33,7 @@ namespace AnonFilesUpload.IdentityServer
 
             services.AddDbContext<DataContext>(opt =>
             {
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), configure =>
+                opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), configure =>
                 {
                     configure.MigrationsAssembly("AnonFilesUpload.Data");
 
@@ -67,17 +67,6 @@ namespace AnonFilesUpload.IdentityServer
             builder.AddDeveloperSigningCredential();
             builder.AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>();
 
-            services.AddAuthentication()
-                .AddGoogle(options =>
-                {
-                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-
-                    // register your IdentityServer with Google at https://console.developers.google.com
-                    // enable the Google+ API
-                    // set the redirect URI to https://localhost:5001/signin-google
-                    options.ClientId = "copy client ID from Google here";
-                    options.ClientSecret = "copy client secret from Google here";
-                });
 
             services.AddLocalApiAuthentication(); // Buradan bize otomatik olarak Policy gelmektedir. Bunu User Controller'da kullandık. 
         }

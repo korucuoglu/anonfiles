@@ -54,7 +54,7 @@ namespace AnonFilesUpload.Api
 
             services.AddDbContext<DataContext>(opt =>
             {
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), configure =>
+                opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), configure =>
                 {
                     configure.MigrationsAssembly("AnonFilesUpload.Data");
 

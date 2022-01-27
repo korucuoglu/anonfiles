@@ -22,7 +22,7 @@ namespace AnonFilesUpload.Api.Services
         private readonly DataContext _context;
         private readonly IConfiguration configuration;
         private readonly ISharedIdentityService _sharedIdentityService;
-        private UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         public FileService(HttpClient client, DataContext context, IConfiguration configuration, ISharedIdentityService sharedIdentityService, UserManager<ApplicationUser> userManager)
         {
             _client = client;
