@@ -1,17 +1,9 @@
 YAPILACAKLAR LİSTESİ 23 OCAK 2022
 
-
 2- Layout kısmındaki footer kısmı bozuk. 
 3- User Profile sayfası olacak ve buradan kişinin ne kadar alan kullandığı görülecek. 
-
 8- User Login ve Register sayfaları VueJs ile tekrardan oluşturulacak. 
-
-  
-16- Muhtemelen Access Token ömrü bittikten sonra sistemde hata meydana gelmekte ve Refresh Token ile yeni bir token alınamamakta. Bu hatayı irdele. 
 17- User Controller içerisinde Register kodla. 
-
-Üye girişi yapmayan kişi indir butonuna tıkladığında ArgumentException: Parameter is required (Parameter 'refresh_token') hatasını almakta.
-İlk olarak bu hatayı gider daha sonra ise SignalR üzerinden sadece bldirimde bulunan Client'a mesaj at. 
 
 
 
