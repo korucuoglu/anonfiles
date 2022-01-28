@@ -40,5 +40,9 @@ services:
 
     ports:
       - "5003:80"
+    depends_on:
+      - identityserver.api
+      - upload.api
+      
    
       
