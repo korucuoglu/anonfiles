@@ -45,7 +45,7 @@ namespace AnonFilesUpload.IdentityServer
                .AddEntityFrameworkStores<DataContext>()
                .AddDefaultTokenProviders();
 
-           
+
 
             var builder = services.AddIdentityServer(options =>
             {
@@ -76,14 +76,14 @@ namespace AnonFilesUpload.IdentityServer
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+
             }
-           
+
             app.UseStaticFiles();
 
             app.UseRouting();
             app.UseIdentityServer();
-            app.UseAuthentication(); 
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  postgresdb:
+    image: postgres
+  upload.api:
+    image: upload_api_image
+    build:
+      context: .
+      dockerfile: AnonFilesUpload.Api/Dockerfile
+  identityserver.api:
+    image: identityserver_api_image
+    build:
+      context: .
+      dockerfile: AnonFilesUpload.IdentityServer/Dockerfile
+  aspnetcoremvc.web:
+    image: aspnetcoremvc.web_image
+    build:
+      context: .
+      dockerfile: AnonFilesUpload.MVC/Dockerfile
+
+volumes:
+  postgresdb_volume:

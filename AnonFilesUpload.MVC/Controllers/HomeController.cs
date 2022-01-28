@@ -33,6 +33,7 @@ namespace AnonFilesUpload.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
+            ViewBag.Deneme = "Halit";
             return await Task.FromResult(View());
         }
 
