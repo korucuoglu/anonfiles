@@ -1,6 +1,8 @@
 
 using AnonFilesUpload.MVC.Extensions;
 using AnonFilesUpload.MVC.Hubs;
+using AnonFilesUpload.MVC.Middlewares;
+using AnonFilesUpload.Shared.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +29,9 @@ namespace AnonFilesUpload.MVC
 
 
             services.AddHttpClientServices(Configuration);
+
+            services.AddSingleton<ILogger, ConsoleLogger>();
+
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts =>
             {
@@ -69,6 +74,8 @@ namespace AnonFilesUpload.MVC
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseCustomRequestLogger();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

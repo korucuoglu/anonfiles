@@ -1,8 +1,10 @@
 ﻿using AnonFilesUpload.MVC.Handler;
+
 using AnonFilesUpload.MVC.Models;
 using AnonFilesUpload.MVC.Services;
 using AnonFilesUpload.MVC.Services.Interfaces;
 using AnonFilesUpload.Shared;
+using AnonFilesUpload.Shared.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -23,9 +25,8 @@ namespace AnonFilesUpload.MVC.Extensions
             services.AddScoped<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<ClientCredentialTokenHandler>();
             services.AddScoped<ResourceOwnerPasswordTokenHandler>();
-             
 
-            
+
 
             services.AddHttpClient<IClientCredentialTokenService, ClientCredentialTokenService>();
             services.AddHttpClient<IIdentityService, IdentityService>();
