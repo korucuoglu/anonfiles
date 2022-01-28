@@ -1,11 +1,6 @@
 
 using AnonFilesUpload.MVC.Extensions;
-using AnonFilesUpload.MVC.Handler;
 using AnonFilesUpload.MVC.Hubs;
-using AnonFilesUpload.MVC.Models;
-using AnonFilesUpload.MVC.Services;
-using AnonFilesUpload.MVC.Services.Interfaces;
-using AnonFilesUpload.Shared;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,7 +19,7 @@ namespace AnonFilesUpload.MVC
         }
 
         public IConfiguration Configuration { get; }
-        
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -46,7 +41,7 @@ namespace AnonFilesUpload.MVC
 
             services.AddSignalR();
 
-           
+
 
         }
 
@@ -65,7 +60,7 @@ namespace AnonFilesUpload.MVC
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

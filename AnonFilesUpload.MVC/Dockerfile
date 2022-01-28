@@ -3,6 +3,7 @@ WORKDIR /app
 EXPOSE 80
 COPY AnonFilesUpload.MVC/*.csproj AnonFilesUpload.MVC/
 COPY AnonFilesUpload.Data/*.csproj AnonFilesUpload.Data/
+COPY AnonFilesUpload.Shared/*.csproj AnonFilesUpload.Shared/
 RUN dotnet restore AnonFilesUpload.MVC/*.csproj
 COPY . .
 RUN dotnet publish AnonFilesUpload.MVC/*.csproj -c Release -o out

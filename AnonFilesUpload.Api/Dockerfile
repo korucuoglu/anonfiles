@@ -3,6 +3,7 @@ WORKDIR /app
 EXPOSE 80
 COPY AnonFilesUpload.Api/*.csproj AnonFilesUpload.Api/
 COPY AnonFilesUpload.Data/*.csproj AnonFilesUpload.Data/
+COPY AnonFilesUpload.Shared/*.csproj AnonFilesUpload.Shared/
 RUN dotnet restore AnonFilesUpload.Api/*.csproj
 COPY . .
 RUN dotnet publish AnonFilesUpload.Api/*.csproj -c Release -o out

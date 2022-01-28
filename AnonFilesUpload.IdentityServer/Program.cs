@@ -48,14 +48,14 @@ namespace AnonFilesUpload.IdentityServer
 
                     var applicationDbContext = serviceProvider.GetRequiredService<DataContext>();
 
-                    applicationDbContext.Database.Migrate();
+                    // applicationDbContext.Database.Migrate();
 
-                    // var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-                    // if (!userManager.Users.Any())
-                    // {
-                    //     userManager.CreateAsync(new ApplicationUser { UserName = "***REMOVED***", Email = "***REMOVED***", City = "Bursa" }, "***REMOVED***").Wait();
-                    // }
+                    if (!userManager.Users.Any())
+                    {
+                        userManager.CreateAsync(new ApplicationUser { UserName = "***REMOVED***", Email = "***REMOVED***", City = "Bursa" }, "***REMOVED***").Wait();
+                    }
                 }
 
                 Log.Information("Starting host...");
