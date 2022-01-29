@@ -42,7 +42,7 @@ namespace AnonFilesUpload.IdentityServer
 
         };
 
-        
+
 
 
         public static IEnumerable<Client> Clients => new Client[]
@@ -51,7 +51,7 @@ namespace AnonFilesUpload.IdentityServer
                 {
                     ClientId = "MVCClient",
                     ClientName = "MVC Client Credentials Client",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    ClientSecrets = { new Secret("secret".Sha256(), DateTime.Now) },
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes = { "api", IdentityServerConstants.LocalApi.ScopeName }
                 },
@@ -65,7 +65,7 @@ namespace AnonFilesUpload.IdentityServer
                     ClientSecrets= {new Secret("secret".Sha256())},
                     AllowedGrantTypes= GrantTypes.ResourceOwnerPassword,
                     AllowedScopes={ "api_password", IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess, IdentityServerConstants.LocalApi.ScopeName,"roles" },
-                    AccessTokenLifetime=5,
+                    AccessTokenLifetime=1*60*60,
                     RefreshTokenExpiration=TokenExpiration.Absolute,
                     AbsoluteRefreshTokenLifetime= (int) (DateTime.Now.AddDays(60)- DateTime.Now).TotalSeconds,
                     RefreshTokenUsage= TokenUsage.ReUse
