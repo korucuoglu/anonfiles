@@ -2,7 +2,7 @@
 using AnonFilesUpload.MVC.Extensions;
 using AnonFilesUpload.MVC.Hubs;
 using AnonFilesUpload.Shared.Middlewares;
-using AnonFilesUpload.Shared.Services.Logger;
+using AnonFilesUpload.Shared.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

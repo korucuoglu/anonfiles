@@ -1,17 +1,15 @@
-﻿using AnonFilesUpload.Shared.Models;
+﻿using AnonFilesUpload.Shared.Services;
 using AnonFilesUpload.MVC.Hubs;
 using AnonFilesUpload.MVC.Models;
 using AnonFilesUpload.MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using AnonFilesUpload.MVC.Exceptions;
 using Microsoft.AspNetCore.Authorization;
-using AnonFilesUpload.Shared;
 using System.Linq;
 
 namespace AnonFilesUpload.MVC.Controllers
@@ -33,7 +31,7 @@ namespace AnonFilesUpload.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.Deneme = "Halit";
+            
             return await Task.FromResult(View());
         }
 

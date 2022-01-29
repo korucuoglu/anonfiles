@@ -1,8 +1,7 @@
 ﻿using AnonFilesUpload.MVC.Models;
-using AnonFilesUpload.Shared;
+using AnonFilesUpload.Shared.Services;
 using AnonFilesUpload.Shared.Models;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

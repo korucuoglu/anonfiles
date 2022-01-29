@@ -3,8 +3,7 @@
 using AnonFilesUpload.MVC.Models;
 using AnonFilesUpload.MVC.Services;
 using AnonFilesUpload.MVC.Services.Interfaces;
-using AnonFilesUpload.Shared;
-using AnonFilesUpload.Shared.Models;
+using AnonFilesUpload.Shared.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;

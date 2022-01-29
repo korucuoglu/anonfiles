@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace AnonFilesUpload.Shared
+namespace AnonFilesUpload.Shared.Services
 {
     public interface ISharedIdentityService
     {

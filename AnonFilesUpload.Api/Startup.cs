@@ -1,6 +1,6 @@
 using AnonFilesUpload.Api.Services;
 using AnonFilesUpload.Data.Entity;
-using AnonFilesUpload.Shared;
+using AnonFilesUpload.Shared.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
