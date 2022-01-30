@@ -29,19 +29,19 @@ namespace AnonFilesUpload.Api
             services.AddScoped<IFileService, FileService>();
             services.AddHttpContextAccessor();
 
-            
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub"); // Api içerisinden UserId deðerlerini okuyabilmek için bunu ekledik. 
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub"); // Api iï¿½erisinden UserId deï¿½erlerini okuyabilmek iï¿½in bunu ekledik. 
 
             services.AddAuthentication().AddJwtBearer(options =>
             {
                 options.Authority = Configuration["IdentityServerURL"];
-                options.Audience = "resource_api_password"; 
+                options.Audience = "resource_api_password";
                 options.RequireHttpsMetadata = false;
 
-                // AUd parametresinden Identity Server, hangi akýþ tipinde olduðunu anlar ve ona göre davranýþ sergiler. 
+                // AUd parametresinden Identity Server, hangi akï¿½ï¿½ tipinde olduï¿½unu anlar ve ona gï¿½re davranï¿½ï¿½ sergiler. 
             });
 
-          
+
 
             services.AddControllers(opt =>
             {
@@ -77,8 +77,10 @@ namespace AnonFilesUpload.Api
                 app.UseDeveloperExceptionPage();
             }
 
-
-            app.UseHttpsRedirection();
+            if (env.IsProduction())
+            {
+                app.UseHttpsRedirection();
+            }
 
             app.UseRouting();
 
@@ -89,7 +91,7 @@ namespace AnonFilesUpload.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-               
+
             });
         }
     }

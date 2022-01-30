@@ -50,7 +50,7 @@ namespace AnonFilesUpload.IdentityServer
 
                     // applicationDbContext.Database.Migrate();
 
-                   
+
                 }
 
                 Log.Information("Starting host...");
