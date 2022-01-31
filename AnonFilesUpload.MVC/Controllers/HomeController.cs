@@ -20,14 +20,13 @@ namespace AnonFilesUpload.MVC.Controllers
         private readonly IHubContext<FileHub, IFileHub> _fileHub;
         private readonly ISharedIdentityService _sharedIdentityService;
 
-        private readonly ILogger _logger;
 
-        public HomeController(IUserService userService, IHubContext<FileHub, IFileHub> fileHub, ISharedIdentityService sharedIdentityService, ILogger logger)
+        public HomeController(IUserService userService, IHubContext<FileHub, IFileHub> fileHub, ISharedIdentityService sharedIdentityService)
         {
             _userService = userService;
             _fileHub = fileHub;
             _sharedIdentityService = sharedIdentityService;
-            _logger = logger;
+           
         }
 
         [HttpGet]

@@ -1,10 +1,7 @@
 ﻿
 using AnonFilesUpload.Api.Services;
-using AnonFilesUpload.Shared.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 
 namespace AnonFilesUpload.Api.Controllers
@@ -15,16 +12,11 @@ namespace AnonFilesUpload.Api.Controllers
     {
         private readonly IFileService _fileService;
 
-        private readonly IConfiguration _configuration;
-        private readonly ISharedIdentityService _sharedIdentityService;
 
-
-
-        public DataController(IFileService fileService, IConfiguration configuration, ISharedIdentityService sharedIdentityService)
+        public DataController(IFileService fileService)
         {
             _fileService = fileService;
-            _configuration = configuration;
-            _sharedIdentityService = sharedIdentityService;
+          
         }
 
         [HttpPost]
@@ -38,20 +30,6 @@ namespace AnonFilesUpload.Api.Controllers
             };
         }
 
-        [HttpGet("token")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Get()
-        {
-
-            if (User.Identity.IsAuthenticated)
-            {
-                return Ok(_sharedIdentityService.GetUserId);
-            }
-
-            return Ok(_configuration.GetSection("token").Value);
-        }
-
-      
         [HttpGet("myfiles")]
         public async Task<IActionResult> GetMyFiles()
         {

@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "SignIn";
 }
-@model AnonFilesUpload.MVC.Models.User.SignupInput
+@model AnonFilesUpload.Shared.Models.User.SignupInput
 
 <div class="row">
 
@@ -31,11 +31,6 @@
                         <span class="text-danger" asp-validation-for="City"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label asp-for="UserName" for="username" class="form-label"></label>
-                        <input type="text" asp-for="UserName" class="form-control" id="username">
-                        <span class="text-danger" asp-validation-for="UserName"></span>
-                    </div>
                     <button type="submit" class="btn btn-primary">Kayıt Ol</button>
                 </form>
             </div>

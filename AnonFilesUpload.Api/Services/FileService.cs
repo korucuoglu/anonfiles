@@ -23,15 +23,13 @@ namespace AnonFilesUpload.Api.Services
         private readonly IConfiguration configuration;
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ILogger _logger;
-        public FileService(HttpClient client, DataContext context, IConfiguration configuration, ISharedIdentityService sharedIdentityService, UserManager<ApplicationUser> userManager, ILogger logger)
+        public FileService(HttpClient client, DataContext context, IConfiguration configuration, ISharedIdentityService sharedIdentityService, UserManager<ApplicationUser> userManager)
         {
             _client = client;
             _context = context;
             this.configuration = configuration;
             _sharedIdentityService = sharedIdentityService;
             _userManager = userManager;
-            _logger = logger;
         }
 
         public async Task<Response<bool>> DeleteAsyncByMetaId(string metaId)
@@ -80,7 +78,6 @@ namespace AnonFilesUpload.Api.Services
         {
             if (_context.Data.Any())
             {
-                _logger.Write("data sayısı 1den fazla");
 
                 var filesList = await _context.Data.Where(x => x.UserId == _sharedIdentityService.GetUserId).Select(x => new MyFilesViewModel()
                 {
@@ -92,8 +89,6 @@ namespace AnonFilesUpload.Api.Services
                 return Response<List<MyFilesViewModel>>.Success(filesList, 200);
             }
 
-            _logger.Write("data yok");
-
             return Response<List<MyFilesViewModel>>.Fail("Herhangi bir veri bulunamadı", 404);
 
         }
@@ -104,7 +99,6 @@ namespace AnonFilesUpload.Api.Services
 
             if (file == null)
             {
-                _logger.Write("File Upload metoduna null olarak geldi");
                 var failedModel = new UploadModel() { FileName = file.FileName };
                 return Response<UploadModel>.Fail(failedModel, 500);
             }
@@ -118,13 +112,11 @@ namespace AnonFilesUpload.Api.Services
             var token = configuration.GetSection("token").Value;
             var content = await Helper.GetMultipartContentAsync(file);
 
-            _logger.Write($"token: {token}");
 
             var response = await _client.PostAsync($"https://api.anonfiles.com/upload?token={token}", content);
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.Write($"{file.FileName} yüklenirken hata meydana geldi");
                 var failedModel = new UploadModel() { FileName = file.FileName };
 
                 return Response<UploadModel>.Fail(failedModel, (int)response.StatusCode);
@@ -146,7 +138,6 @@ namespace AnonFilesUpload.Api.Services
             await _context.Data.AddAsync(dataEntity);
             await _context.SaveChangesAsync();
 
-            _logger.Write($"{file.FileName} başarılı şekilde yüklendi");
 
             var model = new UploadModel() { FileId = dataEntity.MetaDataId, FileName = dataEntity.Name };
             return Response<UploadModel>.Success(model, (int)response.StatusCode);

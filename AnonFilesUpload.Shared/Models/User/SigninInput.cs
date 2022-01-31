@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AnonFilesUpload.MVC.Models.User
+namespace AnonFilesUpload.Shared.Models.User
 {
     public class SigninInput
     {
@@ -11,6 +11,6 @@ namespace AnonFilesUpload.MVC.Models.User
         [Required]
         [Display(Name = "Şifreniz")]
         public string Password { get; set; }
-       
+
     }
 }

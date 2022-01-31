@@ -1,6 +1,5 @@
 ﻿using AnonFilesUpload.Data.Entity;
-using AnonFilesUpload.IdentityServer.Dtos;
-using AnonFilesUpload.Shared.Services;
+using AnonFilesUpload.Shared.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,21 +18,19 @@ namespace AnonFilesUpload.IdentityServer.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ILogger _logger;
 
-        public UserController(UserManager<ApplicationUser> userManager, ILogger logger)
+        public UserController(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _logger = logger;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Signup(SignupDto dto)
+        public async Task<IActionResult> Signup(SignupInput dto)
         {
 
             var user = new ApplicationUser()
             {
-                UserName = dto.UserName,
+                UserName = dto.Email,
                 City = dto.City,
                 Email = dto.Email
             };
@@ -42,11 +39,8 @@ namespace AnonFilesUpload.IdentityServer.Controllers
 
             if (!result.Succeeded)
             {
-                _logger.Write($"{dto.Email} oluşturulurken hata alındı");
                 return BadRequest(result.Errors.ToList());
             }
-            _logger.Write($"{dto.Email} başarıyla oluşturuldu");
-
 
             return NoContent();
 
