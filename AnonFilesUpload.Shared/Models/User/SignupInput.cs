@@ -1,13 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AnonFilesUpload.MVC.Models.User
+namespace AnonFilesUpload.Shared.Models.User
 {
     public class SignupInput
     {
-        [Required]
-        [Display(Name = "Kullanıcı Adı")]
-        public string UserName { get; set; }
-
         [Required]
         [Display(Name = "Email Adresiniz")]
         public string Email { get; set; }

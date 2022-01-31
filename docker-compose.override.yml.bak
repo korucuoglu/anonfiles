@@ -39,7 +39,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ServiceApiSettings:IdentityBaseUri=http://identityserver.api
-      - ServiceApiSettings:ApiBaseUri=http://upload.api/api/
+      - ServiceApiSettings:ApiBaseUri=http://upload.api/api
     ports:
       - "5003:80"
     

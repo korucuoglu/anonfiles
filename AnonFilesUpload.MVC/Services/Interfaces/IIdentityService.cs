@@ -1,4 +1,4 @@
-﻿using AnonFilesUpload.MVC.Models.User;
+﻿using AnonFilesUpload.Shared.Models.User;
 using IdentityModel.Client;
 using System.Threading.Tasks;
 

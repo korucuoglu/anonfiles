@@ -2,7 +2,6 @@
 using AnonFilesUpload.MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Net.Http;
 using System.Threading;
@@ -14,17 +13,15 @@ namespace AnonFilesUpload.MVC.Handler
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIdentityService _identityService;
-        
-
+     
         public ResourceOwnerPasswordTokenHandler(IHttpContextAccessor httpContextAccessor, IIdentityService identityService)
         {
             _httpContextAccessor = httpContextAccessor;
             _identityService = identityService;
-            
         }
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+           var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
 
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
@@ -32,6 +29,7 @@ namespace AnonFilesUpload.MVC.Handler
 
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
+
                 var tokenResponse = await _identityService.GetAccessTokenByRefreshToken();
 
                 if (tokenResponse != null)

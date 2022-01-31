@@ -21,10 +21,10 @@ namespace AnonFilesUpload.IdentityServer.Services
         {
             var user = await _userManager.FindByEmailAsync(context.UserName);
 
-            if (user==null)
+            if (user == null)
             {
-                var errors = new Dictionary<string, object>(); 
-                errors.Add("errors", new List<string> { "Email veya şifreniz yanlış" }); 
+                var errors = new Dictionary<string, object>();
+                errors.Add("errors", new List<string> { "Email veya şifreniz yanlış" });
                 context.Result.CustomResponse = errors;
                 return;
             }
@@ -33,9 +33,9 @@ namespace AnonFilesUpload.IdentityServer.Services
 
             if (passwordCheck == false)
             {
-                var errors = new Dictionary<string, object>(); 
-                errors.Add("errors", new List<string> { "Email veya şifreniz yanlış" }); 
-                context.Result.CustomResponse = errors; 
+                var errors = new Dictionary<string, object>();
+                errors.Add("errors", new List<string> { "Email veya şifreniz yanlış" });
+                context.Result.CustomResponse = errors;
                 return;
             }
 

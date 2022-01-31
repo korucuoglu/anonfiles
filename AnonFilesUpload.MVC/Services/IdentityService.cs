@@ -1,6 +1,6 @@
 ﻿using AnonFilesUpload.MVC.Models;
-using AnonFilesUpload.MVC.Models.User;
 using AnonFilesUpload.MVC.Services.Interfaces;
+using AnonFilesUpload.Shared.Models.User;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -15,7 +15,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace AnonFilesUpload.MVC.Services
@@ -54,7 +53,7 @@ namespace AnonFilesUpload.MVC.Services
 
             var refreshToken = await _httpContextAccessor.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
 
-            if (refreshToken==null)
+            if (refreshToken == null)
             {
                 return null;
             }
@@ -121,18 +120,18 @@ namespace AnonFilesUpload.MVC.Services
 
             SigninInput signinInput = new()
             {
-                 Email = signupInput.Email,
-                 Password = signupInput.Password
+                Email = signupInput.Email,
+                Password = signupInput.Password
             };
 
             await SignIn(signinInput);
 
             return true;
-            
 
-           
 
-           
+
+
+
         }
 
         public async Task RevokeRefreshToken()
@@ -189,7 +188,7 @@ namespace AnonFilesUpload.MVC.Services
             {
 
                 return false;
-              
+
             }
 
             var userInfoRequest = new UserInfoRequest

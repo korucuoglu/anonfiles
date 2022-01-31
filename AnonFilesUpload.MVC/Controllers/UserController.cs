@@ -1,5 +1,5 @@
-﻿using AnonFilesUpload.MVC.Models.User;
-using AnonFilesUpload.MVC.Services.Interfaces;
+﻿using AnonFilesUpload.MVC.Services.Interfaces;
+using AnonFilesUpload.Shared.Models.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;

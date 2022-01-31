@@ -11,6 +11,7 @@ namespace AnonFilesUpload.MVC.Services.Interfaces
         Task<Response<List<MyFilesViewModel>>> GetMyFiles();
         Task<Response<string>> GetDirectLink(string id);
         Task<Response<bool>> DeleteFile(string id);
+       
       
 
        
