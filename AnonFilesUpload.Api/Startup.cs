@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace AnonFilesUpload.Api
@@ -38,6 +39,11 @@ namespace AnonFilesUpload.Api
                 options.Authority = Configuration["IdentityServerURL"];
                 options.Audience = "resource_api_password";
                 options.RequireHttpsMetadata = false;
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false
+                };
 
                 // AUd parametresinden Identity Server, hangi ak�� tipinde oldu�unu anlar ve ona g�re davran�� sergiler. 
             });
