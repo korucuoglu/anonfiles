@@ -14,23 +14,35 @@ services:
   upload.api:
     container_name: upload.api
     environment:
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_HTTPS_PORT=443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=AbcUser1234*test
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/AnonFilesUpload.Api.pfx
       - ASPNETCORE_ENVIRONMENT=Development
       - IdentityServerURL=http://identityserver.api
       - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
+      - "token=15ae3e98a74afa8dd"
     ports:
       - "5002:80"
     depends_on:
       - postgresdb
+    volumes:
+      - ~/.aspnet/https:/https:ro    
   identityserver.api:
     container_name: identityserver.api
     restart: on-failure
     environment:
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=AbcUser1234*test
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/AnonFilesUpload.IdentityServer.pfx
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
     ports:
       - "5001:80"
     depends_on:
       - postgresdb
+    volumes:
+      - ~/.aspnet/https:/https:ro
   aspnetcoremvc.web:
     container_name: aspnetcoremvc.web
     environment:
@@ -40,11 +52,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ServiceApiSettings:IdentityBaseUri=http://identityserver.api
       - ServiceApiSettings:ApiBaseUri=http://upload.api
-
     ports:
-      - "5003:443" 
+      - "5003:80"
     volumes:
-      - ~/.aspnet/https:/https:ro
-      
-   
-      
+      - ~/.aspnet/https:/https:ro  
+    

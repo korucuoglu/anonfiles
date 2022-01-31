@@ -4,7 +4,7 @@
 
 using AnonFilesUpload.Data.Entity;
 using AnonFilesUpload.IdentityServer.Services;
-using IdentityServer4;
+using AnonFilesUpload.Shared.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -28,7 +28,10 @@ namespace AnonFilesUpload.IdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLocalApiAuthentication(); // Buradan bize otomatik olarak Policy gelmektedir. Bunu User Controller'da kullandık. 
             services.AddControllersWithViews();
+
+            services.AddScoped<ILogger, ConsoleLogger>();
 
 
             services.AddDbContext<DataContext>(opt =>
@@ -40,6 +43,8 @@ namespace AnonFilesUpload.IdentityServer
                 });
 
             });
+
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<DataContext>()
@@ -64,11 +69,11 @@ namespace AnonFilesUpload.IdentityServer
                 .AddAspNetIdentity<ApplicationUser>();
 
             // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
             builder.AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>();
 
+            builder.AddDeveloperSigningCredential();
 
-            services.AddLocalApiAuthentication(); // Buradan bize otomatik olarak Policy gelmektedir. Bunu User Controller'da kullandık. 
+
         }
 
         public void Configure(IApplicationBuilder app)
@@ -76,6 +81,7 @@ namespace AnonFilesUpload.IdentityServer
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
 
             }
 

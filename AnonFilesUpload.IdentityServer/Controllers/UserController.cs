@@ -1,5 +1,6 @@
 ﻿using AnonFilesUpload.Data.Entity;
 using AnonFilesUpload.IdentityServer.Dtos;
+using AnonFilesUpload.Shared.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ using static IdentityServer4.IdentityServerConstants;
 
 namespace AnonFilesUpload.IdentityServer.Controllers
 {
-    [Authorize(LocalApi.PolicyName)] 
+    [Authorize(LocalApi.PolicyName)]
     // Default gelen Policy'yi ekledik. Bu sayede token olmadan buraya istek yapılamayacaktır.
     // Token olmadan istek yapıldığında 401 hatası vereceğiz. 
 
@@ -18,10 +19,12 @@ namespace AnonFilesUpload.IdentityServer.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger _logger;
 
-        public UserController(UserManager<ApplicationUser> userManager)
+        public UserController(UserManager<ApplicationUser> userManager, ILogger logger)
         {
             _userManager = userManager;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -39,10 +42,14 @@ namespace AnonFilesUpload.IdentityServer.Controllers
 
             if (!result.Succeeded)
             {
+                _logger.Write($"{dto.Email} oluşturulurken hata alındı");
                 return BadRequest(result.Errors.ToList());
             }
+            _logger.Write($"{dto.Email} başarıyla oluşturuldu");
+
 
             return NoContent();
+
 
         }
     }

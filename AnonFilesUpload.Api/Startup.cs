@@ -27,6 +27,7 @@ namespace AnonFilesUpload.Api
         {
             services.AddScoped<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<ILogger, ConsoleLogger>();
             services.AddHttpContextAccessor();
 
 
@@ -75,11 +76,6 @@ namespace AnonFilesUpload.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-
-            if (env.IsProduction())
-            {
-                app.UseHttpsRedirection();
             }
 
             app.UseRouting();

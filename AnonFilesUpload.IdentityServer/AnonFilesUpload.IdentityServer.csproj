@@ -24,5 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AnonFilesUpload.Data\AnonFilesUpload.Data.csproj" />
+    <ProjectReference Include="..\AnonFilesUpload.Shared\AnonFilesUpload.Shared.csproj" />
   </ItemGroup>
 </Project>
