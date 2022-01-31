@@ -51,7 +51,7 @@ namespace AnonFilesUpload.IdentityServer
                 {
                     ClientId = "MVCClient",
                     ClientName = "MVC Client Credentials Client",
-                    ClientSecrets = { new Secret("secret".Sha256(), DateTime.Now) },
+                    ClientSecrets = { new Secret("secret".Sha256())},
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes = { "api", IdentityServerConstants.LocalApi.ScopeName }
                 },

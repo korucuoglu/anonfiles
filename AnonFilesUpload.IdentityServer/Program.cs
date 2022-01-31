@@ -5,15 +5,11 @@
 
 using AnonFilesUpload.Data.Entity;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.SystemConsole.Themes;
 using System;
-using System.Linq;
 
 namespace AnonFilesUpload.IdentityServer
 {
@@ -21,22 +17,15 @@ namespace AnonFilesUpload.IdentityServer
     {
         public static int Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-                .MinimumLevel.Override("System", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                // uncomment to write to Azure diagnostics stream
-                //.WriteTo.File(
-                //    @"D:\home\LogFiles\Application\identityserver.txt",
-                //    fileSizeLimitBytes: 1_000_000,
-                //    rollOnFileSizeLimit: true,
-                //    shared: true,
-                //    flushToDiskInterval: TimeSpan.FromSeconds(1))
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
-                .CreateLogger();
+            // Log.Logger = new LoggerConfiguration()
+            //     .MinimumLevel.Debug()
+            //     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            //     .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+            //     .MinimumLevel.Override("System", LogEventLevel.Warning)
+            //     .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+            //     .Enrich.FromLogContext()
+            //     .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
+            //     .CreateLogger();
 
             try
             {
@@ -48,23 +37,31 @@ namespace AnonFilesUpload.IdentityServer
 
                     var applicationDbContext = serviceProvider.GetRequiredService<DataContext>();
 
-                    // applicationDbContext.Database.Migrate();
+                    try
+                    {
+                        applicationDbContext.Database.Migrate();
+                    }
+
+                    catch
+                    {
+
+                    }
 
 
                 }
 
-                Log.Information("Starting host...");
+                // Log.Information("Starting host...");
                 host.Run();
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Host terminated unexpectedly.");
+                // Log.Fatal(ex, "Host terminated unexpectedly.");
                 return 1;
             }
             finally
             {
-                Log.CloseAndFlush();
+                // Log.CloseAndFlush();
             }
         }
 

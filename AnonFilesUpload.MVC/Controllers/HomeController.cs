@@ -20,18 +20,21 @@ namespace AnonFilesUpload.MVC.Controllers
         private readonly IHubContext<FileHub, IFileHub> _fileHub;
         private readonly ISharedIdentityService _sharedIdentityService;
 
-        public HomeController(IUserService userService, IHubContext<FileHub, IFileHub> fileHub, ISharedIdentityService sharedIdentityService)
+        private readonly ILogger _logger;
+
+        public HomeController(IUserService userService, IHubContext<FileHub, IFileHub> fileHub, ISharedIdentityService sharedIdentityService, ILogger logger)
         {
             _userService = userService;
             _fileHub = fileHub;
             _sharedIdentityService = sharedIdentityService;
+            _logger = logger;
         }
 
         [HttpGet]
 
         public async Task<IActionResult> Index()
         {
-            
+
             return await Task.FromResult(View());
         }
 
@@ -52,7 +55,6 @@ namespace AnonFilesUpload.MVC.Controllers
 
             foreach (var file in files)
             {
-
                 await _fileHub.Clients.Client(ConnectionId).FilesUploadStarting(file.FileName);
                 var data = await _userService.Upload(file);
                 await _fileHub.Clients.Client(ConnectionId).FilesUploaded(data);

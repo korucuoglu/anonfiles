@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using Microsoft.AspNetCore.Http;
 
 namespace AnonFilesUpload.Shared.Services
 {
@@ -15,8 +16,9 @@ namespace AnonFilesUpload.Shared.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
+        // public string GetUserId => String.IsNullOrEmpty(_httpContextAccessor.HttpContext.User.FindFirst("sub").Value) ? "" : _httpContextAccessor.HttpContext.User.FindFirst("sub").Value;
         public string GetUserId => _httpContextAccessor.HttpContext.User.FindFirst("sub").Value;
-            
+
 
     }
 }

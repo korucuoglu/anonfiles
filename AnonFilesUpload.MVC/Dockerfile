@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim as build
 WORKDIR /app
 EXPOSE 80
+EXPOSE 443
 COPY AnonFilesUpload.MVC/*.csproj AnonFilesUpload.MVC/
 COPY AnonFilesUpload.Data/*.csproj AnonFilesUpload.Data/
 COPY AnonFilesUpload.Shared/*.csproj AnonFilesUpload.Shared/

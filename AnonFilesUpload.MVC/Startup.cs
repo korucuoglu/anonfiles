@@ -39,6 +39,7 @@ namespace AnonFilesUpload.MVC
                 opts.ExpireTimeSpan = TimeSpan.FromDays(60);
                 opts.SlidingExpiration = true;
                 opts.Cookie.Name = "anonfiled";
+
             });
 
             services.AddControllersWithViews();
@@ -55,9 +56,8 @@ namespace AnonFilesUpload.MVC
         {
             if (env.IsDevelopment())
             {
-                // app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
 
-                app.UseExceptionHandler("/Home/Error");
             }
 
             if (env.IsProduction())
