@@ -19,11 +19,11 @@ namespace AnonFilesUpload.Api.Services
     public class FileService : IFileService
     {
         private static HttpClient _client;
-        private readonly DataContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly IConfiguration configuration;
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly UserManager<ApplicationUser> _userManager;
-        public FileService(HttpClient client, DataContext context, IConfiguration configuration, ISharedIdentityService sharedIdentityService, UserManager<ApplicationUser> userManager)
+        public FileService(HttpClient client, ApplicationDbContext context, IConfiguration configuration, ISharedIdentityService sharedIdentityService, UserManager<ApplicationUser> userManager)
         {
             _client = client;
             _context = context;

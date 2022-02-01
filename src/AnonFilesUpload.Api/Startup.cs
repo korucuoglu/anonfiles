@@ -59,7 +59,7 @@ namespace AnonFilesUpload.Api
 
             services.AddHttpClient<IFileService, FileService>();
 
-            services.AddDbContext<DataContext>(opt =>
+            services.AddDbContext<ApplicationDbContext>(opt =>
             {
                 opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), configure =>
                 {
@@ -70,7 +70,7 @@ namespace AnonFilesUpload.Api
             });
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-               .AddEntityFrameworkStores<DataContext>()
+               .AddEntityFrameworkStores<ApplicationDbContext>()
                .AddDefaultTokenProviders();
 
 
