@@ -4,16 +4,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AnonFilesUpload.Data.Entity
 {
-    public class DataContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
 
         public DbSet<Data> Data { get; set; }
       
 
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

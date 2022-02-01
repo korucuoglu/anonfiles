@@ -34,7 +34,7 @@ namespace AnonFilesUpload.IdentityServer
             services.AddScoped<ILogger, ConsoleLogger>();
 
 
-            services.AddDbContext<DataContext>(opt =>
+            services.AddDbContext<ApplicationDbContext>(opt =>
             {
                 opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), configure =>
                 {
@@ -47,7 +47,7 @@ namespace AnonFilesUpload.IdentityServer
 
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-               .AddEntityFrameworkStores<DataContext>()
+               .AddEntityFrameworkStores<ApplicationDbContext>()
                .AddDefaultTokenProviders();
 
 

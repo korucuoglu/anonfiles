@@ -37,7 +37,7 @@ namespace AnonFilesUpload.IdentityServer
                 {
                     var serviceProvider = scope.ServiceProvider;
 
-                    var applicationDbContext = serviceProvider.GetRequiredService<DataContext>();
+                    var applicationDbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
                     try
                     {
