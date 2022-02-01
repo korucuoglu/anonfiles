@@ -10,13 +10,13 @@ services:
   identityserver.api:
     image: identityserver_api_image
     build:
-      context: /src/
-      dockerfile: AnonFilesUpload.IdentityServer/Dockerfile
+      context: .
+      dockerfile: src/AnonFilesUpload.IdentityServer/Dockerfile
   aspnetcoremvc.web:
     image: aspnetcoremvc.web_image
     build:
-      context: /src/
-      dockerfile: AnonFilesUpload.MVC/Dockerfile
+      context: .
+      dockerfile: src/AnonFilesUpload.MVC/Dockerfile
 
 volumes:
   postgresdb_volume:
