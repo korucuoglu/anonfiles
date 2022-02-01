@@ -89,7 +89,7 @@ namespace AnonFilesUpload.Api.Services
                 return Response<List<MyFilesViewModel>>.Success(filesList, 200);
             }
 
-            return Response<List<MyFilesViewModel>>.Fail("Herhangi bir veri bulunamadı", 404);
+            return Response<List<MyFilesViewModel>>.Success(200);
 
         }
 
