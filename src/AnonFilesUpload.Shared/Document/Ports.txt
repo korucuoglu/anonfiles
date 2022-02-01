@@ -1,5 +1,0 @@
-Ocelot: 5000
-Identity Server: 5001
-Api: 5002
-MVC Client: 5003
-VueJs Client: 3000

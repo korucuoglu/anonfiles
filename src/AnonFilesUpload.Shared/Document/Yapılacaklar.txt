@@ -1,9 +1,0 @@
-YAPILACAKLAR LİSTESİ 23 OCAK 2022
-
-2- Layout kısmındaki footer kısmı bozuk. 
-3- User Profile sayfası olacak ve buradan kişinin ne kadar alan kullandığı görülecek. 
-8- User Login ve Register sayfaları VueJs ile tekrardan oluşturulacak. 
-17- User Controller içerisinde Register kodla. 
-
-
-
