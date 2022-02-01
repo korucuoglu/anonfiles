@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonFilesUpload.Api", "AnonFilesUpload.Api\AnonFilesUpload.Api.csproj", "{65A5185F-651F-444D-B003-B0C8854CDE4C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D858785C-5F1F-4ECB-8C89-CBDDE5AF6D41}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonFilesUpload.MVC", "AnonFilesUpload.MVC\AnonFilesUpload.MVC.csproj", "{7882FCB2-FEA6-48AC-822D-9AFA89AD090E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonFilesUpload.Api", "src\AnonFilesUpload.Api\AnonFilesUpload.Api.csproj", "{DEE65B78-2BAE-4311-B117-7E34046E3852}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonFilesUpload.Data", "AnonFilesUpload.Data\AnonFilesUpload.Data.csproj", "{2F14EFF4-87F7-4A96-B602-73D6B2CBAB57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonFilesUpload.Data", "src\AnonFilesUpload.Data\AnonFilesUpload.Data.csproj", "{72B9D775-9115-48B9-AE2D-D6FF52250489}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonFilesUpload.IdentityServer", "AnonFilesUpload.IdentityServer\AnonFilesUpload.IdentityServer.csproj", "{67FA6BC2-3159-44BF-9B04-2D7D0260177F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonFilesUpload.IdentityServer", "src\AnonFilesUpload.IdentityServer\AnonFilesUpload.IdentityServer.csproj", "{D2F31115-365C-4A65-B2D0-5758B8488CC7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonFilesUpload.Shared", "AnonFilesUpload.Shared\AnonFilesUpload.Shared.csproj", "{2F7F0322-09EA-41DA-B2AD-F96BC89A7DA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonFilesUpload.MVC", "src\AnonFilesUpload.MVC\AnonFilesUpload.MVC.csproj", "{ED0C51C2-B8CE-4642-BBBF-07E0C3D15850}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonFilesUpload.Shared", "src\AnonFilesUpload.Shared\AnonFilesUpload.Shared.csproj", "{056D18C4-794A-404E-A51E-F476E56C1C1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,29 +21,36 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{65A5185F-651F-444D-B003-B0C8854CDE4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65A5185F-651F-444D-B003-B0C8854CDE4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65A5185F-651F-444D-B003-B0C8854CDE4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65A5185F-651F-444D-B003-B0C8854CDE4C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7882FCB2-FEA6-48AC-822D-9AFA89AD090E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7882FCB2-FEA6-48AC-822D-9AFA89AD090E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7882FCB2-FEA6-48AC-822D-9AFA89AD090E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7882FCB2-FEA6-48AC-822D-9AFA89AD090E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F14EFF4-87F7-4A96-B602-73D6B2CBAB57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F14EFF4-87F7-4A96-B602-73D6B2CBAB57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F14EFF4-87F7-4A96-B602-73D6B2CBAB57}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F14EFF4-87F7-4A96-B602-73D6B2CBAB57}.Release|Any CPU.Build.0 = Release|Any CPU
-		{67FA6BC2-3159-44BF-9B04-2D7D0260177F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67FA6BC2-3159-44BF-9B04-2D7D0260177F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67FA6BC2-3159-44BF-9B04-2D7D0260177F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67FA6BC2-3159-44BF-9B04-2D7D0260177F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F7F0322-09EA-41DA-B2AD-F96BC89A7DA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F7F0322-09EA-41DA-B2AD-F96BC89A7DA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F7F0322-09EA-41DA-B2AD-F96BC89A7DA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F7F0322-09EA-41DA-B2AD-F96BC89A7DA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEE65B78-2BAE-4311-B117-7E34046E3852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEE65B78-2BAE-4311-B117-7E34046E3852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEE65B78-2BAE-4311-B117-7E34046E3852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEE65B78-2BAE-4311-B117-7E34046E3852}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72B9D775-9115-48B9-AE2D-D6FF52250489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72B9D775-9115-48B9-AE2D-D6FF52250489}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72B9D775-9115-48B9-AE2D-D6FF52250489}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72B9D775-9115-48B9-AE2D-D6FF52250489}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2F31115-365C-4A65-B2D0-5758B8488CC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2F31115-365C-4A65-B2D0-5758B8488CC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2F31115-365C-4A65-B2D0-5758B8488CC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2F31115-365C-4A65-B2D0-5758B8488CC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED0C51C2-B8CE-4642-BBBF-07E0C3D15850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED0C51C2-B8CE-4642-BBBF-07E0C3D15850}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED0C51C2-B8CE-4642-BBBF-07E0C3D15850}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED0C51C2-B8CE-4642-BBBF-07E0C3D15850}.Release|Any CPU.Build.0 = Release|Any CPU
+		{056D18C4-794A-404E-A51E-F476E56C1C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{056D18C4-794A-404E-A51E-F476E56C1C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{056D18C4-794A-404E-A51E-F476E56C1C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{056D18C4-794A-404E-A51E-F476E56C1C1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DEE65B78-2BAE-4311-B117-7E34046E3852} = {D858785C-5F1F-4ECB-8C89-CBDDE5AF6D41}
+		{72B9D775-9115-48B9-AE2D-D6FF52250489} = {D858785C-5F1F-4ECB-8C89-CBDDE5AF6D41}
+		{D2F31115-365C-4A65-B2D0-5758B8488CC7} = {D858785C-5F1F-4ECB-8C89-CBDDE5AF6D41}
+		{ED0C51C2-B8CE-4642-BBBF-07E0C3D15850} = {D858785C-5F1F-4ECB-8C89-CBDDE5AF6D41}
+		{056D18C4-794A-404E-A51E-F476E56C1C1E} = {D858785C-5F1F-4ECB-8C89-CBDDE5AF6D41}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E6FF9DC-FA88-43CB-9600-94F3D301ABBB}
