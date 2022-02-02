@@ -1,5 +1,4 @@
 ﻿using AnonFilesUpload.Api.UnitTests.TestSetup;
-using AnonFilesUpload.Data.Entity;
 using Xunit;
 
 namespace AnonFilesUpload.Api.UnitTests.Tests.MVC.HomeController
