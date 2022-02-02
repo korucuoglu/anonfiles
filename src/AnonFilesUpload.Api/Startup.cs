@@ -1,5 +1,6 @@
 using AnonFilesUpload.Api.Services;
 using AnonFilesUpload.Data.Entity;
+using AnonFilesUpload.Data.Repository;
 using AnonFilesUpload.Shared.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +30,7 @@ namespace AnonFilesUpload.Api
             services.AddScoped<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<ILogger, ConsoleLogger>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddHttpContextAccessor();
 
 

@@ -18,7 +18,7 @@ namespace AnonFilesUpload.Api.Services
 
     public class FileService : IFileService
     {
-        private static HttpClient _client;
+        private readonly HttpClient _client;
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration configuration;
         private readonly ISharedIdentityService _sharedIdentityService;
@@ -41,9 +41,10 @@ namespace AnonFilesUpload.Api.Services
 
             var data = await _context.Data.Where(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId).FirstOrDefaultAsync();
 
-            _context.Remove(data);
+
+            _context.Data.Remove(data);
             (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace -= data.Size;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             return Response<bool>.Success(true, 200);
         }
@@ -136,7 +137,8 @@ namespace AnonFilesUpload.Api.Services
             (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace += dataEntity.Size;
 
             await _context.Data.AddAsync(dataEntity);
-            await _context.SaveChangesAsync();
+            // await _context.SaveChangesAsync();
+             _context.SaveChanges();
 
 
             var model = new UploadModel() { FileId = dataEntity.MetaDataId, FileName = dataEntity.Name };

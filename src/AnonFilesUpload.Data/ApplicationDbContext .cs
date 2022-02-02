@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AnonFilesUpload.Data.Entity
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
 
         public DbSet<Data> Data { get; set; }
@@ -14,8 +16,10 @@ namespace AnonFilesUpload.Data.Entity
         {
 
         }
-        
-
+        public override int SaveChanges()
+        {
+            return base.SaveChanges();
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
