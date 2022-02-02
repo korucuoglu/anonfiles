@@ -1,6 +1,9 @@
 ﻿using AnonFilesUpload.Data.Entity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace AnonFilesUpload.Data.Repository
@@ -16,26 +19,41 @@ namespace AnonFilesUpload.Data.Repository
             _dbSet = _context.Set<TEntity>();
         }
 
-        public async Task Create(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
-        public void Delete(TEntity entity)
+        public void Remove(TEntity entity)
         {
             _dbSet.Remove(entity);
             _context.SaveChanges();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet.FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<TEntity> GetById(int id)
+        public async Task<bool> Any(Expression<Func<TEntity, bool>> predicate = null)
         {
-            return await _dbSet.FindAsync(id);
+            return predicate == null
+                       ? _dbSet.Any()
+                       : _dbSet.Any(predicate);
+            
+        }
+
+        public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _dbSet.Where(predicate);
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = null)
+        {
+            return predicate == null
+                 ? await _dbSet.ToListAsync()
+                 : await _dbSet.Where(predicate).ToListAsync();
         }
 
         public void Update(TEntity entity)

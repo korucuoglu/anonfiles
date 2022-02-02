@@ -2,21 +2,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AnonFilesUpload.Data.Repository
 {
-    public interface IRepository<TEntity> where TEntity : BaseEntity 
+    public interface IRepository<TEntity> where TEntity : BaseEntity
     {
-        Task<IEnumerable<TEntity>> GetAll();
+        Task<bool> Any(Expression<Func<TEntity, bool>> predicate = null);
 
-        Task<TEntity> GetById(int id);
+        IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate);
 
-        Task Create(TEntity entity);
+        Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate=null);
+
+        Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+      
+
+
+
+
+        Task AddAsync(TEntity entity);
 
         void Update(TEntity entity);
 
-        void Delete(TEntity entity);
+        void Remove(TEntity entity);
     }
 }
