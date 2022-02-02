@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -18,6 +20,18 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AnonFilesUpload.Api\AnonFilesUpload.Api.csproj" />
+    <ProjectReference Include="..\..\src\AnonFilesUpload.Data\AnonFilesUpload.Data.csproj" />
+    <ProjectReference Include="..\..\src\AnonFilesUpload.IdentityServer\AnonFilesUpload.IdentityServer.csproj" />
+    <ProjectReference Include="..\..\src\AnonFilesUpload.MVC\AnonFilesUpload.MVC.csproj" />
+    <ProjectReference Include="..\..\src\AnonFilesUpload.Shared\AnonFilesUpload.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tests\IdentityServer\" />
   </ItemGroup>
 
 </Project>

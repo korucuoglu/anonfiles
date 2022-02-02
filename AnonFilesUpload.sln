@@ -17,11 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonFilesUpload.Shared", "s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{445C096D-C4AE-472B-8D78-FD63D3C8C91C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnonFilesUpload.IdentityServer.UnitTests", "test\AnonFilesUpload.IdentityServer.UnitTests\AnonFilesUpload.IdentityServer.UnitTests.csproj", "{28F125FF-08B4-424D-BA83-9BFB8CBA6CE2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnonFilesUpload.Api.UnitTests", "test\AnonFilesUpload.Api.UnitTests\AnonFilesUpload.Api.UnitTests.csproj", "{03B37D5D-B687-4B91-B29D-D2C9CA96015A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnonFilesUpload.MVC.UnitTests", "test\AnonFilesUpload.MVC.UnitTests\AnonFilesUpload.MVC.UnitTests.csproj", "{E7E75084-4418-4004-B2B4-AB60BF0B37DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonFilesUpload.Api.UnitTests", "test\AnonFilesUpload.Api.UnitTests\AnonFilesUpload.Api.UnitTests.csproj", "{03B37D5D-B687-4B91-B29D-D2C9CA96015A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,18 +45,10 @@ Global
 		{056D18C4-794A-404E-A51E-F476E56C1C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{056D18C4-794A-404E-A51E-F476E56C1C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{056D18C4-794A-404E-A51E-F476E56C1C1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{28F125FF-08B4-424D-BA83-9BFB8CBA6CE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{28F125FF-08B4-424D-BA83-9BFB8CBA6CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{28F125FF-08B4-424D-BA83-9BFB8CBA6CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{28F125FF-08B4-424D-BA83-9BFB8CBA6CE2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{03B37D5D-B687-4B91-B29D-D2C9CA96015A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{03B37D5D-B687-4B91-B29D-D2C9CA96015A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03B37D5D-B687-4B91-B29D-D2C9CA96015A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03B37D5D-B687-4B91-B29D-D2C9CA96015A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7E75084-4418-4004-B2B4-AB60BF0B37DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7E75084-4418-4004-B2B4-AB60BF0B37DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7E75084-4418-4004-B2B4-AB60BF0B37DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7E75084-4418-4004-B2B4-AB60BF0B37DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,9 +59,7 @@ Global
 		{D2F31115-365C-4A65-B2D0-5758B8488CC7} = {D858785C-5F1F-4ECB-8C89-CBDDE5AF6D41}
 		{ED0C51C2-B8CE-4642-BBBF-07E0C3D15850} = {D858785C-5F1F-4ECB-8C89-CBDDE5AF6D41}
 		{056D18C4-794A-404E-A51E-F476E56C1C1E} = {D858785C-5F1F-4ECB-8C89-CBDDE5AF6D41}
-		{28F125FF-08B4-424D-BA83-9BFB8CBA6CE2} = {445C096D-C4AE-472B-8D78-FD63D3C8C91C}
 		{03B37D5D-B687-4B91-B29D-D2C9CA96015A} = {445C096D-C4AE-472B-8D78-FD63D3C8C91C}
-		{E7E75084-4418-4004-B2B4-AB60BF0B37DC} = {445C096D-C4AE-472B-8D78-FD63D3C8C91C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E6FF9DC-FA88-43CB-9600-94F3D301ABBB}

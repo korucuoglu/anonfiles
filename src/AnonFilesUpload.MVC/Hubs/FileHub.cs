@@ -37,7 +37,7 @@ namespace AnonFilesUpload.MVC.Hubs
         public override Task OnDisconnectedAsync(Exception exception)
         {
 
-            var user = HubData.ClientsData.Where(x => x.UserId == _sharedIdentityService.GetUserId).FirstOrDefault();
+            var user = HubData.ClientsData.FirstOrDefault(x => x.UserId == _sharedIdentityService.GetUserId);
             HubData.ClientsData.Remove(user);
             return Task.CompletedTask;
         }
