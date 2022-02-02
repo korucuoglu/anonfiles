@@ -1,5 +1,6 @@
 ﻿
 using AnonFilesUpload.Data.Entity;
+using AnonFilesUpload.Data.Repository;
 using AnonFilesUpload.Shared.Models;
 using AnonFilesUpload.Shared.Services;
 using HtmlAgilityPack;
@@ -19,14 +20,14 @@ namespace AnonFilesUpload.Api.Services
     public class FileService : IFileService
     {
         private readonly HttpClient _client;
-        private readonly ApplicationDbContext _context;
+        private readonly IRepository<Data.Entity.Data> _repository;
         private readonly IConfiguration configuration;
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly UserManager<ApplicationUser> _userManager;
-        public FileService(HttpClient client, ApplicationDbContext context, IConfiguration configuration, ISharedIdentityService sharedIdentityService, UserManager<ApplicationUser> userManager)
+        public FileService(HttpClient client, IRepository<Data.Entity.Data> repository, IConfiguration configuration, ISharedIdentityService sharedIdentityService, UserManager<ApplicationUser> userManager)
         {
             _client = client;
-            _context = context;
+            _repository = repository;
             this.configuration = configuration;
             _sharedIdentityService = sharedIdentityService;
             _userManager = userManager;
@@ -34,24 +35,44 @@ namespace AnonFilesUpload.Api.Services
 
         public async Task<Response<bool>> DeleteAsyncByMetaId(string metaId)
         {
-            if (!_context.Data.Any(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId))
+
+            //if (!_context.Data.Any(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId))
+            //{
+            //    return Response<bool>.Fail(false, 404);
+            //}
+
+            //var data = await _context.Data.Where(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId).FirstOrDefaultAsync();
+
+
+            //_context.Data.Remove(data);
+            //(await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace -= data.Size;
+            //_context.SaveChanges();
+
+            var existingData = await _repository.Any(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId);
+
+            if (!existingData)
             {
                 return Response<bool>.Fail(false, 404);
             }
 
-            var data = await _context.Data.Where(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId).FirstOrDefaultAsync();
+            var data = await _repository.FirstOrDefaultAsync(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId);
 
-
-            _context.Data.Remove(data);
+            _repository.Remove(data);
             (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace -= data.Size;
-            _context.SaveChanges();
 
             return Response<bool>.Success(true, 200);
+
+
+           
+
+
         }
 
         public async Task<Response<string>> GetDirectLinkByMetaId(string metaId)
         {
-            if (!_context.Data.Any(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId))
+            var existingData = await _repository.Any(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId);
+
+            if (!existingData)
             {
                 return Response<string>.Fail("Böyle bir dosya bulunamadı", 404);
             }
@@ -77,10 +98,10 @@ namespace AnonFilesUpload.Api.Services
 
         public async Task<Response<List<MyFilesViewModel>>> GetMyFiles()
         {
-            if (_context.Data.Any())
+            if (await _repository.Any())
             {
 
-                var filesList = await _context.Data.Where(x => x.UserId == _sharedIdentityService.GetUserId).Select(x => new MyFilesViewModel()
+                var filesList = await _repository.Where(x => x.UserId == _sharedIdentityService.GetUserId).Select(x => new MyFilesViewModel()
                 {
                     FileId = x.MetaDataId,
                     FileName = x.Name
@@ -96,8 +117,6 @@ namespace AnonFilesUpload.Api.Services
 
         public async Task<Response<UploadModel>> UploadAsync(IFormFile file)
         {
-
-
             if (file == null)
             {
                 var failedModel = new UploadModel() { FileName = file.FileName };
@@ -136,10 +155,7 @@ namespace AnonFilesUpload.Api.Services
 
             (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace += dataEntity.Size;
 
-            await _context.Data.AddAsync(dataEntity);
-            // await _context.SaveChangesAsync();
-             _context.SaveChanges();
-
+            await _repository.AddAsync(dataEntity);
 
             var model = new UploadModel() { FileId = dataEntity.MetaDataId, FileName = dataEntity.Name };
             return Response<UploadModel>.Success(model, (int)response.StatusCode);

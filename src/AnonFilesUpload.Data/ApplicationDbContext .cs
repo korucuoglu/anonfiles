@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnonFilesUpload.Data.Entity
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
 
         public DbSet<Data> Data { get; set; }
@@ -16,10 +16,7 @@ namespace AnonFilesUpload.Data.Entity
         {
 
         }
-        public override int SaveChanges()
-        {
-            return base.SaveChanges();
-        }
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
