@@ -48,9 +48,7 @@ namespace AnonFilesUpload.Api.Services
             //(await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace -= data.Size;
             //_context.SaveChanges();
 
-            var existingData = await _repository.Any(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId);
-
-            if (!existingData)
+            if (!_repository.Any(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId))
             {
                 return Response<bool>.Fail(false, 404);
             }
@@ -63,16 +61,11 @@ namespace AnonFilesUpload.Api.Services
             return Response<bool>.Success(true, 200);
 
 
-           
-
-
         }
 
         public async Task<Response<string>> GetDirectLinkByMetaId(string metaId)
         {
-            var existingData = await _repository.Any(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId);
-
-            if (!existingData)
+            if (!_repository.Any(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId))
             {
                 return Response<string>.Fail("Böyle bir dosya bulunamadı", 404);
             }
@@ -98,9 +91,8 @@ namespace AnonFilesUpload.Api.Services
 
         public async Task<Response<List<MyFilesViewModel>>> GetMyFiles()
         {
-            if (await _repository.Any())
+            if (_repository.Any())
             {
-
                 var filesList = await _repository.Where(x => x.UserId == _sharedIdentityService.GetUserId).Select(x => new MyFilesViewModel()
                 {
                     FileId = x.MetaDataId,
@@ -132,7 +124,6 @@ namespace AnonFilesUpload.Api.Services
             var token = configuration.GetSection("token").Value;
             var content = await Helper.GetMultipartContentAsync(file);
 
-
             var response = await _client.PostAsync($"https://api.anonfiles.com/upload?token={token}", content);
 
             if (!response.IsSuccessStatusCode)
@@ -159,8 +150,6 @@ namespace AnonFilesUpload.Api.Services
 
             var model = new UploadModel() { FileId = dataEntity.MetaDataId, FileName = dataEntity.Name };
             return Response<UploadModel>.Success(model, (int)response.StatusCode);
-
-
         }
 
     }

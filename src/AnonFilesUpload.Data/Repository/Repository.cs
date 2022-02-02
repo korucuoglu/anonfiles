@@ -36,7 +36,7 @@ namespace AnonFilesUpload.Data.Repository
             return await _dbSet.FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<bool> Any(Expression<Func<TEntity, bool>> predicate = null)
+        public bool Any(Expression<Func<TEntity, bool>> predicate = null)
         {
             return predicate == null
                        ? _dbSet.Any()

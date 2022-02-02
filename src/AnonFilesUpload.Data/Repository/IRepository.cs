@@ -10,7 +10,7 @@ namespace AnonFilesUpload.Data.Repository
 {
     public interface IRepository<TEntity> where TEntity : BaseEntity
     {
-        Task<bool> Any(Expression<Func<TEntity, bool>> predicate = null);
+        bool Any(Expression<Func<TEntity, bool>> predicate = null);
 
         IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate);
 
