@@ -222,7 +222,6 @@ namespace AnonFilesUpload.MVC.Services
             await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, authenticationProperties);
 
             return true;
-            // return Response<bool>.Success(200);
         }
     }
 }
