@@ -13,20 +13,7 @@ namespace AnonFilesUpload.IdentityServer
 {
     public static class Config
     {
-        public static IEnumerable<TestUser> GetUsers()
-        {
-            return new List<TestUser>()
-            {
-                new TestUser{ SubjectId="1",Username="halit",  Password="halit",Claims= new List<Claim>(){
-                 
-                      new Claim("role","admin")
-                } },
-                 new TestUser{ SubjectId="2",Username="betül",  Password="betül",Claims= new List<Claim>(){
-                    new Claim("role","customer")
-                 } }
-            };
-        }
-
+      
         public static IEnumerable<ApiScope> ApiScopes => new ApiScope[]
         {
                 new ApiScope("api", "AnonFilesUpload.Api'ya full erişim iznidir."),
