@@ -59,19 +59,30 @@ namespace AnonFilesUpload.IdentityServer
                     if (!roleManager.Roles.Any())
                     {
                         roleManager.CreateAsync(new ApplicationRole{ Name = "Admin" }).Wait();
+                        roleManager.CreateAsync(new ApplicationRole{ Name = "User" }).Wait();
                     }
 
                     if (!userManager.Users.Any())
                     {
-                        ApplicationUser user = new()
+                        ApplicationUser userAdmin = new()
                         {
-                            UserName = "test123@gmail.com",
-                            Email = "test123@gmail.com",
-                            City = "Test123"
+                            UserName = "admin@gmail.com",
+                            Email = "admin@gmail.com",
+                            City = "İstanbul"
                         };
                         
-                        userManager.CreateAsync(user, "Test123.,").Wait();
-                        userManager.AddToRoleAsync(user, "Admin").Wait();
+                        userManager.CreateAsync(userAdmin, "Password123.,").Wait();
+                        userManager.AddToRoleAsync(userAdmin, "Admin").Wait();
+
+                        ApplicationUser user = new()
+                        {
+                            UserName = "user@gmail.com",
+                            Email = "user@gmail.com",
+                            City = "İstanbul"
+                        };
+
+                        userManager.CreateAsync(user, "Password123.,").Wait();
+                        userManager.AddToRoleAsync(user, "User").Wait();
                     }
 
 
