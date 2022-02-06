@@ -15,31 +15,44 @@ namespace AnonFilesUpload.MVC.Services
 
         public async Task<string> DeleteAsync(string uri)
         {
-            var response = await _client.DeleteAsync(uri);
+            using (_client)
+            {
+                var response = await _client.DeleteAsync(uri);
+                return await response.Content.ReadAsStringAsync();
+            }
 
-            return await response.Content.ReadAsStringAsync();
+
         }
 
         public async Task<string> GetAsync(string uri)
         {
-            var response = await _client.GetAsync(uri);
-
-            return await response.Content.ReadAsStringAsync();
+            using (_client) 
+            {
+                var response = await _client.GetAsync(uri);
+                return await response.Content.ReadAsStringAsync();
+            }
 
         }
 
         public async Task<string> PostAsync(string uri, HttpContent content)
         {
-            var response = await _client.PostAsync(uri, content);
 
-            return await response.Content.ReadAsStringAsync();
+            using (_client)
+            {
+                var response = await _client.PostAsync(uri, content);
+                return await response.Content.ReadAsStringAsync();
+
+            }
         }
 
         public async Task<string> PutAsync(string uri, HttpContent content)
         {
-            var response = await _client.PutAsync(uri, content);
+            using (_client)
+            {
+                var response = await _client.PutAsync(uri, content);
+                return await response.Content.ReadAsStringAsync();
 
-            return await response.Content.ReadAsStringAsync();
+            }
 
         }
     }
