@@ -3,6 +3,7 @@ using IdentityModel;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AnonFilesUpload.IdentityServer.Services
@@ -11,10 +12,12 @@ namespace AnonFilesUpload.IdentityServer.Services
     {
 
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public IdentityResourceOwnerPasswordValidator(UserManager<ApplicationUser> userManager)
+        public IdentityResourceOwnerPasswordValidator(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
@@ -31,13 +34,15 @@ namespace AnonFilesUpload.IdentityServer.Services
 
             var passwordCheck = await _userManager.CheckPasswordAsync(user, context.Password);
 
-            if (passwordCheck == false)
+            if (!passwordCheck)
             {
                 var errors = new Dictionary<string, object>();
                 errors.Add("errors", new List<string> { "Email veya şifreniz yanlış" });
                 context.Result.CustomResponse = errors;
                 return;
             }
+
+            
 
             context.Result = new GrantValidationResult(user.Id.ToString(), OidcConstants.AuthenticationMethods.Password);
         }

@@ -73,6 +73,14 @@ namespace AnonFilesUpload.MVC.Controllers
         }
 
 
+        [Route("[controller]/info")]
+        [HttpGet]
+        public IActionResult Info()
+        {
+            return View();
+        }
+
+
 
         [Route("[controller]/logout")]
         [HttpGet]

@@ -5,6 +5,7 @@
 
 using AnonFilesUpload.Data.Entity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,6 +13,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
+using System.Linq;
 
 namespace AnonFilesUpload.IdentityServer
 {
@@ -41,12 +43,35 @@ namespace AnonFilesUpload.IdentityServer
 
                     try
                     {
+                        applicationDbContext.Database.EnsureCreated();
                         applicationDbContext.Database.Migrate();
                     }
 
                     catch
                     {
                         Log.Warning("Migration kısmında hata meydana geldi");
+                    }
+
+
+                    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                    var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+
+                    if (!roleManager.Roles.Any())
+                    {
+                        roleManager.CreateAsync(new ApplicationRole{ Name = "Admin" }).Wait();
+                    }
+
+                    if (!userManager.Users.Any())
+                    {
+                        ApplicationUser user = new()
+                        {
+                            UserName = "test123@gmail.com",
+                            Email = "test123@gmail.com",
+                            City = "Test123"
+                        };
+                        
+                        userManager.CreateAsync(user, "Test123.,").Wait();
+                        userManager.AddToRoleAsync(user, "Admin").Wait();
                     }
 
 

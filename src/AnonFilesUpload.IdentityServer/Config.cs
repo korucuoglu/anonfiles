@@ -4,14 +4,28 @@
 
 using IdentityServer4;
 using IdentityServer4.Models;
+using IdentityServer4.Test;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace AnonFilesUpload.IdentityServer
 {
     public static class Config
     {
-
+        public static IEnumerable<TestUser> GetUsers()
+        {
+            return new List<TestUser>()
+            {
+                new TestUser{ SubjectId="1",Username="halit",  Password="halit",Claims= new List<Claim>(){
+                 
+                      new Claim("role","admin")
+                } },
+                 new TestUser{ SubjectId="2",Username="betül",  Password="betül",Claims= new List<Claim>(){
+                    new Claim("role","customer")
+                 } }
+            };
+        }
 
         public static IEnumerable<ApiScope> ApiScopes => new ApiScope[]
         {
@@ -24,7 +38,7 @@ namespace AnonFilesUpload.IdentityServer
         };
 
 
-        public static IEnumerable<ApiResource> ApiResources = new ApiResource[]
+        public static IEnumerable<ApiResource> ApiResources => new ApiResource[]
         {
 
                 new ApiResource("resource_api"){Scopes = {"api"}},
