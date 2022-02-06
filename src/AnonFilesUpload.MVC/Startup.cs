@@ -1,4 +1,3 @@
-
 using AnonFilesUpload.MVC.Extensions;
 using AnonFilesUpload.MVC.Hubs;
 using AnonFilesUpload.Shared.Middlewares;
@@ -27,7 +26,6 @@ namespace AnonFilesUpload.MVC
         public void ConfigureServices(IServiceCollection services)
         {
 
-
             services.AddHttpClientServices(Configuration);
 
             services.AddSingleton<ILogger, ConsoleLogger>();
@@ -35,7 +33,7 @@ namespace AnonFilesUpload.MVC
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts =>
             {
-                opts.LoginPath = "/User/login";
+                opts.LoginPath = "/user/login";
                 opts.ExpireTimeSpan = TimeSpan.FromDays(60);
                 opts.SlidingExpiration = true;
                 opts.Cookie.Name = "anonfiled";
@@ -43,8 +41,6 @@ namespace AnonFilesUpload.MVC
             });
 
             services.AddControllersWithViews();
-
-
             services.AddSignalR();
 
 
@@ -56,12 +52,11 @@ namespace AnonFilesUpload.MVC
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                 app.UseDeveloperExceptionPage();
 
-            }
-
-            if (env.IsProduction())
+            } else
             {
+
                 app.UseHttpsRedirection();
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();

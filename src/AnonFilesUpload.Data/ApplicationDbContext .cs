@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnonFilesUpload.Data.Entity
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
 
         public DbSet<Data> Data { get; set; }
