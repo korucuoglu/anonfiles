@@ -2,6 +2,8 @@ version: '3.8'
 services:
   postgresdb:
     image: postgres
+  minio: 
+    image: minio/minio
   upload.api:
     image: upload_api_image
     build:
@@ -20,3 +22,4 @@ services:
 
 volumes:
   postgresdb_volume:
+  minio_volume:
