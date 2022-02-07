@@ -17,7 +17,9 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - IdentityServerURL=http://identityserver.api
       - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
-      - "token=15ae3e98a74afa8d"
+      - "MinioAccessInfo:AccessKey=minioadmin"
+      - "MinioAccessInfo:SecretKey=minioadmin"
+      - "MinioAccessInfo:EndPoint=http://minio:9000"
     ports:
       - "5002:80"
     depends_on:
@@ -42,4 +44,16 @@ services:
       - ServiceApiSettings:ApiBaseUri=http://upload.api/api/
     ports:
       - "5003:80"
-    
+  minio:
+    container_name: minio
+    restart: always
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_volume:/minio/data:/data  
+      - minio_volume:/minio/config:/root/.minio  
+    command: server --address ":9000" --console-address ":9001" /data
