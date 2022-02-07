@@ -6,17 +6,17 @@ services:
     image: upload_api_image
     build:
       context: /src/
-      dockerfile: AnonFilesUpload.Api/Dockerfile
+      dockerfile: FileUpload.Api/Dockerfile
   identityserver.api:
     image: identityserver_api_image
     build:
       context: .
-      dockerfile: src/AnonFilesUpload.IdentityServer/Dockerfile
+      dockerfile: src/FileUpload.IdentityServer/Dockerfile
   aspnetcoremvc.web:
     image: aspnetcoremvc.web_image
     build:
       context: .
-      dockerfile: src/AnonFilesUpload.MVC/Dockerfile
+      dockerfile: src/FileUpload.MVC/Dockerfile
 
 volumes:
   postgresdb_volume:
