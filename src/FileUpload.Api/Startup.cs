@@ -59,7 +59,7 @@ namespace FileUpload.Api
             });
 
 
-            services.AddHttpClient<IFileService, FileService>();
+            services.AddHttpClient<IFileService, AnonFilesUploadService>();
 
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
