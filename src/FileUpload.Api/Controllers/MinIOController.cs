@@ -27,5 +27,43 @@ namespace FileUpload.Api.Controllers
                 StatusCode = data.StatusCode
             };
         }
+
+        [HttpGet("myfiles")]
+        public async Task<IActionResult> GetMyFiles()
+        {
+            var data = await _service.GetMyFiles();
+
+            return new ObjectResult(data)
+            {
+                StatusCode = data.StatusCode
+            };
+
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Download(string id)
+        {
+            var data = await _service.Download(id);
+
+            return new ObjectResult(data)
+            {
+                StatusCode = data.StatusCode
+            };
+
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(string id)
+        {
+            var data = await _service.Remove(id);
+
+            return new ObjectResult(data)
+            {
+                StatusCode = data.StatusCode
+            };
+
+        }
+
+
     }
 }

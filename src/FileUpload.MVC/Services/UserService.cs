@@ -21,7 +21,7 @@ namespace FileUpload.MVC.Services
         {
             var content = await Helper.GetMultipartContentAsync(file);
 
-            var deserializeData = await _apiService.PostAsync("data", content);
+            var deserializeData = await _apiService.PostAsync("minio", content);
 
             var serializeData = JsonConvert.DeserializeObject<Response<UploadModel>>(deserializeData);
 
@@ -32,7 +32,7 @@ namespace FileUpload.MVC.Services
 
         public async Task<Response<List<MyFilesViewModel>>> GetMyFiles()
         {
-            var deserializeData = await _apiService.GetAsync("data/myfiles");
+            var deserializeData = await _apiService.GetAsync("minio/myfiles");
             var serializeData = JsonConvert.DeserializeObject<Response<List<MyFilesViewModel>>>(deserializeData);
 
             return serializeData;
@@ -41,7 +41,7 @@ namespace FileUpload.MVC.Services
 
         public async Task<Response<string>> GetDirectLink(string id)
         {
-            var deserializeData = await _apiService.GetAsync($"data/{id}");
+            var deserializeData = await _apiService.GetAsync($"minio/{id}");
 
             var serializeData = JsonConvert.DeserializeObject<Response<string>>(deserializeData);
 
@@ -50,7 +50,7 @@ namespace FileUpload.MVC.Services
 
         public async Task<Response<bool>> DeleteFile(string id)
         {
-            var deserializeData = await _apiService.DeleteAsync($"data/{id}");
+            var deserializeData = await _apiService.DeleteAsync($"minio/{id}");
 
             var serializeData = JsonConvert.DeserializeObject<Response<bool>>(deserializeData);
 
