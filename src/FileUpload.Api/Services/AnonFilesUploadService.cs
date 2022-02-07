@@ -17,14 +17,14 @@ using System.Threading.Tasks;
 namespace FileUpload.Api.Services
 {
 
-    public class FileService : IFileService
+    public class AnonFilesUploadService : IFileService
     {
         private readonly HttpClient _client;
         private readonly IRepository<Data.Entity.Data> _repository;
         private readonly IConfiguration configuration;
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly UserManager<ApplicationUser> _userManager;
-        public FileService(HttpClient client, IRepository<Data.Entity.Data> repository, IConfiguration configuration, ISharedIdentityService sharedIdentityService, UserManager<ApplicationUser> userManager)
+        public AnonFilesUploadService(HttpClient client, IRepository<Data.Entity.Data> repository, IConfiguration configuration, ISharedIdentityService sharedIdentityService, UserManager<ApplicationUser> userManager)
         {
             _client = client;
             _repository = repository;
@@ -35,18 +35,6 @@ namespace FileUpload.Api.Services
 
         public async Task<Response<bool>> DeleteAsyncByMetaId(string metaId)
         {
-
-            //if (!_context.Data.Any(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId))
-            //{
-            //    return Response<bool>.Fail(false, 404);
-            //}
-
-            //var data = await _context.Data.Where(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId).FirstOrDefaultAsync();
-
-
-            //_context.Data.Remove(data);
-            //(await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace -= data.Size;
-            //_context.SaveChanges();
 
             if (!_repository.Any(x => x.UserId == _sharedIdentityService.GetUserId && x.MetaDataId == metaId))
             {
@@ -59,7 +47,6 @@ namespace FileUpload.Api.Services
             (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace -= data.Size;
 
             return Response<bool>.Success(true, 200);
-
 
         }
 

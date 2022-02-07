@@ -28,7 +28,7 @@ namespace FileUpload.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ISharedIdentityService, SharedIdentityService>();
-            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IFileService, AnonFilesUploadService>();
             services.AddScoped<ILogger, ConsoleLogger>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddHttpContextAccessor();
