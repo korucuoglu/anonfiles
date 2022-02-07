@@ -11,8 +11,6 @@ namespace FileUpload.Api.Controllers
     public class DataController : ControllerBase
     {
         private readonly IFileService _fileService;
-
-
         public DataController(IFileService fileService)
         {
             _fileService = fileService;

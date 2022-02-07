@@ -73,7 +73,7 @@ namespace FileUpload.Api.Services
                     BucketName = await GetBucketName(),
                     InputStream = stream,
                     AutoCloseStream = true,
-                    Key = key,
+                    Key = $"{key}-{file.FileName}",
                     ContentType = file.ContentType
                 };
                 var encodedFilename = Uri.EscapeDataString(file.FileName);
@@ -83,7 +83,7 @@ namespace FileUpload.Api.Services
             }
             catch (Exception e)
             {
-                Logger.LogError("Error ocurred In UploadFileAsync", e);
+                Logger.LogError("Error ocurred In UploadFileAsync", e.Message);
                 return Response<UploadModel>.Fail(e.Message, 500);
             }
             return Response<UploadModel>.Success(new UploadModel { FileId = key, FileName = file.FileName}, 200);
@@ -100,14 +100,12 @@ namespace FileUpload.Api.Services
                     BucketName = _sharedIdentityService.GetUserId
                 };
 
-                var fileList = (await client.ListObjectsAsync(request)).S3Objects;
-
                 var model = new List<MyFilesViewModel>();
 
-                foreach (var item in fileList)
-                {
-                    model.Add(new MyFilesViewModel { FileId = item.Key, FileName = item.Key });
-                }
+                (await client.ListObjectsAsync(request)).S3Objects.ForEach(item =>
+
+                 model.Add(new MyFilesViewModel { FileId = item.Key, FileName = item.Key })
+                );
 
                 return Response<List<MyFilesViewModel>>.Success(model, 200);
             }
