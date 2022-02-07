@@ -120,13 +120,16 @@ namespace FileUpload.Api.Services
         {
             if (string.IsNullOrEmpty(key)) return null;
 
-            var data = client.GetPreSignedURL(new GetPreSignedUrlRequest()
+
+            var request = new GetPreSignedUrlRequest()
             {
                 BucketName = _sharedIdentityService.GetUserId,
                 Key = key,
+                Protocol = Protocol.HTTP,
                 Expires = DateTime.Now.AddMinutes(30)
-            });
-
+            };
+            var data = client.GetPreSignedURL(request);
+           
             return Response<string>.Success(data, 200);
 
 
