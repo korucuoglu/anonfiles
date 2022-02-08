@@ -66,14 +66,14 @@ namespace FileUpload.Api.Services
             var key = string.Empty;
             try
             {
-                key = Guid.NewGuid().ToString();
+                key = Guid.NewGuid().ToString().Substring(0,8);
                 var stream = file.OpenReadStream();
                 var request = new PutObjectRequest()
                 {
                     BucketName = await GetBucketName(),
                     InputStream = stream,
                     AutoCloseStream = true,
-                    Key = $"{key}-{file.FileName}",
+                    Key = $"{key}_{file.FileName}",
                     ContentType = file.ContentType
                 };
                 var encodedFilename = Uri.EscapeDataString(file.FileName);
@@ -95,17 +95,22 @@ namespace FileUpload.Api.Services
 
             if (await AmazonS3Util.DoesS3BucketExistV2Async(client, _sharedIdentityService.GetUserId))
             {
-                ListObjectsRequest request = new ListObjectsRequest
+                ListObjectsRequest request = new()
                 {
                     BucketName = _sharedIdentityService.GetUserId
                 };
 
                 var model = new List<MyFilesViewModel>();
 
-                (await client.ListObjectsAsync(request)).S3Objects.ForEach(item =>
 
-                 model.Add(new MyFilesViewModel { FileId = item.Key, FileName = item.Key })
-                );
+                var files = (await client.ListObjectsAsync(request)).S3Objects;
+
+                foreach (var item in files)
+                {
+                    var dizi = item.Key.Split("_");
+
+                    model.Add(new MyFilesViewModel { FileId = item.Key, FileName = dizi[1] });
+                }
 
                 return Response<List<MyFilesViewModel>>.Success(model, 200);
             }
@@ -117,7 +122,6 @@ namespace FileUpload.Api.Services
         public async Task<Response<string>> Download(string key)
         {
             if (string.IsNullOrEmpty(key)) return null;
-
 
             var request = new GetPreSignedUrlRequest()
             {
