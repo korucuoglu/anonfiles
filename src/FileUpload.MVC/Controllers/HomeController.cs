@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using FileUpload.MVC.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using FileUpload.MVC.Services;
 
 namespace FileUpload.MVC.Controllers
 {
@@ -66,11 +67,13 @@ namespace FileUpload.MVC.Controllers
 
         [HttpGet]
         [Route("myfiles")]
-
-        public async Task<IActionResult> Files()
+        public async Task<IActionResult> Files(int page = 1, int number = 10, int OrderBy = 3)
         {
-            var data = await _userService.GetMyFiles();
-            return await Task.FromResult(View(data.Data));
+            var response = await _userService.GetMyFiles();
+
+            var data = await FilteredData.GetFilteredData(response.Data.AsQueryable(), page, number, OrderBy);
+
+            return await Task.FromResult(View(data.ToList()));
         }
 
 
