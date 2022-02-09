@@ -14,7 +14,7 @@ namespace FileUpload.Api.UnitTests.DataGenerator
                     Id = "1",
                     FileName = "1.txt",
                     Size = 15,
-                    UserId = "",
+                    ApplicationUserId = "",
                 },
 
                  new FileUpload.Data.Entity.File
@@ -22,7 +22,7 @@ namespace FileUpload.Api.UnitTests.DataGenerator
                      Id = "1",
                      FileName = "1.txt",
                      Size = 15,
-                     UserId = "",
+                     ApplicationUserId = "",
                  }
 
                 );

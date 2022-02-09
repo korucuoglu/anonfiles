@@ -21,10 +21,6 @@ namespace FileUpload.Data.Entity
         {
             optionsBuilder.EnableSensitiveDataLogging();
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
 
     }
 }

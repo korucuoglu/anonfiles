@@ -71,9 +71,7 @@ namespace FileUpload.MVC.Controllers
         {
             var response = await _userService.GetMyFiles();
 
-            var data = await FilteredData.GetFilteredData(response.Data.AsQueryable(), page, number, OrderBy);
-
-            return await Task.FromResult(View(data.ToList()));
+            return await Task.FromResult(View(response.Data));
         }
 
 

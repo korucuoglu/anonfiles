@@ -29,7 +29,7 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpGet("myfiles")]
-        public async Task<IActionResult> GetMyFiles()
+        public async Task<IActionResult> GetMyFiles(int page = 1, int number = 10, int OrderBy = 0)
         {
 
             var data = await _fileService.GetMyFiles();
