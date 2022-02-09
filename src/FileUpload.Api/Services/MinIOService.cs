@@ -2,9 +2,11 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Util;
+using FileUpload.Data.Repository;
 using FileUpload.Shared.Models;
 using FileUpload.Shared.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,11 +22,12 @@ namespace FileUpload.Api.Services
     {
         private readonly IConfiguration configuration;
         private readonly ISharedIdentityService _sharedIdentityService;
+        private readonly IRepository<Data.Entity.File> _repository;
         private ILogger<MinIOService> Logger { get; set; }
 
         public AmazonS3Client client { get; set; }
 
-        public MinIOService(IConfiguration configuration, ISharedIdentityService sharedIdentityService, ILogger<MinIOService> logger)
+        public MinIOService(IConfiguration configuration, ISharedIdentityService sharedIdentityService, ILogger<MinIOService> logger, IRepository<Data.Entity.File> repository)
         {
             this.configuration = configuration;
             _sharedIdentityService = sharedIdentityService;
@@ -37,10 +40,8 @@ namespace FileUpload.Api.Services
                 ForcePathStyle = true,
                 SignatureVersion = "2"
             };
-
             client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
-
-
+            _repository = repository;
         }
 
         public async Task<string> GetBucketName()
@@ -62,7 +63,6 @@ namespace FileUpload.Api.Services
 
         public async Task<Response<UploadModel>> UploadAsync(IFormFile file)
         {
-
             var key = string.Empty;
             try
             {
@@ -73,13 +73,24 @@ namespace FileUpload.Api.Services
                     BucketName = await GetBucketName(),
                     InputStream = stream,
                     AutoCloseStream = true,
-                    Key = $"{key}{Path.GetExtension(file.FileName)}",
+                    Key = $"{key}", // e6e37de7.txt
                     ContentType = file.ContentType
                 };
                 var encodedFilename = Uri.EscapeDataString(file.FileName);
                 request.Metadata.Add("original-filename", encodedFilename);
                 request.Headers.ContentDisposition = $"attachment; filename=\"{encodedFilename}\"";
                 await client.PutObjectAsync(request);
+
+                Data.Entity.File fileEntity = new()
+                {
+                    ApplicationUserId = _sharedIdentityService.GetUserId,
+                    FileName = file.FileName,
+                    Size = file.Length,
+                    Id = key
+                };
+
+                await _repository.AddAsync(fileEntity);
+
             }
             catch (Exception e)
             {
@@ -111,6 +122,24 @@ namespace FileUpload.Api.Services
                 }
 
                 return Response<List<MyFilesViewModel>>.Success(model, 200);
+            }
+
+            return Response<List<MyFilesViewModel>>.Success(200);
+
+        }
+
+        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles()
+        {
+            if (_repository.Any(x=> x.ApplicationUserId == _sharedIdentityService.GetUserId))
+            {
+                var filesList = await _repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId).Select(x => new MyFilesViewModel()
+                {
+                    FileId = x.Id,
+                    FileName = x.FileName
+
+                }).ToListAsync();
+
+                return Response<List<MyFilesViewModel>>.Success(filesList, 200);
             }
 
             return Response<List<MyFilesViewModel>>.Success(200);

@@ -44,7 +44,7 @@ namespace FileUpload.IdentityServer
                     try
                     {
                         applicationDbContext.Database.EnsureCreated();
-                        applicationDbContext.Database.Migrate();
+                        // applicationDbContext.Database.Migrate();
                     }
 
                     catch

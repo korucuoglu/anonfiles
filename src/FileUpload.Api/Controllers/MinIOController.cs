@@ -31,7 +31,7 @@ namespace FileUpload.Api.Controllers
         [HttpGet("myfiles")]
         public async Task<IActionResult> GetMyFiles()
         {
-            var data = await _service.GetMyFilesInBucket();
+            var data = await _service.GetMyFiles();
 
             return new ObjectResult(data)
             {
