@@ -35,8 +35,6 @@ namespace FileUpload.Api.Services
                 return model;
             }
 
-            Console.WriteLine($"dosya uzantısı {extension}");
-
             return model.Where(x => x.Extension == extension);
         }
 

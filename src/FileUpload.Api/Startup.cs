@@ -56,7 +56,13 @@ namespace FileUpload.Api
             {
                 var policy = new AuthorizationPolicyBuilder("Bearer").RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));
+            }).AddNewtonsoftJson(opt =>
+            {
+                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
             });
+
+            
 
 
             services.AddDbContext<ApplicationDbContext>(opt =>
