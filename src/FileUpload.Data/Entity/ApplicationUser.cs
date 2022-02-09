@@ -8,6 +8,7 @@ namespace FileUpload.Data.Entity
     {
         public long UsedSpace { get; set; }
 
-        public ICollection<File> Files { get; set; }
+        public virtual ICollection<File> Files { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }

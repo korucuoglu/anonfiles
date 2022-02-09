@@ -67,9 +67,9 @@ namespace FileUpload.MVC.Controllers
 
         [HttpGet]
         [Route("myfiles")]
-        public async Task<IActionResult> Files(int page = 1, int number = 10, int orderBy = 0)
+        public async Task<IActionResult> Files(int page = 1, int number = 10, int orderBy = 0, string extension = "TXT")
         {
-            var response = await _userService.GetMyFiles(page, number, orderBy);
+            var response = await _userService.GetMyFiles(page, number, orderBy, extension);
 
             return await Task.FromResult(View(response.Data));
         }
