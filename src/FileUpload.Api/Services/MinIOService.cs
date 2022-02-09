@@ -66,14 +66,14 @@ namespace FileUpload.Api.Services
             var key = string.Empty;
             try
             {
-                key = Guid.NewGuid().ToString().Substring(0,8);
+                key = Guid.NewGuid().ToString();
                 var stream = file.OpenReadStream();
                 var request = new PutObjectRequest()
                 {
                     BucketName = await GetBucketName(),
                     InputStream = stream,
                     AutoCloseStream = true,
-                    Key = $"{key}_{file.FileName}",
+                    Key = $"{key}{Path.GetExtension(file.FileName)}",
                     ContentType = file.ContentType
                 };
                 var encodedFilename = Uri.EscapeDataString(file.FileName);
@@ -90,7 +90,7 @@ namespace FileUpload.Api.Services
 
         }
 
-        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles()
+        public async Task<Response<List<MyFilesViewModel>>> GetMyFilesInBucket()
         {
 
             if (await AmazonS3Util.DoesS3BucketExistV2Async(client, _sharedIdentityService.GetUserId))
@@ -107,9 +107,7 @@ namespace FileUpload.Api.Services
 
                 foreach (var item in files)
                 {
-                    var dizi = item.Key.Split("_");
-
-                    model.Add(new MyFilesViewModel { FileId = item.Key, FileName = dizi[1] });
+                    model.Add(new MyFilesViewModel { FileId = item.Key, FileName = item.Key, UploadedDate = item.LastModified, Size = item.Size });
                 }
 
                 return Response<List<MyFilesViewModel>>.Success(model, 200);

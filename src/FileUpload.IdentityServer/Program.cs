@@ -68,7 +68,6 @@ namespace FileUpload.IdentityServer
                         {
                             UserName = "admin@gmail.com",
                             Email = "admin@gmail.com",
-                            City = "İstanbul"
                         };
 
                         userManager.CreateAsync(userAdmin, "Password123.,").Wait();
@@ -78,7 +77,6 @@ namespace FileUpload.IdentityServer
                         {
                             UserName = "user@gmail.com",
                             Email = "user@gmail.com",
-                            City = "İstanbul"
                         };
 
                         userManager.CreateAsync(user, "Password123.,").Wait();
