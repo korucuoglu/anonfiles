@@ -44,9 +44,12 @@ namespace FileUpload.Data.Repository
 
         }
 
-        public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
+        public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate = null)
         {
-            return _dbSet.Where(predicate);
+            return predicate == null
+                       ? _dbSet.AsQueryable()
+                       : _dbSet.Where(predicate);
+
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = null)

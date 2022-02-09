@@ -12,7 +12,7 @@ namespace FileUpload.Data.Repository
     {
         bool Any(Expression<Func<TEntity, bool>> predicate = null);
 
-        IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate);
+        IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate = null);
 
         Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = null);
 
