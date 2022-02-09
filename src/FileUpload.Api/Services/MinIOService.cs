@@ -142,7 +142,9 @@ namespace FileUpload.Api.Services
                 var filesList = await filteredFile.Select(x => new MyFilesViewModel()
                 {
                     FileId = x.Id,
-                    FileName = x.FileName
+                    FileName = x.FileName,
+                    Size = x.Size, 
+                    UploadedDate = x.CreatedDate
 
                 }).ToListAsync();
 

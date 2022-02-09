@@ -30,9 +30,10 @@ namespace FileUpload.MVC.Services
 
         }
 
-        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles()
+        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles(int page, int number, int orderBy)
         {
-            var deserializeData = await _apiService.GetAsync("minio/myfiles");
+
+            var deserializeData = await _apiService.GetAsync($"minio/myfiles?page={page}&number={number}&orderBy={orderBy}");
             var serializeData = JsonConvert.DeserializeObject<Response<List<MyFilesViewModel>>>(deserializeData);
 
             return serializeData;
