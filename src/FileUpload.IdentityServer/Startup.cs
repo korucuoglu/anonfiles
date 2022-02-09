@@ -37,6 +37,7 @@ namespace FileUpload.IdentityServer
 
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
+                opt.EnableSensitiveDataLogging(true);
                 opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), configure =>
                 {
                     configure.MigrationsAssembly("FileUpload.Data");

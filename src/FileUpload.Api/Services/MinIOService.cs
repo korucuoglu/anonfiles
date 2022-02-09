@@ -2,10 +2,12 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Util;
+using FileUpload.Data.Entity;
 using FileUpload.Data.Repository;
 using FileUpload.Shared.Models;
 using FileUpload.Shared.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -23,11 +25,12 @@ namespace FileUpload.Api.Services
         private readonly IConfiguration configuration;
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IRepository<Data.Entity.File> _repository;
+        private readonly UserManager<ApplicationUser> _userManager;
         private ILogger<MinIOService> Logger { get; set; }
 
         public AmazonS3Client client { get; set; }
 
-        public MinIOService(IConfiguration configuration, ISharedIdentityService sharedIdentityService, ILogger<MinIOService> logger, IRepository<Data.Entity.File> repository)
+        public MinIOService(IConfiguration configuration, ISharedIdentityService sharedIdentityService, ILogger<MinIOService> logger, IRepository<Data.Entity.File> repository, UserManager<ApplicationUser> userManager)
         {
             this.configuration = configuration;
             _sharedIdentityService = sharedIdentityService;
@@ -42,6 +45,7 @@ namespace FileUpload.Api.Services
             };
             client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
             _repository = repository;
+            _userManager = userManager;
         }
 
         public async Task<string> GetBucketName()
@@ -86,9 +90,10 @@ namespace FileUpload.Api.Services
                     ApplicationUserId = _sharedIdentityService.GetUserId,
                     FileName = file.FileName,
                     Size = file.Length,
-                    Id = key
+                    Id = key,
                 };
 
+                (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace += file.Length;
                 await _repository.AddAsync(fileEntity);
 
             }
@@ -97,7 +102,7 @@ namespace FileUpload.Api.Services
                 Logger.LogError("Error ocurred In UploadFileAsync", e.Message);
                 return Response<UploadModel>.Fail(e.Message, 500);
             }
-            return Response<UploadModel>.Success(new UploadModel { FileId = key, FileName = file.FileName}, 200);
+            return Response<UploadModel>.Success(new UploadModel { FileId = key, FileName = file.FileName }, 200);
 
         }
 
@@ -128,18 +133,20 @@ namespace FileUpload.Api.Services
 
         }
 
-        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles()
+        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles(int page, int number, int orderBy)
         {
-            if (_repository.Any(x=> x.ApplicationUserId == _sharedIdentityService.GetUserId))
+            if (_repository.Any(x => x.ApplicationUserId == _sharedIdentityService.GetUserId))
             {
-                var filesList = await _repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId).Select(x => new MyFilesViewModel()
+                var filteredFile = Filter.FilterFile(_repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), page, number, orderBy);
+
+                var filesList = await filteredFile.Select(x => new MyFilesViewModel()
                 {
                     FileId = x.Id,
                     FileName = x.FileName
 
                 }).ToListAsync();
 
-                return Response<List<MyFilesViewModel>>.Success(filesList, 200);
+            return Response<List<MyFilesViewModel>>.Success(filesList, 200);
             }
 
             return Response<List<MyFilesViewModel>>.Success(200);
@@ -158,11 +165,11 @@ namespace FileUpload.Api.Services
                 Expires = DateTime.Now.AddMinutes(30)
             };
             var data = client.GetPreSignedURL(request);
-           
-            return Response<string>.Success(data, 200);
+
+            return await Task.FromResult(Response<string>.Success(data, 200));
 
 
-           
+
         }
 
         public async Task<Response<bool>> Remove(string key)
@@ -178,6 +185,9 @@ namespace FileUpload.Api.Services
                 };
 
                 await client.DeleteObjectAsync(deleteObjectRequest);
+                var file = await _repository.FirstOrDefaultAsync(x => x.Id == key);
+                (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace -= file.Size;
+                _repository.Remove(file);
                 return Response<bool>.Success(true, 200);
             }
             catch (AmazonS3Exception e)
