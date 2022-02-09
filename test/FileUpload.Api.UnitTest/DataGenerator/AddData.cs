@@ -6,24 +6,21 @@ namespace FileUpload.Api.UnitTests.DataGenerator
     {
         public static void AddData(this ApplicationDbContext context)
         {
-            context.Data.AddRange(
+            context.Files.AddRange(
 
-                new FileUpload.Data.Entity.Data
+                new FileUpload.Data.Entity.File
                 {
 
-                    MetaDataId = "1",
-                    Name = "1.txt",
-                    ShortUri = "",
+                    Id = "1",
+                    FileName = "1.txt",
                     Size = 15,
                     UserId = "",
                 },
 
-                 new FileUpload.Data.Entity.Data
+                 new FileUpload.Data.Entity.File
                  {
-
-                     MetaDataId = "2",
-                     Name = "2.txt",
-                     ShortUri = "",
+                     Id = "1",
+                     FileName = "1.txt",
                      Size = 15,
                      UserId = "",
                  }

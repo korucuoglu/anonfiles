@@ -31,7 +31,6 @@ namespace FileUpload.IdentityServer.Controllers
             var user = new ApplicationUser()
             {
                 UserName = dto.Email,
-                City = dto.City,
                 Email = dto.Email
             };
 

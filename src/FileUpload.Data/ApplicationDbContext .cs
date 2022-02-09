@@ -9,8 +9,8 @@ namespace FileUpload.Data.Entity
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
 
-        public DbSet<Data> Data { get; set; }
-
+        public DbSet<File> Files { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -19,7 +19,6 @@ namespace FileUpload.Data.Entity
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             optionsBuilder.EnableSensitiveDataLogging();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
