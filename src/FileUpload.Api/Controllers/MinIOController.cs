@@ -1,4 +1,5 @@
 ﻿using FileUpload.Api.Services;
+using FileUpload.Shared.Models.Files;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpGet("myfiles")]
-        public async Task<IActionResult> GetMyFiles(int page = 1, int number = 10, int orderBy = 0)
+        public async Task<IActionResult> GetMyFiles(int page, int number, int orderBy)
         {
             var data = await _service.GetMyFiles(page, number, orderBy);
 
