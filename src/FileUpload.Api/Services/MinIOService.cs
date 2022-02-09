@@ -77,7 +77,7 @@ namespace FileUpload.Api.Services
                     BucketName = await GetBucketName(),
                     InputStream = stream,
                     AutoCloseStream = true,
-                    Key = $"{key}", // e6e37de7.txt
+                    Key = $"{key}", 
                     ContentType = file.ContentType
                 };
                 var encodedFilename = Uri.EscapeDataString(file.FileName);
@@ -91,6 +91,7 @@ namespace FileUpload.Api.Services
                     FileName = file.FileName,
                     Size = file.Length,
                     Id = key,
+                    Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper()
                 };
 
                 (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace += file.Length;
@@ -133,11 +134,11 @@ namespace FileUpload.Api.Services
 
         }
 
-        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles(int page, int number, int orderBy)
+        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles(int page, int number, int orderBy, string extension)
         {
             if (_repository.Any(x => x.ApplicationUserId == _sharedIdentityService.GetUserId))
             {
-                var filteredFile = Filter.FilterFile(_repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), page, number, orderBy);
+                var filteredFile = Filter.FilterFile(_repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), page, number, orderBy, extension);
 
                 var filesList = await filteredFile.Select(x => new MyFilesViewModel()
                 {

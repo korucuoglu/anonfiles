@@ -28,7 +28,6 @@ namespace FileUpload.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ISharedIdentityService, SharedIdentityService>();
-            // services.AddScoped<IFileService, AnonFilesUploadService>();
             services.AddScoped<ILogger, ConsoleLogger>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddHttpContextAccessor();
@@ -59,8 +58,6 @@ namespace FileUpload.Api
                 opt.Filters.Add(new AuthorizeFilter(policy));
             });
 
-
-            // services.AddHttpClient<IFileService, AnonFilesUploadService>();
 
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
