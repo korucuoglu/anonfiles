@@ -16,7 +16,7 @@ namespace FileUpload.Api.Dtos.Categories
     {
         public AddCategoryDtoValidator()
         {
-            RuleFor(x => x.Title).NotNull().NotEmpty().WithMessage(" Kategori ismi boş olamaz");
+            RuleFor(x => x.Title).NotNull().NotEmpty().WithMessage("Title değeri boş olamaz");
         }
     }
 }

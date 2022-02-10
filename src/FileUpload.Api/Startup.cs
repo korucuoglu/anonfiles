@@ -40,7 +40,7 @@ namespace FileUpload.Api
             services.AddScoped<MinIOService>();
             services.AddScoped<CategoriesService>();
             services.AddScoped(typeof(NotFoundFilter<>));
-            services.AddScoped<ValidationFilterAttribute>();
+            services.AddScoped(typeof(ValidationFilterAttribute<>));
 
             services.AddAutoMapper(typeof(Startup));
 
