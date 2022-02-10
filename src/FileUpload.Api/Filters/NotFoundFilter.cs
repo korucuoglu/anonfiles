@@ -25,14 +25,14 @@ namespace FileUpload.Api.Filters
 
             if (string.IsNullOrEmpty(id))
             {
-                context.Result = new NotFoundObjectResult(Response<NoContent>.Fail("Id değeri boş olamaz", 404));
+                context.Result = new NotFoundObjectResult(Response<TEntity>.Fail("Id değeri boş olamaz", 404));
                 return;
             }
 
             if (!_service.Any(x=> x.Id == id && x.ApplicationUserId == _sharedIdentityService.GetUserId))
             {
                 var error = $"Böyle bir veri bulunamadı.";
-                context.Result = new NotFoundObjectResult(Response<NoContent>.Fail(error, 404));
+                context.Result = new NotFoundObjectResult(Response<TEntity>.Fail(error, 404));
                 return;
             }
 

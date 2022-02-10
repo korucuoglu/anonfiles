@@ -42,7 +42,7 @@ namespace FileUpload.MVC.Services
 
         public async Task<Response<string>> GetDirectLink(string id)
         {
-            var deserializeData = await _apiService.GetAsync($"minio/{id}");
+            var deserializeData = await _apiService.GetAsync($"minio/download/{id}");
 
             var serializeData = JsonConvert.DeserializeObject<Response<string>>(deserializeData);
 
