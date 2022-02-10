@@ -33,7 +33,7 @@ namespace FileUpload.Api.Filters
                     errors.Add(item.ErrorMessage);
                 }
 
-                context.Result = new BadRequestObjectResult(Response<NoContent>.Fail(errors, 400));
+                context.Result = new BadRequestObjectResult(Response<TEntity>.Fail(errors, 400));
 
                 return;
 

@@ -1,6 +1,8 @@
-﻿using FileUpload.Api.Services;
-using FileUpload.Shared.Models.Files;
-using Microsoft.AspNetCore.Authorization;
+﻿using FileUpload.Api.Dtos.File;
+using FileUpload.Api.Filters;
+using FileUpload.Api.Services;
+using FileUpload.Data.Entity;
+using FileUpload.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -19,14 +21,16 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file)
+        [ServiceFilter(typeof(ValidationFilterAttribute<UploadModel>))]
+        public async Task<IActionResult> Upload([FromForm] UploadFileDto dto)
         {
-            var data = await _service.UploadAsync(file);
+            var data = await _service.UploadAsync(dto.File);
 
             return new ObjectResult(data)
             {
                 StatusCode = data.StatusCode
             };
+
         }
 
         [HttpGet("myfiles")]
@@ -41,7 +45,8 @@ namespace FileUpload.Api.Controllers
 
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("download/{id}")] 
+        [ServiceFilter(typeof(NotFoundFilter<Data.Entity.File>))]
         public async Task<IActionResult> Download(string id)
         {
             var data = await _service.Download(id);
@@ -54,6 +59,7 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(NotFoundFilter<Data.Entity.File>))]
         public async Task<IActionResult> Remove(string id)
         {
             var data = await _service.Remove(id);
