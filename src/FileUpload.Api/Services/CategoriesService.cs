@@ -63,18 +63,23 @@ namespace FileUpload.Api.Services
         }
 
 
-        public async Task<Response<bool>> UpdateAsync(UpdateCategory dto)
+        public async Task<Response<bool>> UpdateAsync(string id, UpdateCategory dto)
         {
-            if (!_categoryRepository.Any(x=> x.ApplicationUserId ==_sharedIdentityService.GetUserId && x.Id==dto.Id))
+            if (id != dto.Id)
             {
-                return await Task.FromResult(Response<bool>.Fail(false, 200));
+                return await Task.FromResult(Response<bool>.Fail(false, 404));
             }
+
+            //if (!_categoryRepository.Any(x=> x.ApplicationUserId ==_sharedIdentityService.GetUserId && x.Id==dto.Id))
+            //{
+            //    return await Task.FromResult(Response<bool>.Fail(false, 404));
+            //}
 
             var mapperData = _mapper.Map<Category>(dto);
 
             _categoryRepository.Update(mapperData);
             
-            return Response<bool>.Success(true, 200);
+            return await Task.FromResult(Response<bool>.Success(true, 200));
 
         }
 

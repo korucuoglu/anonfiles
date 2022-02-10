@@ -24,7 +24,7 @@ namespace FileUpload.Api.Controllers
         
         
         [HttpGet]
-        public async Task<IActionResult> GetAllCategories()
+        public async Task<IActionResult> GetAllAsync()
         {
             var data = await _categoriesService.GetAllAsync();
 
@@ -36,8 +36,7 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        [ServiceFilter(typeof(NotFoundFilter<Category>))]
-        public async Task<IActionResult> GetCategoryById(string id)
+        public async Task<IActionResult> GetByIdAsync(string id)
         {
             var data = await _categoriesService.GetByIdAsync(id);
 
@@ -49,8 +48,8 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> AddCategory(AddCategoryDto dto)
+        [ServiceFilter(typeof(ValidationFilterAttribute<Category>))]
+        public async Task<IActionResult> AddAsync(AddCategoryDto dto)
         {
             var data = await _categoriesService.AddAsync(dto);
 
@@ -60,11 +59,12 @@ namespace FileUpload.Api.Controllers
             };
         }
 
-        [HttpPut]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> AddCategory(UpdateCategory dto)
+        [HttpPut("{id}")]
+        [ServiceFilter(typeof(NotFoundFilter<Category>))]
+        [ServiceFilter(typeof(ValidationFilterAttribute<Category>))]
+        public async Task<IActionResult> UpdateAsync(string id, UpdateCategory dto)
         {
-            var data = await _categoriesService.UpdateAsync(dto);
+            var data = await _categoriesService.UpdateAsync(id, dto);
 
             return new ObjectResult(data)
             {
@@ -75,7 +75,7 @@ namespace FileUpload.Api.Controllers
 
         [HttpDelete("{id}")]
         [ServiceFilter(typeof(NotFoundFilter<Category>))]
-        public async Task<IActionResult> DeleteCategoryById(string id)
+        public async Task<IActionResult> DeleteByIdAsync(string id)
         {
             var data = await _categoriesService.DeleteByIdAsync(id);
 

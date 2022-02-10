@@ -23,14 +23,21 @@ namespace FileUpload.Api.Filters
         {
             var id = context.RouteData.Values["id"].ToString();
 
-            if (_service.Any(x=> x.Id == id && x.ApplicationUserId == _sharedIdentityService.GetUserId))
+            if (string.IsNullOrEmpty(id))
             {
-                await next();
+                context.Result = new NotFoundObjectResult(Response<NoContent>.Fail("Id değeri boş olamaz", 404));
+                return;
             }
-          
-            var error = $"Böyle bir veri bulunamadı.";
 
-            context.Result = new NotFoundObjectResult(Response<NoContent>.Fail(error, 404));
+            if (!_service.Any(x=> x.Id == id && x.ApplicationUserId == _sharedIdentityService.GetUserId))
+            {
+                var error = $"Böyle bir veri bulunamadı.";
+                context.Result = new NotFoundObjectResult(Response<NoContent>.Fail(error, 404));
+                return;
+            }
+
+            await next();
+          
 
         }
     }
