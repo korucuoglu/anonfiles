@@ -32,7 +32,9 @@ namespace FileUpload.Api
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddHttpContextAccessor();
             services.AddScoped<MinIOService>();
+            services.AddScoped<CategoriesService>();
 
+            services.AddAutoMapper(typeof(Startup));
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub"); // Api i�erisinden UserId de�erlerini okuyabilmek i�in bunu ekledik. 
 
