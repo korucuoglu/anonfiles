@@ -3,6 +3,7 @@ using FileUpload.Api.Filters;
 using FileUpload.Api.Services;
 using FileUpload.Data.Entity;
 using FileUpload.Shared.Models;
+using FileUpload.Shared.Models.Files;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -34,9 +35,9 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpGet("myfiles")]
-        public async Task<IActionResult> GetMyFiles(int page, int number, int orderBy, string extension)
+        public async Task<IActionResult> GetMyFiles([FromQuery] FileFilterModel model)
         {
-            var data = await _service.GetMyFiles(page, number, orderBy, extension);
+            var data = await _service.GetMyFiles(model);
 
             return new ObjectResult(data)
             {

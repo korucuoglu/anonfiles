@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using FileUpload.Shared.Models.Files;
+using FileUpload.Shared.Helper;
 
 namespace FileUpload.MVC.Services
 {
@@ -30,10 +32,11 @@ namespace FileUpload.MVC.Services
 
         }
 
-        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles(int page, int number, int orderBy, string extension)
+        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles(FileFilterModel model)
         {
+            string queryString = Helper.GetQueryString(model);
 
-            var deserializeData = await _apiService.GetAsync($"minio/myfiles?page={page}&number={number}&orderBy={orderBy}&extension={extension}");
+            var deserializeData = await _apiService.GetAsync($"minio/myfiles?{queryString}");
             var serializeData = JsonConvert.DeserializeObject<Response<List<MyFilesViewModel>>>(deserializeData);
 
             return serializeData;

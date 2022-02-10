@@ -1,5 +1,6 @@
 ﻿using FileUpload.Shared.Enums;
 using FileUpload.Shared.Models;
+using FileUpload.Shared.Models.Files;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,21 +9,21 @@ namespace FileUpload.Api.Services
 {
     public static class Filter
     {
-        public static IQueryable<Data.Entity.File> FilterFile (IQueryable<Data.Entity.File> model, int page, int number, int orderBy, string extension)
+        public static IQueryable<Data.Entity.File> FilterFile (IQueryable<Data.Entity.File> model, FileFilterModel filterModel)
         {
-            var maxPage = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(model.Count()) / Convert.ToDouble(number)));
+            var maxPage = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(model.Count()) / Convert.ToDouble(filterModel.Number)));
 
 
-            if (page > maxPage)
+            if (filterModel.Page > maxPage)
             {
-                page = maxPage;
+                filterModel.Page = maxPage;
             }
 
-            var extensionFilterData = ExtensionFilter(model, extension);
+            var extensionFilterData = ExtensionFilter(model, filterModel.Extension);
 
-            var orderFilterData = OrderFiles(extensionFilterData, orderBy);
+            var orderFilterData = OrderFiles(extensionFilterData, filterModel.OrderBy);
 
-            model = PaginationData(orderFilterData, page, number);
+            model = PaginationData(orderFilterData, filterModel.Page, filterModel.Number);
 
             return model;
         }
