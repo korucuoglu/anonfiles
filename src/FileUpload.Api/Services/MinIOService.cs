@@ -5,6 +5,7 @@ using Amazon.S3.Util;
 using FileUpload.Data.Entity;
 using FileUpload.Data.Repository;
 using FileUpload.Shared.Models;
+using FileUpload.Shared.Models.Files;
 using FileUpload.Shared.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -107,38 +108,11 @@ namespace FileUpload.Api.Services
 
         }
 
-        public async Task<Response<List<MyFilesViewModel>>> GetMyFilesInBucket()
-        {
-
-            if (await AmazonS3Util.DoesS3BucketExistV2Async(client, _sharedIdentityService.GetUserId))
-            {
-                ListObjectsRequest request = new()
-                {
-                    BucketName = _sharedIdentityService.GetUserId
-                };
-
-                var model = new List<MyFilesViewModel>();
-
-
-                var files = (await client.ListObjectsAsync(request)).S3Objects;
-
-                foreach (var item in files)
-                {
-                    model.Add(new MyFilesViewModel { FileId = item.Key, FileName = item.Key, UploadedDate = item.LastModified, Size = item.Size });
-                }
-
-                return Response<List<MyFilesViewModel>>.Success(model, 200);
-            }
-
-            return Response<List<MyFilesViewModel>>.Success(200);
-
-        }
-
-        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles(int page, int number, int orderBy, string extension)
+        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles(FileFilterModel model)
         {
             if (_repository.Any(x => x.ApplicationUserId == _sharedIdentityService.GetUserId))
             {
-                var filteredFile = Filter.FilterFile(_repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), page, number, orderBy, extension);
+                var filteredFile = Filter.FilterFile(_repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
 
                 var filesList = await filteredFile.Select(x => new MyFilesViewModel()
                 {

@@ -43,7 +43,6 @@ namespace FileUpload.IdentityServer
 
                     try
                     {
-                        //applicationDbContext.Database.EnsureDeleted();
                         applicationDbContext.Database.EnsureCreated();
                     }
 

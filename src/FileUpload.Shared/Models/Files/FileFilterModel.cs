@@ -8,20 +8,11 @@ namespace FileUpload.Shared.Models.Files
 {
     public  class FileFilterModel
     {
-        public int OrderBy { get; set; }
 
-        private int page;
-        public int Page
-        {
-            get => page;
-            set => page = page == 0 ? 1 : value;
-        }
+        public int Page { get; set; } = 1;
+        public int Number { get; set; } = 10;
+        public int OrderBy { get; set; } = 0;
+        public string Extension { get; set; } = "TXT";
 
-        private int number;
-        public int Number
-        {
-            get => number;
-            set => number = number == 0 ? 10 : value;
-        }
     }
 }
