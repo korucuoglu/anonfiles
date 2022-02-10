@@ -5,7 +5,7 @@ using FileUpload.Shared.Services;
 
 namespace FileUpload.Api.Mapping
 {
-    public class IdentityResolver : IValueResolver<AddCategoryDto, Category, string>
+    public class IdentityResolver<TSource, TDestination> : IValueResolver<TSource, TDestination, string> where TSource : class where TDestination : class
     {
         private readonly ISharedIdentityService _sharedIdentityService;
 
@@ -14,7 +14,7 @@ namespace FileUpload.Api.Mapping
             _sharedIdentityService = sharedIdentityService;
         }
 
-        public string Resolve(AddCategoryDto source, Category destination, string destMember, ResolutionContext context)
+        public string Resolve(TSource source, TDestination destination, string destMember, ResolutionContext context)
         {
             return _sharedIdentityService.GetUserId;
         }

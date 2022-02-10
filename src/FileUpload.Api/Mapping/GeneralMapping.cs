@@ -9,8 +9,8 @@ namespace FileUpload.Api.Mapping
     {
         public GeneralMapping()
         {
-            CreateMap<AddCategoryDto, Category>().ForMember(dest => dest.ApplicationUserId, opt => opt.MapFrom<IdentityResolver>());
-            CreateMap<UpdateCategory, Category>().ForMember(dest => dest.ApplicationUserId, opt => opt.MapFrom(src => ""));
+            CreateMap<AddCategoryDto, Category>().ForMember(dest => dest.ApplicationUserId, opt => opt.MapFrom<IdentityResolver<AddCategoryDto, Category>>());
+            CreateMap<UpdateCategory, Category>().ForMember(dest => dest.ApplicationUserId, opt => opt.MapFrom<IdentityResolver<UpdateCategory, Category>>());
         }
     }
 }
