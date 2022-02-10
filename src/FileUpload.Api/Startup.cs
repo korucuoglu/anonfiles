@@ -1,3 +1,4 @@
+using AutoMapper;
 using FileUpload.Api.Services;
 using FileUpload.Data.Entity;
 using FileUpload.Data.Repository;
@@ -27,7 +28,9 @@ namespace FileUpload.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ISharedIdentityService, SharedIdentityService>();
+            services.AddSingleton<ISharedIdentityService, SharedIdentityService>();
+
+
             services.AddScoped<ILogger, ConsoleLogger>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddHttpContextAccessor();

@@ -64,6 +64,7 @@ namespace FileUpload.Data.Repository
             _context.Entry(entity).State = EntityState.Modified;
 
             _context.SaveChanges();
+            
         }
     }
 }

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileUpload.Shared.Dtos.Categories
+namespace FileUpload.Api.Dtos.Categories
 {
-    public class GetCategoriesDto
+    public class GetCategoryDto
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
     }
 }
