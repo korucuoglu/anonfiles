@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using FileUpload.Data.Entity.Base;
+using System.Collections.Generic;
 
 namespace FileUpload.Data.Entity
 {
-    public class File : BaseEntity
+    public class File : BaseIdentity
     {
-        public string ApplicationUserId { get; set; }
         public string FileName { get; set; }
         public string Extension { get; set; }
         public long Size { get; set; }
