@@ -1,12 +1,15 @@
 using AutoMapper;
+using FileUpload.Api.Filters;
 using FileUpload.Api.Services;
 using FileUpload.Data.Entity;
 using FileUpload.Data.Repository;
 using FileUpload.Shared.Services;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -36,10 +39,31 @@ namespace FileUpload.Api
             services.AddHttpContextAccessor();
             services.AddScoped<MinIOService>();
             services.AddScoped<CategoriesService>();
+            services.AddScoped(typeof(NotFoundFilter<>));
+            services.AddScoped<ValidationFilterAttribute>();
 
             services.AddAutoMapper(typeof(Startup));
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub"); // Api i�erisinden UserId de�erlerini okuyabilmek i�in bunu ekledik. 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub"); // Api içerisinden UserId de�erlerini okuyabilmek için bunu ekledik. 
+
+            services.Configure<ApiBehaviorOptions>(options => 
+            { 
+                options.SuppressModelStateInvalidFilter = true; 
+            });
+
+
+            services.AddControllers(opt =>
+            {
+                var policy = new AuthorizationPolicyBuilder("Bearer").RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            }). 
+            AddNewtonsoftJson(opt =>
+            {
+                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+            }).
+            AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
+
 
             services.AddAuthentication().AddJwtBearer(options =>
             {
@@ -52,23 +76,8 @@ namespace FileUpload.Api
                     ValidateIssuer = false
                 };
 
-                // AUd parametresinden Identity Server, hangi ak�� tipinde oldu�unu anlar ve ona g�re davran�� sergiler. 
+                // Aud parametresinden Identity Server, hangi akış tipinde oldu�unu anlar ve ona göre davranış sergiler. 
             });
-
-
-
-            services.AddControllers(opt =>
-            {
-                var policy = new AuthorizationPolicyBuilder("Bearer").RequireAuthenticatedUser().Build();
-                opt.Filters.Add(new AuthorizeFilter(policy));
-            }).AddNewtonsoftJson(opt =>
-            {
-                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-
-            });
-
-            
-
 
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
@@ -84,11 +93,8 @@ namespace FileUpload.Api
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
                .AddDefaultTokenProviders();
-
-
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

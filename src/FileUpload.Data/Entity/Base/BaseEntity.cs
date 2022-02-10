@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileUpload.Data.Entity
+namespace FileUpload.Data.Entity.Base
 {
     public abstract class BaseEntity
     {

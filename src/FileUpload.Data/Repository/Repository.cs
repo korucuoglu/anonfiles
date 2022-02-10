@@ -1,4 +1,5 @@
 ﻿using FileUpload.Data.Entity;
+using FileUpload.Data.Entity.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
