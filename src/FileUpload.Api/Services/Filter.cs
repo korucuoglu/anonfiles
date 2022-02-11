@@ -37,7 +37,7 @@ namespace FileUpload.Api.Services
                 return model;
             }
 
-            return model.Where(x => x.Extension == extension);
+            return model.Where(x => x.Extension.ToUpper() == extension.ToUpper());
         }
 
         public static IQueryable<Data.Entity.File> OrderFiles(IQueryable<Data.Entity.File> model, int orderBy)
@@ -74,13 +74,16 @@ namespace FileUpload.Api.Services
 
         public static async Task<Response<MyFilesViewModel>> GetOneFileAfterRemovedFile(IQueryable<Data.Entity.File> model, FileFilterModel filterModel)
         {
-            filterModel.Page += 1;
+            if (model.Count() <= (filterModel.Page * filterModel.Number))
+            {
+                return Response<MyFilesViewModel>.Success(200);
+            }
 
             var extensionFilterData = ExtensionFilter(model, filterModel.Extension);
 
             var orderFilterData = OrderFiles(extensionFilterData, filterModel.OrderBy);
 
-            model = orderFilterData.Skip((filterModel.Page - 1) * filterModel.Number).Take(1);
+            model = orderFilterData.Skip(filterModel.Page * filterModel.Number).Take(1);
 
             var data = await model.Select(x => new MyFilesViewModel()
             {
