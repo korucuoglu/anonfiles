@@ -164,9 +164,11 @@ namespace FileUpload.Api.Services
                 await client.DeleteObjectAsync(deleteObjectRequest);
                 var file = await _repository.FirstOrDefaultAsync(x => x.Id == key);
                 (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace -= file.Size;
+                
+                var data =  await Filter.GetOneFileAfterRemovedFile(_repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
                 _repository.Remove(file);
+                return data;
 
-                return await Filter.GetOneFileAfterRemovedFile(_repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
             }
             catch (AmazonS3Exception e)
             {

@@ -21,7 +21,7 @@ namespace FileUpload.Api.Filters
         }
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var id = context.RouteData.Values["id"].ToString();
+            var id = (string)context.RouteData.Values["id"];
 
             if (string.IsNullOrEmpty(id))
             {
