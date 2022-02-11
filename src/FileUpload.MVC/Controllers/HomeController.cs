@@ -77,9 +77,9 @@ namespace FileUpload.MVC.Controllers
 
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete([FromQuery] FileFilterModel model, string id)
         {
-            var data = await _userService.DeleteFile(id);
+            var data = await _userService.DeleteFile(model, id);
 
             return Ok(data);
         }
