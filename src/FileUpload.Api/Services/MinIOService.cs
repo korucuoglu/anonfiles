@@ -149,9 +149,9 @@ namespace FileUpload.Api.Services
 
         }
 
-        public async Task<Response<bool>> Remove(string key)
+        public async Task<Response<MyFilesViewModel>> Remove(FileFilterModel model, string key)
         {
-            if (string.IsNullOrEmpty(key)) return Response<bool>.Fail(false, 404);
+            if (string.IsNullOrEmpty(key)) return Response<MyFilesViewModel>.Fail("FileId boş olamaz.", 404);
 
             try
             {
@@ -165,17 +165,18 @@ namespace FileUpload.Api.Services
                 var file = await _repository.FirstOrDefaultAsync(x => x.Id == key);
                 (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace -= file.Size;
                 _repository.Remove(file);
-                return Response<bool>.Success(true, 200);
+
+                return await Filter.GetOneFileAfterRemovedFile(_repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
             }
             catch (AmazonS3Exception e)
             {
                 Console.WriteLine("Error encountered on server. Message:'{0}' when deleting an object", e.Message);
-                return Response<bool>.Fail(e.Message, 500);
+                return Response<MyFilesViewModel>.Fail(e.Message, 500);
             }
             catch (Exception e)
             {
                 Console.WriteLine("Unknown encountered on server. Message:'{0}' when deleting an object", e.Message);
-                return Response<bool>.Fail(e.Message, 500);
+                return Response<MyFilesViewModel>.Fail(e.Message, 500);
             }
 
 
