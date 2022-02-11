@@ -12,7 +12,7 @@ namespace FileUpload.Shared.Models.Files
         public int Page { get; set; } = 1;
         public int Number { get; set; } = 10;
         public int OrderBy { get; set; } = 0;
-        public string Extension { get; set; } = "TXT";
+        public string Extension { get; set; }
 
     }
 }

@@ -56,8 +56,22 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                 }).then(response => {
-                    if (response.data.isSuccessful) {
-                        this.datas = this.datas.filter(data => data.fileId != fileId);
+                    
+                    if (response.data.isSuccessful) 
+                    {
+                       this.datas = this.datas.filter(data => data.fileId != fileId);
+
+                        if (response.data.data != null) 
+                        {
+                             this.datas.push(
+                             {
+                                fileId: response.data.data.fileId,
+                                fileName: response.data.data.fileName,
+                                size: response.data.data.size,
+                                uploadedDate: response.data.data.uploadedDate,
+                            });
+                        }
+
                     } else {
                         alert("hata");
 
