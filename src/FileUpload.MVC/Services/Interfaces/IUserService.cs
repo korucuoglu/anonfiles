@@ -11,7 +11,7 @@ namespace FileUpload.MVC.Services.Interfaces
         Task<Response<UploadModel>> Upload(IFormFile file);
         Task<Response<List<MyFilesViewModel>>> GetMyFiles(FileFilterModel model);
         Task<Response<string>> GetDirectLink(string id);
-        Task<Response<MyFilesViewModel>> DeleteFile(string id);
+        Task<Response<MyFilesViewModel>> DeleteFile(FileFilterModel model, string id);
 
 
 
