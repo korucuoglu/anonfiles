@@ -58,6 +58,13 @@ namespace FileUpload.Api.Services
 
         public static IQueryable<Data.Entity.File> OrderFiles(IQueryable<Data.Entity.File> model, int orderBy)
         {
+            var orderByCount = Enum.GetNames(typeof(EnumOrderBy)).Length;
+
+            if (orderByCount < orderBy)
+            {
+                orderBy = orderByCount;
+            }
+
             EnumOrderBy OrderEnum = (EnumOrderBy)orderBy;
 
             if (OrderEnum == EnumOrderBy.YenidenEskiye)

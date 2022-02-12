@@ -9,10 +9,10 @@ namespace FileUpload.Shared.Enums
     public enum EnumOrderBy : short
     {
         
-        YenidenEskiye,
-        EskidenYeniye,
-        BoyutaGöreArtan,
-        BoyutaGöreAzalan
+        YenidenEskiye = 1,
+        EskidenYeniye = 2,
+        BoyutaGöreArtan = 3,
+        BoyutaGöreAzalan = 4
        
     }
 }
