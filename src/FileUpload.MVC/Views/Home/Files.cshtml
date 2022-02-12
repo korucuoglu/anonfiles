@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model List<FileUpload.Shared.Models.MyFilesViewModel>
+@model FileUpload.Shared.Models.Files.MyFilesViewModel
 
 <div class="container" id="app">
 
@@ -24,6 +24,18 @@
             </td>
         </tr>
     </table>
+
+
+ <nav aria-label="Page navigation example" class="d-flex flex-row justify-content-center">
+  <ul class="pagination">
+    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+  </ul>
+</nav>
+
 </div>
 
 @section Scripts {
@@ -36,7 +48,8 @@
         data() {
             return {
 
-                datas: JSON.parse('@Html.Raw(Json.Serialize(Model))'),
+                datas: JSON.parse('@Html.Raw(Json.Serialize(Model.Files))'),
+                PageInfo: JSON.parse('@Html.Raw(Json.Serialize(Model.Pages))'),
                 queryString: {Page:1, Number:10, OrderBy:1, Extension:"" }
 
 
@@ -44,29 +57,35 @@
         },
         created(){
 
-            let urlParams = new URLSearchParams(window.location.search);
-           
-            if (urlParams.has('page'))
-            {
-                this.queryString.Page = urlParams.get('page');
-            }
-
-            if (urlParams.has('number'))
-            {
-                this.queryString.Number = urlParams.get('number');
-            }
-
-            if (urlParams.has('orderBy'))
-            {
-                this.queryString.OrderBy = urlParams.get('orderBy');
-            }
-
-            if (urlParams.has('extension'))
-            {
-                this.queryString.Extension = urlParams.get('extension');
-            }
+            this.getQuery();
+          
         },
         methods: {
+
+            getQuery(){
+                let urlParams = new URLSearchParams(window.location.search);
+           
+                if (urlParams.has('page'))
+                {
+                    this.queryString.Page = urlParams.get('page');
+                }
+
+                if (urlParams.has('number'))
+                {
+                    this.queryString.Number = urlParams.get('number');
+                }
+
+                if (urlParams.has('orderBy'))
+                {
+                    this.queryString.OrderBy = urlParams.get('orderBy');
+                }
+
+                if (urlParams.has('extension'))
+                {
+                    this.queryString.Extension = urlParams.get('extension');
+                }
+            },
+
 
             deleteFile(fileId) {
 

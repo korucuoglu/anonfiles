@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace FileUpload.Shared.Models
+namespace FileUpload.Shared.Models.Files
 {
-    public class MyFilesViewModel
+    public class FileDto
     {
         public string FileId { get; set; }
         public string FileName { get; set; }
-        public DateTime UploadedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         public long Size { get; set; }
     }
-
 }

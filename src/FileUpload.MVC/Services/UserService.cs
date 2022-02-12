@@ -32,12 +32,12 @@ namespace FileUpload.MVC.Services
 
         }
 
-        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles(FileFilterModel model)
+        public async Task<Response<MyFilesViewModel>> GetMyFiles(FileFilterModel model)
         {
             string queryString = Helper.GetQueryString(model);
 
             var deserializeData = await _apiService.GetAsync($"minio/myfiles?{queryString}");
-            var serializeData = JsonConvert.DeserializeObject<Response<List<MyFilesViewModel>>>(deserializeData);
+            var serializeData = JsonConvert.DeserializeObject<Response<MyFilesViewModel>>(deserializeData);
 
             return serializeData;
 
@@ -52,13 +52,13 @@ namespace FileUpload.MVC.Services
             return serializeData;
         }
 
-        public async Task<Response<MyFilesViewModel>> DeleteFile(FileFilterModel model, string id)
+        public async Task<Response<FileDto>> DeleteFile(FileFilterModel model, string id)
         {
             string queryString = Helper.GetQueryString(model);
 
             var deserializeData = await _apiService.DeleteAsync($"minio/{id}?{queryString}");
 
-            var serializeData = JsonConvert.DeserializeObject<Response<MyFilesViewModel>>(deserializeData);
+            var serializeData = JsonConvert.DeserializeObject<Response<FileDto>>(deserializeData);
 
             return serializeData;
         }
