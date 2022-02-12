@@ -108,7 +108,7 @@ namespace FileUpload.Api.Services
 
         }
 
-        public async Task<Response<List<MyFilesViewModel>>> GetMyFiles(FileFilterModel model)
+        public async Task<Response<MyFilesViewModel>> GetMyFiles(FileFilterModel model)
         {
              return await Filter.FilterFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
 
@@ -131,7 +131,7 @@ namespace FileUpload.Api.Services
 
         }
 
-        public async Task<Response<MyFilesViewModel>> Remove(FileFilterModel model, string key)
+        public async Task<Response<FileDto>> Remove(FileFilterModel model, string key)
         {
             try
             {
@@ -145,7 +145,7 @@ namespace FileUpload.Api.Services
                 var file = await _fileRepository.FirstOrDefaultAsync(x => x.Id == key && x.ApplicationUserId == _sharedIdentityService.GetUserId);
                 (await _userInfoRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == _sharedIdentityService.GetUserId)).UsedSpace -= file.Size;
 
-                var data =  await Filter.GetOneFileAfterRemovedFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == key), model);
+                var data =  await Filter.GetOneFileAfterRemovedFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
                 _fileRepository.Remove(file);
                 return data;
 
@@ -153,12 +153,12 @@ namespace FileUpload.Api.Services
             catch (AmazonS3Exception e)
             {
                 Console.WriteLine("Error encountered on server. Message:'{0}' when deleting an object", e.Message);
-                return Response<MyFilesViewModel>.Fail(e.Message, 500);
+                return Response<FileDto>.Fail(e.Message, 500);
             }
             catch (Exception e)
             {
                 Console.WriteLine("Unknown encountered on server. Message:'{0}' when deleting an object", e.Message);
-                return Response<MyFilesViewModel>.Fail(e.Message, 500);
+                return Response<FileDto>.Fail(e.Message, 500);
             }
 
 
