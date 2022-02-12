@@ -75,6 +75,14 @@ namespace FileUpload.MVC.Controllers
             return await Task.FromResult(View(response.Data));
         }
 
+        [HttpGet]
+        [Route("getmyfiles")]
+        public async Task<IActionResult> GetMyFiles([FromQuery] FileFilterModel model)
+        {
+            var response = await _userService.GetMyFiles(model);
+
+            return Ok(response);
+        }
 
         [HttpDelete]
         public async Task<IActionResult> Delete([FromQuery] FileFilterModel model, string id)
