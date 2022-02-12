@@ -116,8 +116,6 @@ namespace FileUpload.Api.Services
 
         public async Task<Response<string>> Download(string key)
         {
-            if (string.IsNullOrEmpty(key)) return null;
-
             var request = new GetPreSignedUrlRequest()
             {
                 BucketName = _sharedIdentityService.GetUserId,
@@ -144,11 +142,10 @@ namespace FileUpload.Api.Services
                 };
 
                 await client.DeleteObjectAsync(deleteObjectRequest);
-                var file = await _fileRepository.FirstOrDefaultAsync(x => x.Id == key);
+                var file = await _fileRepository.FirstOrDefaultAsync(x => x.Id == key && x.ApplicationUserId == _sharedIdentityService.GetUserId);
                 (await _userInfoRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == _sharedIdentityService.GetUserId)).UsedSpace -= file.Size;
 
-
-                var data =  await Filter.GetOneFileAfterRemovedFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
+                var data =  await Filter.GetOneFileAfterRemovedFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == key), model);
                 _fileRepository.Remove(file);
                 return data;
 

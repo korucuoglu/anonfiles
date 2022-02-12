@@ -44,8 +44,8 @@ namespace FileUpload.Shared.Models.Files
             get { return orderBy; }
             set
             {
-                if (value < 0)
-                { orderBy = 0; }
+                if (value <= 0)
+                { orderBy = 1; }
                 else
                 { orderBy = value; }
             }
