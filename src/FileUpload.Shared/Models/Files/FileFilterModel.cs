@@ -6,12 +6,52 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Shared.Models.Files
 {
-    public  class FileFilterModel
+    public class FileFilterModel
     {
 
-        public int Page { get; set; } = 1;
-        public int Number { get; set; } = 10;
-        public int OrderBy { get; set; } = 0;
+        int page;
+
+        public int Page
+        {
+            get { return page; }
+            set
+            {
+                if (value <= 0)
+                { page = 1; }
+                else
+                { page = value; }
+            }
+        }
+
+        int number;
+
+        public int Number
+        {
+            get { return number; }
+            set
+            {
+                if (value <= 0)
+                { number = 10; }
+                else
+                { number = value; }
+            }
+        }
+
+        int orderBy;
+
+        public int OrderBy
+        {
+            get { return orderBy; }
+            set
+            {
+                if (value < 0)
+                { orderBy = 0; }
+                else
+                { orderBy = value; }
+            }
+        }
+
+
         public string Extension { get; set; }
 
     }

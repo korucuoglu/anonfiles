@@ -70,14 +70,7 @@ namespace FileUpload.Api.Services
                 return await Task.FromResult(Response<bool>.Fail(false, 404));
             }
 
-            //if (!_categoryRepository.Any(x=> x.ApplicationUserId ==_sharedIdentityService.GetUserId && x.Id==dto.Id))
-            //{
-            //    return await Task.FromResult(Response<bool>.Fail(false, 404));
-            //}
-
-            var mapperData = _mapper.Map<Category>(dto);
-
-            _categoryRepository.Update(mapperData);
+            _categoryRepository.Update(_mapper.Map<Category>(dto));
             
             return await Task.FromResult(Response<bool>.Success(true, 200));
 

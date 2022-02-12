@@ -110,23 +110,7 @@ namespace FileUpload.Api.Services
 
         public async Task<Response<List<MyFilesViewModel>>> GetMyFiles(FileFilterModel model)
         {
-            if (_repository.Any(x => x.ApplicationUserId == _sharedIdentityService.GetUserId))
-            {
-                var filteredFile = Filter.FilterFile(_repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
-
-                var filesList = await filteredFile.Select(x => new MyFilesViewModel()
-                {
-                    FileId = x.Id,
-                    FileName = x.FileName,
-                    Size = x.Size, 
-                    UploadedDate = x.CreatedDate
-
-                }).ToListAsync();
-
-            return Response<List<MyFilesViewModel>>.Success(filesList, 200);
-            }
-
-            return Response<List<MyFilesViewModel>>.Success(200);
+             return await Filter.FilterFile(_repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
 
         }
 
@@ -151,8 +135,6 @@ namespace FileUpload.Api.Services
 
         public async Task<Response<MyFilesViewModel>> Remove(FileFilterModel model, string key)
         {
-            if (string.IsNullOrEmpty(key)) return Response<MyFilesViewModel>.Fail("FileId boş olamaz.", 404);
-
             try
             {
                 var deleteObjectRequest = new DeleteObjectRequest
