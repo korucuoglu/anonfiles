@@ -25,13 +25,13 @@ namespace FileUpload.Api.Services
     {
         private readonly IConfiguration configuration;
         private readonly ISharedIdentityService _sharedIdentityService;
-        private readonly IRepository<Data.Entity.File> _repository;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IRepository<Data.Entity.File> _fileRepository;
+        private readonly IRepository<Data.Entity.UserInfo> _userInfoRepository;
         private ILogger<MinIOService> Logger { get; set; }
 
         public AmazonS3Client client { get; set; }
 
-        public MinIOService(IConfiguration configuration, ISharedIdentityService sharedIdentityService, ILogger<MinIOService> logger, IRepository<Data.Entity.File> repository, UserManager<ApplicationUser> userManager)
+        public MinIOService(IConfiguration configuration, ISharedIdentityService sharedIdentityService, ILogger<MinIOService> logger, IRepository<Data.Entity.File> fileRepository, IRepository<UserInfo> userInfoRepository = null)
         {
             this.configuration = configuration;
             _sharedIdentityService = sharedIdentityService;
@@ -45,8 +45,8 @@ namespace FileUpload.Api.Services
                 SignatureVersion = "2"
             };
             client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
-            _repository = repository;
-            _userManager = userManager;
+            _fileRepository = fileRepository;
+            _userInfoRepository = userInfoRepository;
         }
 
         public async Task<string> GetBucketName()
@@ -95,8 +95,8 @@ namespace FileUpload.Api.Services
                     Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper()
                 };
 
-                (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace += file.Length;
-                await _repository.AddAsync(fileEntity);
+                (await _userInfoRepository.FirstOrDefaultAsync(x=> x.ApplicationUserId==_sharedIdentityService.GetUserId)).UsedSpace += file.Length;
+                await _fileRepository.AddAsync(fileEntity);
 
             }
             catch (Exception e)
@@ -110,7 +110,7 @@ namespace FileUpload.Api.Services
 
         public async Task<Response<List<MyFilesViewModel>>> GetMyFiles(FileFilterModel model)
         {
-             return await Filter.FilterFile(_repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
+             return await Filter.FilterFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
 
         }
 
@@ -144,11 +144,12 @@ namespace FileUpload.Api.Services
                 };
 
                 await client.DeleteObjectAsync(deleteObjectRequest);
-                var file = await _repository.FirstOrDefaultAsync(x => x.Id == key);
-                (await _userManager.FindByIdAsync(_sharedIdentityService.GetUserId)).UsedSpace -= file.Size;
-                
-                var data =  await Filter.GetOneFileAfterRemovedFile(_repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
-                _repository.Remove(file);
+                var file = await _fileRepository.FirstOrDefaultAsync(x => x.Id == key);
+                (await _userInfoRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == _sharedIdentityService.GetUserId)).UsedSpace -= file.Size;
+
+
+                var data =  await Filter.GetOneFileAfterRemovedFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
+                _fileRepository.Remove(file);
                 return data;
 
             }

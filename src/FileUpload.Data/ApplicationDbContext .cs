@@ -11,6 +11,7 @@ namespace FileUpload.Data.Entity
 
         public DbSet<File> Files { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<UserInfo> UserInfo { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
