@@ -44,6 +44,7 @@ namespace FileUpload.IdentityServer
                     try
                     {
                         applicationDbContext.Database.EnsureCreated();
+                        applicationDbContext.Database.Migrate();
                     }
 
                     catch
@@ -72,6 +73,8 @@ namespace FileUpload.IdentityServer
                         userManager.CreateAsync(userAdmin, "Password123.,").Wait();
                         userManager.AddToRoleAsync(userAdmin, "Admin").Wait();
 
+                        applicationDbContext.UserInfo.Add(new UserInfo() { ApplicationUserId = userAdmin.Id});
+
                         ApplicationUser user = new()
                         {
                             UserName = "user@gmail.com",
@@ -80,6 +83,10 @@ namespace FileUpload.IdentityServer
 
                         userManager.CreateAsync(user, "Password123.,").Wait();
                         userManager.AddToRoleAsync(user, "User").Wait();
+
+                        applicationDbContext.UserInfo.Add(new UserInfo() { ApplicationUserId = user.Id });
+
+                        applicationDbContext.SaveChanges();
                     }
 
 

@@ -1,4 +1,5 @@
 ﻿using FileUpload.Data.Entity;
+using FileUpload.Data.Repository;
 using FileUpload.Shared.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,10 +19,12 @@ namespace FileUpload.IdentityServer.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IRepository<UserInfo> _repository;
 
-        public UserController(UserManager<ApplicationUser> userManager)
+        public UserController(UserManager<ApplicationUser> userManager, IRepository<UserInfo> repository)
         {
             _userManager = userManager;
+            _repository = repository;
         }
 
         [HttpPost]
@@ -40,6 +43,13 @@ namespace FileUpload.IdentityServer.Controllers
             {
                 return BadRequest(result.Errors.ToList());
             }
+
+            var UserInfo = new UserInfo()
+            {
+                ApplicationUserId = user.Id,
+            };
+
+            await _repository.AddAsync(UserInfo);
 
             return NoContent();
 

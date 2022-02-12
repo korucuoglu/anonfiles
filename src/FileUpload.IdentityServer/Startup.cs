@@ -3,6 +3,7 @@
 
 
 using FileUpload.Data.Entity;
+using FileUpload.Data.Repository;
 using FileUpload.IdentityServer.Services;
 using FileUpload.Shared.Services;
 using Microsoft.AspNetCore.Builder;
@@ -32,6 +33,7 @@ namespace FileUpload.IdentityServer
             services.AddLocalApiAuthentication(); // Buradan bize otomatik olarak Policy gelmektedir. Bunu User Controller'da kullandık. 
             services.AddControllersWithViews();
 
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<ILogger, ConsoleLogger>();
 
 
