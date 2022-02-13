@@ -26,17 +26,17 @@
     </table>
 
 
- <nav aria-label="Page navigation example" class="d-flex flex-row justify-content-center">
-  <ul class="pagination">
-    <li class="page-item"><a @@click.prevent="getData(PageInfo.currentPage-1)" class="btn page-link" :class="{'disabled': PageInfo.currentPage == 1}">Prev</a></li>
-    <li class="page-item active"><a class="btn page-link">{{PageInfo.currentPage}}</a></li>
+    <nav aria-label="Page navigation example" class="d-flex flex-row justify-content-center">
+        <ul class="pagination">
 
-    <li v-if="PageInfo.totalPage >= (PageInfo.currentPage+1)" class="page-item"><a @@click.prevent="getData(PageInfo.currentPage+1)" class="btn page-link">{{(PageInfo.currentPage+1)}}</a></li>
-    <li v-if="PageInfo.totalPage >= (PageInfo.currentPage+2)" class="page-item"><a @@click.prevent="getData(PageInfo.currentPage+2)" class="btn page-link">{{(PageInfo.currentPage+2)}}</a></li>
+            <li class="page-item"><a @@click.prevent="getData(PageInfo.currentPage-1)" class="btn page-link" :class="{'disabled': PageInfo.currentPage == 1}">Prev</a></li>
 
-    <li class="page-item"><a @@click.prevent="getData(PageInfo.currentPage+1)" class="btn page-link" :class="{'disabled': PageInfo.currentPage == PageInfo.totalPage}">Next</a></li>
-  </ul>
-</nav>
+            <li v-for="index in PageInfo.endPage" :key="index" class="page-item" :class="{'active': PageInfo.currentPage == index}">
+                <a @@click.prevent="getData(index)" class="btn page-link">{{index}}</a>
+            </li>
+            <li class="page-item"><a @@click.prevent="getData(PageInfo.currentPage+1)" class="btn page-link" :class="{'disabled': PageInfo.currentPage == PageInfo.totalPage}">Next</a></li>
+        </ul>
+    </nav>
 
 </div>
 
@@ -52,92 +52,92 @@
 
                 datas: JSON.parse('@Html.Raw(Json.Serialize(Model.Files))'),
                 PageInfo: JSON.parse('@Html.Raw(Json.Serialize(Model.Pages))'),
-                queryString: {Page:1, Number:10, OrderBy:1, Extension:"" }
+                Filter: {Page:1, PageSize:10, OrderBy:1, Extension:"" }
 
 
             }
         },
-        created(){
 
+        created()
+        {
             this.getQuery();
 
-          
         },
+
         methods: {
 
-            getQuery(){
+
+             getQuery()
+
+             {
                 let urlParams = new URLSearchParams(window.location.search);
-           
+
                 if (urlParams.has('page'))
                 {
-                    this.queryString.Page = urlParams.get('page');
+                    this.Filter.Page = urlParams.get('page');
                 }
-
-                if (urlParams.has('number'))
+                if (urlParams.has('pageSize'))
                 {
-                    this.queryString.Number = urlParams.get('number');
+                    this.Filter.PageSize = urlParams.get('pageSize');
                 }
-
                 if (urlParams.has('orderBy'))
                 {
-                    this.queryString.OrderBy = urlParams.get('orderBy');
+                    this.Filter.OrderBy = urlParams.get('orderBy');
                 }
-
                 if (urlParams.has('extension'))
                 {
-                    this.queryString.Extension = urlParams.get('extension');
+                    this.Filter.Extension = urlParams.get('extension');
                 }
             },
 
             getData(e) {
+             axios({
+                method: "get",
+                url:`/myfiles/?json=true&page=${e}&pageSize=${this.Filter.PageSize}&orderBy=${this.Filter.OrderBy}&Extension=${this.Filter.Extension}`,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+            }).then(response => {
 
-                 axios({
-                    method: "get",
-                    url:`/getmyfiles/?page=${e}&number=${this.queryString.Number}&orderBy=${this.queryString.OrderBy}&Extension=${this.queryString.Extension}`,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                }).then(response => {
-                    
-                    if (response.data.isSuccessful) 
-                    {
-                       this.datas = response.data.data.files
-                       this.PageInfo = response.data.data.pages
-
-                    }
-                    else 
-                    {
-                        alert("hata");
-                    }
-                });
-
-            },
+                if (response.data.isSuccessful)
+                {
+                   this.datas = response.data.data.files
+                   this.PageInfo = response.data.data.pages
+                }
+                else
+                {
+                    alert("hata");
+                }
+            });
+        },
 
 
             deleteFile(fileId) {
 
                 axios({
                     method: "delete",
-                    url:`/Home/Delete/${fileId}?page=${this.PageInfo.currentPage}&number=${this.queryString.Number}&orderBy=${this.queryString.OrderBy}&Extension=${this.queryString.Extension}`,
+                    url:`/Home/Delete/${fileId}?page=${this.PageInfo.currentPage}&pageSize=${this.Filter.PageSize}&orderBy=${this.Filter.OrderBy}&Extension=${this.Filter.Extension}`,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                 }).then(response => {
-                    
-                    if (response.data.isSuccessful) 
+                    console.log(response);
+                    if (response.data.isSuccessful)
                     {
                        this.datas = this.datas.filter(data => data.fileId != fileId);
 
-                        if (response.data.data != null) 
+                        if (response.data.data.file != null)
                         {
                              this.datas.push(
                              {
-                                fileId: response.data.data.fileId,
-                                fileName: response.data.data.fileName,
-                                size: response.data.data.size,
-                                uploadedDate: response.data.data.uploadedDate,
+                                fileId: response.data.data.file.fileId,
+                                fileName: response.data.data.file.fileName,
+                                size: response.data.data.file.size,
+                                uploadedDate: response.data.data.file.uploadedDate,
                             });
                         }
+
+                          this.PageInfo = response.data.data.pages
                     }
-                    else 
+                    else
                     {
                         alert("hata");
 

@@ -37,6 +37,7 @@ namespace FileUpload.Api.Controllers
         [HttpGet("myfiles")]
         public async Task<IActionResult> GetMyFiles([FromQuery] FileFilterModel model)
         {
+
             var data = await _service.GetMyFiles(model);
 
             return new ObjectResult(data)

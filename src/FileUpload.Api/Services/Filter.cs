@@ -14,25 +14,19 @@ namespace FileUpload.Api.Services
         public static async Task<Response<MyFilesViewModel>> FilterFile(IQueryable<Data.Entity.File> model, FileFilterModel filterModel)
         {
             var modelCount = model.Count();
-            
 
             if (modelCount == 0)
             {
                 return Response<MyFilesViewModel>.Success(200);
             }
 
-            var maxPage = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(modelCount) / Convert.ToDouble(filterModel.Number)));
-
-            if (filterModel.Page > maxPage)
-            {
-                filterModel.Page = maxPage;
-            }
+            Pager pager = new(modelCount, filterModel.Page, filterModel.PageSize);
 
             var extensionFilterData = ExtensionFilter(model, filterModel.Extension);
 
             var orderFilterData = OrderFiles(extensionFilterData, filterModel.OrderBy);
 
-            model = PaginationData(orderFilterData, filterModel.Page, filterModel.Number);
+            model = PaginationData(orderFilterData, pager.CurrentPage, filterModel.PageSize);
 
             var fileDto = await model.Select(x => new FileDto()
             {
@@ -43,15 +37,10 @@ namespace FileUpload.Api.Services
 
             }).ToListAsync();
 
-            PageDto pageDto = new()
-            {
-                TotalPage = maxPage,
-                CurrentPage = filterModel.Page
-            };
 
             MyFilesViewModel dto = new()
             {
-                Pages = pageDto,
+                Pages = pager,
                 Files = fileDto
             };
 
@@ -71,13 +60,7 @@ namespace FileUpload.Api.Services
 
         public static IQueryable<Data.Entity.File> OrderFiles(IQueryable<Data.Entity.File> model, int orderBy)
         {
-            var orderByCount = Enum.GetNames(typeof(EnumOrderBy)).Length;
-
-            if (orderByCount < orderBy)
-            {
-                orderBy = orderByCount;
-            }
-
+         
             EnumOrderBy OrderEnum = (EnumOrderBy)orderBy;
 
             if (OrderEnum == EnumOrderBy.YenidenEskiye)
@@ -108,23 +91,32 @@ namespace FileUpload.Api.Services
             return model.Skip((page - 1) * number).Take(number);
         }
 
-        public static async Task<Response<FileDto>> GetOneFileAfterRemovedFile(IQueryable<Data.Entity.File> model, FileFilterModel filterModel)
+        public static async Task<Response<MyFileViewModel>> GetOneFileAfterRemovedFile(IQueryable<Data.Entity.File> model, FileFilterModel filterModel)
         {
             var count = model.Count();
 
+            FileDto fileDto = null;
 
-            if (count <= (filterModel.Page * filterModel.Number))
+            Pager pager = new(count-1, filterModel.Page, filterModel.PageSize);
+
+            if (count <= (filterModel.Page * filterModel.PageSize))
             {
-                return Response<FileDto>.Success(200);
+                MyFileViewModel data = new()
+                {
+                    Pages = pager,
+                    File = fileDto
+                };
+
+                return Response<MyFileViewModel>.Success(data, 200);
             }
 
             var extensionFilterData = ExtensionFilter(model, filterModel.Extension);
 
             var orderFilterData = OrderFiles(extensionFilterData, filterModel.OrderBy);
 
-            model = orderFilterData.Skip(filterModel.Page * filterModel.Number).Take(1);
+            model = orderFilterData.Skip(filterModel.Page * filterModel.PageSize).Take(1);
 
-            var data = await model.Select(x => new FileDto()
+             fileDto = await model.Select(x => new FileDto()
             {
                 FileId = x.Id,
                 FileName = x.FileName,
@@ -133,7 +125,14 @@ namespace FileUpload.Api.Services
 
             }).FirstOrDefaultAsync();
 
-            return Response<FileDto>.Success(data, 200);
+            MyFileViewModel dto = new()
+            {
+                Pages = pager,
+                File = fileDto
+            };
+
+
+            return Response<MyFileViewModel>.Success(dto, 200);
 
 
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileUpload.Shared.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,50 +10,43 @@ namespace FileUpload.Shared.Models.Files
     public class FileFilterModel
     {
 
-        int page;
-
-        public int Page
+        public FileFilterModel()
         {
-            get { return page; }
-            set
+                
+        }
+        public FileFilterModel(FileFilterModel model)
+        {
+            if (model.Page <= 0)
             {
-                if (value <= 0)
-                { page = 1; }
-                else
-                { page = value; }
+                model.Page = 1;
             }
+
+            if (model.PageSize <= 0)
+            {
+                model.PageSize = 10;
+            }
+            var orderByCount = Enum.GetNames(typeof(EnumOrderBy)).Length;
+
+            if (model.OrderBy <= 0 || model.OrderBy > orderByCount)
+            {
+                model.OrderBy = 1;
+            }
+
+
+            Page = model.Page;
+            PageSize = model.PageSize;
+            OrderBy = model.OrderBy;
+
+            
+
+            
+         
         }
 
-        int number;
-
-        public int Number
-        {
-            get { return number; }
-            set
-            {
-                if (value <= 0)
-                { number = 10; }
-                else
-                { number = value; }
-            }
-        }
-
-        int orderBy;
-
-        public int OrderBy
-        {
-            get { return orderBy; }
-            set
-            {
-                if (value <= 0)
-                { orderBy = 1; }
-                else
-                { orderBy = value; }
-            }
-        }
-
-
-        public string Extension { get; set; }
+        public int Page { get; set; } 
+        public int PageSize { get; set; } 
+        public int OrderBy { get; set; } 
+        public string Extension { get; set; } 
 
     }
 }

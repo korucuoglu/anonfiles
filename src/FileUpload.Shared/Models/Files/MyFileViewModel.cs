@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 namespace FileUpload.Shared.Models.Files
 {
-    public class MyFilesViewModel
+    public class MyFileViewModel
     {
         public Pager Pages { get; set; }
-        public List<FileDto> Files { get; set; }
+
+        public FileDto File { get; set; }
       
     }
 
