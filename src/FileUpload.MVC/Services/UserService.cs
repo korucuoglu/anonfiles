@@ -52,13 +52,13 @@ namespace FileUpload.MVC.Services
             return serializeData;
         }
 
-        public async Task<Response<FileDto>> DeleteFile(FileFilterModel model, string id)
+        public async Task<Response<MyFileViewModel>> DeleteFile(FileFilterModel model, string id)
         {
             string queryString = Helper.GetQueryString(model);
 
             var deserializeData = await _apiService.DeleteAsync($"minio/{id}?{queryString}");
 
-            var serializeData = JsonConvert.DeserializeObject<Response<FileDto>>(deserializeData);
+            var serializeData = JsonConvert.DeserializeObject<Response<MyFileViewModel>>(deserializeData);
 
             return serializeData;
         }

@@ -131,7 +131,7 @@ namespace FileUpload.Api.Services
 
         }
 
-        public async Task<Response<FileDto>> Remove(FileFilterModel model, string key)
+        public async Task<Response<MyFileViewModel>> Remove(FileFilterModel model, string key)
         {
             try
             {
@@ -153,12 +153,12 @@ namespace FileUpload.Api.Services
             catch (AmazonS3Exception e)
             {
                 Console.WriteLine("Error encountered on server. Message:'{0}' when deleting an object", e.Message);
-                return Response<FileDto>.Fail(e.Message, 500);
+                return Response<MyFileViewModel>.Fail(e.Message, 500);
             }
             catch (Exception e)
             {
                 Console.WriteLine("Unknown encountered on server. Message:'{0}' when deleting an object", e.Message);
-                return Response<FileDto>.Fail(e.Message, 500);
+                return Response<MyFileViewModel>.Fail(e.Message, 500);
             }
 
 

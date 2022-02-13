@@ -68,20 +68,19 @@ namespace FileUpload.MVC.Controllers
 
         [HttpGet]
         [Route("myfiles")]
-        public async Task<IActionResult> Files([FromQuery] FileFilterModel model)
+        public async Task<IActionResult> Files([FromQuery] FileFilterModel model, [FromQuery] bool? json)
         {
-            var response = await _userService.GetMyFiles(model);
+            FileFilterModel filterModel = new(model);
+
+            var response = await _userService.GetMyFiles(filterModel);
+
+            if (json==true)
+            {
+                return await Task.FromResult(Ok(response));
+            }
+
 
             return await Task.FromResult(View(response.Data));
-        }
-
-        [HttpGet]
-        [Route("getmyfiles")]
-        public async Task<IActionResult> GetMyFiles([FromQuery] FileFilterModel model)
-        {
-            var response = await _userService.GetMyFiles(model);
-
-            return Ok(response);
         }
 
         [HttpDelete]
