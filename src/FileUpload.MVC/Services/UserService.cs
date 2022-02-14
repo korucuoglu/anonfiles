@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using FileUpload.Shared.Models.Files;
 using FileUpload.Shared.Helper;
+using FileUpload.Shared.Dtos.Categories;
 
 namespace FileUpload.MVC.Services
 {
@@ -63,5 +64,12 @@ namespace FileUpload.MVC.Services
             return serializeData;
         }
 
+        public async Task<Response<List<GetCategoryDto>>> GetCategories()
+        {
+            var deserializeData = await _apiService.GetAsync("categories");
+            var serializeData = JsonConvert.DeserializeObject<Response<List<GetCategoryDto>>>(deserializeData);
+
+            return serializeData;
+        }
     }
 }

@@ -72,6 +72,21 @@ namespace FileUpload.IdentityServer
                     RefreshTokenUsage= TokenUsage.ReUse
                 },
 
+                 new Client
+                {
+                    ClientName="Vue JS",
+                    ClientId="vuejs",
+                    AllowedGrantTypes= GrantTypes.Code,
+                    AllowedScopes={ "api_password", "about", IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess, IdentityServerConstants.LocalApi.ScopeName,"roles" },
+                    AllowedCorsOrigins = { "http://localhost:8080" },
+                    RedirectUris = new[] { "http://localhost:808" },
+                    PostLogoutRedirectUris = new[] { "http://localhost:8080" },
+                    AccessTokenLifetime=1*60*60,
+                    RefreshTokenExpiration=TokenExpiration.Absolute,
+                    AbsoluteRefreshTokenLifetime= (int) (DateTime.Now.AddDays(60)- DateTime.Now).TotalSeconds,
+                    RefreshTokenUsage= TokenUsage.ReUse
+                },
+
         };
     }
 }

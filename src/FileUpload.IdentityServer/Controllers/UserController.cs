@@ -26,7 +26,7 @@ namespace FileUpload.IdentityServer.Controllers
             _userManager = userManager;
             _repository = repository;
         }
-
+       
         [HttpPost]
         public async Task<IActionResult> Signup(SignupInput dto)
         {
@@ -53,7 +53,8 @@ namespace FileUpload.IdentityServer.Controllers
 
             return NoContent();
 
-
         }
+
+        
     }
 }

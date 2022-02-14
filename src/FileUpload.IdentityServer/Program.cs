@@ -74,6 +74,10 @@ namespace FileUpload.IdentityServer
                         userManager.AddToRoleAsync(userAdmin, "Admin").Wait();
 
                         applicationDbContext.UserInfo.Add(new UserInfo() { ApplicationUserId = userAdmin.Id});
+                        applicationDbContext.Categories.Add(new Category() { ApplicationUserId = userAdmin.Id, Title = "Ödevler" });
+                        applicationDbContext.Categories.Add(new Category() { ApplicationUserId = userAdmin.Id, Title = "Tasarımlar" });
+                        applicationDbContext.Categories.Add(new Category() { ApplicationUserId = userAdmin.Id, Title = "Dosyalar" });
+
 
                         ApplicationUser user = new()
                         {
@@ -85,6 +89,10 @@ namespace FileUpload.IdentityServer
                         userManager.AddToRoleAsync(user, "User").Wait();
 
                         applicationDbContext.UserInfo.Add(new UserInfo() { ApplicationUserId = user.Id });
+
+                        applicationDbContext.Categories.Add(new Category() { ApplicationUserId = user.Id, Title = "Ödevler" });
+                        applicationDbContext.Categories.Add(new Category() { ApplicationUserId = user.Id, Title = "Tasarımlar" });
+                        applicationDbContext.Categories.Add(new Category() { ApplicationUserId = user.Id, Title = "Dosyalar" });
 
                         applicationDbContext.SaveChanges();
                     }
