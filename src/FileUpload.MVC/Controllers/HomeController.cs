@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using FileUpload.MVC.Services;
 using FileUpload.Shared.Models.Files;
+using System.Collections.Generic;
+using FileUpload.Shared.Dtos.Categories;
 
 namespace FileUpload.MVC.Controllers
 {
@@ -45,21 +47,22 @@ namespace FileUpload.MVC.Controllers
         [Authorize]
         public async Task<IActionResult> Upload()
         {
+            var data = await _userService.GetCategories();
            
-            return await Task.FromResult(View());
+            return await Task.FromResult(View(data.Data));
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Upload(UploadFileDto dto)
         {
-            var ConnectionId = HubData.ClientsData.Where(x => x.UserId == _sharedIdentityService.GetUserId).Select(x => x.ConnectionId).FirstOrDefault();
+            var connectionıd = HubData.ClientsData.Where(x => x.UserId == _sharedIdentityService.GetUserId).Select(x => x.ConnectionId).FirstOrDefault();
 
             foreach (var file in dto.Files)
             {
-                await _fileHub.Clients.Client(ConnectionId).FilesUploadStarting(file.FileName);
+                await _fileHub.Clients.Client(connectionıd).FilesUploadStarting(file.FileName);
                 var data = await _userService.Upload(file);
-                await _fileHub.Clients.Client(ConnectionId).FilesUploaded(data);
+                await _fileHub.Clients.Client(connectionıd).FilesUploaded(data);
             }
 
             return Json(new { finish = true });

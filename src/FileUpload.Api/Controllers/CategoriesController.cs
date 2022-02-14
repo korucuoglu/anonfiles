@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using FileUpload.Api.Dtos.Categories;
-using FileUpload.Api.Filters;
+﻿using FileUpload.Api.Filters;
 using FileUpload.Api.Services;
 using FileUpload.Data.Entity;
-using Microsoft.AspNetCore.Http;
+using FileUpload.Shared.Dtos.Categories;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -18,10 +16,7 @@ namespace FileUpload.Api.Controllers
         public CategoriesController(CategoriesService categoriesService)
         {
             _categoriesService = categoriesService;
-           
         }
-
-        
         
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
@@ -32,7 +27,6 @@ namespace FileUpload.Api.Controllers
             {
                 StatusCode = data.StatusCode
             };
-
         }
 
         [HttpGet("{id}")]

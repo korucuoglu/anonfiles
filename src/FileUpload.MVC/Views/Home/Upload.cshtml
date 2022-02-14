@@ -1,4 +1,5 @@
 ﻿@addTagHelper * ,Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<FileUpload.Shared.Dtos.Categories.GetCategoryDto>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -82,6 +83,7 @@
             return {
                 datas: [],
                 PostAddress: "/home/upload",
+                categories: @Html.Raw(Json.Serialize(Model))
             }
         },
 
@@ -119,20 +121,34 @@
             },
 
             addDocs(e) {
+               
                 var formData = new FormData();
 
                 for (var i = 0; i < this.datas.length; i++) {
                     formData.append("files", this.datas[i].file);
                 }
 
+                for (var i = 0; i < this.categories.length; i++) {
+                  formData.append(`categories[][${i}][id]`, this.categories[i].id);
+                  formData.append(`categories[][${i}][title]`, this.categories[i].title);
+                }
+              
+
+                for (var pair of formData.entries()) {
+                   console.log(pair[0]+ ', ' + pair[1]); 
+                }
+
+                console.log(formData);
+
+
                 axios({
                     method: "post",
                     url: this.PostAddress,
                     data: formData,
-                    contentType: "application/json; charset=utf-8",
+                    contentType: "multipart/form-data",
                     dataType: "json",
                 }).then(function (response) {
-                    
+                    console.log(response);
                 });
             },
 

@@ -1,4 +1,5 @@
-﻿using FileUpload.Shared.Models;
+﻿using FileUpload.Shared.Dtos.Categories;
+using FileUpload.Shared.Models;
 using FileUpload.Shared.Models.Files;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace FileUpload.MVC.Services.Interfaces
         Task<Response<MyFilesViewModel>> GetMyFiles(FileFilterModel model);
         Task<Response<string>> GetDirectLink(string id);
         Task<Response<MyFileViewModel>> DeleteFile(FileFilterModel model, string id);
+        Task<Response<List<GetCategoryDto>>> GetCategories();
 
 
 

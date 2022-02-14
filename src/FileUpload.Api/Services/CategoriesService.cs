@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using FileUpload.Api.Dtos.Categories;
 using FileUpload.Data.Entity;
 using FileUpload.Data.Repository;
+using FileUpload.Shared.Dtos.Categories;
 using FileUpload.Shared.Models;
 using FileUpload.Shared.Services;
 using Microsoft.AspNetCore.Identity;
