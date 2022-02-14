@@ -45,16 +45,17 @@ namespace FileUpload.MVC.Controllers
         [Authorize]
         public async Task<IActionResult> Upload()
         {
+           
             return await Task.FromResult(View());
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile[] files)
+        public async Task<IActionResult> Upload(UploadFileDto dto)
         {
             var ConnectionId = HubData.ClientsData.Where(x => x.UserId == _sharedIdentityService.GetUserId).Select(x => x.ConnectionId).FirstOrDefault();
 
-            foreach (var file in files)
+            foreach (var file in dto.Files)
             {
                 await _fileHub.Clients.Client(ConnectionId).FilesUploadStarting(file.FileName);
                 var data = await _userService.Upload(file);

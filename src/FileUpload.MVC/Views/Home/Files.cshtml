@@ -49,12 +49,10 @@
     const app = {
         data() {
             return {
-
-                datas: JSON.parse('@Html.Raw(Json.Serialize(Model.Files))'),
-                PageInfo: JSON.parse('@Html.Raw(Json.Serialize(Model.Pages))'),
+              
+                datas: @Html.Raw(Json.Serialize(Model.Files)),
+                PageInfo: @Html.Raw(Json.Serialize(Model.Pages)),
                 Filter: {Page:1, PageSize:10, OrderBy:1, Extension:"" }
-
-
             }
         },
 
