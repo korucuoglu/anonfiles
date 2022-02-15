@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FileUpload.MVC.Models
+namespace FileUpload.Api.Models
 {
     public static class HubData
     {

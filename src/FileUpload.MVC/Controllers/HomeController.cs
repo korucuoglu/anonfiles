@@ -1,36 +1,26 @@
 ﻿using FileUpload.Shared.Services;
-using FileUpload.MVC.Hubs;
 using FileUpload.MVC.Models;
 using FileUpload.MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using FileUpload.MVC.Exceptions;
 using Microsoft.AspNetCore.Authorization;
-using System.Linq;
-using FileUpload.MVC.Services;
 using FileUpload.Shared.Models.Files;
-using System.Collections.Generic;
-using FileUpload.Shared.Dtos.Categories;
+using FileUpload.Shared.Models;
 
 namespace FileUpload.MVC.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IUserService _userService;
-        private readonly IHubContext<FileHub, IFileHub> _fileHub;
-        private readonly ISharedIdentityService _sharedIdentityService;
 
 
-        public HomeController(IUserService userService, IHubContext<FileHub, IFileHub> fileHub, ISharedIdentityService sharedIdentityService)
+        public HomeController(IUserService userService)
         {
             _userService = userService;
-            _fileHub = fileHub;
-            _sharedIdentityService = sharedIdentityService;
-
         }
 
         [HttpGet]
@@ -48,7 +38,7 @@ namespace FileUpload.MVC.Controllers
         public async Task<IActionResult> Upload()
         {
             var data = await _userService.GetCategories();
-           
+
             return await Task.FromResult(View(data.Data));
         }
 
@@ -56,29 +46,18 @@ namespace FileUpload.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(UploadFileDto dto)
         {
-            var connectionıd = HubData.ClientsData.Where(x => x.UserId == _sharedIdentityService.GetUserId).Select(x => x.ConnectionId).FirstOrDefault();
-
-            foreach (var file in dto.Files)
-            {
-                await _fileHub.Clients.Client(connectionıd).FilesUploadStarting(file.FileName);
-                var data = await _userService.Upload(file);
-                await _fileHub.Clients.Client(connectionıd).FilesUploaded(data);
-            }
+            await _userService.Upload(dto);
 
             return Json(new { finish = true });
-
         }
-
 
         [HttpGet]
         [Route("myfiles")]
         public async Task<IActionResult> Files([FromQuery] FileFilterModel model, [FromQuery] bool? json)
         {
-            FileFilterModel filterModel = new(model);
+            var response = await _userService.GetMyFiles(model);
 
-            var response = await _userService.GetMyFiles(filterModel);
-
-            if (json==true)
+            if (json == true)
             {
                 return await Task.FromResult(Ok(response));
             }

@@ -1,7 +1,7 @@
 ﻿using FileUpload.Shared.Models;
 using System.Threading.Tasks;
 
-namespace FileUpload.MVC.Hubs
+namespace FileUpload.Api.Hubs
 {
     public interface IFileHub
     {

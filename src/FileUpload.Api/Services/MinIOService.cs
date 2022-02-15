@@ -2,6 +2,8 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Util;
+using FileUpload.Api.Hubs;
+using FileUpload.Api.Models;
 using FileUpload.Data.Entity;
 using FileUpload.Data.Repository;
 using FileUpload.Shared.Models;
@@ -9,6 +11,7 @@ using FileUpload.Shared.Models.Files;
 using FileUpload.Shared.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -27,15 +30,19 @@ namespace FileUpload.Api.Services
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IRepository<Data.Entity.File> _fileRepository;
         private readonly IRepository<Data.Entity.UserInfo> _userInfoRepository;
+        private readonly IHubContext<FileHub, IFileHub> _fileHub;
         private ILogger<MinIOService> Logger { get; set; }
 
         public AmazonS3Client client { get; set; }
 
-        public MinIOService(IConfiguration configuration, ISharedIdentityService sharedIdentityService, ILogger<MinIOService> logger, IRepository<Data.Entity.File> fileRepository, IRepository<UserInfo> userInfoRepository = null)
+        public MinIOService(IConfiguration configuration, ISharedIdentityService sharedIdentityService, ILogger<MinIOService> logger, IRepository<Data.Entity.File> fileRepository, IRepository<UserInfo> userInfoRepository, IHubContext<FileHub, IFileHub> fileHub)
         {
             this.configuration = configuration;
             _sharedIdentityService = sharedIdentityService;
             Logger = logger;
+            _fileRepository = fileRepository;
+            _userInfoRepository = userInfoRepository;
+            _fileHub = fileHub;
 
             var config = new AmazonS3Config
             {
@@ -45,8 +52,7 @@ namespace FileUpload.Api.Services
                 SignatureVersion = "2"
             };
             client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
-            _fileRepository = fileRepository;
-            _userInfoRepository = userInfoRepository;
+
         }
 
         public async Task<string> GetBucketName()
@@ -66,52 +72,72 @@ namespace FileUpload.Api.Services
 
         }
 
-        public async Task<Response<UploadModel>> UploadAsync(IFormFile file)
+        public async Task<Response<UploadModel>> UploadAsync(UploadFileDto dto)
         {
             var key = string.Empty;
-            try
+
+            var ConnnnectionId = HubData.ClientsData.Where(x => x.UserId == "1").Select(x => x.ConnectionId).FirstOrDefault();
+
+            Response<UploadModel> data = new();
+
+            foreach (var file in dto.Files)
             {
-                key = Guid.NewGuid().ToString();
-                var stream = file.OpenReadStream();
-                var request = new PutObjectRequest()
+                try
                 {
-                    BucketName = await GetBucketName(),
-                    InputStream = stream,
-                    AutoCloseStream = true,
-                    Key = $"{key}", 
-                    ContentType = file.ContentType
-                };
-                var encodedFilename = Uri.EscapeDataString(file.FileName);
-                request.Metadata.Add("original-filename", encodedFilename);
-                request.Headers.ContentDisposition = $"attachment; filename=\"{encodedFilename}\"";
-                await client.PutObjectAsync(request);
 
-                Data.Entity.File fileEntity = new()
+                    await _fileHub.Clients.Client(ConnnnectionId).FilesUploadStarting(file.FileName);
+
+                    key = Guid.NewGuid().ToString();
+                    var stream = file.OpenReadStream();
+                    var request = new PutObjectRequest()
+                    {
+                        BucketName = await GetBucketName(),
+                        InputStream = stream,
+                        AutoCloseStream = true,
+                        Key = $"{key}",
+                        ContentType = file.ContentType
+                    };
+                    var encodedFilename = Uri.EscapeDataString(file.FileName);
+                    request.Metadata.Add("original-filename", encodedFilename);
+                    request.Headers.ContentDisposition = $"attachment; filename=\"{encodedFilename}\"";
+                    await client.PutObjectAsync(request);
+
+                    Data.Entity.File fileEntity = new()
+                    {
+                        ApplicationUserId = _sharedIdentityService.GetUserId,
+                        FileName = file.FileName,
+                        Size = file.Length,
+                        Id = key,
+                        Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper()
+                    };
+
+                    (await _userInfoRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == _sharedIdentityService.GetUserId)).UsedSpace += file.Length;
+                    await _fileRepository.AddAsync(fileEntity);
+
+                    data = Response<UploadModel>.Success(new UploadModel { FileId = key, FileName = file.FileName }, 200);
+
+                }
+
+                catch (Exception e)
                 {
-                    ApplicationUserId = _sharedIdentityService.GetUserId,
-                    FileName = file.FileName,
-                    Size = file.Length,
-                    Id = key,
-                    Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper()
-                };
+                    Logger.LogError("Error ocurred In UploadFileAsync", e.Message);
+                    data = Response<UploadModel>.Fail(e.Message, 500);
+                }
 
-                (await _userInfoRepository.FirstOrDefaultAsync(x=> x.ApplicationUserId==_sharedIdentityService.GetUserId)).UsedSpace += file.Length;
-                await _fileRepository.AddAsync(fileEntity);
-
+                finally
+                {
+                    await _fileHub.Clients.Client(ConnnnectionId).FilesUploaded(data);
+                }
             }
-            catch (Exception e)
-            {
-                Logger.LogError("Error ocurred In UploadFileAsync", e.Message);
-                return Response<UploadModel>.Fail(e.Message, 500);
-            }
-            return Response<UploadModel>.Success(new UploadModel { FileId = key, FileName = file.FileName }, 200);
 
+            return Response<UploadModel>.Success(200);
+
+           
         }
 
         public async Task<Response<MyFilesViewModel>> GetMyFiles(FileFilterModel model)
         {
-             return await Filter.FilterFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
-
+            return await Filter.FilterFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
         }
 
         public async Task<Response<string>> Download(string key)
@@ -145,7 +171,7 @@ namespace FileUpload.Api.Services
                 var file = await _fileRepository.FirstOrDefaultAsync(x => x.Id == key && x.ApplicationUserId == _sharedIdentityService.GetUserId);
                 (await _userInfoRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == _sharedIdentityService.GetUserId)).UsedSpace -= file.Size;
 
-                var data =  await Filter.GetOneFileAfterRemovedFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
+                var data = await Filter.GetOneFileAfterRemovedFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
                 _fileRepository.Remove(file);
                 return data;
 

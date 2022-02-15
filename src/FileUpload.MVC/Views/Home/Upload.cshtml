@@ -138,8 +138,6 @@
                    console.log(pair[0]+ ', ' + pair[1]); 
                 }
 
-                console.log(formData);
-
 
                 axios({
                     method: "post",
@@ -157,7 +155,7 @@
         created() {
 
             const connection = new signalR.HubConnectionBuilder()
-                .withUrl("/fileHub")
+                .withUrl("http://localhost:5002/fileHub")
                 .configureLogging(signalR.LogLevel.Information)
                 .build();
 
