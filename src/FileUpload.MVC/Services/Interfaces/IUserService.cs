@@ -9,7 +9,7 @@ namespace FileUpload.MVC.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<Response<UploadModel>> Upload(IFormFile file);
+        Task<Response<UploadModel>> Upload(UploadFileDto fileDto);
         Task<Response<MyFilesViewModel>> GetMyFiles(FileFilterModel model);
         Task<Response<string>> GetDirectLink(string id);
         Task<Response<MyFileViewModel>> DeleteFile(FileFilterModel model, string id);

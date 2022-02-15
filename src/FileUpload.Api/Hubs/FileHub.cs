@@ -1,16 +1,17 @@
-﻿using FileUpload.MVC.Models;
-using FileUpload.Shared.Services;
+﻿
+using FileUpload.Api.Models;
 using FileUpload.Shared.Models;
+using FileUpload.Shared.Services;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FileUpload.MVC.Hubs
+
+namespace FileUpload.Api.Hubs
 {
     public class FileHub : Hub<IFileHub>
     {
-
         private readonly ISharedIdentityService _sharedIdentityService;
         public FileHub(ISharedIdentityService sharedIdentityService)
         {
@@ -19,12 +20,13 @@ namespace FileUpload.MVC.Hubs
 
         public override Task OnConnectedAsync()
         {
-            if (!HubData.ClientsData.Any(x => x.UserId == _sharedIdentityService.GetUserId))
+
+            if (!HubData.ClientsData.Any(x => x.UserId == "1"))
             {
                 var user = new HubDataModel()
                 {
-                    ConnectionId = Context.ConnectionId,
-                    UserId = _sharedIdentityService.GetUserId
+                    UserId = "1",
+                    ConnectionId = Context.ConnectionId
                 };
 
                 HubData.ClientsData.Add(user);
@@ -53,4 +55,6 @@ namespace FileUpload.MVC.Hubs
             await Clients.Caller.FilesUploadStarting(fileName);
         }
     }
+
+
 }

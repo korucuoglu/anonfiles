@@ -1,5 +1,5 @@
-using AutoMapper;
 using FileUpload.Api.Filters;
+using FileUpload.Api.Hubs;
 using FileUpload.Api.Services;
 using FileUpload.Data.Entity;
 using FileUpload.Data.Repository;
@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,43 +32,9 @@ namespace FileUpload.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ISharedIdentityService, SharedIdentityService>();
-
-
-            services.AddScoped<ILogger, ConsoleLogger>();
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddHttpContextAccessor();
-            services.AddScoped<MinIOService>();
-            services.AddScoped<CategoriesService>();
-            services.AddScoped(typeof(NotFoundFilter<>));
-            services.AddScoped(typeof(ValidationFilterAttribute<>));
-
-            services.AddAutoMapper(typeof(Startup));
-
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub"); // Api içerisinden UserId de�erlerini okuyabilmek için bunu ekledik. 
-
-            services.Configure<ApiBehaviorOptions>(options => 
-            { 
-                options.SuppressModelStateInvalidFilter = true; 
-            });
-
-
-            services.AddControllers(opt =>
-            {
-                var policy = new AuthorizationPolicyBuilder("Bearer").RequireAuthenticatedUser().Build();
-                opt.Filters.Add(new AuthorizeFilter(policy));
-            }). 
-            AddNewtonsoftJson(opt =>
-            {
-                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-
-            }).
-            AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
-
-
             services.AddAuthentication().AddJwtBearer(options =>
             {
-                options.Authority = Configuration["IdentityServerURL"];
+                options.Authority = Configuration.GetSection("ServiceApiSettings").GetSection("IdentityBaseUri").Value;
                 options.Audience = "resource_api_password";
                 options.RequireHttpsMetadata = false;
 
@@ -78,6 +45,7 @@ namespace FileUpload.Api
 
                 // Aud parametresinden Identity Server, hangi akış tipinde oldu�unu anlar ve ona göre davranış sergiler. 
             });
+
 
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
@@ -90,9 +58,60 @@ namespace FileUpload.Api
 
             });
 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub"); // Api içerisinden UserId değelerini okuyabilmek için bunu ekledik. 
+
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
                .AddDefaultTokenProviders();
+
+      
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<ILogger, ConsoleLogger>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<MinIOService>();
+            services.AddScoped<CategoriesService>();
+            services.AddScoped(typeof(NotFoundFilter<>));
+            services.AddScoped(typeof(ValidationFilterAttribute<>));
+
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddSignalR(e =>
+            {
+                e.MaximumReceiveMessageSize = 102400000;
+                e.EnableDetailedErrors = true;
+            });
+
+            services.AddSingleton<ISharedIdentityService, SharedIdentityService>();
+
+
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.WithOrigins(Configuration.GetSection("ServiceApiSettings").GetSection("MVCClient").Value).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                });
+            });
+
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
+            services.AddControllers(opt =>
+            {
+                var policy = new AuthorizationPolicyBuilder("Bearer").RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            }).
+            AddNewtonsoftJson(opt =>
+            {
+                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+            }).
+            AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>());
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -102,17 +121,21 @@ namespace FileUpload.Api
                 app.UseDeveloperExceptionPage();
             }
 
+
             app.UseRouting();
 
             app.UseAuthentication();
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
+            app.UseCors("CorsPolicy");
 
-            });
+            app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            endpoints.MapHub<FileHub>("/fileHub");
+
+        });
         }
     }
 }

@@ -1,5 +1,4 @@
 using FileUpload.MVC.Extensions;
-using FileUpload.MVC.Hubs;
 using FileUpload.Shared.Middlewares;
 using FileUpload.Shared.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -41,7 +40,6 @@ namespace FileUpload.MVC
             });
 
             services.AddControllersWithViews();
-            services.AddSignalR();
 
 
 
@@ -78,7 +76,7 @@ namespace FileUpload.MVC
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                endpoints.MapHub<FileHub>("/fileHub");
+                
             });
         }
     }

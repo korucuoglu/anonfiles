@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FileUpload.Shared.Dtos.Categories;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
-namespace FileUpload.Api.Dtos.File
+namespace FileUpload.Shared.Models
 {
     public class UploadFileDto
     {
-        public IFormFile File { get; set; }
-    }
+        public IFormFile[] Files { get; set; }
 
-  
+        public List<GetCategoryDto> Categories { get; set; }
+
+    }
 }

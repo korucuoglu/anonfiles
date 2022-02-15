@@ -1,10 +1,7 @@
-﻿using FileUpload.Api.Dtos.File;
-using FileUpload.Api.Filters;
+﻿using FileUpload.Api.Filters;
 using FileUpload.Api.Services;
-using FileUpload.Data.Entity;
 using FileUpload.Shared.Models;
 using FileUpload.Shared.Models.Files;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -25,7 +22,7 @@ namespace FileUpload.Api.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute<UploadModel>))]
         public async Task<IActionResult> Upload([FromForm] UploadFileDto dto)
         {
-            var data = await _service.UploadAsync(dto.File);
+            var data = await _service.UploadAsync(dto);
 
             return new ObjectResult(data)
             {
@@ -37,8 +34,9 @@ namespace FileUpload.Api.Controllers
         [HttpGet("myfiles")]
         public async Task<IActionResult> GetMyFiles([FromQuery] FileFilterModel model)
         {
+            FileFilterModel filterModel = new(model);
 
-            var data = await _service.GetMyFiles(model);
+            var data = await _service.GetMyFiles(filterModel);
 
             return new ObjectResult(data)
             {

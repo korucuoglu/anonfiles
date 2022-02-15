@@ -44,16 +44,17 @@ namespace FileUpload.Shared.Helper
             return $"% {remainingSpace}";
         }
 
-        public static async Task<MultipartContent> GetMultipartContentAsync(IFormFile file)
+        public static async Task<MultipartContent> GetMultipartContentAsync(IFormFile[] files)
         {
-            using (var ms = new MemoryStream())
-            {
-                var multipartContent = new MultipartFormDataContent();
-                await file.CopyToAsync(ms);
-                multipartContent.Add(new ByteArrayContent(ms.ToArray()), "file", file.FileName);
+            var multipartContent = new MultipartFormDataContent();
 
-                return multipartContent;
-            };
+            foreach (var file in files)
+            {
+                using var ms = new MemoryStream();
+                await file.CopyToAsync(ms);
+                multipartContent.Add(new ByteArrayContent(ms.ToArray()), "files", file.FileName);
+            }
+            return multipartContent;
         }
 
         public static string GetQueryString(this object obj)

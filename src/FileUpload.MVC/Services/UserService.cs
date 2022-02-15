@@ -20,9 +20,9 @@ namespace FileUpload.MVC.Services
             _apiService = apiService;
         }
 
-        public async Task<Response<UploadModel>> Upload(IFormFile file)
+        public async Task<Response<UploadModel>> Upload(UploadFileDto fileDto)
         {
-            var content = await Helper.GetMultipartContentAsync(file);
+            var content = await Helper.GetMultipartContentAsync(fileDto.Files);
 
             var deserializeData = await _apiService.PostAsync("minio", content);
 
