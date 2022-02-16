@@ -166,15 +166,13 @@ namespace FileUpload.Data.Migrations
 
             modelBuilder.Entity("FileUpload.Data.Entity.File_Category", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("FileId")
                         .HasColumnType("uuid");

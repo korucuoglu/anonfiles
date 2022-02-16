@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FileUpload.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220216131308_Initial")]
+    [Migration("20220216135440_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -168,15 +168,13 @@ namespace FileUpload.Data.Migrations
 
             modelBuilder.Entity("FileUpload.Data.Entity.File_Category", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("FileId")
                         .HasColumnType("uuid");

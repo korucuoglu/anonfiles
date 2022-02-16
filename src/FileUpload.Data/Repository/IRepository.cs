@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Data.Repository
 {
-    public interface IRepository<TEntity> where TEntity : BaseEntity
+    public interface IRepository<TEntity> where TEntity : class
     {
         bool Any(Expression<Func<TEntity, bool>> predicate = null);
 

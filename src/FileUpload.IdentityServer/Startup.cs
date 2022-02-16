@@ -49,11 +49,15 @@ namespace FileUpload.IdentityServer
 
             });
 
+            //    services.AddIdentity<ApplicationUser, ApplicationRole>()
+            //       .AddEntityFrameworkStores<ApplicationDbContext>()
+            //       .AddDefaultTokenProviders()
+            //       .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
+            //.AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
+
             services.AddIdentity<ApplicationUser, ApplicationRole>()
-               .AddEntityFrameworkStores<ApplicationDbContext>()
-               .AddDefaultTokenProviders()
-               .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
-        .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
+             .AddEntityFrameworkStores<ApplicationDbContext>()
+             .AddDefaultTokenProviders();
 
 
             services.AddIdentityServer(options =>
