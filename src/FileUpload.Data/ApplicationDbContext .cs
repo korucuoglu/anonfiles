@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using FileUpload.Data.Entity.Base;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Threading;
-using System.Threading.Tasks;
+using System;
 
 namespace FileUpload.Data.Entity
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
 
         public DbSet<File> Files { get; set; }
@@ -20,6 +19,10 @@ namespace FileUpload.Data.Entity
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.HasPostgresExtension("uuid-ossp");
+
+
+
             builder.Entity<File_Category>()
                 .HasOne(x => x.File)
                 .WithMany(x => x.File_Category)
@@ -31,6 +34,18 @@ namespace FileUpload.Data.Entity
               .HasForeignKey(x => x.CategoryId);
 
             base.OnModelCreating(builder);
+
+
+            builder.Entity<ApplicationUser>(b =>
+            {
+                b.Property(u => u.Id).HasColumnType("uuid").HasDefaultValueSql("uuid_generate_v4()").IsRequired();
+            });
+
+
+            builder.Entity<ApplicationRole>(b =>
+            {
+                b.Property(u => u.Id).HasDefaultValueSql("uuid_generate_v4()");
+            });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

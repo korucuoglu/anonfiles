@@ -9,10 +9,12 @@ using FileUpload.Shared.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace FileUpload.IdentityServer
 {
@@ -49,7 +51,9 @@ namespace FileUpload.IdentityServer
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
-               .AddDefaultTokenProviders();
+               .AddDefaultTokenProviders()
+               .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
+        .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
 
 
             services.AddIdentityServer(options =>

@@ -30,12 +30,19 @@ namespace FileUpload.Api.Services
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IRepository<Data.Entity.File> _fileRepository;
         private readonly IRepository<Data.Entity.UserInfo> _userInfoRepository;
+        private readonly IRepository<Data.Entity.File_Category> _filesCategoriesRepository;
         private readonly IHubContext<FileHub, IFileHub> _fileHub;
         private ILogger<MinIOService> Logger { get; set; }
 
         public AmazonS3Client client { get; set; }
 
-        public MinIOService(IConfiguration configuration, ISharedIdentityService sharedIdentityService, ILogger<MinIOService> logger, IRepository<Data.Entity.File> fileRepository, IRepository<UserInfo> userInfoRepository, IHubContext<FileHub, IFileHub> fileHub)
+        public MinIOService(IConfiguration configuration, 
+            ISharedIdentityService sharedIdentityService, 
+            ILogger<MinIOService> logger, 
+            IRepository<Data.Entity.File> fileRepository, 
+            IRepository<UserInfo> userInfoRepository, 
+            IHubContext<FileHub, IFileHub> fileHub, 
+            IRepository<File_Category> filesCategoriesRepository)
         {
             this.configuration = configuration;
             _sharedIdentityService = sharedIdentityService;
@@ -52,29 +59,29 @@ namespace FileUpload.Api.Services
                 SignatureVersion = "2"
             };
             client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
-
+            _filesCategoriesRepository = filesCategoriesRepository;
         }
 
         public async Task<string> GetBucketName()
         {
-            if (!(await AmazonS3Util.DoesS3BucketExistV2Async(client, _sharedIdentityService.GetUserId)))
+            if (!(await AmazonS3Util.DoesS3BucketExistV2Async(client, _sharedIdentityService.GetUserId.ToString())))
             {
                 var putBucketRequest = new PutBucketRequest
                 {
-                    BucketName = _sharedIdentityService.GetUserId,
+                    BucketName = _sharedIdentityService.GetUserId.ToString(),
                     UseClientRegion = true
                 };
 
                 await client.PutBucketAsync(putBucketRequest);
             }
 
-            return _sharedIdentityService.GetUserId;
+            return _sharedIdentityService.GetUserId.ToString();
 
         }
 
         public async Task<Response<UploadModel>> UploadAsync(UploadFileDto dto)
         {
-            string fileId = string.Empty;
+            Guid fileId;
 
             var ConnnnectionId = HubData.ClientsData.Where(x => x.UserId == "1").Select(x => x.ConnectionId).FirstOrDefault();
 
@@ -84,10 +91,9 @@ namespace FileUpload.Api.Services
             {
                 try
                 {
-
                     await _fileHub.Clients.Client(ConnnnectionId).FilesUploadStarting(file.FileName);
 
-                    fileId = Guid.NewGuid().ToString();
+                    fileId = Guid.NewGuid();
                     var stream = file.OpenReadStream();
                     var request = new PutObjectRequest()
                     {
@@ -114,6 +120,17 @@ namespace FileUpload.Api.Services
 
                     (await _userInfoRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == _sharedIdentityService.GetUserId)).UsedSpace += file.Length;
                     await _fileRepository.AddAsync(fileEntity);
+
+                    foreach (var category in dto.Categories)
+                    {
+                        File_Category file_category = new()
+                        {
+                            CategoryId = category.Id,
+                            FileId = fileId
+                        };
+
+                        await _filesCategoriesRepository.AddAsync(file_category);
+                    }
 
                     data = Response<UploadModel>.Success(new UploadModel { FileId = fileId, FileName = file.FileName }, 200);
 
@@ -146,7 +163,7 @@ namespace FileUpload.Api.Services
         {
             var request = new GetPreSignedUrlRequest()
             {
-                BucketName = _sharedIdentityService.GetUserId,
+                BucketName = _sharedIdentityService.GetUserId.ToString(),
                 Key = key,
                 Protocol = Protocol.HTTP,
                 Expires = DateTime.Now.AddMinutes(30)
@@ -159,18 +176,19 @@ namespace FileUpload.Api.Services
 
         }
 
-        public async Task<Response<MyFileViewModel>> Remove(FileFilterModel model, string key)
+        public async Task<Response<MyFileViewModel>> Remove(FileFilterModel model, Guid fileId)
         {
             try
             {
                 var deleteObjectRequest = new DeleteObjectRequest
                 {
-                    BucketName = _sharedIdentityService.GetUserId,
-                    Key = key
+                    BucketName = _sharedIdentityService.GetUserId.ToString(),
+                    Key = fileId.ToString()
                 };
 
                 await client.DeleteObjectAsync(deleteObjectRequest);
-                var file = await _fileRepository.FirstOrDefaultAsync(x => x.Id == key && x.ApplicationUserId == _sharedIdentityService.GetUserId);
+                
+                var file = await _fileRepository.FirstOrDefaultAsync(x => x.Id == fileId && x.ApplicationUserId == _sharedIdentityService.GetUserId);
                 (await _userInfoRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == _sharedIdentityService.GetUserId)).UsedSpace -= file.Size;
 
                 var data = await Filter.GetOneFileAfterRemovedFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);

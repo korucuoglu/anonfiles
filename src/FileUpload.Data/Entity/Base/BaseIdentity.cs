@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Data.Entity.Base
 {
-    public class BaseIdentity: BaseEntity
+    public abstract class BaseIdentity: BaseEntity
     {
-        public string ApplicationUserId { get; set; }
+        public Guid ApplicationUserId { get; set; }
 
     }
 }

@@ -1,8 +1,10 @@
-﻿namespace FileUpload.Shared.Dtos.Categories
+﻿using System;
+
+namespace FileUpload.Shared.Dtos.Categories
 {
     public class GetCategoryDto
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; }
     }
 

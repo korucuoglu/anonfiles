@@ -1,9 +1,11 @@
 ﻿
+using System;
+
 namespace FileUpload.Shared.Models
 {
     public class UploadModel
     {
-        public string FileId { get; set; }
+        public Guid FileId { get; set; }
         public string FileName { get; set; }
 
     }

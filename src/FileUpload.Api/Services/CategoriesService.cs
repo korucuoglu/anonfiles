@@ -6,6 +6,7 @@ using FileUpload.Shared.Models;
 using FileUpload.Shared.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,7 +42,7 @@ namespace FileUpload.Api.Services
             return Response<IEnumerable<GetCategoryDto>>.Success(data, 200);
         }
 
-        public async Task<Response<GetCategoryDto>> GetByIdAsync(string id)
+        public async Task<Response<GetCategoryDto>> GetByIdAsync(Guid id)
         {
             var data = await _categoryRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == id).Select(x => new GetCategoryDto()
             {
@@ -76,7 +77,7 @@ namespace FileUpload.Api.Services
 
         }
 
-        public async Task<Response<bool>> DeleteByIdAsync(string id)
+        public async Task<Response<bool>> DeleteByIdAsync(Guid id)
         {
             var data = await _categoryRepository.FirstOrDefaultAsync(x => x.Id == id && x.ApplicationUserId == _sharedIdentityService.GetUserId);
 
