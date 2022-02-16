@@ -39,7 +39,7 @@ namespace FileUpload.Api.Hubs
         public override Task OnDisconnectedAsync(Exception exception)
         {
 
-            var user = HubData.ClientsData.FirstOrDefault(x => x.UserId == _sharedIdentityService.GetUserId);
+            var user = HubData.ClientsData.FirstOrDefault(x => x.UserId == "1");
             HubData.ClientsData.Remove(user);
             return Task.CompletedTask;
         }

@@ -74,7 +74,7 @@ namespace FileUpload.Api.Services
 
         public async Task<Response<UploadModel>> UploadAsync(UploadFileDto dto)
         {
-            var key = string.Empty;
+            string fileId = string.Empty;
 
             var ConnnnectionId = HubData.ClientsData.Where(x => x.UserId == "1").Select(x => x.ConnectionId).FirstOrDefault();
 
@@ -87,14 +87,14 @@ namespace FileUpload.Api.Services
 
                     await _fileHub.Clients.Client(ConnnnectionId).FilesUploadStarting(file.FileName);
 
-                    key = Guid.NewGuid().ToString();
+                    fileId = Guid.NewGuid().ToString();
                     var stream = file.OpenReadStream();
                     var request = new PutObjectRequest()
                     {
                         BucketName = await GetBucketName(),
                         InputStream = stream,
                         AutoCloseStream = true,
-                        Key = $"{key}",
+                        Key = $"{fileId}",
                         ContentType = file.ContentType
                     };
                     var encodedFilename = Uri.EscapeDataString(file.FileName);
@@ -107,14 +107,14 @@ namespace FileUpload.Api.Services
                         ApplicationUserId = _sharedIdentityService.GetUserId,
                         FileName = file.FileName,
                         Size = file.Length,
-                        Id = key,
+                        Id = fileId,
                         Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper()
                     };
 
                     (await _userInfoRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == _sharedIdentityService.GetUserId)).UsedSpace += file.Length;
                     await _fileRepository.AddAsync(fileEntity);
 
-                    data = Response<UploadModel>.Success(new UploadModel { FileId = key, FileName = file.FileName }, 200);
+                    data = Response<UploadModel>.Success(new UploadModel { FileId = fileId, FileName = file.FileName }, 200);
 
                 }
 

@@ -11,4 +11,12 @@ namespace FileUpload.Shared.Models
         public List<GetCategoryDto> Categories { get; set; }
 
     }
+
+    public class UploadFileDto2
+    {
+        public IFormFile[] Files { get; set; }
+
+        public string Categories { get; set; }
+
+    }
 }

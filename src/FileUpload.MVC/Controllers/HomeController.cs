@@ -46,9 +46,11 @@ namespace FileUpload.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(UploadFileDto dto)
         {
-            await _userService.Upload(dto);
+            System.Console.WriteLine(dto.Categories.Count);
 
-            return Json(new { finish = true });
+            var data = await _userService.Upload(dto);
+
+            return Json(new { data = data });
         }
 
         [HttpGet]

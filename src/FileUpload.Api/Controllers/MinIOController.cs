@@ -1,8 +1,11 @@
 ﻿using FileUpload.Api.Filters;
 using FileUpload.Api.Services;
+using FileUpload.Shared.Dtos.Categories;
 using FileUpload.Shared.Models;
 using FileUpload.Shared.Models.Files;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FileUpload.Api.Controllers
@@ -20,9 +23,21 @@ namespace FileUpload.Api.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute<UploadModel>))]
-        public async Task<IActionResult> Upload([FromForm] UploadFileDto dto)
+        public async Task<IActionResult> Upload([FromForm] UploadFileDto2 dto)
         {
-            var data = await _service.UploadAsync(dto);
+            var category = JsonConvert.DeserializeObject<List<GetCategoryDto>>(dto.Categories);
+
+            UploadFileDto fileDto = new()
+            {
+                Categories = category,
+                Files = dto.Files
+            };
+
+            // var data = Response<UploadModel>.Fail($"kategori sayısı: {category.Count}", 500);
+            
+            // var data = Response<UploadModel>.Fail($"kategori sayısı: {dto.Categories.Count}", 500);
+
+            var data = await _service.UploadAsync(fileDto);
 
             return new ObjectResult(data)
             {
@@ -45,7 +60,7 @@ namespace FileUpload.Api.Controllers
 
         }
 
-        [HttpGet("download/{id}")] 
+        [HttpGet("download/{id}")]
         [ServiceFilter(typeof(NotFoundFilter<Data.Entity.File>))]
         public async Task<IActionResult> Download(string id)
         {

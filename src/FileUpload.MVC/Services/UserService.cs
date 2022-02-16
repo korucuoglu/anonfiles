@@ -1,6 +1,5 @@
 ﻿using FileUpload.Shared.Models;
 using FileUpload.MVC.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -22,7 +21,7 @@ namespace FileUpload.MVC.Services
 
         public async Task<Response<UploadModel>> Upload(UploadFileDto fileDto)
         {
-            var content = await Helper.GetMultipartContentAsync(fileDto.Files);
+            var content = await Helper.GetMultipartContentAsync(fileDto);
 
             var deserializeData = await _apiService.PostAsync("minio", content);
 
