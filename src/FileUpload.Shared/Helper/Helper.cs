@@ -1,9 +1,12 @@
 ﻿using ByteSizeLib;
-using Microsoft.AspNetCore.Http;
+using FileUpload.Shared.Models;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -44,16 +47,30 @@ namespace FileUpload.Shared.Helper
             return $"% {remainingSpace}";
         }
 
-        public static async Task<MultipartContent> GetMultipartContentAsync(IFormFile[] files)
+        public static async Task<MultipartContent> GetMultipartContentAsync(UploadFileDto dto)
         {
             var multipartContent = new MultipartFormDataContent();
 
-            foreach (var file in files)
+            using var ms = new MemoryStream();
+
+            foreach (var file in dto.Files)
             {
-                using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
                 multipartContent.Add(new ByteArrayContent(ms.ToArray()), "files", file.FileName);
             }
+
+
+            byte[] SerializeObject(object value) => Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value));
+
+            //var stringContent = new StringContent(JsonConvert.SerializeObject(dto.Categories), Encoding.UTF8, "application/json");
+
+            //multipartContent.Add(stringContent, "categories");
+
+            var byteArrayContent = new ByteArrayContent(SerializeObject(dto.Categories));
+
+            multipartContent.Add(byteArrayContent, "Categories");
+
+
             return multipartContent;
         }
 
@@ -65,6 +82,8 @@ namespace FileUpload.Shared.Helper
 
             return String.Join("&", properties.ToArray());
         }
+
+        
 
     }
 }
