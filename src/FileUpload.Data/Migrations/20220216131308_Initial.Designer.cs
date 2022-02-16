@@ -10,36 +10,24 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FileUpload.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220212110553_UserInfo")]
-    partial class UserInfo
+    [Migration("20220216131308_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasPostgresExtension("uuid-ossp")
                 .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
-            modelBuilder.Entity("CategoryFile", b =>
-                {
-                    b.Property<string>("CategoriesId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FilesId")
-                        .HasColumnType("text");
-
-                    b.HasKey("CategoriesId", "FilesId");
-
-                    b.HasIndex("FilesId");
-
-                    b.ToTable("CategoryFile");
-                });
-
             modelBuilder.Entity("FileUpload.Data.Entity.ApplicationRole", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("uuid_generate_v4()");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -64,8 +52,10 @@ namespace FileUpload.Data.Migrations
 
             modelBuilder.Entity("FileUpload.Data.Entity.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("uuid_generate_v4()");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
@@ -128,11 +118,12 @@ namespace FileUpload.Data.Migrations
 
             modelBuilder.Entity("FileUpload.Data.Entity.Category", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
@@ -149,11 +140,12 @@ namespace FileUpload.Data.Migrations
 
             modelBuilder.Entity("FileUpload.Data.Entity.File", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
@@ -174,13 +166,38 @@ namespace FileUpload.Data.Migrations
                     b.ToTable("Files");
                 });
 
+            modelBuilder.Entity("FileUpload.Data.Entity.File_Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("FileId");
+
+                    b.ToTable("Files_Categories");
+                });
+
             modelBuilder.Entity("FileUpload.Data.Entity.UserInfo", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
@@ -196,7 +213,7 @@ namespace FileUpload.Data.Migrations
                     b.ToTable("UserInfo");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -209,9 +226,8 @@ namespace FileUpload.Data.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -220,7 +236,7 @@ namespace FileUpload.Data.Migrations
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -233,9 +249,8 @@ namespace FileUpload.Data.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -244,7 +259,7 @@ namespace FileUpload.Data.Migrations
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text");
@@ -255,9 +270,8 @@ namespace FileUpload.Data.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -266,13 +280,13 @@ namespace FileUpload.Data.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -281,10 +295,10 @@ namespace FileUpload.Data.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text");
@@ -300,26 +314,13 @@ namespace FileUpload.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("CategoryFile", b =>
-                {
-                    b.HasOne("FileUpload.Data.Entity.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FileUpload.Data.Entity.File", null)
-                        .WithMany()
-                        .HasForeignKey("FilesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("FileUpload.Data.Entity.Category", b =>
                 {
                     b.HasOne("FileUpload.Data.Entity.ApplicationUser", "ApplicationUser")
                         .WithMany("Categories")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
                 });
@@ -328,21 +329,44 @@ namespace FileUpload.Data.Migrations
                 {
                     b.HasOne("FileUpload.Data.Entity.ApplicationUser", "ApplicationUser")
                         .WithMany("Files")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("FileUpload.Data.Entity.File_Category", b =>
+                {
+                    b.HasOne("FileUpload.Data.Entity.Category", "Category")
+                        .WithMany("File_Category")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FileUpload.Data.Entity.File", "File")
+                        .WithMany("File_Category")
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("File");
                 });
 
             modelBuilder.Entity("FileUpload.Data.Entity.UserInfo", b =>
                 {
                     b.HasOne("FileUpload.Data.Entity.ApplicationUser", "ApplicationUser")
                         .WithOne("UserInfo")
-                        .HasForeignKey("FileUpload.Data.Entity.UserInfo", "ApplicationUserId");
+                        .HasForeignKey("FileUpload.Data.Entity.UserInfo", "ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("FileUpload.Data.Entity.ApplicationRole", null)
                         .WithMany()
@@ -351,7 +375,7 @@ namespace FileUpload.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.HasOne("FileUpload.Data.Entity.ApplicationUser", null)
                         .WithMany()
@@ -360,7 +384,7 @@ namespace FileUpload.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.HasOne("FileUpload.Data.Entity.ApplicationUser", null)
                         .WithMany()
@@ -369,7 +393,7 @@ namespace FileUpload.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
                     b.HasOne("FileUpload.Data.Entity.ApplicationRole", null)
                         .WithMany()
@@ -384,7 +408,7 @@ namespace FileUpload.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.HasOne("FileUpload.Data.Entity.ApplicationUser", null)
                         .WithMany()
@@ -400,6 +424,16 @@ namespace FileUpload.Data.Migrations
                     b.Navigation("Files");
 
                     b.Navigation("UserInfo");
+                });
+
+            modelBuilder.Entity("FileUpload.Data.Entity.Category", b =>
+                {
+                    b.Navigation("File_Category");
+                });
+
+            modelBuilder.Entity("FileUpload.Data.Entity.File", b =>
+                {
+                    b.Navigation("File_Category");
                 });
 #pragma warning restore 612, 618
         }

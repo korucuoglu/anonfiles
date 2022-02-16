@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
 
 namespace FileUpload.Shared.Services
 {
     public interface ISharedIdentityService
     {
-        public string GetUserId { get; }
+        public Guid GetUserId { get; }
     }
     
     public class SharedIdentityService : ISharedIdentityService
@@ -16,7 +17,7 @@ namespace FileUpload.Shared.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public string GetUserId => _httpContextAccessor.HttpContext.User.FindFirst("sub").Value;
+        public Guid GetUserId => new Guid(_httpContextAccessor.HttpContext.User.FindFirst("sub").Value);
 
 
     }

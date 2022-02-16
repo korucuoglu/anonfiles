@@ -29,7 +29,7 @@ namespace FileUpload.Api.Filters
                 return;
             }
 
-            if (!_service.Any(x=> x.Id == id && x.ApplicationUserId == _sharedIdentityService.GetUserId))
+            if (!_service.Any(x=> x.Id.ToString() == id && x.ApplicationUserId == _sharedIdentityService.GetUserId))
             {
                 var error = $"Böyle bir veri bulunamadı.";
                 context.Result = new NotFoundObjectResult(Response<TEntity>.Fail(error, 404));

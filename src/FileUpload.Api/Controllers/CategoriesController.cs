@@ -3,6 +3,7 @@ using FileUpload.Api.Services;
 using FileUpload.Data.Entity;
 using FileUpload.Shared.Dtos.Categories;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace FileUpload.Api.Controllers
@@ -30,7 +31,7 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(string id)
+        public async Task<IActionResult> GetByIdAsync(Guid id)
         {
             var data = await _categoriesService.GetByIdAsync(id);
 
@@ -69,7 +70,7 @@ namespace FileUpload.Api.Controllers
 
         [HttpDelete("{id}")]
         [ServiceFilter(typeof(NotFoundFilter<Category>))]
-        public async Task<IActionResult> DeleteByIdAsync(string id)
+        public async Task<IActionResult> DeleteByIdAsync(Guid id)
         {
             var data = await _categoriesService.DeleteByIdAsync(id);
 

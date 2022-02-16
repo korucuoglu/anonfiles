@@ -5,6 +5,7 @@ using FileUpload.Shared.Models;
 using FileUpload.Shared.Models.Files;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -75,7 +76,7 @@ namespace FileUpload.Api.Controllers
 
         [HttpDelete("{id}")]
         [ServiceFilter(typeof(NotFoundFilter<Data.Entity.File>))]
-        public async Task<IActionResult> Remove([FromQuery] FileFilterModel model, string id)
+        public async Task<IActionResult> Remove([FromQuery] FileFilterModel model, Guid id)
         {
             var data = await _service.Remove(model, id);
 

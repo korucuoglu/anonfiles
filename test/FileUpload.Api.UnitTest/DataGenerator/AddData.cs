@@ -1,4 +1,5 @@
 ﻿using FileUpload.Data.Entity;
+using System;
 
 namespace FileUpload.Api.UnitTests.DataGenerator
 {
@@ -11,21 +12,21 @@ namespace FileUpload.Api.UnitTests.DataGenerator
                 new FileUpload.Data.Entity.File
                 {
 
-                    Id = "1",
+                    Id = Guid.NewGuid(),
                     FileName = "1.txt",
                     Size = 15,
-                    ApplicationUserId = "",
+                    ApplicationUserId = Guid.NewGuid(),
                 },
 
                  new FileUpload.Data.Entity.File
                  {
-                     Id = "1",
+                     Id = Guid.NewGuid(),
                      FileName = "1.txt",
                      Size = 15,
-                     ApplicationUserId = "",
+                     ApplicationUserId = Guid.NewGuid(),
                  }
 
-                );
+                );;
         }
 
 
