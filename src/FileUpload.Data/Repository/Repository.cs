@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Data.Repository
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
