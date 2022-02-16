@@ -108,7 +108,8 @@ namespace FileUpload.Api.Services
                         FileName = file.FileName,
                         Size = file.Length,
                         Id = fileId,
-                        Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper()
+                        Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper(),
+                       
                     };
 
                     (await _userInfoRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == _sharedIdentityService.GetUserId)).UsedSpace += file.Length;
@@ -129,6 +130,7 @@ namespace FileUpload.Api.Services
                     await _fileHub.Clients.Client(ConnnnectionId).FilesUploaded(data);
                 }
             }
+
 
             return Response<UploadModel>.Success(200);
 
