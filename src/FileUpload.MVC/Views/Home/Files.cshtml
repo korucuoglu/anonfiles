@@ -26,7 +26,7 @@
     </table>
 
 
-    <nav aria-label="Page navigation example" class="d-flex flex-row justify-content-center">
+    <nav v-if="PageInfo.totalItems" aria-label="Page navigation example" class="d-flex flex-row justify-content-center">
         <ul class="pagination">
 
             <li class="page-item"><a @@click.prevent="getData(PageInfo.currentPage-1)" class="btn page-link" :class="{'disabled': PageInfo.currentPage == 1}">Prev</a></li>
@@ -49,10 +49,10 @@
     const app = {
         data() {
             return {
-              
+
                 datas: @Html.Raw(Json.Serialize(Model.Files)),
                 PageInfo: @Html.Raw(Json.Serialize(Model.Pages)),
-                Filter: {Page:1, PageSize:10, OrderBy:1, Extension:"" }
+                Filter: {Page:1, PageSize:10, OrderBy:1, Extension:"", Category:""}
             }
         },
 
@@ -86,12 +86,16 @@
                 {
                     this.Filter.Extension = urlParams.get('extension');
                 }
+                 if (urlParams.has('category'))
+                {
+                    this.Filter.Category = urlParams.get('category');
+                }
             },
 
             getData(e) {
              axios({
                 method: "get",
-                url:`/myfiles/?json=true&page=${e}&pageSize=${this.Filter.PageSize}&orderBy=${this.Filter.OrderBy}&Extension=${this.Filter.Extension}`,
+                url:`/myfiles/?json=true&page=${e}&pageSize=${this.Filter.PageSize}&orderBy=${this.Filter.OrderBy}&Extension=${this.Filter.Extension}&Category=${this.Filter.Category}`,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
             }).then(response => {

@@ -10,7 +10,7 @@ namespace FileUpload.Data.Entity
 
         public DbSet<File> Files { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<File_Category> Files_Categories { get; set; }
+        public DbSet<FileCategory> Files_Categories { get; set; }
         public DbSet<UserInfo> UserInfo { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -23,12 +23,12 @@ namespace FileUpload.Data.Entity
 
 
 
-            builder.Entity<File_Category>()
+            builder.Entity<FileCategory>()
                 .HasOne(x => x.File)
                 .WithMany(x => x.File_Category)
                 .HasForeignKey(x => x.FileId);
 
-            builder.Entity<File_Category>()
+            builder.Entity<FileCategory>()
               .HasOne(x => x.Category)
               .WithMany(x => x.File_Category)
               .HasForeignKey(x => x.CategoryId);

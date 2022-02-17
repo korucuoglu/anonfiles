@@ -30,7 +30,7 @@ namespace FileUpload.Api.Services
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IRepository<Data.Entity.File> _fileRepository;
         private readonly IRepository<Data.Entity.UserInfo> _userInfoRepository;
-        private readonly IRepository<Data.Entity.File_Category> _filesCategoriesRepository;
+        private readonly IRepository<Data.Entity.FileCategory> _filesCategoriesRepository;
         private readonly IHubContext<FileHub, IFileHub> _fileHub;
         private ILogger<MinIOService> Logger { get; set; }
 
@@ -42,7 +42,7 @@ namespace FileUpload.Api.Services
             IRepository<Data.Entity.File> fileRepository, 
             IRepository<UserInfo> userInfoRepository, 
             IHubContext<FileHub, IFileHub> fileHub, 
-            IRepository<File_Category> filesCategoriesRepository)
+            IRepository<FileCategory> filesCategoriesRepository)
         {
             this.configuration = configuration;
             _sharedIdentityService = sharedIdentityService;
@@ -123,7 +123,7 @@ namespace FileUpload.Api.Services
 
                     foreach (var category in dto.Categories)
                     {
-                        File_Category file_category = new()
+                        FileCategory file_category = new()
                         {
                             CategoryId = category.Id,
                             FileId = fileId
@@ -156,7 +156,14 @@ namespace FileUpload.Api.Services
 
         public async Task<Response<MyFilesViewModel>> GetMyFiles(FileFilterModel model)
         {
-            return await Filter.FilterFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
+            if (_fileRepository.Any(x=> x.ApplicationUserId == _sharedIdentityService.GetUserId))
+            {
+                return await Filter.FilterFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
+
+            }
+
+            return Response<MyFilesViewModel>.Success(new MyFilesViewModel(), 200);
+
         }
 
         public async Task<Response<string>> Download(string key)

@@ -36,6 +36,8 @@ namespace FileUpload.Shared.Models.Files
             Page = model.Page;
             PageSize = model.PageSize;
             OrderBy = model.OrderBy;
+            Category = model.Category;
+            Extension = model.Extension;
 
             
 
@@ -46,7 +48,8 @@ namespace FileUpload.Shared.Models.Files
         public int Page { get; set; } 
         public int PageSize { get; set; } 
         public int OrderBy { get; set; } 
-        public string Extension { get; set; } 
+        public string Extension { get; set; }
+        public string Category { get; set; }
 
     }
 }
