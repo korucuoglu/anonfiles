@@ -48,9 +48,9 @@ namespace FileUpload.MVC.Controllers
         {
             System.Console.WriteLine(dto.Categories.Count);
 
-            var data = await _userService.Upload(dto);
+            await _userService.Upload(dto);
 
-            return Json(new { data = data });
+            return Json(new { finish = true });
         }
 
         [HttpGet]
@@ -63,7 +63,6 @@ namespace FileUpload.MVC.Controllers
             {
                 return await Task.FromResult(Ok(response));
             }
-
 
             return await Task.FromResult(View(response.Data));
         }

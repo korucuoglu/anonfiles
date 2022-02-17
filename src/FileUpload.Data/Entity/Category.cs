@@ -9,7 +9,7 @@ namespace FileUpload.Data.Entity
         public string Title { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
 
-        public virtual ICollection<File_Category> File_Category { get; set; }
+        public virtual ICollection<FileCategory> File_Category { get; set; }
 
 
 

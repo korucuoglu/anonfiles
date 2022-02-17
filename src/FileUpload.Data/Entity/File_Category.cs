@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Data.Entity
 {
-    public class File_Category
+    public class FileCategory
     {
         public int Id { get; set; }
         public Guid FileId { get; set; }
