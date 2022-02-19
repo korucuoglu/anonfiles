@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using FileUpload.Application.Interfaces.Context;
+using FileUpload.Domain.Entities;
+using FileUpload.Persistence.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace FileUpload.Data.Entity
+namespace FileUpload.Persistence.Context
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IApplicationDbContext
     {
 
         public DbSet<File> Files { get; set; }
@@ -19,8 +22,6 @@ namespace FileUpload.Data.Entity
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.HasPostgresExtension("uuid-ossp");
-
-
 
             builder.Entity<FileCategory>()
                 .HasOne(x => x.File)
