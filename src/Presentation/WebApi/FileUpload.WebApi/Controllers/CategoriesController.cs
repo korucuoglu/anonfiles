@@ -1,6 +1,11 @@
-﻿using FileUpload.Application.Features.Queries;
-using MediatR;
+﻿using FileUpload.Api.Filters;
+using FileUpload.Application.Features.Commands.Categories.Add;
+using FileUpload.Application.Features.Commands.Categories.Update;
+using FileUpload.Application.Interfaces.Services;
+using FileUpload.Domain.Entities; // yanlış
+using FileUpload.Infrastructure.Attribute;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace FileUpload.WebApi.Controllers
@@ -9,11 +14,11 @@ namespace FileUpload.WebApi.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly ICategoryService _categoryService;
 
-        public CategoriesController(IMediator mediator)
+        public CategoriesController(ICategoryService categoryService)
         {
-            _mediator = mediator;
+            _categoryService = categoryService;
         }
 
 
@@ -21,63 +26,59 @@ namespace FileUpload.WebApi.Controllers
         public async Task<IActionResult> GetAllAsync()
         {
 
-            var query = new GetAllCategoriesByUserIdQueryRequest();
-
-            return Ok(await _mediator.Send(query));
+            return Ok(await _categoryService.GetAllAsync());
 
         }
 
+        [HttpGet("{id}")]
+        [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
+        public async Task<IActionResult> GetByIdAsync(Guid id)
+        {
+            var data = await _categoryService.GetByIdAsync(id);
 
+            return new ObjectResult(data)
+            {
+                StatusCode = data.StatusCode
+            };
 
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetByIdAsync(Guid id)
-        //{
-        //    var data = await _categoriesService.GetByIdAsync(id);
+        }
 
-        //    return new ObjectResult(data)
-        //    {
-        //        StatusCode = data.StatusCode
-        //    };
+        [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> AddAsync(AddCategoryCommand dto)
+        {
+            var data = await _categoryService.AddAsync(dto);
 
-        //}
+            return new ObjectResult(data)
+            {
+                StatusCode = data.StatusCode
+            };
+        }
 
-        //[HttpPost]
-        //[ServiceFilter(typeof(ValidationFilterAttribute<Category>))]
-        //public async Task<IActionResult> AddAsync(AddCategoryDto dto)
-        //{
-        //    var data = await _categoriesService.AddAsync(dto);
+        [HttpPut]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> UpdateAsync(UpdateCategoryCommand dto)
+        {
+            var data = await _categoryService.UpdateAsync(dto);
 
-        //    return new ObjectResult(data)
-        //    {
-        //        StatusCode = data.StatusCode
-        //    };
-        //}
+            return new ObjectResult(data)
+            {
+                StatusCode = data.StatusCode
+            };
 
-        //[HttpPut("{id}")]
-        //[ServiceFilter(typeof(NotFoundFilter<Category>))]
-        //[ServiceFilter(typeof(ValidationFilterAttribute<Category>))]
-        //public async Task<IActionResult> UpdateAsync(string id, UpdateCategory dto)
-        //{
-        //    var data = await _categoriesService.UpdateAsync(id, dto);
+        }
 
-        //    return new ObjectResult(data)
-        //    {
-        //        StatusCode = data.StatusCode
-        //    };
+        [HttpDelete("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> DeleteByIdAsync(Guid id)
+        {
+            var data = await _categoryService.DeleteByIdAsync(id);
 
-        //}
+            return new ObjectResult(data)
+            {
+                StatusCode = data.StatusCode
+            };
 
-        //[HttpDelete("{id}")]
-        //[ServiceFilter(typeof(NotFoundFilter<Category>))]
-        //public async Task<IActionResult> DeleteByIdAsync(Guid id)
-        //{
-        //    var data = await _categoriesService.DeleteByIdAsync(id);
-
-        //    return new ObjectResult(data)
-        //    {
-        //        StatusCode = data.StatusCode
-        //    };
-
-        //}
+        }
     }
 }
