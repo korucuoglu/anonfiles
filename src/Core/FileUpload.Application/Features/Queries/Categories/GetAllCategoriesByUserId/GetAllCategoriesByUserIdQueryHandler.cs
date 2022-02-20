@@ -6,18 +6,17 @@ using FileUpload.Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Features.Queries.Categories.GetAllCategoriesByUserId
+namespace FileUpload.Application.Features.Queries
 {
+
     public class GetAllCategoriesByUserIdQueryHandler : IRequestHandler<GetAllCategoriesByUserIdQueryRequest, List<GetCategoryDto>>
     {
         private readonly IRepository<Category> _categoryRepository;
         private readonly ISharedIdentityService _sharedIdentityService;
-        IMapper _mapper;
+        private readonly IMapper _mapper;
         public GetAllCategoriesByUserIdQueryHandler(IRepository<Category> categoryRepository, IMapper mapper, ISharedIdentityService sharedIdentityService)
         {
             _categoryRepository = categoryRepository;
