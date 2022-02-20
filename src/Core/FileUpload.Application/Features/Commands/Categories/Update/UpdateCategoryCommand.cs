@@ -3,6 +3,7 @@ using FileUpload.Application.Interfaces.Repositories;
 using FileUpload.Application.Interfaces.Services;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Threading;
@@ -14,6 +15,15 @@ namespace FileUpload.Application.Features.Commands.Categories.Update
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+    }
+
+    public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>
+    {
+        public UpdateCategoryCommandValidator()
+        {
+            RuleFor(x => x.Id).NotEmpty().NotNull().WithMessage($"Id boş olamaz");
+            RuleFor(x => x.Title).NotEmpty().NotNull().WithMessage($"Title boş olamaz");
+        }
     }
 
     public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Response<bool>>
@@ -38,7 +48,7 @@ namespace FileUpload.Application.Features.Commands.Categories.Update
 
             var category = _mapper.Map<Category>(request);
             _categoryRepository.Update(category);
-            return Response<bool>.Success(true, 200);
+            return await Task.FromResult(Response<bool>.Success(true, 200));
         }
     }
 }
