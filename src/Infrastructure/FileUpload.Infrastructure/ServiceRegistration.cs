@@ -16,6 +16,7 @@ namespace FileUpload.Infrastructure
             services.AddSingleton<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped(typeof(NotFoundFilterAttribute<>));
+            services.AddScoped<ValidationFilterAttribute>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

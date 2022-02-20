@@ -3,6 +3,7 @@ using FileUpload.Application.Interfaces.Repositories;
 using FileUpload.Application.Interfaces.Services;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Threading;
@@ -13,6 +14,14 @@ namespace FileUpload.Application.Features.Commands.Categories.Delete
     public class DeleteCategoryCommand : IRequest<Response<bool>>
     {
         public Guid Id { get; set; }
+    }
+
+    public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
+    {
+        public DeleteCategoryCommandValidator()
+        {
+            RuleFor(x => x.Id).NotEmpty().NotNull().WithMessage($"Id boş olamaz");
+        }
     }
 
     public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Response<bool>>

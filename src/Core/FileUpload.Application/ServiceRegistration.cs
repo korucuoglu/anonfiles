@@ -16,7 +16,6 @@ namespace FileUpload.Application
             services.AddAutoMapper(assm);
 
             services.AddMediatR(assm);
-            // services.AddMediatR(typeof(GetAllCategoriesByUserIdQueryHandler).Assembly);
 
 
 
