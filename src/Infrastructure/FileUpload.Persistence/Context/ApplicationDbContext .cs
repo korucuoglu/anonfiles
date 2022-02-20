@@ -42,7 +42,7 @@ namespace FileUpload.Persistence.Context
 
             builder.Entity<ApplicationRole>(b =>
             {
-                b.Property(u => u.Id).HasDefaultValueSql("uuid_generate_v4()");
+                b.Property(u => u.Id).HasDefaultValueSql("uuid_generate_v4()").IsRequired();
             });
 
             base.OnModelCreating(builder);
