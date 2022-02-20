@@ -33,13 +33,18 @@ namespace FileUpload.Application.Features.Queries.Categories.GetById
 
         public async Task<Response<GetCategoryDto>> Handle(GetCategoryByIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var data = await _categoryRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == request.Id).Select(x => new GetCategoryDto()
-            {
-                Id = x.Id,
-                Title = x.Title
-            }).FirstOrDefaultAsync();
 
-            return Response<GetCategoryDto>.Success(data, 200);
+            //var data = await _categoryRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == request.Id).Select(x => new GetCategoryDto()
+            //{
+            //    Id = x.Id,
+            //    Title = x.Title
+            //}).FirstOrDefaultAsync();
+
+            var data = _categoryRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == request.Id);
+
+            var mapperData = await _mapper.ProjectTo<GetCategoryDto>(data).FirstOrDefaultAsync();
+
+            return Response<GetCategoryDto>.Success(mapperData, 200);
         }
     }
 }

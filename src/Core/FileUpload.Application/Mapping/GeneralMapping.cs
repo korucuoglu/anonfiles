@@ -11,10 +11,14 @@ namespace FileUpload.Application.Mapping
     {
         public GeneralMapping()
         {
+            #region Category
+
             CreateMap<AddCategoryCommand, Category>().ForMember(dest => dest.ApplicationUserId, opt => opt.MapFrom<IdentityResolver<AddCategoryCommand, Category>>());
             CreateMap<UpdateCategoryCommand, Category>().ForMember(dest => dest.ApplicationUserId, opt => opt.MapFrom<IdentityResolver<UpdateCategoryCommand, Category>>());
 
             CreateMap<Category, GetCategoryDto>();
+
+            #endregion
         }
     }
 }

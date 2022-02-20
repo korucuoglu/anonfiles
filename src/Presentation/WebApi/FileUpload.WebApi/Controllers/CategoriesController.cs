@@ -56,7 +56,7 @@ namespace FileUpload.WebApi.Controllers
         }
 
         [HttpPut]
-        // [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
         public async Task<IActionResult> UpdateAsync(UpdateCategoryCommand dto)
         {

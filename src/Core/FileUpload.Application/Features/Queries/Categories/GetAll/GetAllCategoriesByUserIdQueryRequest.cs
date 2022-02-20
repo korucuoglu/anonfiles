@@ -5,6 +5,7 @@ using FileUpload.Application.Interfaces.Services;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,10 +30,9 @@ namespace FileUpload.Application.Features.Queries.Categories.GetAll
 
         public async Task<Response<List<GetCategoryDto>>> Handle(GetAllCategoriesQueryRequest request, CancellationToken cancellationToken)
         {
+            var data = _categoryRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId);
 
-            var data = await _categoryRepository.GetAllAsync(x => x.ApplicationUserId == _sharedIdentityService.GetUserId);
-
-            var mapperData = _mapper.Map<List<GetCategoryDto>>(data);
+            var mapperData = await _mapper.ProjectTo<GetCategoryDto>(data).ToListAsync();
 
             return Response<List<GetCategoryDto>>.Success(mapperData, 200);
 
