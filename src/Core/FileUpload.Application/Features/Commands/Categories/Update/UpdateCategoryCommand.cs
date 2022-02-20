@@ -13,7 +13,7 @@ namespace FileUpload.Application.Features.Commands.Categories.Update
 {
     public class UpdateCategoryCommand : IRequest<Response<bool>>
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
     }
 
@@ -41,7 +41,7 @@ namespace FileUpload.Application.Features.Commands.Categories.Update
 
         public async Task<Response<bool>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            if (!(_categoryRepository.Any(x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == request.Id)))
+            if (!_categoryRepository.Any(x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == new Guid(request.Id)))
             {
                 return Response<bool>.Fail(false, 200);
             }

@@ -56,7 +56,8 @@ namespace FileUpload.WebApi.Controllers
         }
 
         [HttpPut]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        // [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
         public async Task<IActionResult> UpdateAsync(UpdateCategoryCommand dto)
         {
             var data = await _categoryService.UpdateAsync(dto);
@@ -69,7 +70,7 @@ namespace FileUpload.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
         public async Task<IActionResult> DeleteByIdAsync(Guid id)
         {
             var data = await _categoryService.DeleteByIdAsync(id);

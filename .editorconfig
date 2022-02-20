@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# S3626: Jump statements should not be redundant
+dotnet_diagnostic.S3626.severity = none
