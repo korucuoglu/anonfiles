@@ -3,7 +3,7 @@ using FileUpload.Application.Interfaces.Services;
 using FileUpload.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FileUpload.Persistence
+namespace FileUpload.Infrastructure
 {
     public static class ServiceRegistration
     {

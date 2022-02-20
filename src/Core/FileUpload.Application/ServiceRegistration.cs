@@ -1,6 +1,8 @@
 ﻿
+using FileUpload.Application.Features.Queries;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Reflection;
 
 namespace FileUpload.Application
@@ -11,8 +13,13 @@ namespace FileUpload.Application
         {
             var assm = Assembly.GetExecutingAssembly();
 
-            services.AddMediatR(assm);
             services.AddAutoMapper(assm);
+
+            services.AddMediatR(assm);
+            // services.AddMediatR(typeof(GetAllCategoriesByUserIdQueryHandler).Assembly);
+
+
+
         }
     }
 }

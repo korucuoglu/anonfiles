@@ -33,6 +33,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUpload.Infrastructure",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUpload.Persistence", "src\Infrastructure\FileUpload.Persistence\FileUpload.Persistence.csproj", "{6D0D4D7E-57CF-4CF7-93CB-32C987167193}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApi", "WebApi", "{A74FD332-23D7-4E56-B087-9C2B17468FFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUpload.WebApi", "src\Presentation\WebApi\FileUpload.WebApi\FileUpload.WebApi.csproj", "{8B775CAE-73BB-45C3-BF47-206F0F402477}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +83,10 @@ Global
 		{6D0D4D7E-57CF-4CF7-93CB-32C987167193}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D0D4D7E-57CF-4CF7-93CB-32C987167193}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D0D4D7E-57CF-4CF7-93CB-32C987167193}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B775CAE-73BB-45C3-BF47-206F0F402477}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B775CAE-73BB-45C3-BF47-206F0F402477}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B775CAE-73BB-45C3-BF47-206F0F402477}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B775CAE-73BB-45C3-BF47-206F0F402477}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +105,8 @@ Global
 		{CE74576F-C01C-47E9-AC40-B2F38A920D41} = {FAE4E0C2-4048-4344-9341-C4DFAEACCEDB}
 		{750DC826-F77C-41F5-8538-D06E8D43E7F2} = {06F8E29C-41AC-4A18-87A3-8D3393DDEC1C}
 		{6D0D4D7E-57CF-4CF7-93CB-32C987167193} = {06F8E29C-41AC-4A18-87A3-8D3393DDEC1C}
+		{A74FD332-23D7-4E56-B087-9C2B17468FFB} = {61FBB276-5C67-40FD-966D-BFA45A673387}
+		{8B775CAE-73BB-45C3-BF47-206F0F402477} = {A74FD332-23D7-4E56-B087-9C2B17468FFB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E6FF9DC-FA88-43CB-9600-94F3D301ABBB}

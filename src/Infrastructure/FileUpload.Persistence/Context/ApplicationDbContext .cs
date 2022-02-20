@@ -4,6 +4,7 @@ using FileUpload.Persistence.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading.Tasks;
 
 namespace FileUpload.Persistence.Context
 {
@@ -33,9 +34,6 @@ namespace FileUpload.Persistence.Context
               .WithMany(x => x.File_Category)
               .HasForeignKey(x => x.CategoryId);
 
-            base.OnModelCreating(builder);
-
-
             builder.Entity<ApplicationUser>(b =>
             {
                 b.Property(u => u.Id).HasColumnType("uuid").HasDefaultValueSql("uuid_generate_v4()").IsRequired();
@@ -46,6 +44,8 @@ namespace FileUpload.Persistence.Context
             {
                 b.Property(u => u.Id).HasDefaultValueSql("uuid_generate_v4()");
             });
+
+            base.OnModelCreating(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -53,5 +53,9 @@ namespace FileUpload.Persistence.Context
             optionsBuilder.EnableSensitiveDataLogging();
         }
 
+        async Task<int> IApplicationDbContext.SaveChanges()
+        {
+            return await base.SaveChangesAsync();
+        }
     }
 }
