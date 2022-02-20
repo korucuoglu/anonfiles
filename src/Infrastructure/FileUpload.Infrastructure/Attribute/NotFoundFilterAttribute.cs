@@ -4,10 +4,13 @@ using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Common; // yanlış
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FileUpload.Api.Filters
 {
+
+
     public class NotFoundFilterAttribute<TEntity> : IAsyncActionFilter where TEntity : BaseIdentity
     {
         private readonly IRepository<TEntity> _service;
@@ -18,9 +21,39 @@ namespace FileUpload.Api.Filters
             _service = service;
             _sharedIdentityService = sharedIdentityService;
         }
+
+        public bool GetData(string id)
+        {
+            var data = _service.Any(x => x.Id.ToString() == id && x.ApplicationUserId == _sharedIdentityService.GetUserId);
+
+            return data;
+        }
+
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var id = (string)context.RouteData.Values["id"];
+            string GetId()
+            {
+               string routeId = (string)context.RouteData.Values["id"];
+
+                if (!string.IsNullOrEmpty(routeId))
+                {
+                    return routeId;
+                }
+
+                var obj = context.ActionArguments.First().Value;
+
+                string modelId = obj.GetType().GetProperties().First(o => o.Name == "Id").GetValue(obj, null).ToString();
+
+                if (!string.IsNullOrEmpty(modelId))
+                {
+                    return modelId;
+                }
+
+                return null;
+
+            }
+
+            var id = GetId();
 
             if (string.IsNullOrEmpty(id))
             {
@@ -28,15 +61,15 @@ namespace FileUpload.Api.Filters
                 return;
             }
 
-            if (!_service.Any(x=> x.Id.ToString() == id && x.ApplicationUserId == _sharedIdentityService.GetUserId))
+            if (!GetData(id))
             {
-                var error = $"Böyle bir veri bulunamadı.";
+                var error = "Böyle bir veri bulunamadı.";
                 context.Result = new NotFoundObjectResult(Response<TEntity>.Fail(error, 404));
                 return;
             }
 
             await next();
-          
+
 
         }
     }

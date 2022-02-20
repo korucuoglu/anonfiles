@@ -29,13 +29,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileUpload.Domain", "src\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileUpload.Application", "src\Core\FileUpload.Application\FileUpload.Application.csproj", "{CE74576F-C01C-47E9-AC40-B2F38A920D41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUpload.Infrastructure", "src\Infrastructure\FileUpload.Infrastructure\FileUpload.Infrastructure.csproj", "{750DC826-F77C-41F5-8538-D06E8D43E7F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileUpload.Infrastructure", "src\Infrastructure\FileUpload.Infrastructure\FileUpload.Infrastructure.csproj", "{750DC826-F77C-41F5-8538-D06E8D43E7F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUpload.Persistence", "src\Infrastructure\FileUpload.Persistence\FileUpload.Persistence.csproj", "{6D0D4D7E-57CF-4CF7-93CB-32C987167193}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileUpload.Persistence", "src\Infrastructure\FileUpload.Persistence\FileUpload.Persistence.csproj", "{6D0D4D7E-57CF-4CF7-93CB-32C987167193}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApi", "WebApi", "{A74FD332-23D7-4E56-B087-9C2B17468FFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUpload.WebApi", "src\Presentation\WebApi\FileUpload.WebApi\FileUpload.WebApi.csproj", "{8B775CAE-73BB-45C3-BF47-206F0F402477}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileUpload.WebApi", "src\Presentation\WebApi\FileUpload.WebApi\FileUpload.WebApi.csproj", "{8B775CAE-73BB-45C3-BF47-206F0F402477}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
