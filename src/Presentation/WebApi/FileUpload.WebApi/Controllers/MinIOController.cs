@@ -1,7 +1,9 @@
-﻿using FileUpload.Application.Dtos.Categories;
+﻿using FileUpload.Api.Filters;
+using FileUpload.Application.Dtos.Categories;
 using FileUpload.Application.Dtos.Files;
 using FileUpload.Application.Features.Commands.Files.Add;
 using FileUpload.Application.Interfaces.Services;
+using FileUpload.Domain.Entities;
 using FileUpload.Infrastructure.Attribute;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,12 +30,7 @@ namespace FileUpload.WebApi.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Upload([FromForm] IFormFile[] files)
         {
-            AddFileCommand dto = new()
-            {
-                Files = files
-            };
-
-            var data = await _service.UploadAsync(dto);
+            var data = await _service.UploadAsync(files);
 
             return new ObjectResult(data)
             {
@@ -43,7 +40,7 @@ namespace FileUpload.WebApi.Controllers
         }
 
         [HttpGet("myfiles")]
-        public async Task<IActionResult> GetMyFiles([FromQuery] FileFilterModel model)
+        public async Task<IActionResult> GetAllAsync([FromQuery] FileFilterModel model)
         {
             FileFilterModel filterModel = new(model);
 
@@ -57,9 +54,24 @@ namespace FileUpload.WebApi.Controllers
         }
 
         [HttpGet("myfiles/{id}")]
-        public async Task<IActionResult> GetMyFiles(Guid id)
+        public async Task<IActionResult> GetByIdAsync(Guid id)
         {
             var data = await _service.GetFileById(id);
+
+            return new ObjectResult(data)
+            {
+                StatusCode = data.StatusCode
+            };
+
+        }
+
+        [HttpDelete("{id}")]
+        [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
+        public async Task<IActionResult> Remove([FromQuery] FileFilterModel model, Guid id)
+        {
+            FileFilterModel filterModel = new(model);
+
+            var data = await _service.Remove(filterModel, id);
 
             return new ObjectResult(data)
             {
