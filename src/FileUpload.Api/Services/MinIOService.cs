@@ -159,7 +159,6 @@ namespace FileUpload.Api.Services
             if (_fileRepository.Any(x=> x.ApplicationUserId == _sharedIdentityService.GetUserId))
             {
                 return await Filter.FilterFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
-
             }
 
             return Response<MyFilesViewModel>.Success(new MyFilesViewModel(), 200);
