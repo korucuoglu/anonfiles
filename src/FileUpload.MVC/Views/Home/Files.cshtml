@@ -14,13 +14,13 @@
         </tr>
 
         <tr v-for="(item, index) in datas" :key="index">
-            <td>{{item.fileId}}</td>
+            <td>{{item.id}}</td>
             <td>{{item.fileName}}</td>
             <td>
-                <button @@click.prevent="Download(item.fileId)" class="btn btn-primary btn-sm">
+                <button @@click.prevent="Download(item.id)" class="btn btn-primary btn-sm">
                     İndir
                 </button>
-                <button class="btn btn-sm btn-danger" @@click.prevent="deleteFile(item.fileId)">Sil</button>
+                <button class="btn btn-sm btn-danger" @@click.prevent="deleteFile(item.id)">Sil</button>
             </td>
         </tr>
     </table>
@@ -113,24 +113,24 @@
         },
 
 
-            deleteFile(fileId) {
+            deleteFile(id) {
 
                 axios({
                     method: "delete",
-                    url:`/Home/Delete/${fileId}?page=${this.PageInfo.currentPage}&pageSize=${this.Filter.PageSize}&orderBy=${this.Filter.OrderBy}&Extension=${this.Filter.Extension}`,
+                    url:`/Home/Delete/${id}?page=${this.PageInfo.currentPage}&pageSize=${this.Filter.PageSize}&orderBy=${this.Filter.OrderBy}&Extension=${this.Filter.Extension}`,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                 }).then(response => {
                     console.log(response);
                     if (response.data.isSuccessful)
                     {
-                       this.datas = this.datas.filter(data => data.fileId != fileId);
+                       this.datas = this.datas.filter(data => data.id != id);
 
                         if (response.data.data.file != null)
                         {
                              this.datas.push(
                              {
-                                fileId: response.data.data.file.fileId,
+                                id: response.data.data.file.id,
                                 fileName: response.data.data.file.fileName,
                                 size: response.data.data.file.size,
                                 uploadedDate: response.data.data.file.uploadedDate,
@@ -147,10 +147,10 @@
                 });
             },
 
-            Download(fileId) {
+            Download(id) {
                 axios({
                     method: "get",
-                    url:`/Home/GetLink/${fileId}`,
+                    url:`/Home/GetLink/${id}`,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                 }).then(response => {

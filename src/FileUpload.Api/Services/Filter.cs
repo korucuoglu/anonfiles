@@ -38,7 +38,7 @@ namespace FileUpload.Api.Services
                 Pages = pager,
                 Files = await model.Select(x => new FileDto()
                 {
-                    FileId = x.Id,
+                    Id = x.Id,
                     FileName = x.FileName,
                     Size = x.Size,
                     CreatedDate = x.CreatedDate
@@ -131,7 +131,7 @@ namespace FileUpload.Api.Services
 
             fileDto = await model.Select(x => new FileDto()
             {
-                FileId = x.Id,
+                Id = x.Id,
                 FileName = x.FileName,
                 Size = x.Size,
                 CreatedDate = x.CreatedDate

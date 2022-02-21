@@ -1,5 +1,4 @@
 ﻿using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Features.Commands.Files.Add;
 using FileUpload.Application.Wrappers;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -13,6 +12,8 @@ namespace FileUpload.Application.Interfaces.Services
         Task<Response<MyFilesViewModel>> GetAllFiles(FileFilterModel model);
         Task<Response<FileDto>> GetFileById(Guid id);
         Task<Response<MyFileViewModel>> Remove(FileFilterModel model, Guid fileId);
+
+        Task<Response<string>> Download(string id);
 
 
     }

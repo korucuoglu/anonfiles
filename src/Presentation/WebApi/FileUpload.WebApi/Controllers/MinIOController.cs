@@ -1,15 +1,11 @@
 ﻿using FileUpload.Api.Filters;
-using FileUpload.Application.Dtos.Categories;
 using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Features.Commands.Files.Add;
 using FileUpload.Application.Interfaces.Services;
 using FileUpload.Domain.Entities;
 using FileUpload.Infrastructure.Attribute;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FileUpload.WebApi.Controllers
@@ -27,7 +23,6 @@ namespace FileUpload.WebApi.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Upload([FromForm] IFormFile[] files)
         {
             var data = await _service.UploadAsync(files);
@@ -50,7 +45,6 @@ namespace FileUpload.WebApi.Controllers
             {
                 StatusCode = data.StatusCode
             };
-
         }
 
         [HttpGet("myfiles/{id}")]
@@ -72,6 +66,19 @@ namespace FileUpload.WebApi.Controllers
             FileFilterModel filterModel = new(model);
 
             var data = await _service.Remove(filterModel, id);
+
+            return new ObjectResult(data)
+            {
+                StatusCode = data.StatusCode
+            };
+
+        }
+
+        [HttpGet("download/{id}")]
+        [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
+        public async Task<IActionResult> Download(string id)
+        {
+            var data = await _service.Download(id);
 
             return new ObjectResult(data)
             {
