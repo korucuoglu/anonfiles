@@ -1,0 +1,168 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model FileUpload.MVC.Models.Files.MyFilesViewModel
+
+<div class="container" id="app">
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>File Id</th>
+            <th>File Name</th>
+            <th>Direct Link</th>
+        </tr>
+
+        <tr v-for="(item, index) in datas" :key="index">
+            <td>{{item.id}}</td>
+            <td>{{item.fileName}}</td>
+            <td>
+                <button @@click.prevent="Download(item.id)" class="btn btn-primary btn-sm">
+                    İndir
+                </button>
+                <button class="btn btn-sm btn-danger" @@click.prevent="deleteFile(item.id)">Sil</button>
+            </td>
+        </tr>
+    </table>
+
+
+    <nav v-if="PageInfo.totalItems" aria-label="Page navigation example" class="d-flex flex-row justify-content-center">
+        <ul class="pagination">
+
+            <li class="page-item"><a @@click.prevent="getData(PageInfo.currentPage-1)" class="btn page-link" :class="{'disabled': PageInfo.currentPage == 1}">Prev</a></li>
+
+            <li v-for="index in PageInfo.endPage" :key="index" class="page-item" :class="{'active': PageInfo.currentPage == index}">
+                <a @@click.prevent="getData(index)" class="btn page-link">{{index}}</a>
+            </li>
+            <li class="page-item"><a @@click.prevent="getData(PageInfo.currentPage+1)" class="btn page-link" :class="{'disabled': PageInfo.currentPage == PageInfo.totalPage}">Next</a></li>
+        </ul>
+    </nav>
+
+</div>
+
+@section Scripts {
+
+@await Html.PartialAsync("_VueJsPartial")
+
+<script>
+
+    const app = {
+        data() {
+            return {
+
+                datas: @Html.Raw(Json.Serialize(Model.Files)),
+                PageInfo: @Html.Raw(Json.Serialize(Model.Pages)),
+                Filter: {Page:1, PageSize:10, OrderBy:1, Extension:"", Category:""}
+            }
+        },
+
+        created()
+        {
+            this.getQuery();
+
+        },
+
+        methods: {
+
+
+             getQuery()
+
+             {
+                let urlParams = new URLSearchParams(window.location.search);
+
+                if (urlParams.has('page'))
+                {
+                    this.Filter.Page = urlParams.get('page');
+                }
+                if (urlParams.has('pageSize'))
+                {
+                    this.Filter.PageSize = urlParams.get('pageSize');
+                }
+                if (urlParams.has('orderBy'))
+                {
+                    this.Filter.OrderBy = urlParams.get('orderBy');
+                }
+                if (urlParams.has('extension'))
+                {
+                    this.Filter.Extension = urlParams.get('extension');
+                }
+                 if (urlParams.has('category'))
+                {
+                    this.Filter.Category = urlParams.get('category');
+                }
+            },
+
+            getData(e) {
+             axios({
+                method: "get",
+                url:`/myfiles/?json=true&page=${e}&pageSize=${this.Filter.PageSize}&orderBy=${this.Filter.OrderBy}&Extension=${this.Filter.Extension}&Category=${this.Filter.Category}`,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+            }).then(response => {
+
+                if (response.data.isSuccessful)
+                {
+                   this.datas = response.data.data.files
+                   this.PageInfo = response.data.data.pages
+                }
+                else
+                {
+                    alert("hata");
+                }
+            });
+        },
+
+
+            deleteFile(id) {
+
+                axios({
+                    method: "delete",
+                    url:`/Home/Delete/${id}?page=${this.PageInfo.currentPage}&pageSize=${this.Filter.PageSize}&orderBy=${this.Filter.OrderBy}&Extension=${this.Filter.Extension}`,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                }).then(response => {
+                    console.log(response);
+                    if (response.data.isSuccessful)
+                    {
+                       this.datas = this.datas.filter(data => data.id != id);
+
+                        if (response.data.data.file != null)
+                        {
+                             this.datas.push(
+                             {
+                                id: response.data.data.file.id,
+                                fileName: response.data.data.file.fileName,
+                                size: response.data.data.file.size,
+                                uploadedDate: response.data.data.file.uploadedDate,
+                            });
+                        }
+
+                          this.PageInfo = response.data.data.pages
+                    }
+                    else
+                    {
+                        alert("hata");
+
+                    }
+                });
+            },
+
+            Download(id) {
+                axios({
+                    method: "get",
+                    url:`/Home/GetLink/${id}`,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                }).then(response => {
+                    if (response.data.isSuccessful) {
+                        window.location.href = response.data.data;
+                    }
+
+                });
+            }
+        },
+    }
+    Vue.createApp(app).mount('#app');
+</script>
+
+}
