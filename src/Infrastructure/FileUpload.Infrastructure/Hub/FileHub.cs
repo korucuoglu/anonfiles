@@ -1,38 +1,29 @@
 ﻿using FileUpload.Application.Dtos.Files;
 using FileUpload.Application.Interfaces.Hub;
-using FileUpload.Application.Interfaces.Services;
 using FileUpload.Application.Wrappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FileUpload.Infrastructure.Hub
 {
     public class FileHub : Hub<IFileHub>
     {
-        private readonly ISharedIdentityService _sharedIdentityService;
-        public FileHub(ISharedIdentityService sharedIdentityService)
-        {
-            _sharedIdentityService = sharedIdentityService;
-        }
-
         public override Task OnConnectedAsync()
         {
+            var UserId = Context.User.FindFirst("sub").Value;
 
-            if (!HubData.ClientsData.Any(x => x.UserId == "1"))
+            if (!HubData.ClientsData.Any(x => x.UserId == UserId))
             {
                 var user = new HubDataModel()
                 {
-                    UserId = "1",
+                    UserId = UserId,
                     ConnectionId = Context.ConnectionId
                 };
-
                 HubData.ClientsData.Add(user);
             }
-
 
             return Task.CompletedTask;
         }
