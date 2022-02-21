@@ -24,8 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FileUpload.Api\FileUpload.Api.csproj" />
-    <ProjectReference Include="..\..\src\FileUpload.Data\FileUpload.Data.csproj" />
     <ProjectReference Include="..\..\src\FileUpload.IdentityServer\FileUpload.IdentityServer.csproj" />
     <ProjectReference Include="..\..\src\FileUpload.MVC\FileUpload.MVC.csproj" />
     <ProjectReference Include="..\..\src\FileUpload.Shared\FileUpload.Shared.csproj" />

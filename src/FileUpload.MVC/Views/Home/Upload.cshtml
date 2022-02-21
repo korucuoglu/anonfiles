@@ -153,7 +153,9 @@
         created() {
 
             const connection = new signalR.HubConnectionBuilder()
-                .withUrl(this.SignalRConnection)
+                .withUrl(this.SignalRConnection, {
+                    accessTokenFactory: () => "eyJhbGciOiJSUzI1NiIsImtpZCI6IjFBQUE4MTU0Q0I4OTk3RDA2NUZERTEwNDNGNTQ2NUNEIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2NDU0NjQ3MzQsImV4cCI6MTY0NTQ2ODMzNCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxIiwiYXVkIjpbInJlc291cmNlX2FwaV9wYXNzd29yZCIsImh0dHA6Ly9sb2NhbGhvc3Q6NTAwMS9yZXNvdXJjZXMiXSwiY2xpZW50X2lkIjoiV2ViTXZjQ2xpZW50Rm9yVXNlciIsInN1YiI6ImFkNWYxMmM2LWYyYzQtNDQ0NC1iZGUwLTgwODY3OWVkNmQyOSIsImF1dGhfdGltZSI6MTY0NTQ2NDczNCwiaWRwIjoibG9jYWwiLCJqdGkiOiI1REVBRENFMTQ2NjRGREZFQTE5NjRENjlFMjMwNDg1QyIsImlhdCI6MTY0NTQ2NDczNCwic2NvcGUiOlsiYXBpX3Bhc3N3b3JkIiwiZW1haWwiLCJJZGVudGl0eVNlcnZlckFwaSIsIm9wZW5pZCIsInByb2ZpbGUiLCJyb2xlcyIsIm9mZmxpbmVfYWNjZXNzIl0sImFtciI6WyJwd2QiXX0.mtwA9O1OtH8CmIvuJTlsz0FkxsXsKnLd-7RmgW6TAB9CrRfIvuLUQ8zNzdbDaaQTc_UZMrGnHgrrczHVsLEX4Gua2b7vYPB6uQ5A0LXmqd68WJEOpzag3uxgwP0Kn6rVPcb11m8_rgGESmwrP8IqJvFZFd6YQpvPUvS3RrobTQFzB6Cr5ut1S57tsVR8L-LQLIvkchmLMW4NRKqpaIwA6gqdXP2j9iuNAPY-k1BeYCkVCzNlSyftzPuSocKx2LXuCfB1Kp-0Xa2OGb4jDsmRV8gm3tcb7Ba5fCemFvtY8aepnr6DT77ydduTiwyte46JeLX7wfUYVOYYeXQ_RaiNwQ"
+                })
                 .configureLogging(signalR.LogLevel.Information)
                 .build();
 
