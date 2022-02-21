@@ -7,13 +7,17 @@ using FileUpload.Application.Features.Commands.Files.Add;
 using FileUpload.Application.Features.Commands.Files.Delete;
 using FileUpload.Application.Features.Queries.Files.GetAll;
 using FileUpload.Application.Features.Queries.Files.GetById;
+using FileUpload.Application.Interfaces.Hub;
 using FileUpload.Application.Interfaces.Services;
 using FileUpload.Application.Wrappers;
+using FileUpload.Infrastructure.Hub;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FileUpload.Infrastructure.Services
@@ -23,9 +27,13 @@ namespace FileUpload.Infrastructure.Services
         private readonly IMediator _mediator;
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IConfiguration configuration;
+        private readonly IHubContext<FileHub, IFileHub> _fileHub;
         public AmazonS3Client client { get; set; }
 
-        public FileService(IMediator mediator, ISharedIdentityService sharedIdentityService, IConfiguration configuration)
+        public FileService(IMediator mediator, 
+            ISharedIdentityService sharedIdentityService, 
+            IConfiguration configuration, 
+            IHubContext<FileHub, IFileHub> fileHub)
         {
             _mediator = mediator;
             _sharedIdentityService = sharedIdentityService;
@@ -39,6 +47,7 @@ namespace FileUpload.Infrastructure.Services
                 SignatureVersion = "2"
             };
             client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
+            _fileHub = fileHub;
         }
 
         public async Task<Response<MyFilesViewModel>> GetAllFiles(FileFilterModel model)
@@ -86,11 +95,17 @@ namespace FileUpload.Infrastructure.Services
 
             Response<UploadModel> data = new();
 
+            var ConnnnectionId = HubData.ClientsData.Where(x => x.UserId == "1").Select(x => x.ConnectionId).FirstOrDefault();
+
             foreach (var file in files)
             {
                 try
                 {
-                    // await _fileHub.Clients.Client(ConnnnectionId).FilesUploadStarting(file.FileName);
+                    if (!string.IsNullOrEmpty(ConnnnectionId))
+                    {
+                        await _fileHub.Clients.Client(ConnnnectionId).FilesUploadStarting(file.FileName);
+                    }
+
 
                     fileId = Guid.NewGuid();
                     var stream = file.OpenReadStream();
@@ -132,8 +147,10 @@ namespace FileUpload.Infrastructure.Services
 
                 finally
                 {
-                    // await _fileHub.Clients.Client(ConnnnectionId).FilesUploaded(data);
-
+                    if (!string.IsNullOrEmpty(ConnnnectionId))
+                    {
+                        await _fileHub.Clients.Client(ConnnnectionId).FilesUploaded(data);
+                    }
                 }
             }
 
@@ -161,13 +178,6 @@ namespace FileUpload.Infrastructure.Services
 
                 return await _mediator.Send(command);
 
-                //var file = await _fileRepository.FirstOrDefaultAsync(x => x.Id == fileId && x.ApplicationUserId == _sharedIdentityService.GetUserId);
-                //(await _userInfoRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == _sharedIdentityService.GetUserId)).UsedSpace -= file.Size;
-
-                //var data = await Filter.GetOneFileAfterRemovedFile(_fileRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId), model);
-                //_fileRepository.Remove(file);
-                //return data;
-
             }
             catch (AmazonS3Exception e)
             {
@@ -179,6 +189,20 @@ namespace FileUpload.Infrastructure.Services
                 Console.WriteLine("Unknown encountered on server. Message:'{0}' when deleting an object", e.Message);
                 return Response<MyFileViewModel>.Fail(e.Message, 500);
             }
+        }
+
+        public async Task<Response<string>> Download(string id)
+        {
+            var request = new GetPreSignedUrlRequest()
+            {
+                BucketName = _sharedIdentityService.GetUserId.ToString(),
+                Key = id,
+                Protocol = Protocol.HTTP,
+                Expires = DateTime.Now.AddMinutes(30)
+            };
+            var data = client.GetPreSignedURL(request);
+
+            return await Task.FromResult(Response<string>.Success(data, 200));
         }
     }
 

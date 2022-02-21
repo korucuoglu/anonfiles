@@ -8,7 +8,7 @@ namespace FileUpload.Shared.Models.Files
 {
     public class FileDto
     {
-        public Guid FileId { get; set; }
+        public Guid Id { get; set; }
         public string FileName { get; set; }
         public DateTime CreatedDate { get; set; }
         public long Size { get; set; }

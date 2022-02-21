@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
 using FileUpload.Application.Features.Commands.Categories.Add;
+using FileUpload.Infrastructure.Hub;
 
 namespace FileUpload.WebApi
 {
@@ -28,7 +29,7 @@ namespace FileUpload.WebApi
 
             services.AddApplicationServices();
             services.AddPersistenceServices(Configuration);
-            services.AddInfrastructureServices();
+            services.AddInfrastructureServices(Configuration);
 
            
 
@@ -61,6 +62,8 @@ namespace FileUpload.WebApi
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FileUpload.WebApi v1"));
             }
 
+            app.UseCors("CorsPolicy");
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -70,6 +73,7 @@ namespace FileUpload.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<FileHub>("/fileHub");
             });
         }
     }
