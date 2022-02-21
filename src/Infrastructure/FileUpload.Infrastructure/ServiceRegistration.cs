@@ -15,6 +15,7 @@ namespace FileUpload.Infrastructure
             services.AddHttpContextAccessor();
             services.AddSingleton<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IFileService, FileService>();
             services.AddScoped(typeof(NotFoundFilterAttribute<>));
             services.AddScoped<ValidationFilterAttribute>();
 
