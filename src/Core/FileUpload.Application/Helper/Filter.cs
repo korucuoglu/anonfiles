@@ -109,7 +109,7 @@ namespace FileUpload.Application.Helper
 
             FileDto fileDto = null;
 
-            Pager pager = new(count - 1, filterModel.Page, filterModel.PageSize);
+            Pager pager = new(count -1, filterModel.Page, filterModel.PageSize);
 
             if (count <= (filterModel.Page * filterModel.PageSize))
             {
