@@ -26,12 +26,12 @@ namespace FileUpload.Persistence.Context
 
             builder.Entity<FileCategory>()
                 .HasOne(x => x.File)
-                .WithMany(x => x.File_Category)
+                .WithMany(x => x.Files_Categories)
                 .HasForeignKey(x => x.FileId);
 
             builder.Entity<FileCategory>()
               .HasOne(x => x.Category)
-              .WithMany(x => x.File_Category)
+              .WithMany(x => x.Files_Categories)
               .HasForeignKey(x => x.CategoryId);
 
             builder.Entity<ApplicationUser>(b =>

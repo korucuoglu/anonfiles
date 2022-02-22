@@ -97,17 +97,9 @@ namespace FileUpload.Infrastructure.Services
 
         }
 
-        public async Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, string categories)
+        public async Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, List<GetCategoryDto> categories)
         {
             Guid fileId;
-
-            List<FileCategory> FilesCategories = new();
-
-            if (string.IsNullOrEmpty(categories) is false)
-            {
-                var Categories = _mapper.Map<List<Category>>(JsonSerializer.Deserialize<List<GetCategoryDto>>(categories));
-            }
-
 
             Response<AddFileDto> data = new();
 
@@ -147,8 +139,13 @@ namespace FileUpload.Infrastructure.Services
                         Size = file.Length,
                         Id = fileId,
                         Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper(),
-                        File_Category = FilesCategories
                     };
+
+                    categories.ForEach(x =>
+                    {
+                        fileEntity.Files_Categories.Add(new FileCategory() { CategoryId = x.Id });
+                    });
+
 
                     fileListEntity.Add(fileEntity);
 

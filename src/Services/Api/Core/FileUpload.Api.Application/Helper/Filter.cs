@@ -65,8 +65,7 @@ namespace FileUpload.Application.Helper
             {
                 return model;
             }
-
-            return model.Include(x => x.File_Category).Where(d => d.File_Category.Select(a => a.Category.Title.ToLower()).Contains(CategoryName.ToLower()));
+            return model.Include(x => x.Files_Categories).Where(d => d.Files_Categories.Select(a => a.Category.Title.ToLower()).Contains(CategoryName.ToLower()));
         }
 
         public static IQueryable<Domain.Entities.File> OrderFiles(IQueryable<Domain.Entities.File> model, int orderBy)

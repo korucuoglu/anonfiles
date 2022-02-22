@@ -12,7 +12,7 @@ namespace FileUpload.Infrastructure.Hub
     {
         public override Task OnConnectedAsync()
         {
-            var UserId = Context.User.FindFirst("sub").Value;
+            var UserId = "1";
 
             if (!HubData.ClientsData.Any(x => x.UserId == UserId))
             {

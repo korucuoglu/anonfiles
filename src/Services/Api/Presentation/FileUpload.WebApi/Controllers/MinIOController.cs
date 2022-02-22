@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace FileUpload.WebApi.Controllers
@@ -27,7 +28,9 @@ namespace FileUpload.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload([FromForm] IFormFile[] files, [FromForm] string categories)
         {
-            var data = await _service.UploadAsync(files, categories);
+            var GetCategoryDto = JsonSerializer.Deserialize<List<GetCategoryDto>>(categories);
+
+            var data = await _service.UploadAsync(files, GetCategoryDto);
 
             return new ObjectResult(data)
             {
