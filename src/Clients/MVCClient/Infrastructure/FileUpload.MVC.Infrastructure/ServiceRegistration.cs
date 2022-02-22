@@ -1,20 +1,19 @@
-﻿using FileUpload.MVC.Handler;
-using FileUpload.MVC.Interfaces.Services;
-using FileUpload.MVC.Models;
-using FileUpload.MVC.Services;
+﻿using FileUpload.MVC.Application.Dtos.Settings;
+using FileUpload.MVC.Application.Interfaces.Services;
+using FileUpload.MVC.Infrastructure.Handler;
+using FileUpload.MVC.Infrastructure.Services;
 using FileUpload.MVC.Services.Interfaces;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace FileUpload.MVC.Extensions
+namespace FileUpload.MVC.Infrastructure
 {
-    public static class ServiceExtension
+    public static class ServiceRegistration
     {
-
-        public static void AddHttpClientServices(this IServiceCollection services, IConfiguration Configuration)
+        public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration Configuration)
         {
+
             services.Configure<ServiceApiSettings>(Configuration.GetSection("ServiceApiSettings"));
             services.Configure<ClientSettings>(Configuration.GetSection("ClientSettings"));
 
@@ -40,16 +39,6 @@ namespace FileUpload.MVC.Extensions
 
 
             }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts =>
-            {
-                opts.LoginPath = "/user/login";
-                opts.ExpireTimeSpan = TimeSpan.FromDays(60);
-                opts.SlidingExpiration = true;
-                opts.Cookie.Name = "anonfiled";
-
-            });
-
 
         }
     }

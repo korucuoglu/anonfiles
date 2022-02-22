@@ -1,8 +1,10 @@
-﻿using FileUpload.MVC.Services.Interfaces;
+﻿
+
+using FileUpload.MVC.Services.Interfaces;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace FileUpload.MVC.Interfaces.Services
+namespace FileUpload.MVC.Infrastructure.Services
 {
     public class ApiService : IApiService
     {

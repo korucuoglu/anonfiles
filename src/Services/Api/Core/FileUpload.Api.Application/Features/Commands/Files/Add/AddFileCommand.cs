@@ -1,10 +1,9 @@
 ﻿using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Interfaces.Repositories;
+using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
 using FluentValidation;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,26 +26,26 @@ namespace FileUpload.Application.Features.Commands.Files.Add
 
     public class AddFileCommandHandler : IRequestHandler<AddFileCommand, Response<bool>>
     {
-        private readonly IRepository<File> _fileRepository;
-        private readonly IRepository<UserInfo> _userInfoRepository;
-        private readonly IRepository<FileCategory> _filesCategoriesRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AddFileCommandHandler(IRepository<Domain.Entities.File> fileRepository,
-            IRepository<UserInfo> userInfoRepository,
-            IRepository<FileCategory> filesCategoriesRepository)
+        public AddFileCommandHandler(IUnitOfWork unitOfWork)
         {
-            _fileRepository = fileRepository;
-            _userInfoRepository = userInfoRepository;
-            _filesCategoriesRepository = filesCategoriesRepository;
-           
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Response<bool>> Handle(AddFileCommand request, CancellationToken cancellationToken)
         {
-            (await _userInfoRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.File.ApplicationUserId)).UsedSpace += request.File.Size;
-            await _fileRepository.AddAsync(request.File);
+            (await _unitOfWork.GetRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.File.ApplicationUserId)).UsedSpace += request.File.Size;
+            await _unitOfWork.GetRepository<File>().AddAsync(request.File);
 
-            return Response<bool>.Success(true, 200);
+            bool result = await _unitOfWork.SaveChangesAsync() > 0;
+
+            if (!result)
+            {
+                return Response<bool>.Fail(result, 200);
+            }
+
+            return Response<bool>.Success(result, 200);
         }
     }
 }

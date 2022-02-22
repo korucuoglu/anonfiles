@@ -16,7 +16,7 @@ namespace FileUpload.Application.Interfaces.Repositories
 
         Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 
-        Task AddAsync(TEntity entity);
+        Task<bool> AddAsync(TEntity entity);
 
         void Update(TEntity entity);
 
