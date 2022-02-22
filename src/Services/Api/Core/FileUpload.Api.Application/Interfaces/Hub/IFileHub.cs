@@ -6,7 +6,7 @@ namespace FileUpload.Application.Interfaces.Hub
 {
     public interface IFileHub
     { 
-        Task FilesUploaded(Response<UploadModel> model);
+        Task FilesUploaded(Response<AddFileDto> model);
         Task FilesUploadStarting(string fileName);
     }
 }

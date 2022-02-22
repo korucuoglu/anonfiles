@@ -3,6 +3,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Util;
 using FileUpload.Application.Dtos.Files;
+using FileUpload.Application.Dtos.Files.Pager;
 using FileUpload.Application.Features.Commands.Files.Add;
 using FileUpload.Application.Features.Commands.Files.Delete;
 using FileUpload.Application.Features.Queries.Files.GetAll;
@@ -50,7 +51,7 @@ namespace FileUpload.Infrastructure.Services
             _fileHub = fileHub;
         }
 
-        public async Task<Response<MyFilesViewModel>> GetAllFiles(FileFilterModel model)
+        public async Task<Response<FilesPagerViewModel>> GetAllFiles(FileFilterModel model)
         {
             GetAllFilesQueryRequest query = new()
             {
@@ -61,7 +62,7 @@ namespace FileUpload.Infrastructure.Services
             return await _mediator.Send(query);
         }
 
-        public async Task<Response<FileDto>> GetFileById(Guid id)
+        public async Task<Response<GetFileDto>> GetFileById(Guid id)
         {
             GetFileByIdQueryRequest query = new()
             {
@@ -89,11 +90,11 @@ namespace FileUpload.Infrastructure.Services
 
         }
 
-        public async Task<Response<UploadModel>> UploadAsync(IFormFile[] files)
+        public async Task<Response<AddFileDto>> UploadAsync(IFormFile[] files)
         {
             Guid fileId;
 
-            Response<UploadModel> data = new();
+            Response<AddFileDto> data = new();
 
             var ConnnnectionId = HubData.ClientsData.Where(x => x.UserId == "1").Select(x => x.ConnectionId).FirstOrDefault();
 
@@ -136,13 +137,13 @@ namespace FileUpload.Infrastructure.Services
 
                     await _mediator.Send(command);
 
-                    data = Response<UploadModel>.Success(new UploadModel { FileId = fileId, FileName = file.FileName }, 200);
+                    data = Response<AddFileDto>.Success(new AddFileDto { FileId = fileId, FileName = file.FileName }, 200);
 
                 }
 
                 catch (Exception e)
                 {
-                    data = Response<UploadModel>.Fail(e.Message, 500);
+                    data = Response<AddFileDto>.Fail(e.Message, 500);
                 }
 
                 finally
@@ -154,10 +155,10 @@ namespace FileUpload.Infrastructure.Services
                 }
             }
 
-            return Response<UploadModel>.Success(200);
+            return Response<AddFileDto>.Success(200);
         }
 
-        public async Task<Response<MyFileViewModel>> Remove(FileFilterModel model, Guid fileId)
+        public async Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, Guid fileId)
         {
             try
             {
@@ -182,12 +183,12 @@ namespace FileUpload.Infrastructure.Services
             catch (AmazonS3Exception e)
             {
                 Console.WriteLine("Error encountered on server. Message:'{0}' when deleting an object", e.Message);
-                return Response<MyFileViewModel>.Fail(e.Message, 500);
+                return Response<FilePagerViewModel>.Fail(e.Message, 500);
             }
             catch (Exception e)
             {
                 Console.WriteLine("Unknown encountered on server. Message:'{0}' when deleting an object", e.Message);
-                return Response<MyFileViewModel>.Fail(e.Message, 500);
+                return Response<FilePagerViewModel>.Fail(e.Message, 500);
             }
         }
 

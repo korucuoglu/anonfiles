@@ -1,5 +1,5 @@
-﻿using FileUpload.MVC.Services.Interfaces;
-using FileUpload.MVC.Models.User;
+﻿using FileUpload.MVC.Application.Dtos.User;
+using FileUpload.MVC.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -61,14 +61,15 @@ namespace FileUpload.MVC.Controllers
 
             var data = await _identityService.SignUp(model);
 
-            if (data == true)
+            if (data is false)
             {
-                return RedirectToAction("Index", "Home");
+                ModelState.AddModelError(string.Empty, "Hata meydana geldi.");
+
+                return View();
             }
 
-            ModelState.AddModelError(string.Empty, "Hata meydana geldi.");
+            return RedirectToAction("Index", "Home");
 
-            return View();
 
         }
 

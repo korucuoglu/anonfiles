@@ -1,17 +1,16 @@
 ﻿using FileUpload.Application.Dtos.Files;
+using FileUpload.Application.Dtos.Files.Pager;
 using FileUpload.Application.Wrappers;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FileUpload.Application.Helper
 {
     public static class Filter
     {
-        public static async Task<Response<MyFilesViewModel>> FilterFile(IQueryable<Domain.Entities.File> model, FileFilterModel filterModel)
+        public static async Task<Response<FilesPagerViewModel>> FilterFile(IQueryable<Domain.Entities.File> model, FileFilterModel filterModel)
         {
 
             model = ExtensionFilter(model, filterModel.Extension);
@@ -22,7 +21,7 @@ namespace FileUpload.Application.Helper
 
             if (modelCount == 0)
             {
-                return Response<MyFilesViewModel>.Success(new MyFilesViewModel(), 200);
+                return Response<FilesPagerViewModel>.Success(new FilesPagerViewModel(), 200);
             }
 
             Pager pager = new(modelCount, filterModel.Page, filterModel.PageSize);
@@ -32,10 +31,10 @@ namespace FileUpload.Application.Helper
             model = PaginationData(model, pager.CurrentPage, filterModel.PageSize);
 
 
-            MyFilesViewModel dto = new()
+            FilesPagerViewModel dto = new()
             {
                 Pages = pager,
-                Files = await model.Select(x => new FileDto()
+                Files = await model.Select(x => new GetFileDto()
                 {
                     Id = x.Id,
                     FileName = x.FileName,
@@ -45,7 +44,7 @@ namespace FileUpload.Application.Helper
                 }).ToListAsync()
             };
 
-            return Response<MyFilesViewModel>.Success(dto, 200);
+            return Response<FilesPagerViewModel>.Success(dto, 200);
         }
 
         public static IQueryable<Domain.Entities.File> ExtensionFilter(IQueryable<Domain.Entities.File> model, string extension)
@@ -103,23 +102,23 @@ namespace FileUpload.Application.Helper
             return model.Skip((page - 1) * number).Take(number);
         }
 
-        public static async Task<Response<MyFileViewModel>> GetOneFileAfterRemovedFile(IQueryable<Domain.Entities.File> model, FileFilterModel filterModel)
+        public static async Task<Response<FilePagerViewModel>> GetOneFileAfterRemovedFile(IQueryable<Domain.Entities.File> model, FileFilterModel filterModel)
         {
             var count = model.Count();
 
-            FileDto fileDto = null;
+            GetFileDto fileDto = null;
 
             Pager pager = new(count -1, filterModel.Page, filterModel.PageSize);
 
             if (count <= (filterModel.Page * filterModel.PageSize))
             {
-                MyFileViewModel data = new()
+                FilePagerViewModel data = new()
                 {
                     Pages = pager,
                     File = fileDto
                 };
 
-                return Response<MyFileViewModel>.Success(data, 200);
+                return Response<FilePagerViewModel>.Success(data, 200);
             }
 
             var extensionFilterData = ExtensionFilter(model, filterModel.Extension);
@@ -128,7 +127,7 @@ namespace FileUpload.Application.Helper
 
             model = orderFilterData.Skip(filterModel.Page * filterModel.PageSize).Take(1);
 
-            fileDto = await model.Select(x => new FileDto()
+            fileDto = await model.Select(x => new GetFileDto()
             {
                 Id = x.Id,
                 FileName = x.FileName,
@@ -137,13 +136,13 @@ namespace FileUpload.Application.Helper
 
             }).FirstOrDefaultAsync();
 
-            MyFileViewModel dto = new()
+            FilePagerViewModel dto = new()
             {
                 Pages = pager,
                 File = fileDto
             };
 
-            return Response<MyFileViewModel>.Success(dto, 200);
+            return Response<FilePagerViewModel>.Success(dto, 200);
 
 
 

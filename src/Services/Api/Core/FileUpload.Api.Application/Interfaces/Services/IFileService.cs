@@ -1,4 +1,5 @@
 ﻿using FileUpload.Application.Dtos.Files;
+using FileUpload.Application.Dtos.Files.Pager;
 using FileUpload.Application.Wrappers;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -8,10 +9,10 @@ namespace FileUpload.Application.Interfaces.Services
 {
     public interface IFileService
     {
-        Task<Response<UploadModel>> UploadAsync(IFormFile[] files);
-        Task<Response<MyFilesViewModel>> GetAllFiles(FileFilterModel model);
-        Task<Response<FileDto>> GetFileById(Guid id);
-        Task<Response<MyFileViewModel>> Remove(FileFilterModel model, Guid fileId);
+        Task<Response<AddFileDto>> UploadAsync(IFormFile[] files);
+        Task<Response<FilesPagerViewModel>> GetAllFiles(FileFilterModel model);
+        Task<Response<GetFileDto>> GetFileById(Guid id);
+        Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, Guid fileId);
 
         Task<Response<string>> Download(string id);
 
