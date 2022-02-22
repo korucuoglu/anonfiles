@@ -1,5 +1,6 @@
 ﻿using FileUpload.Application.Dtos.Files;
 using FileUpload.Application.Interfaces.Repositories;
+using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
 using FluentValidation;
@@ -30,29 +31,31 @@ namespace FileUpload.Application.Features.Commands.Files.Delete
 
     public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand, Response<MyFileViewModel>>
     {
-        private readonly IRepository<File> _fileRepository;
-        private readonly IRepository<UserInfo> _userInfoRepository;
-        private readonly IRepository<FileCategory> _filesCategoriesRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteFileCommandHandler(IRepository<Domain.Entities.File> fileRepository,
-            IRepository<UserInfo> userInfoRepository,
-            IRepository<FileCategory> filesCategoriesRepository)
+        public DeleteFileCommandHandler(IUnitOfWork unitOfWork)
         {
-            _fileRepository = fileRepository;
-            _userInfoRepository = userInfoRepository;
-            _filesCategoriesRepository = filesCategoriesRepository;
-
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Response<MyFileViewModel>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
         {
-            var file = await _fileRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId && x.Id == request.FileId);
-
-            (await _userInfoRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId)).UsedSpace -= file.Size;
+            var fileRepository = _unitOfWork.GetRepository<File>();
             
-            var data =  await Helper.Filter.GetOneFileAfterRemovedFile(_fileRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel);
+            var file = await fileRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId && x.Id == request.FileId);
 
-            _fileRepository.Remove(file);
+            (await _unitOfWork.GetRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId)).UsedSpace -= file.Size;
+            
+            var data =  await Helper.Filter.GetOneFileAfterRemovedFile(fileRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel);
+
+            fileRepository.Remove(file);
+
+            bool result = await _unitOfWork.SaveChangesAsync() > 0;
+
+            if (!result)
+            {
+                return Response<MyFileViewModel>.Fail("Veri silme sırasında hata meydana geldi", 500);
+            }
 
             return data;
 

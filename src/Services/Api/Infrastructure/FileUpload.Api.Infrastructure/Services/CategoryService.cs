@@ -16,41 +16,58 @@ namespace FileUpload.Infrastructure.Services
     public class CategoryService : ICategoryService
     {
         private readonly IMediator _mediator;
+        private readonly ISharedIdentityService _sharedIdentityService;
 
-        public CategoryService(IMediator mediator)
+
+        public CategoryService(IMediator mediator, ISharedIdentityService sharedIdentityService)
         {
             _mediator = mediator;
-        }
-
-        public async Task<Response<bool>> AddAsync(AddCategoryCommand dto)
-        {
-            return await _mediator.Send(dto);
-        }
-
-        public async Task<Response<bool>> DeleteByIdAsync(Guid id)
-        {
-            var query = new DeleteCategoryCommand() { Id = id };
-
-            return await _mediator.Send(query);
+            _sharedIdentityService = sharedIdentityService;
         }
 
         public async Task<Response<List<GetCategoryDto>>> GetAllAsync()
         {
-            var query = new GetAllCategoriesQueryRequest();
+            GetAllCategoriesQueryRequest query = new()
+            {
+                 UserId = _sharedIdentityService.GetUserId
+            };
 
             return await _mediator.Send(query);
         }
 
         public async Task<Response<GetCategoryDto>> GetByIdAsync(Guid id)
         {
-            var query = new GetCategoryByIdQueryRequest() { Id = id };
+            var query = new GetCategoryByIdQueryRequest()
+            {
+                Id = id,
+                UserId = _sharedIdentityService.GetUserId
+            };
 
             return await _mediator.Send(query);
         }
 
+
         public async Task<Response<bool>> UpdateAsync(UpdateCategoryCommand dto)
         {
+            dto.ApplicationUserId = _sharedIdentityService.GetUserId;
             return await _mediator.Send(dto);
+        }
+
+        public async Task<Response<bool>> AddAsync(AddCategoryCommand dto)
+        {
+            dto.ApplicationUserId = _sharedIdentityService.GetUserId;
+            return await _mediator.Send(dto);
+        }
+
+        public async Task<Response<bool>> DeleteByIdAsync(Guid id)
+        {
+            var query = new DeleteCategoryCommand()
+            {
+                Id = id,
+                UserId = _sharedIdentityService.GetUserId
+            };
+
+            return await _mediator.Send(query);
         }
     }
 }

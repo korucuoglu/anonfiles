@@ -1,14 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using FileUpload.Application.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FileUpload.Application.Interfaces.UnitOfWork
 {
     public interface IUnitOfWork : IAsyncDisposable
     {
-        Task<IDbContextTransaction> BeginTransactionAsync();
+        IRepository<T> GetRepository<T>() where T : class;
+
+        Task<int> SaveChangesAsync();
     }
 }

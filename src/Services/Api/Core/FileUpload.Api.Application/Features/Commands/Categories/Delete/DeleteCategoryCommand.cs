@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using FileUpload.Application.Interfaces.Repositories;
-using FileUpload.Application.Interfaces.Services;
+﻿using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
 using FluentValidation;
@@ -14,6 +12,7 @@ namespace FileUpload.Application.Features.Commands.Categories.Delete
     public class DeleteCategoryCommand : IRequest<Response<bool>>
     {
         public Guid Id { get; set; }
+        public Guid UserId { get; set; }
     }
 
     public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
@@ -26,22 +25,30 @@ namespace FileUpload.Application.Features.Commands.Categories.Delete
 
     public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Response<bool>>
     {
-        private readonly IRepository<Category> _categoryRepository;
-        private readonly ISharedIdentityService _sharedIdentityService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteCategoryCommandHandler(IRepository<Category> categoryRepository, ISharedIdentityService sharedIdentityService)
+        public DeleteCategoryCommandHandler(IUnitOfWork unitOfWork)
         {
-            _categoryRepository = categoryRepository;
-            _sharedIdentityService = sharedIdentityService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Response<bool>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = await _categoryRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == request.Id);
+            var repository = _unitOfWork.GetRepository<Category>();
             
-            _categoryRepository.Remove(category);
+            var category = await repository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId && x.Id == request.Id);
 
-            return Response<bool>.Success(true, 200);
+            repository.Remove(category);
+
+            bool result = await _unitOfWork.SaveChangesAsync() > 0;
+
+            if (!result)
+            {
+                return Response<bool>.Fail(result, 200);
+
+            }
+
+            return Response<bool>.Success(result, 200);
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Interfaces.Repositories;
-using FileUpload.Application.Interfaces.Services;
+﻿using FileUpload.Application.Dtos.Files;
+using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
+using FileUpload.Domain.Entities;
 using MediatR;
 using System;
 using System.Threading;
@@ -17,17 +16,20 @@ namespace FileUpload.Application.Features.Queries.Files.GetAll
     }
     public class GetAllFilesQueryRequestHandler : IRequestHandler<GetAllFilesQueryRequest, Response<MyFilesViewModel>>
     {
-        private readonly IRepository<Domain.Entities.File> _repository;
-        public GetAllFilesQueryRequestHandler(IRepository<Domain.Entities.File> repository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public GetAllFilesQueryRequestHandler(IUnitOfWork unitOfWork)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Response<MyFilesViewModel>> Handle(GetAllFilesQueryRequest request, CancellationToken cancellationToken)
         {
-            if (_repository.Any(x => x.ApplicationUserId == request.UserId))
+            var repository = _unitOfWork.GetRepository<File>();
+
+            if (repository.Any(x => x.ApplicationUserId == request.UserId))
             {
-                return await Helper.Filter.FilterFile(_repository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel);
+                return await Helper.Filter.FilterFile(repository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel);
             }
 
             return Response<MyFilesViewModel>.Success(new MyFilesViewModel(), 200);

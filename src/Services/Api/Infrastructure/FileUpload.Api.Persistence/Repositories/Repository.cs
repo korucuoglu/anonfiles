@@ -20,16 +20,16 @@ namespace FileUpload.Persistence.Repositories
             _dbSet = _context.Set<TEntity>();
         }
 
-        public async Task AddAsync(TEntity entity)
+        public async Task<bool> AddAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            return true;
         }
 
         public void Remove(TEntity entity)
         {
             _dbSet.Remove(entity);
-            _context.SaveChanges();
+            // _context.SaveChanges();
         }
 
         public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
@@ -64,7 +64,7 @@ namespace FileUpload.Persistence.Repositories
         {
             _context.Entry(entity).State = EntityState.Modified;
 
-            _context.SaveChanges();
+            // _context.SaveChanges();
             
         }
     }

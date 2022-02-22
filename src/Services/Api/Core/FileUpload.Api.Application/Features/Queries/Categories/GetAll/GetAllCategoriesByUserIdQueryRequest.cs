@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Interfaces.Repositories;
-using FileUpload.Application.Interfaces.Services;
+using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,23 +14,21 @@ namespace FileUpload.Application.Features.Queries.Categories.GetAll
 {
     public class GetAllCategoriesQueryRequest : IRequest<Response<List<GetCategoryDto>>>
     {
-
+        public Guid UserId { get; set; }
     }
     public class GetAllCategoriesQueryRequestHandler : IRequestHandler<GetAllCategoriesQueryRequest, Response<List<GetCategoryDto>>>
     {
-        private readonly IRepository<Category> _categoryRepository;
-        private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IMapper _mapper;
-        public GetAllCategoriesQueryRequestHandler(IRepository<Category> categoryRepository, IMapper mapper, ISharedIdentityService sharedIdentityService)
+        private readonly IUnitOfWork _unitOfWork;
+        public GetAllCategoriesQueryRequestHandler( IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _categoryRepository = categoryRepository;
             _mapper = mapper;
-            _sharedIdentityService = sharedIdentityService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Response<List<GetCategoryDto>>> Handle(GetAllCategoriesQueryRequest request, CancellationToken cancellationToken)
         {
-            var data = _categoryRepository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId);
+            var data = _unitOfWork.GetRepository<Category>().Where(x => x.ApplicationUserId == request.UserId);
 
             var mapperData = await _mapper.ProjectTo<GetCategoryDto>(data).ToListAsync();
 
