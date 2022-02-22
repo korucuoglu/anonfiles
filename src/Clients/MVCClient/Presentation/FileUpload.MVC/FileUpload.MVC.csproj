@@ -14,6 +14,11 @@
     <PackageReference Include="ByteSize" Version="2.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\FileUpload.MVC.Application\FileUpload.MVC.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\FileUpload.MVC.Infrastructure\FileUpload.MVC.Infrastructure.csproj" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties libman_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

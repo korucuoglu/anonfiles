@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Dtos.Files
+namespace FileUpload.Application.Dtos.Files.Pager
 {
-    public class MyFileViewModel
+    public class FilePagerViewModel
     {
         public Pager Pages { get; set; }
 
-        public FileDto File { get; set; }
+        public GetFileDto File { get; set; }
 
     }
 }

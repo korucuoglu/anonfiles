@@ -1,4 +1,5 @@
 ﻿using FileUpload.Application.Dtos.Files;
+using FileUpload.Application.Dtos.Files.Pager;
 using FileUpload.Application.Interfaces.Repositories;
 using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Application.Features.Commands.Files.Delete
 {
-    public class DeleteFileCommand : IRequest<Response<MyFileViewModel>>
+    public class DeleteFileCommand : IRequest<Response<FilePagerViewModel>>
     {
         public Guid FileId { get; set; }
         public Guid UserId { get; set; }
@@ -29,7 +30,7 @@ namespace FileUpload.Application.Features.Commands.Files.Delete
         }
     }
 
-    public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand, Response<MyFileViewModel>>
+    public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand, Response<FilePagerViewModel>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -38,7 +39,7 @@ namespace FileUpload.Application.Features.Commands.Files.Delete
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Response<MyFileViewModel>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
+        public async Task<Response<FilePagerViewModel>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
         {
             var fileRepository = _unitOfWork.GetRepository<File>();
             
@@ -54,7 +55,7 @@ namespace FileUpload.Application.Features.Commands.Files.Delete
 
             if (!result)
             {
-                return Response<MyFileViewModel>.Fail("Veri silme sırasında hata meydana geldi", 500);
+                return Response<FilePagerViewModel>.Fail("Veri silme sırasında hata meydana geldi", 500);
             }
 
             return data;

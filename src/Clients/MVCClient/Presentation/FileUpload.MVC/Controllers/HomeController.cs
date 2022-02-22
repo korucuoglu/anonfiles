@@ -1,13 +1,13 @@
-﻿using FileUpload.MVC.Models;
-using FileUpload.MVC.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
-using FileUpload.MVC.Exceptions;
 using Microsoft.AspNetCore.Authorization;
-using FileUpload.MVC.Models.Files;
+using FileUpload.MVC.Application.Interfaces.Services;
+using FileUpload.MVC.Application.Dtos.Files;
+using FileUpload.MVC.Application.Exceptions;
+using FileUpload.MVC.Application.Dtos.Error;
 
 namespace FileUpload.MVC.Controllers
 {
@@ -42,7 +42,7 @@ namespace FileUpload.MVC.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Upload(UploadFileDto dto)
+        public async Task<IActionResult> Upload(FilesCategoriesDto dto)
         {
             System.Console.WriteLine(dto.Categories.Count);
 

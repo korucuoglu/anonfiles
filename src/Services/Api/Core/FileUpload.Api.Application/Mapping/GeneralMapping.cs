@@ -28,7 +28,7 @@ namespace FileUpload.Application.Mapping
 
             #region File
 
-            CreateMap<Domain.Entities.File, FileDto>();
+            CreateMap<File, GetFileDto>();
 
             #endregion
         }

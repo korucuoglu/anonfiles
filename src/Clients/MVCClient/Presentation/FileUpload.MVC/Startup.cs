@@ -1,11 +1,9 @@
-using FileUpload.MVC.Extensions;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using FileUpload.MVC.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace FileUpload.MVC
 {
@@ -23,20 +21,9 @@ namespace FileUpload.MVC
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddHttpClientServices(Configuration);
-
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts =>
-            {
-                opts.LoginPath = "/user/login";
-                opts.ExpireTimeSpan = TimeSpan.FromDays(60);
-                opts.SlidingExpiration = true;
-                opts.Cookie.Name = "anonfiled";
-
-            });
+            services.AddInfrastructureServices(Configuration);
 
             services.AddControllersWithViews();
-
 
 
         }
@@ -51,7 +38,6 @@ namespace FileUpload.MVC
             }
             else
             {
-
                 app.UseHttpsRedirection();
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();

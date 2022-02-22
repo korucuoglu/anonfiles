@@ -1,13 +1,11 @@
-﻿
-using System;
+﻿using System;
 
-namespace FileUpload.MVC.Models
+namespace FileUpload.Application.Dtos.Files
 {
-    public class UploadModel
+    public class AddFileDto
     {
         public Guid FileId { get; set; }
         public string FileName { get; set; }
 
     }
-
 }

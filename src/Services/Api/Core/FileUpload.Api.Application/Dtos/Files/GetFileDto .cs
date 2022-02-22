@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FileUpload.MVC.Models.Files
+namespace FileUpload.Application.Dtos.Files
 {
-    public class FileDto
+    public class GetFileDto
     {
         public Guid Id { get; set; }
         public string FileName { get; set; }

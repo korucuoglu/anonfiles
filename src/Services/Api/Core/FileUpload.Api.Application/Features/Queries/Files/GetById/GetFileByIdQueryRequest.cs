@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Application.Features.Queries.Files.GetById
 {
-    public class GetFileByIdQueryRequest : IRequest<Response<FileDto>>
+    public class GetFileByIdQueryRequest : IRequest<Response<GetFileDto>>
     {
         public Guid UserId { get; set; }
         public Guid FileId { get; set; }
     }
-    public class GetAllFilesQueryRequestHandler : IRequestHandler<GetFileByIdQueryRequest, Response<FileDto>>
+    public class GetAllFilesQueryRequestHandler : IRequestHandler<GetFileByIdQueryRequest, Response<GetFileDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -26,13 +26,13 @@ namespace FileUpload.Application.Features.Queries.Files.GetById
             _mapper = mapper;
         }
 
-        public async Task<Response<FileDto>> Handle(GetFileByIdQueryRequest request, CancellationToken cancellationToken)
+        public async Task<Response<GetFileDto>> Handle(GetFileByIdQueryRequest request, CancellationToken cancellationToken)
         {
             var data = _unitOfWork.GetRepository<File>().Where(x => x.ApplicationUserId == request.UserId && x.Id == request.FileId);
 
-            var mapperData = await _mapper.ProjectTo<FileDto>(data).FirstOrDefaultAsync();
+            var mapperData = await _mapper.ProjectTo<GetFileDto>(data).FirstOrDefaultAsync();
 
-            return Response<FileDto>.Success(mapperData, 200);
+            return Response<GetFileDto>.Success(mapperData, 200);
         }
 
     }
