@@ -1,5 +1,4 @@
-﻿using ByteSizeLib;
-using FileUpload.MVC.Application.Dtos.Files;
+﻿using FileUpload.MVC.Application.Dtos.Files;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -13,39 +12,6 @@ namespace FileUpload.MVC.Infrastructure.Helper
 {
     public static class Helper
     {
-        public static string GetUsedSpace(double size)
-        {
-            var UsedByte = ByteSize.FromBytes(size);
-
-            if (UsedByte.GigaBytes > 1)
-            {
-                return $"{Math.Round(UsedByte.GigaBytes, 2)} GB";
-            }
-
-            if (UsedByte.MegaBytes > 1)
-            {
-                return $"{Math.Round(UsedByte.MegaBytes, 2)} MB";
-            }
-
-            if (UsedByte.KiloBytes > 1)
-            {
-                return $"{Math.Round(UsedByte.KiloBytes, 2)} KB";
-            }
-
-            return $"{Math.Round(UsedByte.KiloBytes, 2)} Byte";
-
-
-        }
-
-        public static string GetRemainingSpace(double size)
-        {
-            var maxSizeForByte = ByteSize.FromGigaBytes(100).Bytes;
-
-            var remainingSpace = Math.Floor((size * 100) / maxSizeForByte);
-
-            return $"% {remainingSpace}";
-        }
-
         public static async Task<MultipartContent> GetMultipartContentAsync(FilesCategoriesDto dto)
         {
             var multipartContent = new MultipartFormDataContent();
@@ -63,12 +29,11 @@ namespace FileUpload.MVC.Infrastructure.Helper
 
             var byteArrayContent = new ByteArrayContent(SerializeObject(dto.Categories));
 
-            multipartContent.Add(byteArrayContent, "Categories");
+            multipartContent.Add(byteArrayContent, "categories");
 
 
             return multipartContent;
         }
-
         public static string GetQueryString(this object obj)
         {
             var properties = from p in obj.GetType().GetProperties()
@@ -77,8 +42,5 @@ namespace FileUpload.MVC.Infrastructure.Helper
 
             return String.Join("&", properties.ToArray());
         }
-
-        
-
     }
 }

@@ -21,8 +21,7 @@ namespace FileUpload.Application.Mapping
             CreateMap<UpdateCategoryCommand, Category>();
 
 
-
-            CreateMap<Category, GetCategoryDto>();
+            CreateMap<Category, GetCategoryDto>().ReverseMap();
 
             #endregion
 

@@ -1,4 +1,5 @@
 ﻿using FileUpload.Api.Filters;
+using FileUpload.Application.Dtos.Categories;
 using FileUpload.Application.Dtos.Files;
 using FileUpload.Application.Interfaces.Services;
 using FileUpload.Domain.Entities;
@@ -6,6 +7,7 @@ using FileUpload.Infrastructure.Attribute;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FileUpload.WebApi.Controllers
@@ -23,9 +25,9 @@ namespace FileUpload.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload([FromForm] IFormFile[] files)
+        public async Task<IActionResult> Upload([FromForm] IFormFile[] files, [FromForm] string categories)
         {
-            var data = await _service.UploadAsync(files);
+            var data = await _service.UploadAsync(files, categories);
 
             return new ObjectResult(data)
             {
