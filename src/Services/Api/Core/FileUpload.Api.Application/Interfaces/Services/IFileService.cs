@@ -9,7 +9,7 @@ namespace FileUpload.Application.Interfaces.Services
 {
     public interface IFileService
     {
-        Task<Response<AddFileDto>> UploadAsync(IFormFile[] files);
+        Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, string categories);
         Task<Response<FilesPagerViewModel>> GetAllFiles(FileFilterModel model);
         Task<Response<GetFileDto>> GetFileById(Guid id);
         Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, Guid fileId);

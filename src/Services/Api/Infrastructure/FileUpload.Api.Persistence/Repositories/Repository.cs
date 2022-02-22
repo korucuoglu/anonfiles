@@ -26,10 +26,31 @@ namespace FileUpload.Persistence.Repositories
             return true;
         }
 
+        public async Task<bool> AddRangeAsync(TEntity[] entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            return true;
+        }
+
+        public async Task<bool> AddRangeAsync(IEnumerable<TEntity> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            return true;
+        }
+
         public void Remove(TEntity entity)
         {
             _dbSet.Remove(entity);
-            // _context.SaveChanges();
+        }
+
+        public void RemoveRange(TEntity[] entities)
+        {
+            _dbSet.RemoveRange(entities);
+        }
+
+        public void RemoveRange(IEnumerable<TEntity> entities)
+        {
+            _dbSet.RemoveRange(entities);
         }
 
         public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
@@ -64,8 +85,8 @@ namespace FileUpload.Persistence.Repositories
         {
             _context.Entry(entity).State = EntityState.Modified;
 
-            // _context.SaveChanges();
-            
         }
+
+        
     }
 }

@@ -4,7 +4,9 @@ using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
 using FluentValidation;
 using MediatR;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,15 +14,15 @@ namespace FileUpload.Application.Features.Commands.Files.Add
 {
     public class AddFileCommand : IRequest<Response<bool>>
     {
-        public File File { get; set; }
+        public List<File> Files { get; set; }
         public List<GetCategoryDto> Categories { get; set; }
+        public Guid AplicationUserId { get; set; }
     }
     public class AddFileCommandValidator : AbstractValidator<AddFileCommand>
     {
         public AddFileCommandValidator()
         {
-            RuleFor(x => x.File).NotNull().NotEmpty().WithMessage("Lütfen dosyayı giriniz");
-            RuleFor(x => x.File.Size).GreaterThan(0).WithMessage("Lütfen dolu bir dosya giriniz");
+            RuleFor(x => x.Files).NotNull().NotEmpty().WithMessage("Lütfen dosyayı giriniz");
         }
     }
 
@@ -35,8 +37,9 @@ namespace FileUpload.Application.Features.Commands.Files.Add
 
         public async Task<Response<bool>> Handle(AddFileCommand request, CancellationToken cancellationToken)
         {
-            (await _unitOfWork.GetRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.File.ApplicationUserId)).UsedSpace += request.File.Size;
-            await _unitOfWork.GetRepository<File>().AddAsync(request.File);
+            
+            (await _unitOfWork.GetRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.AplicationUserId)).UsedSpace += request.Files.Sum(x => x.Size);
+            await _unitOfWork.GetRepository<File>().AddRangeAsync(request.Files);
 
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 

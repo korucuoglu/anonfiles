@@ -2,6 +2,8 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Util;
+using AutoMapper;
+using FileUpload.Application.Dtos.Categories;
 using FileUpload.Application.Dtos.Files;
 using FileUpload.Application.Dtos.Files.Pager;
 using FileUpload.Application.Features.Commands.Files.Add;
@@ -11,14 +13,17 @@ using FileUpload.Application.Features.Queries.Files.GetById;
 using FileUpload.Application.Interfaces.Hub;
 using FileUpload.Application.Interfaces.Services;
 using FileUpload.Application.Wrappers;
+using FileUpload.Domain.Entities;
 using FileUpload.Infrastructure.Hub;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace FileUpload.Infrastructure.Services
@@ -29,12 +34,13 @@ namespace FileUpload.Infrastructure.Services
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IConfiguration configuration;
         private readonly IHubContext<FileHub, IFileHub> _fileHub;
+        private readonly IMapper _mapper;
         public AmazonS3Client client { get; set; }
 
-        public FileService(IMediator mediator, 
-            ISharedIdentityService sharedIdentityService, 
-            IConfiguration configuration, 
-            IHubContext<FileHub, IFileHub> fileHub)
+        public FileService(IMediator mediator,
+            ISharedIdentityService sharedIdentityService,
+            IConfiguration configuration,
+            IHubContext<FileHub, IFileHub> fileHub, IMapper mapper)
         {
             _mediator = mediator;
             _sharedIdentityService = sharedIdentityService;
@@ -49,6 +55,7 @@ namespace FileUpload.Infrastructure.Services
             };
             client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
             _fileHub = fileHub;
+            _mapper = mapper;
         }
 
         public async Task<Response<FilesPagerViewModel>> GetAllFiles(FileFilterModel model)
@@ -90,13 +97,23 @@ namespace FileUpload.Infrastructure.Services
 
         }
 
-        public async Task<Response<AddFileDto>> UploadAsync(IFormFile[] files)
+        public async Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, string categories)
         {
             Guid fileId;
+
+            List<FileCategory> FilesCategories = new();
+
+            if (string.IsNullOrEmpty(categories) is false)
+            {
+                var Categories = _mapper.Map<List<Category>>(JsonSerializer.Deserialize<List<GetCategoryDto>>(categories));
+            }
+
 
             Response<AddFileDto> data = new();
 
             var ConnnnectionId = HubData.ClientsData.Where(x => x.UserId == "1").Select(x => x.ConnectionId).FirstOrDefault();
+
+            List<Domain.Entities.File> fileListEntity = new();
 
             foreach (var file in files)
             {
@@ -130,12 +147,11 @@ namespace FileUpload.Infrastructure.Services
                         Size = file.Length,
                         Id = fileId,
                         Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper(),
-
+                        File_Category = FilesCategories
                     };
 
-                    AddFileCommand command = new() { File = fileEntity };
+                    fileListEntity.Add(fileEntity);
 
-                    await _mediator.Send(command);
 
                     data = Response<AddFileDto>.Success(new AddFileDto { FileId = fileId, FileName = file.FileName }, 200);
 
@@ -154,6 +170,14 @@ namespace FileUpload.Infrastructure.Services
                     }
                 }
             }
+
+            AddFileCommand command = new()
+            {
+                Files = fileListEntity,
+                AplicationUserId = _sharedIdentityService.GetUserId
+            };
+
+            await _mediator.Send(command);
 
             return Response<AddFileDto>.Success(200);
         }
