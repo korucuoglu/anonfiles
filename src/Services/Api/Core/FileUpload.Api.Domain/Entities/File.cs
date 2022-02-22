@@ -5,10 +5,19 @@ namespace FileUpload.Domain.Entities
 {
     public class File : BaseIdentity
     {
+
+        public File()
+        {
+            Files_Categories = new List<FileCategory>();
+        }
         public string FileName { get; set; }
         public string Extension { get; set; }
         public long Size { get; set; }
-        // public virtual ApplicationUser ApplicationUser { get; set; }
-        public virtual ICollection<FileCategory> File_Category { get; set; }
+
+        public virtual ICollection<FileCategory> Files_Categories { get; set; }
+        
+        
+
+
     }
 }

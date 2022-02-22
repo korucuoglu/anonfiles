@@ -24,7 +24,7 @@ namespace FileUpload.Persistence
                 opt.EnableSensitiveDataLogging(true);
                 opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), configure =>
                 {
-                    configure.MigrationsAssembly("FileUpload.Persistence");
+                    configure.MigrationsAssembly("FileUpload.Api.Persistence");
 
                 });
             });

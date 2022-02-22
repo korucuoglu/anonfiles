@@ -15,7 +15,6 @@ namespace FileUpload.Application.Features.Commands.Files.Add
     public class AddFileCommand : IRequest<Response<bool>>
     {
         public List<File> Files { get; set; }
-        public List<GetCategoryDto> Categories { get; set; }
         public Guid AplicationUserId { get; set; }
     }
     public class AddFileCommandValidator : AbstractValidator<AddFileCommand>

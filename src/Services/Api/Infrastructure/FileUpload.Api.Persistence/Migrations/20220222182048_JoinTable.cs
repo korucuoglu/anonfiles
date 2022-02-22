@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace FileUpload.Persistence.Migrations
+namespace FileUpload.Api.Persistence.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class JoinTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace FileUpload.Persistence.Migrations
+namespace FileUpload.Api.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -331,13 +331,13 @@ namespace FileUpload.Persistence.Migrations
             modelBuilder.Entity("FileUpload.Domain.Entities.FileCategory", b =>
                 {
                     b.HasOne("FileUpload.Domain.Entities.Category", "Category")
-                        .WithMany("File_Category")
+                        .WithMany("Files_Categories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FileUpload.Domain.Entities.File", "File")
-                        .WithMany("File_Category")
+                        .WithMany("Files_Categories")
                         .HasForeignKey("FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -409,12 +409,12 @@ namespace FileUpload.Persistence.Migrations
 
             modelBuilder.Entity("FileUpload.Domain.Entities.Category", b =>
                 {
-                    b.Navigation("File_Category");
+                    b.Navigation("Files_Categories");
                 });
 
             modelBuilder.Entity("FileUpload.Domain.Entities.File", b =>
                 {
-                    b.Navigation("File_Category");
+                    b.Navigation("Files_Categories");
                 });
 
             modelBuilder.Entity("FileUpload.Persistence.Identity.ApplicationUser", b =>
