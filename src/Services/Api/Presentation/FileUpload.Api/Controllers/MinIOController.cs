@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace FileUpload.WebApi.Controllers
+namespace FileUpload.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

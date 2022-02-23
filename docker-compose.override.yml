@@ -15,7 +15,8 @@ services:
     container_name: upload.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - IdentityServerURL=http://identityserver.api
+      - "ServiceApiSettings:IdentityBaseUri=http://identityserver.api"
+      - "ServiceApiSettings:MVCClient=http://aspnetcoremvc.web"
       - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
       - "MinioAccessInfo:AccessKey=minioadmin"
       - "MinioAccessInfo:SecretKey=minioadmin"
@@ -24,8 +25,8 @@ services:
       - "5002:80"
     depends_on:
       - postgresdb
-    volumes:
-      - ~/.aspnet/https:/https:ro    
+      - identityserver.api
+   
   identityserver.api:
     container_name: identityserver.api
     restart: on-failure
