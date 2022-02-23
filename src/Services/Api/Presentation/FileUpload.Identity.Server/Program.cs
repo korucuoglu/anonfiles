@@ -3,7 +3,9 @@
 
 
 
-using FileUpload.Data.Entity;
+using FileUpload.Domain.Entities;
+using FileUpload.Persistence.Context;
+using FileUpload.Persistence.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

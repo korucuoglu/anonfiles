@@ -1,6 +1,7 @@
-﻿using FileUpload.Data.Entity;
-using FileUpload.Data.Repository;
+﻿using FileUpload.Application.Interfaces.Repositories;
+using FileUpload.Domain.Entities;
 using FileUpload.Identity.Server.Models;
+using FileUpload.Persistence.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
