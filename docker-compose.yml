@@ -7,18 +7,18 @@ services:
   upload.api:
     image: upload_api_image
     build:
-      context: /src/
-      dockerfile: FileUpload.Api/Dockerfile
+      context: /src/services/Api/
+      dockerfile: Presentation/FileUpload.Api/Dockerfile
   identityserver.api:
     image: identityserver_api_image
     build:
-      context: /src/
-      dockerfile: FileUpload.IdentityServer/Dockerfile
+      context: /src/services/Api/
+      dockerfile: Presentation/FileUpload.Identity.Server/Dockerfile
   aspnetcoremvc.web:
     image: aspnetcoremvc.web_image
     build:
-      context: /src/
-      dockerfile: FileUpload.MVC/Dockerfile
+      context: /src/Clients/MVCClient/
+      dockerfile: Presentation/FileUpload.MVC/Dockerfile
 
 volumes:
   postgresdb_volume:

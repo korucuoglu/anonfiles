@@ -14,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace FileUpload.IdentityServer
 {
@@ -41,7 +40,7 @@ namespace FileUpload.IdentityServer
                 opt.EnableSensitiveDataLogging(true);
                 opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), configure =>
                 {
-                    configure.MigrationsAssembly("FileUpload.Data");
+                    configure.MigrationsAssembly("FileUpload.Api.Persistence");
 
                 });
 

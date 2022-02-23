@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
-namespace FileUpload.WebApi.Controllers
+namespace FileUpload.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -45,8 +45,8 @@ namespace FileUpload.IdentityServer
 
                     try
                     {
-                        // applicationDbContext.Database.EnsureCreated();
-                        // applicationDbContext.Database.Migrate();
+                        applicationDbContext.Database.EnsureCreated();
+                        applicationDbContext.Database.Migrate();
                     }
 
                     catch
@@ -75,7 +75,7 @@ namespace FileUpload.IdentityServer
                         userManager.CreateAsync(userAdmin, "Password123.,").Wait();
                         userManager.AddToRoleAsync(userAdmin, "Admin").Wait();
 
-                        applicationDbContext.UserInfo.Add(new UserInfo() { ApplicationUserId = userAdmin.Id});
+                        applicationDbContext.UserInfo.Add(new UserInfo() { ApplicationUserId = userAdmin.Id });
                         applicationDbContext.Categories.Add(new Category() { ApplicationUserId = userAdmin.Id, Title = "Ödevler" });
                         applicationDbContext.Categories.Add(new Category() { ApplicationUserId = userAdmin.Id, Title = "Tasarımlar" });
                         applicationDbContext.Categories.Add(new Category() { ApplicationUserId = userAdmin.Id, Title = "Dosyalar" });

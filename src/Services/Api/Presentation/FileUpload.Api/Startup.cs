@@ -13,7 +13,7 @@ using FluentValidation.AspNetCore;
 using FileUpload.Application.Features.Commands.Categories.Add;
 using FileUpload.Infrastructure.Hub;
 
-namespace FileUpload.WebApi
+namespace FileUpload.Api
 {
     public class Startup
     {
@@ -48,7 +48,7 @@ namespace FileUpload.WebApi
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FileUpload.WebApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FileUpload.Api", Version = "v1" });
             });
         }
 
@@ -59,7 +59,7 @@ namespace FileUpload.WebApi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FileUpload.WebApi v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FileUpload.Api v1"));
             }
 
             app.UseCors("CorsPolicy");
