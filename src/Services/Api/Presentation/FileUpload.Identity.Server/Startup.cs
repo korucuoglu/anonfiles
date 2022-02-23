@@ -2,9 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using FileUpload.Data.Entity;
-using FileUpload.Data.Repository;
+using FileUpload.Application.Interfaces.Repositories;
 using FileUpload.IdentityServer.Services;
+using FileUpload.Persistence.Context;
+using FileUpload.Persistence.Identity;
+using FileUpload.Persistence.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -66,8 +68,6 @@ namespace FileUpload.IdentityServer
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>()
                 .AddDeveloperSigningCredential();
-
-
         }
 
         public void Configure(IApplicationBuilder app)

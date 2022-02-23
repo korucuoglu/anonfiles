@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FileUpload.Identity.Data\FileUpload.Identity.Data.csproj" />
+    <ProjectReference Include="..\..\Core\FileUpload.Api.Application\FileUpload.Api.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\FileUpload.Api.Persistence\FileUpload.Api.Persistence.csproj" />
   </ItemGroup>
 </Project>
