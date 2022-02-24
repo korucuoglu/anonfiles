@@ -23,7 +23,7 @@ namespace FileUpload.Infrastructure.Attribute
                     errors.Add(item.ErrorMessage);
                 }
 
-                context.Result = new BadRequestObjectResult(Response<NoContent>.Fail(errors, 400));
+                context.Result = new BadRequestObjectResult(Response<NoContent>.Fail(modelErrors.First().ErrorMessage, 400));
 
                 return;
 

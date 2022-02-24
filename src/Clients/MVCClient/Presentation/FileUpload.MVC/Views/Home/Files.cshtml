@@ -155,8 +155,10 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                 }).then(response => {
-                    if (response.data.isSuccessful) {
-                        window.location.href = response.data.data;
+                    console.log(response);
+                    
+                    if (response.data) {
+                        window.location.href = response.data;
                     }
 
                 });

@@ -9,11 +9,11 @@ namespace FileUpload.MVC.Application.Interfaces.Services
 {
     public interface IUserService
     {
-        Task<Response<AddFileDto>> Upload(FilesCategoriesDto fileDto);
-        Task<Response<FilesPagerViewModel>> GetMyFiles(FileFilterModel model);
-        Task<Response<string>> GetDirectLink(string id);
+        Task<AddFileDto> Upload(FilesCategoriesDto fileDto);
+        Task<FilesPagerViewModel> GetMyFiles(FileFilterModel model);
+        Task<string> GetDirectLink(string id);
         Task<Response<FilePagerViewModel>> DeleteFile(FileFilterModel model, string id);
-        Task<Response<List<GetCategoryDto>>> GetCategories();
+        Task<List<GetCategoryDto>> GetCategories();
 
 
 

@@ -39,8 +39,8 @@ namespace FileUpload.Api.Controllers
 
         }
 
-        [HttpGet("myfiles")]
-        public async Task<IActionResult> GetAllAsync([FromQuery] FileFilterModel model)
+        [HttpPost("myfiles")]
+        public async Task<IActionResult> GetAllAsync([FromBody] FileFilterModel model)
         {
             FileFilterModel filterModel = new(model);
 
@@ -64,9 +64,9 @@ namespace FileUpload.Api.Controllers
 
         }
 
-        [HttpDelete("{id}")]
+        [HttpPost("{id}")]
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
-        public async Task<IActionResult> Remove([FromQuery] FileFilterModel model, Guid id)
+        public async Task<IActionResult> Remove([FromBody] FileFilterModel model, Guid id)
         {
             FileFilterModel filterModel = new(model);
 
