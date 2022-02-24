@@ -37,15 +37,13 @@ namespace FileUpload.MVC.Controllers
         {
             var data = await _userService.GetCategories();
 
-            return await Task.FromResult(View(data.Data));
+            return await Task.FromResult(View(data));
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Upload(FilesCategoriesDto dto)
         {
-            System.Console.WriteLine(dto.Categories.Count);
-
             await _userService.Upload(dto);
 
             return Json(new { finish = true });
@@ -62,7 +60,7 @@ namespace FileUpload.MVC.Controllers
                 return await Task.FromResult(Ok(response));
             }
 
-            return await Task.FromResult(View(response.Data));
+            return await Task.FromResult(View(response));
         }
 
         [HttpDelete]

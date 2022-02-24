@@ -2,7 +2,6 @@
 using FileUpload.MVC.Application.Interfaces.Services;
 using FileUpload.MVC.Infrastructure.Handler;
 using FileUpload.MVC.Infrastructure.Services;
-using FileUpload.MVC.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,15 +26,11 @@ namespace FileUpload.MVC.Infrastructure
             services.AddHttpClient<IClientCredentialTokenService, ClientCredentialTokenService>();
             services.AddHttpClient<IIdentityService, IdentityService>();
 
-            services.AddScoped<IUserService, UserService>();
-
-
             var serviceApiSettings = Configuration.GetSection("ServiceApiSettings").Get<ServiceApiSettings>();
 
-            services.AddHttpClient<IApiService, ApiService>(opt =>
+            services.AddHttpClient<IUserService, UserService>(opt =>
             {
                 opt.BaseAddress = new Uri(serviceApiSettings.ApiBaseUri);
-
 
             }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
