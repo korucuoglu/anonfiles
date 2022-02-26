@@ -29,10 +29,8 @@ namespace FileUpload.MVC.Controllers
             return await Task.FromResult(View());
         }
 
-
-        [HttpGet]
-        [Route("upload")]
         [Authorize]
+        [HttpGet("upload")]
         public async Task<IActionResult> Upload()
         {
             var data = await _userService.GetCategories();
@@ -49,22 +47,24 @@ namespace FileUpload.MVC.Controllers
             return Json(new { finish = true });
         }
 
-        [HttpGet]
-        [Route("myfiles")]
-        public async Task<IActionResult> Files([FromQuery] FileFilterModel model, [FromQuery] bool? json)
+        [HttpGet("myfiles")]
+        public async Task<IActionResult> Files()
         {
-            var response = await _userService.GetMyFiles(model);
-
-            if (json == true)
-            {
-                return await Task.FromResult(Ok(response));
-            }
+            var response = await _userService.GetMyFiles(new FileFilterModel());
 
             return await Task.FromResult(View(response));
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] FileFilterModel model, string id)
+        [HttpPost("myfiles")]
+        public async Task<IActionResult> Files([FromBody] FileFilterModel model)
+        {
+            var response = await _userService.GetMyFiles(model);
+
+            return await Task.FromResult(Ok(response));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromBody] FileFilterModel model, string id)
         {
             var data = await _userService.DeleteFile(model, id);
 

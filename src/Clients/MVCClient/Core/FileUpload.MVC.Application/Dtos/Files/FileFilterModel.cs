@@ -1,5 +1,6 @@
 ﻿using FileUpload.MVC.Application.Dtos.Files.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace FileUpload.MVC.Application.Dtos.Files
 {
@@ -8,7 +9,11 @@ namespace FileUpload.MVC.Application.Dtos.Files
 
         public FileFilterModel()
         {
-                
+            Page = 1;
+            PageSize = 10;
+            OrderBy = 1;
+            Extension = String.Empty;
+            CategoryIds = new List<Guid>();
         }
         public FileFilterModel(FileFilterModel model)
         {
@@ -32,7 +37,7 @@ namespace FileUpload.MVC.Application.Dtos.Files
             Page = model.Page;
             PageSize = model.PageSize;
             OrderBy = model.OrderBy;
-            Category = model.Category;
+            CategoryIds = model.CategoryIds;
             Extension = model.Extension;
 
             
@@ -45,7 +50,7 @@ namespace FileUpload.MVC.Application.Dtos.Files
         public int PageSize { get; set; } 
         public int OrderBy { get; set; } 
         public string Extension { get; set; }
-        public string Category { get; set; }
+        public List<Guid> CategoryIds { get; set; }
 
     }
 }
