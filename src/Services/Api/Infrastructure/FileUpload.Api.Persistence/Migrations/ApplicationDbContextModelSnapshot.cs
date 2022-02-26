@@ -82,7 +82,7 @@ namespace FileUpload.Api.Persistence.Migrations
 
                     b.HasIndex("FileId");
 
-                    b.ToTable("Files_Categories");
+                    b.ToTable("FilesCategories");
                 });
 
             modelBuilder.Entity("FileUpload.Domain.Entities.UserInfo", b =>
@@ -324,13 +324,13 @@ namespace FileUpload.Api.Persistence.Migrations
             modelBuilder.Entity("FileUpload.Domain.Entities.FileCategory", b =>
                 {
                     b.HasOne("FileUpload.Domain.Entities.Category", "Category")
-                        .WithMany("Files_Categories")
+                        .WithMany("FilesCategories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FileUpload.Domain.Entities.File", "File")
-                        .WithMany("Files_Categories")
+                        .WithMany("FilesCategories")
                         .HasForeignKey("FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -402,12 +402,12 @@ namespace FileUpload.Api.Persistence.Migrations
 
             modelBuilder.Entity("FileUpload.Domain.Entities.Category", b =>
                 {
-                    b.Navigation("Files_Categories");
+                    b.Navigation("FilesCategories");
                 });
 
             modelBuilder.Entity("FileUpload.Domain.Entities.File", b =>
                 {
-                    b.Navigation("Files_Categories");
+                    b.Navigation("FilesCategories");
                 });
 
             modelBuilder.Entity("FileUpload.Persistence.Identity.ApplicationUser", b =>

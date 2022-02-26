@@ -11,7 +11,7 @@ namespace FileUpload.Application.Dtos.Files
 
         public FileFilterModel()
         {
-
+            CategoryIds = new List<Guid>();
         }
         public FileFilterModel(FileFilterModel model)
         {
@@ -35,11 +35,8 @@ namespace FileUpload.Application.Dtos.Files
             Page = model.Page;
             PageSize = model.PageSize;
             OrderBy = model.OrderBy;
-            Category = model.Category;
+            CategoryIds = model.CategoryIds;
             Extension = model.Extension;
-
-
-
 
 
         }
@@ -48,7 +45,7 @@ namespace FileUpload.Application.Dtos.Files
         public int PageSize { get; set; }
         public int OrderBy { get; set; }
         public string Extension { get; set; }
-        public string Category { get; set; }
+        public List<Guid> CategoryIds { get; set; }
 
     }
 }

@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace FileUpload.Api.Persistence.Migrations
 {
-    public partial class JoinTable : Migration
+    public partial class Table : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -219,25 +219,23 @@ namespace FileUpload.Api.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Files_Categories",
+                name: "FilesCategories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FileId = table.Column<Guid>(type: "uuid", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Files_Categories", x => x.Id);
+                    table.PrimaryKey("PK_FilesCategories", x => new { x.CategoryId, x.FileId });
                     table.ForeignKey(
-                        name: "FK_Files_Categories_Categories_CategoryId",
+                        name: "FK_FilesCategories_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Files_Categories_Files_FileId",
+                        name: "FK_FilesCategories_Files_FileId",
                         column: x => x.FileId,
                         principalTable: "Files",
                         principalColumn: "Id",
@@ -292,13 +290,8 @@ namespace FileUpload.Api.Persistence.Migrations
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Files_Categories_CategoryId",
-                table: "Files_Categories",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Files_Categories_FileId",
-                table: "Files_Categories",
+                name: "IX_FilesCategories_FileId",
+                table: "FilesCategories",
                 column: "FileId");
 
             migrationBuilder.CreateIndex(
@@ -326,7 +319,7 @@ namespace FileUpload.Api.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Files_Categories");
+                name: "FilesCategories");
 
             migrationBuilder.DropTable(
                 name: "UserInfo");

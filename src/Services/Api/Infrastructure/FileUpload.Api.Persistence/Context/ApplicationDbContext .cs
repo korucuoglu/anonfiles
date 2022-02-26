@@ -13,7 +13,7 @@ namespace FileUpload.Persistence.Context
 
         public DbSet<File> Files { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<FileCategory> Files_Categories { get; set; }
+        public DbSet<FileCategory> FilesCategories { get; set; }
         public DbSet<UserInfo> UserInfo { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -28,23 +28,23 @@ namespace FileUpload.Persistence.Context
 
             builder.Entity<FileCategory>(entity =>
             {
-                entity.HasKey(table => new {
+                entity.HasKey(table => new
+                {
                     table.CategoryId,
                     table.FileId
                 });
 
                 entity.HasOne(x => x.File)
-              .WithMany(x => x.Files_Categories)
+              .WithMany(x => x.FilesCategories)
               .HasForeignKey(x => x.FileId);
 
                 entity.HasOne(x => x.Category)
-              .WithMany(x => x.Files_Categories)
+              .WithMany(x => x.FilesCategories)
               .HasForeignKey(x => x.CategoryId);
 
             });
 
-          
-              
+
 
             builder.Entity<ApplicationUser>(b =>
             {

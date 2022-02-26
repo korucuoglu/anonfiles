@@ -8,13 +8,14 @@ namespace FileUpload.Domain.Entities
 
         public File()
         {
-            Files_Categories = new List<FileCategory>();
+            FilesCategories = new List<FileCategory>();
         }
+
         public string FileName { get; set; }
         public string Extension { get; set; }
         public long Size { get; set; }
 
-        public virtual ICollection<FileCategory> Files_Categories { get; set; }
+        public virtual ICollection<FileCategory> FilesCategories { get; set; }
         
         
 
