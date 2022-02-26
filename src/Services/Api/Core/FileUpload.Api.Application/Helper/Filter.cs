@@ -1,6 +1,7 @@
 ﻿using FileUpload.Application.Dtos.Files;
 using FileUpload.Application.Dtos.Files.Pager;
 using FileUpload.Application.Wrappers;
+using FileUpload.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace FileUpload.Application.Helper
 {
     public static class Filter
     {
-        public static async Task<Response<FilesPagerViewModel>> FilterFile(IQueryable<Domain.Entities.File> model, FileFilterModel filterModel)
+        public static async Task<Response<FilesPagerViewModel>> FilterFile(IQueryable<File> model, FileFilterModel filterModel)
         {
 
             model = ExtensionFilter(model, filterModel.Extension);
@@ -47,9 +48,8 @@ namespace FileUpload.Application.Helper
             return Response<FilesPagerViewModel>.Success(dto, 200);
         }
 
-        public static IQueryable<Domain.Entities.File> ExtensionFilter(IQueryable<Domain.Entities.File> model, string extension)
+        public static IQueryable<File> ExtensionFilter(IQueryable<File> model, string extension)
         {
-
             if (string.IsNullOrEmpty(extension))
             {
                 return model;
@@ -58,9 +58,8 @@ namespace FileUpload.Application.Helper
             return model.Where(x => x.Extension.ToUpper() == extension.ToUpper());
         }
 
-        public static IQueryable<Domain.Entities.File> CategoryFilter(IQueryable<Domain.Entities.File> model, string CategoryName)
+        public static IQueryable<File> CategoryFilter(IQueryable<File> model, string CategoryName)
         {
-
             if (string.IsNullOrEmpty(CategoryName))
             {
                 return model;
@@ -68,7 +67,7 @@ namespace FileUpload.Application.Helper
             return model.Include(x => x.Files_Categories).Where(d => d.Files_Categories.Select(a => a.Category.Title.ToLower()).Contains(CategoryName.ToLower()));
         }
 
-        public static IQueryable<Domain.Entities.File> OrderFiles(IQueryable<Domain.Entities.File> model, int orderBy)
+        public static IQueryable<File> OrderFiles(IQueryable<File> model, int orderBy)
         {
 
             EnumOrderBy OrderEnum = (EnumOrderBy)orderBy;
@@ -96,12 +95,12 @@ namespace FileUpload.Application.Helper
             return model;
         }
 
-        public static IQueryable<Domain.Entities.File> PaginationData(IQueryable<Domain.Entities.File> model, int page, int number)
+        public static IQueryable<File> PaginationData(IQueryable<File> model, int page, int number)
         {
             return model.Skip((page - 1) * number).Take(number);
         }
 
-        public static async Task<Response<FilePagerViewModel>> GetOneFileAfterRemovedFile(IQueryable<Domain.Entities.File> model, FileFilterModel filterModel)
+        public static async Task<Response<FilePagerViewModel>> GetOneFileAfterRemovedFile(IQueryable<File> model, FileFilterModel filterModel)
         {
             var count = model.Count();
 

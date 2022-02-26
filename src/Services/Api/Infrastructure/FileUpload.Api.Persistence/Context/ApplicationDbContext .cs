@@ -18,21 +18,33 @@ namespace FileUpload.Persistence.Context
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
+            ChangeTracker.LazyLoadingEnabled = false;
+            ChangeTracker.AutoDetectChangesEnabled = false;
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
             builder.HasPostgresExtension("uuid-ossp");
 
-            builder.Entity<FileCategory>()
-                .HasOne(x => x.File)
-                .WithMany(x => x.Files_Categories)
-                .HasForeignKey(x => x.FileId);
+            builder.Entity<FileCategory>(entity =>
+            {
+                entity.HasKey(table => new {
+                    table.CategoryId,
+                    table.FileId
+                });
 
-            builder.Entity<FileCategory>()
-              .HasOne(x => x.Category)
+                entity.HasOne(x => x.File)
+              .WithMany(x => x.Files_Categories)
+              .HasForeignKey(x => x.FileId);
+
+                entity.HasOne(x => x.Category)
               .WithMany(x => x.Files_Categories)
               .HasForeignKey(x => x.CategoryId);
+
+            });
+
+          
+              
 
             builder.Entity<ApplicationUser>(b =>
             {
