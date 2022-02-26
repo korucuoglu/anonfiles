@@ -27,17 +27,19 @@
     </table>
 
 
-    <nav v-if="PageInfo.totalItems" aria-label="Page navigation example" class="d-flex flex-row justify-content-center">
+    <nav v-if="pageInfo.totalItems" aria-label="Page navigation example" class="d-flex flex-row justify-content-center">
         <ul class="pagination">
 
-            <li class="page-item"><a @@click.prevent="getData(PageInfo.currentPage-1)" class="btn page-link" :class="{'disabled': PageInfo.currentPage == 1}">Prev</a></li>
+            <li class="page-item"><a @@click.prevent="getData(pageInfo.currentPage-1)" class="btn page-link" :class="{'disabled': pageInfo.currentPage == 1}">Prev</a></li>
 
-            <li v-for="index in PageInfo.endPage" :key="index" class="page-item" :class="{'active': PageInfo.currentPage == index}">
+            <li v-for="index in pageInfo.endPage" :key="index" class="page-item" :class="{'active': pageInfo.currentPage == index}">
                 <a @@click.prevent="getData(index)" class="btn page-link">{{index}}</a>
             </li>
-            <li class="page-item"><a @@click.prevent="getData(PageInfo.currentPage+1)" class="btn page-link" :class="{'disabled': PageInfo.currentPage == PageInfo.totalPage}">Next</a></li>
+            <li class="page-item"><a @@click.prevent="getData(pageInfo.currentPage+1)" class="btn page-link" :class="{'disabled': pageInfo.currentPage == pageInfo.totalPage}">Next</a></li>
         </ul>
     </nav>
+
+
 
 </div>
 
@@ -52,7 +54,7 @@
             return {
 
                 datas: @Html.Raw(Json.Serialize(Model.Files)),
-                PageInfo: @Html.Raw(Json.Serialize(Model.Pages)),
+                pageInfo: @Html.Raw(Json.Serialize(Model.Pages)),
                 filter: {Page:1, PageSize:10, OrderBy:1, Extension:"", CategoryIds: []}
             }
         },
@@ -105,7 +107,7 @@
                 if (response.data)
                 {
                    this.datas = response.data.files
-                   this.PageInfo = response.data.pages
+                   this.pageInfo = response.data.pages
                 }
                 else
                 {
@@ -139,7 +141,7 @@
                             });
                         }
 
-                          this.PageInfo = response.data.value.pages
+                          this.pageInfo = response.data.value.pages
                     }
                     else
                     {

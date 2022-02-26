@@ -15,7 +15,6 @@ namespace FileUpload.MVC.Controllers
     {
         private readonly IUserService _userService;
 
-
         public HomeController(IUserService userService)
         {
             _userService = userService;
@@ -37,7 +36,6 @@ namespace FileUpload.MVC.Controllers
 
             return await Task.FromResult(View(data));
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Upload(FilesCategoriesDto dto)
@@ -87,7 +85,6 @@ namespace FileUpload.MVC.Controllers
         public async Task<IActionResult> GetLink(string id)
         {
             var data = await _userService.GetDirectLink(id);
-
 
             return Ok(data);
         }

@@ -28,14 +28,14 @@ namespace FileUpload.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload([FromForm] IFormFile[] files, [FromForm] string categories)
         {
-            var dto = new List<GetCategoryDto>();
+            var categoryIds = new List<Guid>();
 
             if (String.IsNullOrEmpty(categories) is false)
             {
-                dto = JsonSerializer.Deserialize<List<GetCategoryDto>>(categories);
+                categoryIds = JsonSerializer.Deserialize<List<Guid>>(categories);
             }
 
-            var data = await _service.UploadAsync(files, dto);
+            var data = await _service.UploadAsync(files, categoryIds);
 
             return new ObjectResult(data)
             {

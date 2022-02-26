@@ -24,23 +24,14 @@ namespace FileUpload.MVC.Infrastructure.Helper
                 multipartContent.Add(new ByteArrayContent(ms.ToArray()), "files", file.FileName);
             }
 
-
             byte[] SerializeObject(object value) => Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value));
 
-            var byteArrayContent = new ByteArrayContent(SerializeObject(dto.Categories));
+            var byteArrayContent = new ByteArrayContent(SerializeObject(dto.CategoriesId));
 
             multipartContent.Add(byteArrayContent, "categories");
 
 
             return multipartContent;
-        }
-        public static string GetQueryString(this object obj)
-        {
-            var properties = from p in obj.GetType().GetProperties()
-                             where p.GetValue(obj, null) != null
-                             select p.Name + "=" + HttpUtility.UrlEncode(p.GetValue(obj, null).ToString());
-
-            return String.Join("&", properties.ToArray());
         }
     }
 }
