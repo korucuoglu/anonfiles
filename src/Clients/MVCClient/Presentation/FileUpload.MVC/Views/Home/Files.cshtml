@@ -3,7 +3,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model FilesPagerViewModel 
+@model FilesPagerViewModel
 
 <div class="container" id="app">
 
@@ -53,14 +53,13 @@
 
                 datas: @Html.Raw(Json.Serialize(Model.Files)),
                 PageInfo: @Html.Raw(Json.Serialize(Model.Pages)),
-                Filter: {Page:1, PageSize:10, OrderBy:1, Extension:"", Category:""}
+                filter: {Page:1, PageSize:10, OrderBy:1, Extension:"", CategoryIds: []}
             }
         },
 
         created()
         {
             this.getQuery();
-
         },
 
         methods: {
@@ -73,38 +72,40 @@
 
                 if (urlParams.has('page'))
                 {
-                    this.Filter.Page = urlParams.get('page');
+                    this.filter.Page = urlParams.get('page');
                 }
                 if (urlParams.has('pageSize'))
                 {
-                    this.Filter.PageSize = urlParams.get('pageSize');
+                    this.filter.PageSize = urlParams.get('pageSize');
                 }
                 if (urlParams.has('orderBy'))
                 {
-                    this.Filter.OrderBy = urlParams.get('orderBy');
+                    this.filter.OrderBy = urlParams.get('orderBy');
                 }
                 if (urlParams.has('extension'))
                 {
-                    this.Filter.Extension = urlParams.get('extension');
+                    this.filter.Extension = urlParams.get('extension');
                 }
-                 if (urlParams.has('category'))
-                {
-                    this.Filter.Category = urlParams.get('category');
-                }
+
             },
 
             getData(e) {
-             axios({
-                method: "get",
-                url:`/myfiles/?json=true&page=${e}&pageSize=${this.Filter.PageSize}&orderBy=${this.Filter.OrderBy}&Extension=${this.Filter.Extension}&Category=${this.Filter.Category}`,
+
+                this.filter.Page = e;
+               console.log(this.filter);
+
+                axios({
+                method: "post",
+                url:"/myfiles",
+                data: this.filter,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
             }).then(response => {
 
-                if (response.data.isSuccessful)
+                if (response.data)
                 {
-                   this.datas = response.data.data.files
-                   this.PageInfo = response.data.data.pages
+                   this.datas = response.data.files
+                   this.PageInfo = response.data.pages
                 }
                 else
                 {
@@ -117,28 +118,28 @@
             deleteFile(id) {
 
                 axios({
-                    method: "delete",
-                    url:`/Home/Delete/${id}?page=${this.PageInfo.currentPage}&pageSize=${this.Filter.PageSize}&orderBy=${this.Filter.OrderBy}&Extension=${this.Filter.Extension}`,
+                    method: "post",
+                    url:`/Home/Delete/${id}`,
+                    data: this.filter,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                 }).then(response => {
-                    console.log(response);
                     if (response.data.isSuccessful)
                     {
                        this.datas = this.datas.filter(data => data.id != id);
 
-                        if (response.data.data.file != null)
+                        if (response.data.value.file != null)
                         {
                              this.datas.push(
                              {
-                                id: response.data.data.file.id,
-                                fileName: response.data.data.file.fileName,
-                                size: response.data.data.file.size,
-                                uploadedDate: response.data.data.file.uploadedDate,
+                                id: response.data.value.file.id,
+                                fileName: response.data.value.file.fileName,
+                                size: response.data.value.file.size,
+                                uploadedDate: response.data.value.file.uploadedDate,
                             });
                         }
 
-                          this.PageInfo = response.data.data.pages
+                          this.PageInfo = response.data.value.pages
                     }
                     else
                     {
@@ -156,7 +157,7 @@
                     dataType: "json",
                 }).then(response => {
                     console.log(response);
-                    
+
                     if (response.data) {
                         window.location.href = response.data;
                     }
