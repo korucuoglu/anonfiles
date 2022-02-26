@@ -97,7 +97,7 @@ namespace FileUpload.Infrastructure.Services
 
         }
 
-        public async Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, List<GetCategoryDto> categories)
+        public async Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, List<Guid> CategoriesId)
         {
             Guid fileId;
 
@@ -142,9 +142,9 @@ namespace FileUpload.Infrastructure.Services
                         
                     };
 
-                    categories.ForEach(x =>
+                    CategoriesId.ForEach(x =>
                     {
-                        fileEntity.FilesCategories.Add(new FileCategory() { CategoryId = x.Id });
+                        fileEntity.FilesCategories.Add(new FileCategory() { CategoryId = x });
                     });
 
                     fileListEntity.Add(fileEntity);

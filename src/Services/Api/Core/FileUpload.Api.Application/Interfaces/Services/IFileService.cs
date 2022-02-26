@@ -11,7 +11,7 @@ namespace FileUpload.Application.Interfaces.Services
 {
     public interface IFileService
     {
-        Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, List<GetCategoryDto> categories);
+        Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, List<Guid> CategoriesId);
         Task<Response<FilesPagerViewModel>> GetAllFiles(FileFilterModel model);
         Task<Response<GetFileDto>> GetFileById(Guid id);
         Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, Guid fileId);
