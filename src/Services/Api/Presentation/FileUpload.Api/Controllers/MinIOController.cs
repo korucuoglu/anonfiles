@@ -28,9 +28,14 @@ namespace FileUpload.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload([FromForm] IFormFile[] files, [FromForm] string categories)
         {
-            var GetCategoryDto = JsonSerializer.Deserialize<List<GetCategoryDto>>(categories);
+            var dto = new List<GetCategoryDto>();
 
-            var data = await _service.UploadAsync(files, GetCategoryDto);
+            if (String.IsNullOrEmpty(categories) is false)
+            {
+                dto = JsonSerializer.Deserialize<List<GetCategoryDto>>(categories);
+            }
+
+            var data = await _service.UploadAsync(files, dto);
 
             return new ObjectResult(data)
             {

@@ -4,6 +4,7 @@ using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,7 +17,7 @@ namespace FileUpload.Application.Helper
 
             model = ExtensionFilter(model, filterModel.Extension);
 
-            model = CategoryFilter(model, filterModel.Category);
+            model = CategoryFilter(model, filterModel.CategoryIds);
 
             var modelCount = model.Count();
 
@@ -58,13 +59,19 @@ namespace FileUpload.Application.Helper
             return model.Where(x => x.Extension.ToUpper() == extension.ToUpper());
         }
 
-        public static IQueryable<File> CategoryFilter(IQueryable<File> model, string CategoryName)
+        public static IQueryable<File> CategoryFilter(IQueryable<File> model, List<Guid> CategoryIds)
         {
-            if (string.IsNullOrEmpty(CategoryName))
+            if (CategoryIds.Count == 0)
             {
                 return model;
             }
-            return model.Include(x => x.Files_Categories).Where(d => d.Files_Categories.Select(a => a.Category.Title.ToLower()).Contains(CategoryName.ToLower()));
+
+            return  model.Include(x => x.FilesCategories).Where(p => p.FilesCategories.Select(a => a.Category).Any(pp => CategoryIds.Contains(pp.Id)));
+
+
+            // myList.Where(item => ids.Contains(item)).ToList()
+
+            // return model.Include(x => x.Files_Categories).Where(d => d.Files_Categories.Select(a => a.Category.Title.ToLower()).Contains(CategoryName.ToLower()));
         }
 
         public static IQueryable<File> OrderFiles(IQueryable<File> model, int orderBy)
@@ -106,7 +113,7 @@ namespace FileUpload.Application.Helper
 
             GetFileDto fileDto = null;
 
-            Pager pager = new(count -1, filterModel.Page, filterModel.PageSize);
+            Pager pager = new(count - 1, filterModel.Page, filterModel.PageSize);
 
             if (count <= (filterModel.Page * filterModel.PageSize))
             {

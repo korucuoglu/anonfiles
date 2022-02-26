@@ -134,18 +134,18 @@ namespace FileUpload.Infrastructure.Services
 
                     Domain.Entities.File fileEntity = new()
                     {
+                        Id = fileId,
                         ApplicationUserId = _sharedIdentityService.GetUserId,
                         FileName = file.FileName,
                         Size = file.Length,
-                        Id = fileId,
                         Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper(),
+                        
                     };
 
                     categories.ForEach(x =>
                     {
-                        fileEntity.Files_Categories.Add(new FileCategory() { CategoryId = x.Id });
+                        fileEntity.FilesCategories.Add(new FileCategory() { CategoryId = x.Id });
                     });
-
 
                     fileListEntity.Add(fileEntity);
 
