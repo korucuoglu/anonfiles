@@ -55,14 +55,14 @@ namespace FileUpload.Persistence.Repositories
 
         public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await _dbSet.FirstOrDefaultAsync(predicate);
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
         }
 
         public bool Any(Expression<Func<TEntity, bool>> predicate = null)
         {
             return predicate == null
-                       ? _dbSet.Any()
-                       : _dbSet.Any(predicate);
+                       ? _dbSet.AsNoTracking().Any()
+                       : _dbSet.AsNoTracking().Any(predicate);
 
         }
 
@@ -77,8 +77,8 @@ namespace FileUpload.Persistence.Repositories
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = null)
         {
             return predicate == null
-                 ? await _dbSet.ToListAsync()
-                 : await _dbSet.Where(predicate).ToListAsync();
+                 ? await _dbSet.AsNoTracking().ToListAsync()
+                 : await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
         }
 
         public void Update(TEntity entity)
