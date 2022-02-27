@@ -1,4 +1,6 @@
-﻿using FileUpload.Application.Dtos.Files;
+﻿using AutoMapper;
+using FileUpload.Application.Dtos.Categories;
+using FileUpload.Application.Dtos.Files;
 using FileUpload.Application.Dtos.Files.Pager;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
@@ -12,23 +14,23 @@ namespace FileUpload.Application.Helper
 {
     public static class Filter
     {
-        public static async Task<Response<FilesPagerViewModel>> FilterFile(IQueryable<File> model, FileFilterModel filterModel)
+        public static async Task<Response<FilesPagerViewModel>> FilterFile(IQueryable<File> model, FileFilterModel filterModel, IMapper mapper)
         {
 
             model = ExtensionFilter(model, filterModel.Extension);
 
             model = CategoryFilter(model, filterModel.CategoryIds);
 
-            var modelCount = model.Count();
-
-            if (modelCount == 0)
+            if (!model.Any())
             {
                 return Response<FilesPagerViewModel>.Success(new FilesPagerViewModel(), 200);
             }
 
-            Pager pager = new(modelCount, filterModel.Page, filterModel.PageSize);
+            Pager pager = new(model.Count(), filterModel.Page, filterModel.PageSize);
 
             model = OrderFiles(model, filterModel.OrderBy);
+
+            var categories = model.SelectMany(x => x.FilesCategories.Select(a => a.Category)).Distinct();
 
             model = PaginationData(model, pager.CurrentPage, filterModel.PageSize);
 
@@ -36,15 +38,10 @@ namespace FileUpload.Application.Helper
             FilesPagerViewModel dto = new()
             {
                 Pages = pager,
-                Files = await model.Select(x => new GetFileDto()
-                {
-                    Id = x.Id,
-                    FileName = x.FileName,
-                    Size = x.Size,
-                    CreatedDate = x.CreatedDate
-
-                }).ToListAsync()
+                Files = await mapper.ProjectTo<GetFileDto>(model).ToListAsync(),
+                Categories = await mapper.ProjectTo<GetCategoryDto>(categories).ToListAsync(),
             };
+
 
             return Response<FilesPagerViewModel>.Success(dto, 200);
         }
@@ -66,7 +63,7 @@ namespace FileUpload.Application.Helper
                 return model;
             }
 
-            return  model.Include(x => x.FilesCategories).Where(p => p.FilesCategories.Select(a => a.Category).Any(pp => CategoryIds.Contains(pp.Id)));
+            return model.Include(x => x.FilesCategories).Where(p => p.FilesCategories.Select(a => a.Category).Any(pp => CategoryIds.Contains(pp.Id)));
         }
 
         public static IQueryable<File> OrderFiles(IQueryable<File> model, int orderBy)
@@ -102,7 +99,7 @@ namespace FileUpload.Application.Helper
             return model.Skip((page - 1) * number).Take(number);
         }
 
-        public static async Task<Response<FilePagerViewModel>> GetOneFileAfterRemovedFile(IQueryable<File> model, FileFilterModel filterModel)
+        public static async Task<Response<FilePagerViewModel>> GetDataInNextPageAfterRemovedFile(IQueryable<File> model, FileFilterModel filterModel)
         {
             var count = model.Count();
 

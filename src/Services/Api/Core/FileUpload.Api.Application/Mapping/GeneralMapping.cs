@@ -20,11 +20,13 @@ namespace FileUpload.Application.Mapping
 
             CreateMap<Category, GetCategoryDto>().ReverseMap();
 
+            CreateMap<IEnumerable<Category>, GetCategoryDto>().ReverseMap();
+
             #endregion
 
             #region File
 
-            CreateMap<File, GetFileDto>();
+              CreateMap<File, GetFileDto>();
 
             #endregion
         }

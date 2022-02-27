@@ -1,4 +1,5 @@
-﻿using FileUpload.Application.Dtos.Files;
+﻿using AutoMapper;
+using FileUpload.Application.Dtos.Files;
 using FileUpload.Application.Dtos.Files.Pager;
 using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
@@ -18,10 +19,12 @@ namespace FileUpload.Application.Features.Queries.Files.GetAll
     public class GetAllFilesQueryRequestHandler : IRequestHandler<GetAllFilesQueryRequest, Response<FilesPagerViewModel>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public GetAllFilesQueryRequestHandler(IUnitOfWork unitOfWork)
+        public GetAllFilesQueryRequestHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<Response<FilesPagerViewModel>> Handle(GetAllFilesQueryRequest request, CancellationToken cancellationToken)
@@ -30,7 +33,7 @@ namespace FileUpload.Application.Features.Queries.Files.GetAll
 
             if (repository.Any(x => x.ApplicationUserId == request.UserId))
             {
-                return await Helper.Filter.FilterFile(repository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel);
+                return await Helper.Filter.FilterFile(repository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel, _mapper);
             }
 
             return Response<FilesPagerViewModel>.Success(new FilesPagerViewModel(), 200);
