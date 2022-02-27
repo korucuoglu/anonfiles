@@ -36,7 +36,7 @@ namespace FileUpload.Application.Features.Commands.Files.Add
 
         public async Task<Response<bool>> Handle(AddFileCommand request, CancellationToken cancellationToken)
         {
-            
+
             (await _unitOfWork.GetRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.AplicationUserId)).UsedSpace += request.Files.Sum(x => x.Size);
             await _unitOfWork.GetRepository<File>().AddRangeAsync(request.Files);
 

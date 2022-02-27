@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FileUpload.Application.Dtos.Categories;
+using System;
+using System.Collections.Generic;
 
 namespace FileUpload.Application.Dtos.Files
 {
@@ -8,5 +10,6 @@ namespace FileUpload.Application.Dtos.Files
         public string FileName { get; set; }
         public DateTime CreatedDate { get; set; }
         public long Size { get; set; }
+
     }
 }

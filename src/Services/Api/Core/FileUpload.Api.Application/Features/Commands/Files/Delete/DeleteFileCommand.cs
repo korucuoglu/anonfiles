@@ -47,7 +47,7 @@ namespace FileUpload.Application.Features.Commands.Files.Delete
 
             (await _unitOfWork.GetRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId)).UsedSpace -= file.Size;
             
-            var data =  await Helper.Filter.GetOneFileAfterRemovedFile(fileRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel);
+            var data =  await Helper.Filter.GetDataInNextPageAfterRemovedFile(fileRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel);
 
             fileRepository.Remove(file);
 

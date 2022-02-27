@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using FileUpload.Application.Dtos.Categories;
+using System.Collections.Generic;
 
 namespace FileUpload.Application.Dtos.Files.Pager
 {
@@ -8,10 +9,12 @@ namespace FileUpload.Application.Dtos.Files.Pager
         {
             Files = new List<GetFileDto>();
             Pages = new Pager();
+            Categories = new List<GetCategoryDto>();
         }
 
         public Pager Pages { get; set; }
         public List<GetFileDto> Files { get; set; }
+        public IEnumerable<GetCategoryDto> Categories { get; set; }
 
     }
 }
