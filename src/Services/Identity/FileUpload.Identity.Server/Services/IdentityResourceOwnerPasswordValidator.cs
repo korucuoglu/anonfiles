@@ -1,4 +1,4 @@
-﻿using FileUpload.Persistence.Identity;
+﻿using FileUpload.Data.Entity;
 using IdentityModel;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
