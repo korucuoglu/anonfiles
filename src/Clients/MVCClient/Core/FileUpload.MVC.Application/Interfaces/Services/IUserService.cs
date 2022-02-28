@@ -14,6 +14,7 @@ namespace FileUpload.MVC.Application.Interfaces.Services
         Task<string> GetDirectLink(string id);
         Task<Response<FilePagerViewModel>> DeleteFile(FileFilterModel model, string id);
         Task<List<GetCategoryDto>> GetCategories();
+        Task<GetCategoryDto> AddCategory(AddCategoryDto dto);
 
 
 

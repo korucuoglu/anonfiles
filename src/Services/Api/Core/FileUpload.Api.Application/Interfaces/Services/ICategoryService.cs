@@ -15,7 +15,7 @@ namespace FileUpload.Application.Interfaces.Services
         public Task<Response<List<GetCategoryDto>>> GetAllAsync();
         public Task<Response<GetCategoryDto>> GetByIdAsync(Guid id);
 
-        public Task<Response<bool>> AddAsync(AddCategoryCommand dto);
+        public Task<Response<GetCategoryDto>> AddAsync(AddCategoryCommand dto);
         public Task<Response<bool>> UpdateAsync(UpdateCategoryCommand dto);
         public Task<Response<bool>> DeleteByIdAsync(Guid id);
     }

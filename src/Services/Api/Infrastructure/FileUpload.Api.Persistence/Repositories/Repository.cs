@@ -20,10 +20,10 @@ namespace FileUpload.Persistence.Repositories
             _dbSet = _context.Set<TEntity>();
         }
 
-        public async Task<bool> AddAsync(TEntity entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
-            return true;
+            return entity;
         }
 
         public async Task<bool> AddRangeAsync(TEntity[] entities)
@@ -41,16 +41,6 @@ namespace FileUpload.Persistence.Repositories
         public void Remove(TEntity entity)
         {
             _dbSet.Remove(entity);
-        }
-
-        public void RemoveRange(TEntity[] entities)
-        {
-            _dbSet.RemoveRange(entities);
-        }
-
-        public void RemoveRange(IEnumerable<TEntity> entities)
-        {
-            _dbSet.RemoveRange(entities);
         }
 
         public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)

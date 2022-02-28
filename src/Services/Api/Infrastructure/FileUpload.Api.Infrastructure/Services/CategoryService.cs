@@ -53,7 +53,7 @@ namespace FileUpload.Infrastructure.Services
             return await _mediator.Send(dto);
         }
 
-        public async Task<Response<bool>> AddAsync(AddCategoryCommand dto)
+        public async Task<Response<GetCategoryDto>> AddAsync(AddCategoryCommand dto)
         {
             dto.ApplicationUserId = _sharedIdentityService.GetUserId;
             return await _mediator.Send(dto);

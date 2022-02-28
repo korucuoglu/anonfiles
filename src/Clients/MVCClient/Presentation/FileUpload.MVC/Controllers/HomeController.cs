@@ -8,6 +8,7 @@ using FileUpload.MVC.Application.Interfaces.Services;
 using FileUpload.MVC.Application.Dtos.Files;
 using FileUpload.MVC.Application.Exceptions;
 using FileUpload.MVC.Application.Dtos.Error;
+using FileUpload.MVC.Application.Dtos.Categories;
 
 namespace FileUpload.MVC.Controllers
 {
@@ -41,6 +42,14 @@ namespace FileUpload.MVC.Controllers
         public async Task<IActionResult> Upload(FilesCategoriesDto dto)
         {
             await _userService.Upload(dto);
+
+            return Json(new { finish = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCategory([FromBody] AddCategoryDto dto)
+        {
+            await _userService.AddCategory(dto);
 
             return Json(new { finish = true });
         }
