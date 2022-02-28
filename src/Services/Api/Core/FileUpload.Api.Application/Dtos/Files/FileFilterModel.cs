@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Dtos.Files
+namespace FileUpload.Api.Application.Dtos.Files
 {
     public class FileFilterModel
     {

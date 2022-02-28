@@ -1,17 +1,17 @@
-﻿using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Features.Commands.Categories.Add;
-using FileUpload.Application.Features.Commands.Categories.Delete;
-using FileUpload.Application.Features.Commands.Categories.Update;
-using FileUpload.Application.Features.Queries.Categories.GetAll;
-using FileUpload.Application.Features.Queries.Categories.GetById;
-using FileUpload.Application.Interfaces.Services;
-using FileUpload.Application.Wrappers;
+﻿using FileUpload.Api.Application.Dtos.Categories;
+using FileUpload.Api.Application.Features.Commands.Categories.Add;
+using FileUpload.Api.Application.Features.Commands.Categories.Delete;
+using FileUpload.Api.Application.Features.Commands.Categories.Update;
+using FileUpload.Api.Application.Features.Queries.Categories.GetAll;
+using FileUpload.Api.Application.Features.Queries.Categories.GetById;
+using FileUpload.Api.Application.Interfaces.Services;
+using FileUpload.Api.Application.Wrappers;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace FileUpload.Infrastructure.Services
+namespace FileUpload.Api.Infrastructure.Services
 {
     public class CategoryService : ICategoryService
     {

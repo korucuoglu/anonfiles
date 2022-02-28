@@ -1,13 +1,13 @@
 ﻿
 using FileUpload.Api.Filters;
-using FileUpload.Application.Interfaces.Services;
-using FileUpload.Infrastructure.Attribute;
-using FileUpload.Infrastructure.Services;
+using FileUpload.Api.Application.Interfaces.Services;
+using FileUpload.Api.Infrastructure.Attribute;
+using FileUpload.Api.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FileUpload.Infrastructure
+namespace FileUpload.Api.Infrastructure
 {
     public static class ServiceRegistration
     {

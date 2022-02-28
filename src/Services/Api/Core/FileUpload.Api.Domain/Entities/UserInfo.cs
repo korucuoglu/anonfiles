@@ -1,7 +1,7 @@
 ﻿
-using FileUpload.Domain.Common;
+using FileUpload.Api.Domain.Common;
 
-namespace FileUpload.Domain.Entities
+namespace FileUpload.Api.Domain.Entities
 {
     public class UserInfo: BaseIdentity
     {

@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Interfaces.UnitOfWork;
-using FileUpload.Application.Wrappers;
-using FileUpload.Domain.Entities;
+using FileUpload.Api.Application.Dtos.Categories;
+using FileUpload.Api.Application.Interfaces.UnitOfWork;
+using FileUpload.Api.Application.Wrappers;
+using FileUpload.Api.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Features.Queries.Categories.GetById
+namespace FileUpload.Api.Application.Features.Queries.Categories.GetById
 {
     public class GetCategoryByIdQueryRequest: IRequest<Response<GetCategoryDto>>
     {
@@ -32,7 +32,7 @@ namespace FileUpload.Application.Features.Queries.Categories.GetById
         {
             var data = _unitOfWork.GetRepository<Category>().Where(x => x.ApplicationUserId == request.UserId && x.Id == request.Id);
 
-            var mapperData = await _mapper.ProjectTo<GetCategoryDto>(data).FirstOrDefaultAsync();
+            var mapperData = _mapper.ProjectTo<GetCategoryDto>(data).FirstOrDefault();
 
             return Response<GetCategoryDto>.Success(mapperData, 200);
         }

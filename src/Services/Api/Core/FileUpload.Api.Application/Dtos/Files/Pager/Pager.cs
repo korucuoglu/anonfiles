@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileUpload.Application.Dtos.Files.Pager
+namespace FileUpload.Api.Application.Dtos.Files.Pager
 {
     public class Pager
     {

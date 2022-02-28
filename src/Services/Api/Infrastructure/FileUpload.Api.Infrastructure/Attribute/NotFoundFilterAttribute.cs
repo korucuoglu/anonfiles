@@ -1,7 +1,7 @@
-﻿using FileUpload.Application.Interfaces.Repositories;
-using FileUpload.Application.Interfaces.Services;
-using FileUpload.Application.Wrappers;
-using FileUpload.Domain.Common; // yanlış
+﻿using FileUpload.Api.Application.Interfaces.Repositories;
+using FileUpload.Api.Application.Interfaces.Services;
+using FileUpload.Api.Application.Wrappers;
+using FileUpload.Api.Domain.Common; // yanlış
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Linq;
@@ -22,11 +22,10 @@ namespace FileUpload.Api.Filters
             _sharedIdentityService = sharedIdentityService;
         }
 
-        public bool GetData(string id)
+        public async Task<bool> GetData(string id)
         {
-            var data = _service.Any(x => x.Id.ToString() == id && x.ApplicationUserId == _sharedIdentityService.GetUserId);
+            return await _service.Any(x => x.Id.ToString() == id && x.ApplicationUserId == _sharedIdentityService.GetUserId);
 
-            return data;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -61,7 +60,7 @@ namespace FileUpload.Api.Filters
                 return;
             }
 
-            if (!GetData(id))
+            if (! await GetData(id))
             {
                 var error = "Böyle bir veri bulunamadı.";
                 context.Result = new NotFoundObjectResult(Response<TEntity>.Fail(error, 404));

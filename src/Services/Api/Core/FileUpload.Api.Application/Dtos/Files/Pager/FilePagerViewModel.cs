@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Dtos.Files.Pager
+namespace FileUpload.Api.Application.Dtos.Files.Pager
 {
     public class FilePagerViewModel
     {

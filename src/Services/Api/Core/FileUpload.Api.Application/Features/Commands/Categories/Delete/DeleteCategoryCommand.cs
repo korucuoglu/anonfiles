@@ -1,13 +1,13 @@
-﻿using FileUpload.Application.Interfaces.UnitOfWork;
-using FileUpload.Application.Wrappers;
-using FileUpload.Domain.Entities;
+﻿using FileUpload.Api.Application.Interfaces.UnitOfWork;
+using FileUpload.Api.Application.Wrappers;
+using FileUpload.Api.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Features.Commands.Categories.Delete
+namespace FileUpload.Api.Application.Features.Commands.Categories.Delete
 {
     public class DeleteCategoryCommand : IRequest<Response<bool>>
     {
@@ -38,17 +38,9 @@ namespace FileUpload.Application.Features.Commands.Categories.Delete
             
             var category = await repository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId && x.Id == request.Id);
 
-            repository.Remove(category);
+            await repository.Remove(category);
 
-            bool result = await _unitOfWork.SaveChangesAsync() > 0;
-
-            if (!result)
-            {
-                return Response<bool>.Fail(result, 200);
-
-            }
-
-            return Response<bool>.Success(result, 200);
+            return Response<bool>.Success(true, 200);
         }
     }
 }

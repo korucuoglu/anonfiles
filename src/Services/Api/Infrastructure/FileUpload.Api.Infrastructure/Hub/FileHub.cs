@@ -1,12 +1,12 @@
-﻿using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Interfaces.Hub;
-using FileUpload.Application.Wrappers;
+﻿using FileUpload.Api.Application.Dtos.Files;
+using FileUpload.Api.Application.Interfaces.Hub;
+using FileUpload.Api.Application.Wrappers;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FileUpload.Infrastructure.Hub
+namespace FileUpload.Api.Infrastructure.Hub
 {
     public class FileHub : Hub<IFileHub>
     {

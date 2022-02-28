@@ -1,4 +1,4 @@
-﻿namespace FileUpload.Application.Dtos.Files
+﻿namespace FileUpload.Api.Application.Dtos.Files
 {
     public enum EnumOrderBy : short
     {

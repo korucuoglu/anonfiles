@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Interfaces.UnitOfWork;
-using FileUpload.Application.Wrappers;
-using FileUpload.Domain.Entities;
+using FileUpload.Api.Application.Interfaces.UnitOfWork;
+using FileUpload.Api.Application.Wrappers;
+using FileUpload.Api.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Features.Commands.Categories.Update
+namespace FileUpload.Api.Application.Features.Commands.Categories.Update
 {
     public class UpdateCategoryCommand : IRequest<Response<bool>>
     {
@@ -41,22 +41,15 @@ namespace FileUpload.Application.Features.Commands.Categories.Update
         {
             var repository = _unitOfWork.GetRepository<Category>();
 
-            if (!repository.Any(x => x.ApplicationUserId == request.ApplicationUserId && x.Id == new Guid(request.Id)))
+            if (! await repository.Any(x => x.ApplicationUserId == request.ApplicationUserId && x.Id == new Guid(request.Id)))
             {
                 return Response<bool>.Fail(false, 200);
             }
 
             var category = _mapper.Map<Category>(request);
-            repository.Update(category);
+            await repository.Update(category);
 
-            bool result = await _unitOfWork.SaveChangesAsync() > 0;
-
-            if (!result)
-            {
-                return Response<bool>.Fail(result, 200);
-            }
-
-            return Response<bool>.Success(result, 200);
+            return Response<bool>.Success(true, 200);
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Interfaces.UnitOfWork;
-using FileUpload.Application.Wrappers;
-using FileUpload.Domain.Entities;
+﻿using FileUpload.Api.Application.Dtos.Categories;
+using FileUpload.Api.Application.Interfaces.UnitOfWork;
+using FileUpload.Api.Application.Wrappers;
+using FileUpload.Api.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using System;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Features.Commands.Files.Add
+namespace FileUpload.Api.Application.Features.Commands.Files.Add
 {
     public class AddFileCommand : IRequest<Response<bool>>
     {
@@ -40,14 +40,7 @@ namespace FileUpload.Application.Features.Commands.Files.Add
             (await _unitOfWork.GetRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.AplicationUserId)).UsedSpace += request.Files.Sum(x => x.Size);
             await _unitOfWork.GetRepository<File>().AddRangeAsync(request.Files);
 
-            bool result = await _unitOfWork.SaveChangesAsync() > 0;
-
-            if (!result)
-            {
-                return Response<bool>.Fail(result, 200);
-            }
-
-            return Response<bool>.Success(result, 200);
+            return Response<bool>.Success(true, 200);
         }
     }
 }

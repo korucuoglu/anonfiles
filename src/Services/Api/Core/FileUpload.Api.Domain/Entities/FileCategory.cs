@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileUpload.Domain.Entities
+namespace FileUpload.Api.Domain.Entities
 {
     public class FileCategory
     {

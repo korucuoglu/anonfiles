@@ -1,8 +1,8 @@
-﻿using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Wrappers;
+﻿using FileUpload.Api.Application.Dtos.Files;
+using FileUpload.Api.Application.Wrappers;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Interfaces.Hub
+namespace FileUpload.Api.Application.Interfaces.Hub
 {
     public interface IFileHub
     { 

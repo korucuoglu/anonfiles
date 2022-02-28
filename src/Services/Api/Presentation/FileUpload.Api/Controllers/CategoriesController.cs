@@ -1,9 +1,9 @@
 ﻿using FileUpload.Api.Filters;
-using FileUpload.Application.Features.Commands.Categories.Add;
-using FileUpload.Application.Features.Commands.Categories.Update;
-using FileUpload.Application.Interfaces.Services;
-using FileUpload.Domain.Entities; // yanlış
-using FileUpload.Infrastructure.Attribute;
+using FileUpload.Api.Application.Features.Commands.Categories.Add;
+using FileUpload.Api.Application.Features.Commands.Categories.Update;
+using FileUpload.Api.Application.Interfaces.Services;
+using FileUpload.Api.Domain.Entities; // yanlış
+using FileUpload.Api.Infrastructure.Attribute;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;

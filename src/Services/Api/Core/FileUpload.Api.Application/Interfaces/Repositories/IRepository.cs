@@ -4,11 +4,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Interfaces.Repositories
+namespace FileUpload.Api.Application.Interfaces.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        bool Any(Expression<Func<TEntity, bool>> predicate = null);
+        Task<bool> Any(Expression<Func<TEntity, bool>> predicate = null);
 
         IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate = null);
 
@@ -20,9 +20,9 @@ namespace FileUpload.Application.Interfaces.Repositories
         Task<bool> AddRangeAsync(TEntity[] entities);
         Task<bool> AddRangeAsync(IEnumerable<TEntity> entities);
 
-        void Remove(TEntity entity);
+        Task Remove(TEntity entity);
       
-        void Update(TEntity entity);
+        Task Update(TEntity entity);
 
        
     }

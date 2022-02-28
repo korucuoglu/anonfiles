@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Interfaces.Services;
+using FileUpload.Api.Application.Interfaces.Services;
 using System;
 
-namespace FileUpload.Application.Mapping
+namespace FileUpload.Api.Application.Mapping
 {
     public class IdentityResolver<TSource, TDestination> : IValueResolver<TSource, TDestination, Guid> where TSource : class where TDestination : class
     {

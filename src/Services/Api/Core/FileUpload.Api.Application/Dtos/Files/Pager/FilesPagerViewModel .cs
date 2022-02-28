@@ -1,7 +1,7 @@
-﻿using FileUpload.Application.Dtos.Categories;
+﻿using FileUpload.Api.Application.Dtos.Categories;
 using System.Collections.Generic;
 
-namespace FileUpload.Application.Dtos.Files.Pager
+namespace FileUpload.Api.Application.Dtos.Files.Pager
 {
     public class FilesPagerViewModel
     {

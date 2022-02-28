@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Features.Commands.Categories.Add;
-using FileUpload.Application.Features.Commands.Categories.Update;
-using FileUpload.Domain.Entities;
+using FileUpload.Api.Application.Dtos.Categories;
+using FileUpload.Api.Application.Dtos.Files;
+using FileUpload.Api.Application.Features.Commands.Categories.Add;
+using FileUpload.Api.Application.Features.Commands.Categories.Update;
+using FileUpload.Api.Domain.Entities;
 using System.Collections.Generic;
 
-namespace FileUpload.Application.Mapping
+namespace FileUpload.Api.Application.Mapping
 {
     public class GeneralMapping : Profile
     {

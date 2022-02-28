@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileUpload.Domain.Common
+namespace FileUpload.Api.Domain.Common
 {
     public abstract class BaseIdentity: BaseEntity
     {

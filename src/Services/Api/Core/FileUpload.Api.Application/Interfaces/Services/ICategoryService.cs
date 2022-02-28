@@ -1,14 +1,14 @@
-﻿using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Features.Commands.Categories.Add;
-using FileUpload.Application.Features.Commands.Categories.Update;
-using FileUpload.Application.Wrappers;
+﻿using FileUpload.Api.Application.Dtos.Categories;
+using FileUpload.Api.Application.Features.Commands.Categories.Add;
+using FileUpload.Api.Application.Features.Commands.Categories.Update;
+using FileUpload.Api.Application.Wrappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Interfaces.Services
+namespace FileUpload.Api.Application.Interfaces.Services
 {
     public interface ICategoryService
     {

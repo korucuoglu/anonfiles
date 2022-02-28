@@ -1,8 +1,8 @@
-﻿using FileUpload.Application.Interfaces.Services;
+﻿using FileUpload.Api.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using System;
 
-namespace FileUpload.Infrastructure.Services
+namespace FileUpload.Api.Infrastructure.Services
 {
     public class SharedIdentityService : ISharedIdentityService
     {

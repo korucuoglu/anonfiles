@@ -1,13 +1,13 @@
-﻿using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Dtos.Files.Pager;
-using FileUpload.Application.Wrappers;
+﻿using FileUpload.Api.Application.Dtos.Categories;
+using FileUpload.Api.Application.Dtos.Files;
+using FileUpload.Api.Application.Dtos.Files.Pager;
+using FileUpload.Api.Application.Wrappers;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Interfaces.Services
+namespace FileUpload.Api.Application.Interfaces.Services
 {
     public interface IFileService
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FileUpload.Infrastructure.Hub
+namespace FileUpload.Api.Infrastructure.Hub
 {
     public static class HubData
     {

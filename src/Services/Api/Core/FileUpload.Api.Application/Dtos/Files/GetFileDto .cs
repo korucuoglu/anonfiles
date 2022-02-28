@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileUpload.Application.Dtos.Files
+namespace FileUpload.Api.Application.Dtos.Files
 {
     public class GetFileDto
     {

@@ -1,6 +1,6 @@
-﻿using FileUpload.Application;
-using FileUpload.Infrastructure;
-using FileUpload.Persistence;
+﻿using FileUpload.Api.Application;
+using FileUpload.Api.Infrastructure;
+using FileUpload.Api.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,8 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
-using FileUpload.Application.Features.Commands.Categories.Add;
-using FileUpload.Infrastructure.Hub;
+using FileUpload.Api.Application.Features.Commands.Categories.Add;
+using FileUpload.Api.Infrastructure.Hub;
 
 namespace FileUpload.Api
 {

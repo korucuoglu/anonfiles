@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 
-namespace FileUpload.Application.Interfaces.Services
+namespace FileUpload.Api.Application.Interfaces.Services
 {
     public interface ISharedIdentityService
     {

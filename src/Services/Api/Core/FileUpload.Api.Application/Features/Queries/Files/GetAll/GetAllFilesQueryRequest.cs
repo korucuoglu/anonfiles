@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Dtos.Files.Pager;
-using FileUpload.Application.Interfaces.UnitOfWork;
-using FileUpload.Application.Wrappers;
-using FileUpload.Domain.Entities;
+using FileUpload.Api.Application.Dtos.Files;
+using FileUpload.Api.Application.Dtos.Files.Pager;
+using FileUpload.Api.Application.Interfaces.UnitOfWork;
+using FileUpload.Api.Application.Wrappers;
+using FileUpload.Api.Domain.Entities;
 using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Features.Queries.Files.GetAll
+namespace FileUpload.Api.Application.Features.Queries.Files.GetAll
 {
     public class GetAllFilesQueryRequest : IRequest<Response<FilesPagerViewModel>>
     {
@@ -31,7 +31,7 @@ namespace FileUpload.Application.Features.Queries.Files.GetAll
         {
             var repository = _unitOfWork.GetRepository<File>();
 
-            if (repository.Any(x => x.ApplicationUserId == request.UserId))
+            if (await repository.Any(x => x.ApplicationUserId == request.UserId))
             {
                 return await Helper.Filter.FilterFile(repository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel, _mapper);
             }

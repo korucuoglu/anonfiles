@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Dtos.Files.Pager;
-using FileUpload.Application.Wrappers;
-using FileUpload.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+using FileUpload.Api.Application.Dtos.Categories;
+using FileUpload.Api.Application.Dtos.Files;
+using FileUpload.Api.Application.Dtos.Files.Pager;
+using FileUpload.Api.Application.Wrappers;
+using FileUpload.Api.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Helper
+namespace FileUpload.Api.Application.Helper
 {
     public static class Filter
     {
@@ -38,8 +37,8 @@ namespace FileUpload.Application.Helper
             FilesPagerViewModel dto = new()
             {
                 Pages = pager,
-                Files = await mapper.ProjectTo<GetFileDto>(model).ToListAsync(),
-                Categories = await mapper.ProjectTo<GetCategoryDto>(categories).ToListAsync(),
+                Files =  mapper.ProjectTo<GetFileDto>(model).ToList(),
+                Categories = mapper.ProjectTo<GetCategoryDto>(categories).ToList(),
             };
 
 
@@ -63,7 +62,9 @@ namespace FileUpload.Application.Helper
                 return model;
             }
 
-            return model.Include(x => x.FilesCategories).Where(p => p.FilesCategories.Select(a => a.Category).Any(pp => CategoryIds.Contains(pp.Id)));
+            return model;
+
+            // return model.Where(x => x.FilesCategories).Where(p => p.FilesCategories.Select(a => a.Category).Any(pp => CategoryIds.Contains(pp.Id)));
         }
 
         public static IQueryable<File> OrderFiles(IQueryable<File> model, int orderBy)
@@ -130,7 +131,7 @@ namespace FileUpload.Application.Helper
             FilePagerViewModel dto = new()
             {
                 Pages = pager,
-                File = await mapper.ProjectTo<GetFileDto>(model).FirstOrDefaultAsync(),
+                File = mapper.ProjectTo<GetFileDto>(model).FirstOrDefault(),
             };
 
           

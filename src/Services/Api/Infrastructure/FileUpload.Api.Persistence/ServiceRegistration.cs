@@ -1,37 +1,29 @@
-﻿using FileUpload.Application.Interfaces.Context;
-using FileUpload.Application.Interfaces.Repositories;
-using FileUpload.Application.Interfaces.UnitOfWork;
-using FileUpload.Persistence.Context;
-using FileUpload.Persistence.Identity;
-using FileUpload.Persistence.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using FileUpload.Api.Application.Interfaces.Settings;
+using FileUpload.Api.Application.Interfaces.UnitOfWork;
+using FileUpload.Api.Persistence.Settings;
+using FileUpload.Api.Application.Interfaces.Repositories;
+using FileUpload.Api.Persistence.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Threading.Tasks;
 
-namespace FileUpload.Persistence
+namespace FileUpload.Api.Persistence
 {
     public static class ServiceRegistration
     {
         public static void AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>(opt =>
-            {
-                opt.EnableSensitiveDataLogging(true);
-                opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), configure =>
-                {
-                    configure.MigrationsAssembly("FileUpload.Api.Persistence");
+            services.Configure<DatabaseSettings>(configuration.GetSection("DatabaseSettings"));
 
-                });
+            services.AddSingleton<IDatabaseSettings>(sp =>
+            {
+                return sp.GetRequiredService<IOptions<DatabaseSettings>>().Value;
             });
 
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
-               .AddEntityFrameworkStores<ApplicationDbContext>()
-               .AddDefaultTokenProviders();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 
             services.AddAuthentication().AddJwtBearer(options =>
             {
@@ -47,11 +39,6 @@ namespace FileUpload.Persistence
             });
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
-
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
-            services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-
         }
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace FileUpload.Application
+namespace FileUpload.Api.Application
 {
     public static class ServiceRegistration
     {

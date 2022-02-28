@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Dtos.Files.Pager;
-using FileUpload.Application.Interfaces.Repositories;
-using FileUpload.Application.Interfaces.UnitOfWork;
-using FileUpload.Application.Wrappers;
-using FileUpload.Domain.Entities;
+using FileUpload.Api.Application.Dtos.Files;
+using FileUpload.Api.Application.Dtos.Files.Pager;
+using FileUpload.Api.Application.Interfaces.Repositories;
+using FileUpload.Api.Application.Interfaces.UnitOfWork;
+using FileUpload.Api.Application.Wrappers;
+using FileUpload.Api.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using System;
@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Features.Commands.Files.Delete
+namespace FileUpload.Api.Application.Features.Commands.Files.Delete
 {
     public class DeleteFileCommand : IRequest<Response<FilePagerViewModel>>
     {
@@ -52,14 +52,7 @@ namespace FileUpload.Application.Features.Commands.Files.Delete
             
             var data =  await Helper.Filter.GetDataInNextPageAfterRemovedFile(fileRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel, _mapper);
 
-            fileRepository.Remove(file);
-
-            bool result = await _unitOfWork.SaveChangesAsync() > 0;
-
-            if (!result)
-            {
-                return Response<FilePagerViewModel>.Fail("Veri silme sırasında hata meydana geldi", 500);
-            }
+            await fileRepository.Remove(file);
 
             return data;
 

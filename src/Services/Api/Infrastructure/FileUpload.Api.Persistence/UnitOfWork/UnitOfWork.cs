@@ -1,29 +1,26 @@
-﻿using FileUpload.Application.Interfaces.Repositories;
-using FileUpload.Application.Interfaces.UnitOfWork;
-using FileUpload.Persistence.Context;
-using FileUpload.Persistence.Repositories;
-using Microsoft.EntityFrameworkCore.Storage;
-using System.Threading.Tasks;
+﻿using FileUpload.Api.Application.Interfaces.Settings;
+using FileUpload.Api.Application.Interfaces.UnitOfWork;
+using FileUpload.Api.Application.Interfaces.Repositories;
+using FileUpload.Api.Domain.Common;
+using FileUpload.Api.Persistence.Repositories;
 
-namespace FileUpload.Persistence.UnitOfWork
+namespace FileUpload.Api.Persistence.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ApplicationDbContext _context;
-        public UnitOfWork(ApplicationDbContext context)
+
+        private readonly IDatabaseSettings _databaseSettings;
+
+        public UnitOfWork(IDatabaseSettings databaseSettings)
         {
-            _context = context;
+            _databaseSettings = databaseSettings;
         }
 
-        public IRepository<T> GetRepository<T>() where T : class
+        public IRepository<T> GetRepository<T>() where T : BaseEntity
         {
-            return new Repository<T>(_context);
+            return new Repository<T>(_databaseSettings);
         }
-        public async ValueTask DisposeAsync() => await _context.DisposeAsync();
 
-        public Task<int> SaveChangesAsync()
-        {
-            return _context.SaveChangesAsync();
-        }
+       
     }
 }

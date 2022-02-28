@@ -1,7 +1,7 @@
-﻿using FileUpload.Domain.Common;
+﻿using FileUpload.Api.Domain.Common;
 using System.Collections.Generic;
 
-namespace FileUpload.Domain.Entities
+namespace FileUpload.Api.Domain.Entities
 {
     public class File : BaseIdentity
     {

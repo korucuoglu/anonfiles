@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Interfaces.UnitOfWork;
-using FileUpload.Application.Wrappers;
-using FileUpload.Domain.Entities;
+using FileUpload.Api.Application.Interfaces.UnitOfWork;
+using FileUpload.Api.Application.Dtos.Categories;
+using FileUpload.Api.Application.Wrappers;
+using FileUpload.Api.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Features.Commands.Categories.Add
+namespace FileUpload.Api.Application.Features.Commands.Categories.Add
 {
     public class AddCategoryCommand : IRequest<Response<GetCategoryDto>>
     {
@@ -40,14 +40,13 @@ namespace FileUpload.Application.Features.Commands.Categories.Add
         {
             var category = _mapper.Map<Category>(request);
             var entity = await _unitOfWork.GetRepository<Category>().AddAsync(category);
-            bool result = await _unitOfWork.SaveChangesAsync() > 0;
 
-            if (!result)
+            if (entity == null)
             {
-                return Response<GetCategoryDto>.Fail("Kaydetme sırasında hata meydana geldi",  500);
+                return Response<GetCategoryDto>.Fail("Kaydetme sırasında hata meydana geldi", 500);
             }
 
-            GetCategoryDto dto = _mapper.Map<GetCategoryDto>(entity);   
+            GetCategoryDto dto = _mapper.Map<GetCategoryDto>(entity);
 
             return Response<GetCategoryDto>.Success(dto, 200);
         }

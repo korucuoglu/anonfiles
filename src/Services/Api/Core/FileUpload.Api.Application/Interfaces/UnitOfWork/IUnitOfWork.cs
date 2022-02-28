@@ -1,14 +1,16 @@
-﻿using FileUpload.Application.Interfaces.Repositories;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using FileUpload.Api.Application.Interfaces.Repositories;
+using FileUpload.Api.Domain.Common;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Interfaces.UnitOfWork
+namespace FileUpload.Api.Application.Interfaces.UnitOfWork
 {
-    public interface IUnitOfWork : IAsyncDisposable
+    public interface IUnitOfWork
     {
-        IRepository<T> GetRepository<T>() where T : class;
+        IRepository<T> GetRepository<T>() where T : BaseEntity;
 
-        Task<int> SaveChangesAsync();
     }
 }

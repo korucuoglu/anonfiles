@@ -3,18 +3,18 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Util;
 using AutoMapper;
-using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Dtos.Files.Pager;
-using FileUpload.Application.Features.Commands.Files.Add;
-using FileUpload.Application.Features.Commands.Files.Delete;
-using FileUpload.Application.Features.Queries.Files.GetAll;
-using FileUpload.Application.Features.Queries.Files.GetById;
-using FileUpload.Application.Interfaces.Hub;
-using FileUpload.Application.Interfaces.Services;
-using FileUpload.Application.Wrappers;
-using FileUpload.Domain.Entities;
-using FileUpload.Infrastructure.Hub;
+using FileUpload.Api.Application.Dtos.Categories;
+using FileUpload.Api.Application.Dtos.Files;
+using FileUpload.Api.Application.Dtos.Files.Pager;
+using FileUpload.Api.Application.Features.Commands.Files.Add;
+using FileUpload.Api.Application.Features.Commands.Files.Delete;
+using FileUpload.Api.Application.Features.Queries.Files.GetAll;
+using FileUpload.Api.Application.Features.Queries.Files.GetById;
+using FileUpload.Api.Application.Interfaces.Hub;
+using FileUpload.Api.Application.Interfaces.Services;
+using FileUpload.Api.Application.Wrappers;
+using FileUpload.Api.Domain.Entities;
+using FileUpload.Api.Infrastructure.Hub;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
@@ -26,7 +26,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace FileUpload.Infrastructure.Services
+namespace FileUpload.Api.Infrastructure.Services
 {
     public class FileService : IFileService
     {

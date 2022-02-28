@@ -1,9 +1,9 @@
 ﻿using FileUpload.Api.Filters;
-using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Interfaces.Services;
-using FileUpload.Domain.Entities;
-using FileUpload.Infrastructure.Attribute;
+using FileUpload.Api.Application.Dtos.Categories;
+using FileUpload.Api.Application.Dtos.Files;
+using FileUpload.Api.Application.Interfaces.Services;
+using FileUpload.Api.Domain.Entities;
+using FileUpload.Api.Infrastructure.Attribute;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;

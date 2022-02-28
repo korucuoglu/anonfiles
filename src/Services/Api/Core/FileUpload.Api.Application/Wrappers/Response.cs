@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace FileUpload.Application.Wrappers
+namespace FileUpload.Api.Application.Wrappers
 {
     public class Response<T>
     {
