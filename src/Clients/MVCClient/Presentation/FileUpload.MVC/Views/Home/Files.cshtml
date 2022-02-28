@@ -40,6 +40,20 @@
     </nav>
 
 
+    <div class="card">
+        <div class="card-body">
+            <div class="form-check" v-for="(category, index) in categories" :key="category.id">
+                <input class="form-check-input" type="checkbox" :value="category.id" v-model="filter.CategoryIds" :id="index" @@change="filterData">
+                <label class="form-check-label" :for="index">
+                    {{ category.title }}
+                </label>
+            </div>
+
+        </div>
+    </div>
+
+
+
 
 </div>
 
@@ -55,6 +69,7 @@
 
                 datas: @Html.Raw(Json.Serialize(Model.Files)),
                 pageInfo: @Html.Raw(Json.Serialize(Model.Pages)),
+                categories: @Html.Raw(Json.Serialize(Model.Categories)),
                 filter: {Page:1, PageSize:10, OrderBy:1, Extension:"", CategoryIds: []}
             }
         },
@@ -93,9 +108,12 @@
 
             getData(e) {
 
-                this.filter.Page = e;
-               console.log(this.filter);
+             this.filter.Page = e;
+             this.filterData();
 
+            },
+
+        filterData(){
                 axios({
                 method: "post",
                 url:"/myfiles",
@@ -108,6 +126,7 @@
                 {
                    this.datas = response.data.files
                    this.pageInfo = response.data.pages
+                   this.categories = response.data.categories
                 }
                 else
                 {
