@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
+using FileUpload.Application.Dtos.Categories;
 using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace FileUpload.Application.Features.Commands.Categories.Add
 {
-    public class AddCategoryCommand : IRequest<Response<bool>>
+    public class AddCategoryCommand : IRequest<Response<GetCategoryDto>>
     {
         public string Title { get; set; }
 
@@ -25,7 +25,7 @@ namespace FileUpload.Application.Features.Commands.Categories.Add
         }
     }
 
-    public class AddCategoryCommandHandler : IRequestHandler<AddCategoryCommand, Response<bool>>
+    public class AddCategoryCommandHandler : IRequestHandler<AddCategoryCommand, Response<GetCategoryDto>>
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
@@ -36,18 +36,20 @@ namespace FileUpload.Application.Features.Commands.Categories.Add
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Response<bool>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Response<GetCategoryDto>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = _mapper.Map<Category>(request);
-            await _unitOfWork.GetRepository<Category>().AddAsync(category);
+            var entity = await _unitOfWork.GetRepository<Category>().AddAsync(category);
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 
             if (!result)
             {
-                return Response<bool>.Fail(result, 200);
+                return Response<GetCategoryDto>.Fail("Kaydetme sırasında hata meydana geldi",  500);
             }
 
-            return Response<bool>.Success(result, 200);
+            GetCategoryDto dto = _mapper.Map<GetCategoryDto>(entity);   
+
+            return Response<GetCategoryDto>.Success(dto, 200);
         }
     }
 }

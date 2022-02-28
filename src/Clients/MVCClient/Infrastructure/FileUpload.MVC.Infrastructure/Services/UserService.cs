@@ -48,5 +48,10 @@ namespace FileUpload.MVC.Infrastructure.Services
             return await _client.CustomGetAsync<List<GetCategoryDto>>("categories", true);
          
         }
+
+        public async Task<GetCategoryDto> AddCategory(AddCategoryDto dto)
+        {
+            return await _client.CustomPostAsync<GetCategoryDto, AddCategoryDto>("categories", dto, true);
+        }
     }
 }

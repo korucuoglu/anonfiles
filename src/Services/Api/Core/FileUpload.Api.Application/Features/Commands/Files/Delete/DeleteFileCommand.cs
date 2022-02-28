@@ -1,4 +1,5 @@
-﻿using FileUpload.Application.Dtos.Files;
+﻿using AutoMapper;
+using FileUpload.Application.Dtos.Files;
 using FileUpload.Application.Dtos.Files.Pager;
 using FileUpload.Application.Interfaces.Repositories;
 using FileUpload.Application.Interfaces.UnitOfWork;
@@ -33,10 +34,12 @@ namespace FileUpload.Application.Features.Commands.Files.Delete
     public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand, Response<FilePagerViewModel>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public DeleteFileCommandHandler(IUnitOfWork unitOfWork)
+        public DeleteFileCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<Response<FilePagerViewModel>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
@@ -47,7 +50,7 @@ namespace FileUpload.Application.Features.Commands.Files.Delete
 
             (await _unitOfWork.GetRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId)).UsedSpace -= file.Size;
             
-            var data =  await Helper.Filter.GetDataInNextPageAfterRemovedFile(fileRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel);
+            var data =  await Helper.Filter.GetDataInNextPageAfterRemovedFile(fileRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel, _mapper);
 
             fileRepository.Remove(file);
 

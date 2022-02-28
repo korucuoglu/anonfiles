@@ -99,11 +99,13 @@ namespace FileUpload.Application.Helper
             return model.Skip((page - 1) * number).Take(number);
         }
 
-        public static async Task<Response<FilePagerViewModel>> GetDataInNextPageAfterRemovedFile(IQueryable<File> model, FileFilterModel filterModel)
+        public static async Task<Response<FilePagerViewModel>> GetDataInNextPageAfterRemovedFile(IQueryable<File> model, FileFilterModel filterModel, IMapper mapper)
         {
-            var count = model.Count();
+            model = ExtensionFilter(model, filterModel.Extension);
 
-            GetFileDto fileDto = null;
+            model = CategoryFilter(model, filterModel.CategoryIds);
+
+            var count = model.Count();
 
             Pager pager = new(count - 1, filterModel.Page, filterModel.PageSize);
 
@@ -112,32 +114,26 @@ namespace FileUpload.Application.Helper
                 FilePagerViewModel data = new()
                 {
                     Pages = pager,
-                    File = fileDto
                 };
 
                 return Response<FilePagerViewModel>.Success(data, 200);
             }
 
-            var extensionFilterData = ExtensionFilter(model, filterModel.Extension);
+           
 
-            var orderFilterData = OrderFiles(extensionFilterData, filterModel.OrderBy);
+            model = OrderFiles(model, filterModel.OrderBy);
 
-            model = orderFilterData.Skip(filterModel.Page * filterModel.PageSize).Take(1);
+            var categories = model.SelectMany(x => x.FilesCategories.Select(a => a.Category)).Distinct();
 
-            fileDto = await model.Select(x => new GetFileDto()
-            {
-                Id = x.Id,
-                FileName = x.FileName,
-                Size = x.Size,
-                CreatedDate = x.CreatedDate
-
-            }).FirstOrDefaultAsync();
+            model = model.Skip(filterModel.Page * filterModel.PageSize).Take(1);
 
             FilePagerViewModel dto = new()
             {
                 Pages = pager,
-                File = fileDto
+                File = await mapper.ProjectTo<GetFileDto>(model).FirstOrDefaultAsync(),
             };
+
+          
 
             return Response<FilePagerViewModel>.Success(dto, 200);
 
