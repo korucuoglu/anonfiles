@@ -14,7 +14,7 @@ namespace FileUpload.Application.Dtos.Files.Pager
 
         public Pager Pages { get; set; }
         public List<GetFileDto> Files { get; set; }
-        public IEnumerable<GetCategoryDto> Categories { get; set; }
+        public List<GetCategoryDto> Categories { get; set; }
 
     }
 }

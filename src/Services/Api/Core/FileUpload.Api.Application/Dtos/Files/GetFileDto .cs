@@ -1,6 +1,4 @@
-﻿using FileUpload.Application.Dtos.Categories;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace FileUpload.Application.Dtos.Files
 {
