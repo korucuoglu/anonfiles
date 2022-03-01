@@ -145,7 +145,6 @@ namespace FileUpload.Api.Infrastructure.Services
 
                     fileListEntity.Add(fileEntity);
 
-
                     data = Response<AddFileDto>.Success(new AddFileDto { FileId = fileId, FileName = file.FileName }, 200);
 
                 }
@@ -170,7 +169,6 @@ namespace FileUpload.Api.Infrastructure.Services
                 UserId = _sharedIdentityService.GetUserId,
                 FileCategories = fileCategories
             };
-
             await _mediator.Send(command);
 
             return Response<AddFileDto>.Success(200);

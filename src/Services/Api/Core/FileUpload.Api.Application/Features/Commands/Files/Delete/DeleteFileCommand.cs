@@ -45,18 +45,19 @@ namespace FileUpload.Api.Application.Features.Commands.Files.Delete
         public async Task<Response<FilePagerViewModel>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
         {
             var fileRepository = _unitOfWork.GetRepository<File>();
-            
-            var file = await fileRepository.FirstOrDefaultAsync(x => x.UserId == request.UserId && x.Id == request.FileId);
+
+            var fileSize = fileRepository.Where(x => x.UserId == request.UserId && x.Id == request.FileId).Select(x => x.Size).FirstOrDefault();
 
             var userInfo = await _unitOfWork.GetRepository<User>().FirstOrDefaultAsync(x => x.Id == request.UserId);
 
-            userInfo.UsedSpace -= file.Size;
+            userInfo.UsedSpace -= fileSize;
 
             var data =  await Helper.Filter.GetDataInNextPageAfterRemovedFile(fileRepository.Where(x => x.UserId == request.UserId), request.FilterModel, _mapper);
 
-            await fileRepository.Remove(file);
+            await fileRepository.Remove(x => x.UserId == request.UserId && x.Id == request.FileId);
 
             await _unitOfWork.GetRepository<User>().Update(userInfo);
+            await _unitOfWork.GetRepository<FileCategory>().RemoveRange(x=> x.FileId == request.FileId);
 
             return data;
 

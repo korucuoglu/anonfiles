@@ -65,9 +65,6 @@ namespace FileUpload.Api.Application.Features.Commands.Files.Add
                 await userRepository.AddAsync(user);
             }
 
-
-          
-
             return Response<bool>.Success(true, 200);
         }
     }

@@ -29,11 +29,6 @@ namespace FileUpload.Api.Persistence.Repositories
             return entity;
         }
 
-        public async Task<bool> AddRangeAsync(TEntity[] entities)
-        {
-            await _collection.InsertManyAsync(entities);
-            return true;
-        }
 
         public async Task<bool> AddRangeAsync(IEnumerable<TEntity> entities)
         {
@@ -76,6 +71,14 @@ namespace FileUpload.Api.Persistence.Repositories
 
         }
 
+        public async Task RemoveRange(Expression<Func<TEntity, bool>> predicate)
+        {
+            await _collection.DeleteManyAsync(predicate);
+        }
 
+        public async Task Remove(Expression<Func<TEntity, bool>> predicate)
+        {
+            await _collection.FindOneAndDeleteAsync(predicate);
+        }
     }
 }

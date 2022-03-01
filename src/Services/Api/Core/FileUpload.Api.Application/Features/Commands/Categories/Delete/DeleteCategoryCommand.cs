@@ -34,11 +34,8 @@ namespace FileUpload.Api.Application.Features.Commands.Categories.Delete
 
         public async Task<Response<bool>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            var repository = _unitOfWork.GetRepository<Category>();
-            
-            var category = await repository.FirstOrDefaultAsync(x => x.UserId == request.UserId && x.Id == request.Id);
-
-            await repository.Remove(category);
+            await _unitOfWork.GetRepository<Category>().Remove(x => x.UserId == request.UserId && x.Id == request.Id);
+            await _unitOfWork.GetRepository<FileCategory>().RemoveRange(x=> x.CategoryId == request.Id);
 
             return Response<bool>.Success(true, 200);
         }
