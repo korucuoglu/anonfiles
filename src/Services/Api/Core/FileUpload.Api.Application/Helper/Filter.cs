@@ -55,7 +55,7 @@ namespace FileUpload.Api.Application.Helper
             return model.Where(x => x.Extension.ToUpper() == extension.ToUpper());
         }
 
-        public static IQueryable<File> CategoryFilter(IQueryable<File> model, List<Guid> CategoryIds)
+        public static IQueryable<File> CategoryFilter(IQueryable<File> model, List<string> CategoryIds)
         {
             if (CategoryIds.Count == 0)
             {

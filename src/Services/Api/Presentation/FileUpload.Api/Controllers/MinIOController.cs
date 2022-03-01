@@ -1,9 +1,5 @@
-﻿using FileUpload.Api.Filters;
-using FileUpload.Api.Application.Dtos.Categories;
-using FileUpload.Api.Application.Dtos.Files;
+﻿using FileUpload.Api.Application.Dtos.Files;
 using FileUpload.Api.Application.Interfaces.Services;
-using FileUpload.Api.Domain.Entities;
-using FileUpload.Api.Infrastructure.Attribute;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,11 +24,11 @@ namespace FileUpload.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload([FromForm] IFormFile[] files, [FromForm] string categories)
         {
-            var categoryIds = new List<Guid>();
+            var categoryIds = new List<string>();
 
             if (String.IsNullOrEmpty(categories) is false)
             {
-                categoryIds = JsonSerializer.Deserialize<List<Guid>>(categories);
+                categoryIds = JsonSerializer.Deserialize<List<string>>(categories);
             }
 
             var data = await _service.UploadAsync(files, categoryIds);
@@ -58,7 +54,7 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpGet("myfiles/{id}")]
-        public async Task<IActionResult> GetByIdAsync(Guid id)
+        public async Task<IActionResult> GetByIdAsync(string id)
         {
             var data = await _service.GetFileById(id);
 
@@ -70,8 +66,8 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpPost("{id}")]
-        [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
-        public async Task<IActionResult> Remove([FromBody] FileFilterModel model, Guid id)
+        // [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
+        public async Task<IActionResult> Remove([FromBody] FileFilterModel model, string id)
         {
             FileFilterModel filterModel = new(model);
 
@@ -85,7 +81,7 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpGet("download/{id}")]
-        [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
+        // [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
         public async Task<IActionResult> Download(string id)
         {
             var data = await _service.Download(id);

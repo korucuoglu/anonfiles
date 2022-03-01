@@ -13,7 +13,7 @@ namespace FileUpload.Api.Infrastructure.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public Guid GetUserId => new Guid(_httpContextAccessor.HttpContext.User.FindFirst("sub").Value);
+        public string GetUserId => _httpContextAccessor.HttpContext.User.FindFirst("sub").Value;
 
     }
 }

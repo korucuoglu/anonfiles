@@ -11,8 +11,8 @@ namespace FileUpload.Api.Application.Features.Commands.Categories.Delete
 {
     public class DeleteCategoryCommand : IRequest<Response<bool>>
     {
-        public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public string Id { get; set; }
+        public string UserId { get; set; }
     }
 
     public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
@@ -36,7 +36,7 @@ namespace FileUpload.Api.Application.Features.Commands.Categories.Delete
         {
             var repository = _unitOfWork.GetRepository<Category>();
             
-            var category = await repository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId && x.Id == request.Id);
+            var category = await repository.FirstOrDefaultAsync(x => x.UserId == request.UserId && x.Id == request.Id);
 
             await repository.Remove(category);
 

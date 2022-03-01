@@ -14,7 +14,7 @@ namespace FileUpload.Api.Application.Features.Queries.Files.GetAll
     public class GetAllFilesQueryRequest : IRequest<Response<FilesPagerViewModel>>
     {
         public FileFilterModel FilterModel { get; set; }
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
     }
     public class GetAllFilesQueryRequestHandler : IRequestHandler<GetAllFilesQueryRequest, Response<FilesPagerViewModel>>
     {
@@ -31,9 +31,9 @@ namespace FileUpload.Api.Application.Features.Queries.Files.GetAll
         {
             var repository = _unitOfWork.GetRepository<File>();
 
-            if (await repository.Any(x => x.ApplicationUserId == request.UserId))
+            if (await repository.Any(x => x.UserId == request.UserId))
             {
-                return await Helper.Filter.FilterFile(repository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel, _mapper);
+                return await Helper.Filter.FilterFile(repository.Where(x => x.UserId == request.UserId), request.FilterModel, _mapper);
             }
 
             return Response<FilesPagerViewModel>.Success(new FilesPagerViewModel(), 200);

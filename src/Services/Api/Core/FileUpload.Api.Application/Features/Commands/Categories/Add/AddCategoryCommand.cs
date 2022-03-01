@@ -15,7 +15,7 @@ namespace FileUpload.Api.Application.Features.Commands.Categories.Add
     {
         public string Title { get; set; }
 
-        public Guid ApplicationUserId { get; set; }
+        public string UserId { get; set; }
     }
     public class AddCategoryCommandValidator : AbstractValidator<AddCategoryCommand>
     {

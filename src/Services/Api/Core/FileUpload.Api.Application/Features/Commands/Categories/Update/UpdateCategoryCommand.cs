@@ -14,7 +14,7 @@ namespace FileUpload.Api.Application.Features.Commands.Categories.Update
     {
         public string Id { get; set; }
         public string Title { get; set; }
-        public Guid ApplicationUserId { get; set; }
+        public string UserId { get; set; }
     }
 
     public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>
@@ -41,7 +41,7 @@ namespace FileUpload.Api.Application.Features.Commands.Categories.Update
         {
             var repository = _unitOfWork.GetRepository<Category>();
 
-            if (! await repository.Any(x => x.ApplicationUserId == request.ApplicationUserId && x.Id == new Guid(request.Id)))
+            if (! await repository.Any(x => x.UserId == request.UserId && x.Id == request.Id))
             {
                 return Response<bool>.Fail(false, 200);
             }

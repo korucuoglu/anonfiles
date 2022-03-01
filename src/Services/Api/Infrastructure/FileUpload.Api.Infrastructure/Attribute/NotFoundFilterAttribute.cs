@@ -1,75 +1,75 @@
-﻿using FileUpload.Api.Application.Interfaces.Repositories;
-using FileUpload.Api.Application.Interfaces.Services;
-using FileUpload.Api.Application.Wrappers;
-using FileUpload.Api.Domain.Common; // yanlış
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//using FileUpload.Api.Application.Interfaces.Repositories;
+//using FileUpload.Api.Application.Interfaces.Services;
+//using FileUpload.Api.Application.Wrappers;
+//using FileUpload.Api.Domain.Common; // yanlış
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.Mvc.Filters;
+//using System.Linq;
+//using System.Threading.Tasks;
 
-namespace FileUpload.Api.Filters
-{
-
-
-    public class NotFoundFilterAttribute<TEntity> : IAsyncActionFilter where TEntity : BaseIdentity
-    {
-        private readonly IRepository<TEntity> _service;
-        private readonly ISharedIdentityService _sharedIdentityService;
-
-        public NotFoundFilterAttribute(IRepository<TEntity> service, ISharedIdentityService sharedIdentityService)
-        {
-            _service = service;
-            _sharedIdentityService = sharedIdentityService;
-        }
-
-        public async Task<bool> GetData(string id)
-        {
-            return await _service.Any(x => x.Id.ToString() == id && x.ApplicationUserId == _sharedIdentityService.GetUserId);
-
-        }
-
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        {
-            string GetId()
-            {
-               string routeId = (string)context.RouteData.Values["id"];
-
-                if (!string.IsNullOrEmpty(routeId))
-                {
-                    return routeId;
-                }
-
-                var obj = context.ActionArguments.First().Value;
-
-                string modelId = obj.GetType().GetProperties().First(o => o.Name == "Id").GetValue(obj, null).ToString();
-
-                if (!string.IsNullOrEmpty(modelId))
-                {
-                    return modelId;
-                }
-
-                return null;
-
-            }
-
-            var id = GetId();
-
-            if (string.IsNullOrEmpty(id))
-            {
-                context.Result = new NotFoundObjectResult(Response<TEntity>.Fail("Id değeri boş olamaz", 404));
-                return;
-            }
-
-            if (! await GetData(id))
-            {
-                var error = "Böyle bir veri bulunamadı.";
-                context.Result = new NotFoundObjectResult(Response<TEntity>.Fail(error, 404));
-                return;
-            }
-
-            await next();
+//namespace FileUpload.Api.Filters
+//{
 
 
-        }
-    }
-}
+//    public class NotFoundFilterAttribute<TEntity> : IAsyncActionFilter where TEntity : IBaseEntity
+//    {
+//        private readonly IRepository<TEntity> _service;
+//        private readonly ISharedIdentityService _sharedIdentityService;
+
+//        public NotFoundFilterAttribute(IRepository<TEntity> service, ISharedIdentityService sharedIdentityService)
+//        {
+//            _service = service;
+//            _sharedIdentityService = sharedIdentityService;
+//        }
+
+//        public async Task<bool> GetData(string id)
+//        {
+//            return await _service.Any(x => x.Id.ToString() == id && x.UserId == _sharedIdentityService.GetUserId);
+
+//        }
+
+//        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+//        {
+//            string GetId()
+//            {
+//               string routeId = (string)context.RouteData.Values["id"];
+
+//                if (!string.IsNullOrEmpty(routeId))
+//                {
+//                    return routeId;
+//                }
+
+//                var obj = context.ActionArguments.First().Value;
+
+//                string modelId = obj.GetType().GetProperties().First(o => o.Name == "Id").GetValue(obj, null).ToString();
+
+//                if (!string.IsNullOrEmpty(modelId))
+//                {
+//                    return modelId;
+//                }
+
+//                return null;
+
+//            }
+
+//            var id = GetId();
+
+//            if (string.IsNullOrEmpty(id))
+//            {
+//                context.Result = new NotFoundObjectResult(Response<TEntity>.Fail("Id değeri boş olamaz", 404));
+//                return;
+//            }
+
+//            if (! await GetData(id))
+//            {
+//                var error = "Böyle bir veri bulunamadı.";
+//                context.Result = new NotFoundObjectResult(Response<TEntity>.Fail(error, 404));
+//                return;
+//            }
+
+//            await next();
+
+
+//        }
+//    }
+//}

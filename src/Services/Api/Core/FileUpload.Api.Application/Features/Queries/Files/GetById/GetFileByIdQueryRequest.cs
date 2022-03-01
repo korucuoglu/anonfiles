@@ -13,8 +13,8 @@ namespace FileUpload.Api.Application.Features.Queries.Files.GetById
 {
     public class GetFileByIdQueryRequest : IRequest<Response<GetFileDto>>
     {
-        public Guid UserId { get; set; }
-        public Guid FileId { get; set; }
+        public string UserId { get; set; }
+        public string FileId { get; set; }
     }
     public class GetAllFilesQueryRequestHandler : IRequestHandler<GetFileByIdQueryRequest, Response<GetFileDto>>
     {
@@ -28,7 +28,7 @@ namespace FileUpload.Api.Application.Features.Queries.Files.GetById
 
         public async Task<Response<GetFileDto>> Handle(GetFileByIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var data = _unitOfWork.GetRepository<File>().Where(x => x.ApplicationUserId == request.UserId && x.Id == request.FileId);
+            var data = _unitOfWork.GetRepository<File>().Where(x => x.UserId == request.UserId && x.Id == request.FileId);
 
             var mapperData = _mapper.ProjectTo<GetFileDto>(data).FirstOrDefault();
 

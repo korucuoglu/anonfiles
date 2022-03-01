@@ -1,5 +1,4 @@
 ﻿using FileUpload.Data.Entity;
-using FileUpload.Data.Repository;
 using FileUpload.Identity.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

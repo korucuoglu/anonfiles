@@ -1,13 +1,18 @@
-﻿using System;
+﻿using FileUpload.Api.Domain.Common;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace FileUpload.Api.Domain.Entities
 {
-    public class FileCategory
+    public class FileCategory: BaseEntity
     {
-        public Guid FileId { get; set; }
+        public string FileId { get; set; }
+
+        [BsonIgnore]
         public File File { get; set; }
 
-        public Guid CategoryId { get; set; }
+        public string CategoryId { get; set; }
+
+        [BsonIgnore]
         public Category Category { get; set; }
     }
 }

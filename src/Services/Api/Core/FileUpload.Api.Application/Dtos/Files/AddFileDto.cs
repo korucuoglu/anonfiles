@@ -4,7 +4,7 @@ namespace FileUpload.Api.Application.Dtos.Files
 {
     public class AddFileDto
     {
-        public Guid FileId { get; set; }
+        public string FileId { get; set; }
         public string FileName { get; set; }
 
     }

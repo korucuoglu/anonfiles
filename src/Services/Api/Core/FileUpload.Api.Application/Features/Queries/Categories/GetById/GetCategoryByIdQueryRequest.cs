@@ -13,8 +13,8 @@ namespace FileUpload.Api.Application.Features.Queries.Categories.GetById
 {
     public class GetCategoryByIdQueryRequest: IRequest<Response<GetCategoryDto>>
     {
-        public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public string Id { get; set; }
+        public string UserId { get; set; }
     }
 
     public class GetCategoryByIdQueryRequestHandler : IRequestHandler<GetCategoryByIdQueryRequest, Response<GetCategoryDto>>
@@ -30,7 +30,7 @@ namespace FileUpload.Api.Application.Features.Queries.Categories.GetById
 
         public async Task<Response<GetCategoryDto>> Handle(GetCategoryByIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var data = _unitOfWork.GetRepository<Category>().Where(x => x.ApplicationUserId == request.UserId && x.Id == request.Id);
+            var data = _unitOfWork.GetRepository<Category>().Where(x => x.UserId == request.UserId && x.Id == request.Id);
 
             var mapperData = _mapper.ProjectTo<GetCategoryDto>(data).FirstOrDefault();
 

@@ -35,7 +35,7 @@ namespace FileUpload.Api.Infrastructure.Services
             return await _mediator.Send(query);
         }
 
-        public async Task<Response<GetCategoryDto>> GetByIdAsync(Guid id)
+        public async Task<Response<GetCategoryDto>> GetByIdAsync(string id)
         {
             var query = new GetCategoryByIdQueryRequest()
             {
@@ -49,17 +49,17 @@ namespace FileUpload.Api.Infrastructure.Services
 
         public async Task<Response<bool>> UpdateAsync(UpdateCategoryCommand dto)
         {
-            dto.ApplicationUserId = _sharedIdentityService.GetUserId;
+            dto.UserId = _sharedIdentityService.GetUserId;
             return await _mediator.Send(dto);
         }
 
         public async Task<Response<GetCategoryDto>> AddAsync(AddCategoryCommand dto)
         {
-            dto.ApplicationUserId = _sharedIdentityService.GetUserId;
+            dto.UserId = _sharedIdentityService.GetUserId;
             return await _mediator.Send(dto);
         }
 
-        public async Task<Response<bool>> DeleteByIdAsync(Guid id)
+        public async Task<Response<bool>> DeleteByIdAsync(string id)
         {
             var query = new DeleteCategoryCommand()
             {

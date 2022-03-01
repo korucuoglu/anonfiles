@@ -18,8 +18,8 @@ namespace FileUpload.Api.Application.Features.Commands.Files.Delete
 {
     public class DeleteFileCommand : IRequest<Response<FilePagerViewModel>>
     {
-        public Guid FileId { get; set; }
-        public Guid UserId { get; set; }
+        public string FileId { get; set; }
+        public string UserId { get; set; }
         public FileFilterModel FilterModel { get; set; }
     }
     public class DeleteFileCommandValidator : AbstractValidator<DeleteFileCommand>
@@ -46,13 +46,17 @@ namespace FileUpload.Api.Application.Features.Commands.Files.Delete
         {
             var fileRepository = _unitOfWork.GetRepository<File>();
             
-            var file = await fileRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId && x.Id == request.FileId);
+            var file = await fileRepository.FirstOrDefaultAsync(x => x.UserId == request.UserId && x.Id == request.FileId);
 
-            (await _unitOfWork.GetRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId)).UsedSpace -= file.Size;
-            
-            var data =  await Helper.Filter.GetDataInNextPageAfterRemovedFile(fileRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel, _mapper);
+            var userInfo = await _unitOfWork.GetRepository<User>().FirstOrDefaultAsync(x => x.Id == request.UserId);
+
+            userInfo.UsedSpace -= file.Size;
+
+            var data =  await Helper.Filter.GetDataInNextPageAfterRemovedFile(fileRepository.Where(x => x.UserId == request.UserId), request.FilterModel, _mapper);
 
             await fileRepository.Remove(file);
+
+            await _unitOfWork.GetRepository<User>().Update(userInfo);
 
             return data;
 

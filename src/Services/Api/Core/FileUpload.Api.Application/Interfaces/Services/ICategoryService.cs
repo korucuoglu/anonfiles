@@ -13,10 +13,10 @@ namespace FileUpload.Api.Application.Interfaces.Services
     public interface ICategoryService
     {
         public Task<Response<List<GetCategoryDto>>> GetAllAsync();
-        public Task<Response<GetCategoryDto>> GetByIdAsync(Guid id);
+        public Task<Response<GetCategoryDto>> GetByIdAsync(string id);
 
         public Task<Response<GetCategoryDto>> AddAsync(AddCategoryCommand dto);
         public Task<Response<bool>> UpdateAsync(UpdateCategoryCommand dto);
-        public Task<Response<bool>> DeleteByIdAsync(Guid id);
+        public Task<Response<bool>> DeleteByIdAsync(string id);
     }
 }

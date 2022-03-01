@@ -1,6 +1,4 @@
-﻿
-using FileUpload.Api.Filters;
-using FileUpload.Api.Application.Interfaces.Services;
+﻿using FileUpload.Api.Application.Interfaces.Services;
 using FileUpload.Api.Infrastructure.Attribute;
 using FileUpload.Api.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +15,7 @@ namespace FileUpload.Api.Infrastructure
             services.AddSingleton<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IFileService, FileService>();
-            services.AddScoped(typeof(NotFoundFilterAttribute<>));
+            // services.AddScoped(typeof(NotFoundFilterAttribute<>));
             services.AddScoped<ValidationFilterAttribute>();
 
             services.Configure<ApiBehaviorOptions>(options =>

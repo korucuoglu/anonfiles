@@ -15,7 +15,8 @@ namespace FileUpload.Api.Application.Features.Commands.Files.Add
     public class AddFileCommand : IRequest<Response<bool>>
     {
         public List<File> Files { get; set; }
-        public Guid AplicationUserId { get; set; }
+        public string UserId { get; set; }
+        public List<FileCategory> FileCategories { get; set; }
     }
     public class AddFileCommandValidator : AbstractValidator<AddFileCommand>
     {
@@ -36,9 +37,36 @@ namespace FileUpload.Api.Application.Features.Commands.Files.Add
 
         public async Task<Response<bool>> Handle(AddFileCommand request, CancellationToken cancellationToken)
         {
-
-            (await _unitOfWork.GetRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.AplicationUserId)).UsedSpace += request.Files.Sum(x => x.Size);
             await _unitOfWork.GetRepository<File>().AddRangeAsync(request.Files);
+
+            if (request.FileCategories.Any())
+            {
+                await _unitOfWork.GetRepository<FileCategory>().AddRangeAsync(request.FileCategories);
+            }
+
+            var userRepository = _unitOfWork.GetRepository<User>();
+
+            if (await userRepository.Any(x => x.Id == request.UserId))
+            {
+                var userInfo = await userRepository.FirstOrDefaultAsync(x => x.Id == request.UserId);
+
+                userInfo.UsedSpace += request.Files.Sum(x => x.Size);
+
+                await userRepository.Update(userInfo);
+            }
+            else
+            {
+                User user = new User()
+                {
+                    Id = request.UserId,
+                    UsedSpace = request.Files.Sum(x => x.Size)
+                };
+
+                await userRepository.AddAsync(user);
+            }
+
+
+          
 
             return Response<bool>.Success(true, 200);
         }

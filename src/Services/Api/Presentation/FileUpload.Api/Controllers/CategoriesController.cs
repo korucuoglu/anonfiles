@@ -1,8 +1,6 @@
-﻿using FileUpload.Api.Filters;
-using FileUpload.Api.Application.Features.Commands.Categories.Add;
+﻿using FileUpload.Api.Application.Features.Commands.Categories.Add;
 using FileUpload.Api.Application.Features.Commands.Categories.Update;
 using FileUpload.Api.Application.Interfaces.Services;
-using FileUpload.Api.Domain.Entities; // yanlış
 using FileUpload.Api.Infrastructure.Attribute;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -31,8 +29,8 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
-        public async Task<IActionResult> GetByIdAsync(Guid id)
+        // [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
+        public async Task<IActionResult> GetByIdAsync(string id)
         {
             var data = await _categoryService.GetByIdAsync(id);
 
@@ -57,7 +55,7 @@ namespace FileUpload.Api.Controllers
 
         [HttpPut]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
+        // [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
         public async Task<IActionResult> UpdateAsync(UpdateCategoryCommand dto)
         {
             var data = await _categoryService.UpdateAsync(dto);
@@ -70,8 +68,8 @@ namespace FileUpload.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
-        public async Task<IActionResult> DeleteByIdAsync(Guid id)
+        // [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
+        public async Task<IActionResult> DeleteByIdAsync(string id)
         {
             var data = await _categoryService.DeleteByIdAsync(id);
 

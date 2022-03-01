@@ -3,7 +3,6 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Util;
 using AutoMapper;
-using FileUpload.Api.Application.Dtos.Categories;
 using FileUpload.Api.Application.Dtos.Files;
 using FileUpload.Api.Application.Dtos.Files.Pager;
 using FileUpload.Api.Application.Features.Commands.Files.Add;
@@ -23,8 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
+using File = FileUpload.Api.Domain.Entities.File;
 
 namespace FileUpload.Api.Infrastructure.Services
 {
@@ -32,19 +31,16 @@ namespace FileUpload.Api.Infrastructure.Services
     {
         private readonly IMediator _mediator;
         private readonly ISharedIdentityService _sharedIdentityService;
-        private readonly IConfiguration configuration;
         private readonly IHubContext<FileHub, IFileHub> _fileHub;
-        private readonly IMapper _mapper;
         public AmazonS3Client client { get; set; }
 
         public FileService(IMediator mediator,
             ISharedIdentityService sharedIdentityService,
             IConfiguration configuration,
-            IHubContext<FileHub, IFileHub> fileHub, IMapper mapper)
+            IHubContext<FileHub, IFileHub> fileHub)
         {
             _mediator = mediator;
             _sharedIdentityService = sharedIdentityService;
-            this.configuration = configuration;
 
             var config = new AmazonS3Config
             {
@@ -55,7 +51,6 @@ namespace FileUpload.Api.Infrastructure.Services
             };
             client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
             _fileHub = fileHub;
-            _mapper = mapper;
         }
 
         public async Task<Response<FilesPagerViewModel>> GetAllFiles(FileFilterModel model)
@@ -69,7 +64,7 @@ namespace FileUpload.Api.Infrastructure.Services
             return await _mediator.Send(query);
         }
 
-        public async Task<Response<GetFileDto>> GetFileById(Guid id)
+        public async Task<Response<GetFileDto>> GetFileById(string id)
         {
             GetFileByIdQueryRequest query = new()
             {
@@ -97,15 +92,16 @@ namespace FileUpload.Api.Infrastructure.Services
 
         }
 
-        public async Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, List<Guid> CategoriesId)
+        public async Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, List<string> CategoriesId)
         {
-            Guid fileId;
+            string fileId;
 
             Response<AddFileDto> data = new();
 
             var ConnnnectionId = HubData.ClientsData.Where(x => x.UserId == "1").Select(x => x.ConnectionId).FirstOrDefault();
 
-            List<Domain.Entities.File> fileListEntity = new();
+            List<File> fileListEntity = new();
+            List<FileCategory> fileCategories = new();
 
             foreach (var file in files)
             {
@@ -117,7 +113,7 @@ namespace FileUpload.Api.Infrastructure.Services
                     }
 
 
-                    fileId = Guid.NewGuid();
+                    fileId = Guid.NewGuid().ToString();
                     var stream = file.OpenReadStream();
                     PutObjectRequest putObjectRequest = new()
                     {
@@ -132,19 +128,19 @@ namespace FileUpload.Api.Infrastructure.Services
                     putObjectRequest.Headers.ContentDisposition = $"attachment; filename=\"{encodedFilename}\"";
                     await client.PutObjectAsync(putObjectRequest);
 
-                    Domain.Entities.File fileEntity = new()
+                   File fileEntity = new()
                     {
                         Id = fileId,
-                        ApplicationUserId = _sharedIdentityService.GetUserId,
+                        UserId = _sharedIdentityService.GetUserId,
                         FileName = file.FileName,
                         Size = file.Length,
                         Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper(),
                         
                     };
 
-                    CategoriesId.ForEach(x =>
+                    CategoriesId.ForEach(catId =>
                     {
-                        fileEntity.FilesCategories.Add(new FileCategory() { CategoryId = x });
+                        fileCategories.Add(new FileCategory() { CategoryId = catId, FileId = fileId });
                     });
 
                     fileListEntity.Add(fileEntity);
@@ -171,7 +167,8 @@ namespace FileUpload.Api.Infrastructure.Services
             AddFileCommand command = new()
             {
                 Files = fileListEntity,
-                AplicationUserId = _sharedIdentityService.GetUserId
+                UserId = _sharedIdentityService.GetUserId,
+                FileCategories = fileCategories
             };
 
             await _mediator.Send(command);
@@ -179,7 +176,7 @@ namespace FileUpload.Api.Infrastructure.Services
             return Response<AddFileDto>.Success(200);
         }
 
-        public async Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, Guid fileId)
+        public async Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, string fileId)
         {
             try
             {
