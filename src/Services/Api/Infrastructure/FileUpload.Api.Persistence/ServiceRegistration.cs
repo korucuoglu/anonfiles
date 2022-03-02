@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using FileUpload.Api.Application.Interfaces.Context;
+using FileUpload.Api.Persistence.Context;
 
 namespace FileUpload.Api.Persistence
 {
@@ -24,6 +26,7 @@ namespace FileUpload.Api.Persistence
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+            services.AddScoped<IMongoContext, MongoContext>();
 
             services.AddAuthentication().AddJwtBearer(options =>
             {

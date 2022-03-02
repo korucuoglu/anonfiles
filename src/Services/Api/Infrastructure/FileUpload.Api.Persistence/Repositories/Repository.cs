@@ -7,38 +7,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using FileUpload.Api.Application.Interfaces.Context;
 
 namespace FileUpload.Api.Persistence.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
         private readonly IMongoCollection<TEntity> _collection;
+        protected readonly IMongoContext _context;
 
-        public Repository(IDatabaseSettings databaseSettings)
+        public Repository(IDatabaseSettings databaseSettings, IMongoContext context)
         {
             var client = new MongoClient(databaseSettings.ConnectionString);
 
             var database = client.GetDatabase(databaseSettings.DatabaseName);
 
             _collection = database.GetCollection<TEntity>(typeof(TEntity).Name);
+            _context = context;
         }
 
         public async Task<TEntity> AddAsync(TEntity entity)
         {
-            await _collection.InsertOneAsync(entity);
+            _context.AddCommand(() =>  _collection.InsertOneAsync(entity));
+
             return entity;
         }
 
 
-        public async Task<bool> AddRangeAsync(IEnumerable<TEntity> entities)
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
-            await _collection.InsertManyAsync(entities);
-            return true;
+             _context.AddCommand(() => _collection.InsertManyAsync(entities));
         }
 
         public async Task Remove(TEntity entity)
         {
-            await _collection.DeleteOneAsync(x => x.Id == entity.Id);
+            _context.AddCommand(() => _collection.DeleteOneAsync(x => x.Id == entity.Id));
+
         }
 
         public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
@@ -67,18 +71,18 @@ namespace FileUpload.Api.Persistence.Repositories
 
         public async Task Update(TEntity entity)
         {
-            await _collection.FindOneAndReplaceAsync(x => x.Id == entity.Id, entity);
+            _context.AddCommand(() => _collection.FindOneAndReplaceAsync(x => x.Id == entity.Id, entity));
 
         }
 
         public async Task RemoveRange(Expression<Func<TEntity, bool>> predicate)
         {
-            await _collection.DeleteManyAsync(predicate);
+            _context.AddCommand(() => _collection.DeleteManyAsync(predicate));
         }
 
         public async Task Remove(Expression<Func<TEntity, bool>> predicate)
         {
-            await _collection.FindOneAndDeleteAsync(predicate);
+            _context.AddCommand(() => _collection.FindOneAndDeleteAsync(predicate));
         }
     }
 }

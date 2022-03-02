@@ -32,7 +32,7 @@ namespace FileUpload.Api.Application.Features.Commands.Categories.Add
 
         public AddCategoryCommandHandler(IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _mapper = mapper;
+             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
 
@@ -41,9 +41,11 @@ namespace FileUpload.Api.Application.Features.Commands.Categories.Add
             var category = _mapper.Map<Category>(request);
             var entity = await _unitOfWork.GetRepository<Category>().AddAsync(category);
 
-            if (entity == null)
+            bool result = await _unitOfWork.Commit();
+
+            if (!result)
             {
-                return Response<GetCategoryDto>.Fail("Kaydetme sırasında hata meydana geldi", 500);
+                return Response<GetCategoryDto>.Fail("Hata meydana geldi", 500);
             }
 
             GetCategoryDto dto = _mapper.Map<GetCategoryDto>(entity);

@@ -18,7 +18,7 @@ namespace FileUpload.Api.Application.Interfaces.Repositories
         Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 
         Task<TEntity> AddAsync(TEntity entity);
-        Task<bool> AddRangeAsync(IEnumerable<TEntity> entities);
+        Task AddRangeAsync(IEnumerable<TEntity> entities);
 
         Task Remove(TEntity entity);
         Task Remove(Expression<Func<TEntity, bool>> predicate);

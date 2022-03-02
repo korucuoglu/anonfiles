@@ -12,5 +12,7 @@ namespace FileUpload.Api.Application.Interfaces.UnitOfWork
     {
         IRepository<T> GetRepository<T>() where T : BaseEntity;
 
+        Task<bool> Commit();
+
     }
 }
