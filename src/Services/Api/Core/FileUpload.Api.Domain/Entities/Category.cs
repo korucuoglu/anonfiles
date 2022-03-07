@@ -8,9 +8,5 @@ namespace FileUpload.Domain.Entities
        
         public string Title { get; set; }
         public virtual ICollection<FileCategory> FilesCategories { get; set; }
-
-
-
-
     }
 }

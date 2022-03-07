@@ -70,14 +70,14 @@ namespace FileUpload.Application.Helper
             return model.Where(x => x.Extension.ToUpper() == extension.ToUpper());
         }
 
-        public static IQueryable<File> CategoryFilter(IQueryable<File> model, List<Guid> CategoryIds)
+        public static IQueryable<File> CategoryFilter(IQueryable<File> model, List<Guid> categoriesIds)
         {
-            if (!CategoryIds.Any())
+            if (!categoriesIds.Any())
             {
                 return model;
             }
 
-            return model.Include(x => x.FilesCategories).Where(p => p.FilesCategories.Select(a => a.Category).Any(pp => CategoryIds.Contains(pp.Id)));
+            return model.Include(x => x.FilesCategories).Where(p => p.FilesCategories.Select(a => a.Category).Any(pp => categoriesIds.Contains(pp.Id)));
         }
 
         public static IQueryable<File> OrderFiles(IQueryable<File> model, int orderBy)

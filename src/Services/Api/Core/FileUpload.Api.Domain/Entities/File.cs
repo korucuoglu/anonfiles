@@ -5,7 +5,6 @@ namespace FileUpload.Domain.Entities
 {
     public class File : BaseIdentity
     {
-
         public File()
         {
             FilesCategories = new List<FileCategory>();
@@ -17,8 +16,5 @@ namespace FileUpload.Domain.Entities
 
         public virtual ICollection<FileCategory> FilesCategories { get; set; }
         
-        
-
-
     }
 }
