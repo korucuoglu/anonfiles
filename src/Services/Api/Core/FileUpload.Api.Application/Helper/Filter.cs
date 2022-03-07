@@ -2,6 +2,7 @@
 using FileUpload.Api.Application.Dtos.Categories;
 using FileUpload.Api.Application.Dtos.Files;
 using FileUpload.Api.Application.Dtos.Files.Pager;
+using FileUpload.Api.Application.Interfaces.UnitOfWork;
 using FileUpload.Api.Application.Wrappers;
 using FileUpload.Api.Domain.Entities;
 using System;
@@ -13,7 +14,7 @@ namespace FileUpload.Api.Application.Helper
 {
     public static class Filter
     {
-        public static async Task<Response<FilesPagerViewModel>> FilterFile(IQueryable<File> model, FileFilterModel filterModel, IMapper mapper)
+        public static async Task<Response<FilesPagerViewModel>> FilterFile(IQueryable<File> model, FileFilterModel filterModel, IMapper mapper, IUnitOfWork unitOfWork)
         {
 
             model = ExtensionFilter(model, filterModel.Extension);
@@ -29,7 +30,9 @@ namespace FileUpload.Api.Application.Helper
 
             model = OrderFiles(model, filterModel.OrderBy);
 
-            var categories = model.SelectMany(x => x.FilesCategories.Select(a => a.Category)).Distinct();
+            var categories = model.SelectMany(a => a.Categories);
+
+            // var categories = model.SelectMany(x => x.FilesCategories.Select(a => a.Category)).Distinct();
 
             model = PaginationData(model, pager.CurrentPage, filterModel.PageSize);
 
@@ -62,9 +65,7 @@ namespace FileUpload.Api.Application.Helper
                 return model;
             }
 
-            return model;
-
-            // return model.Where(x => x.FilesCategories).Where(p => p.FilesCategories.Select(a => a.Category).Any(pp => CategoryIds.Contains(pp.Id)));
+            return model.Where(p => p.Categories.Any(pp => CategoryIds.Contains(pp.Id)));
         }
 
         public static IQueryable<File> OrderFiles(IQueryable<File> model, int orderBy)
@@ -120,11 +121,9 @@ namespace FileUpload.Api.Application.Helper
                 return Response<FilePagerViewModel>.Success(data, 200);
             }
 
-           
-
             model = OrderFiles(model, filterModel.OrderBy);
 
-            var categories = model.SelectMany(x => x.FilesCategories.Select(a => a.Category)).Distinct();
+            // var categories = model.SelectMany(x => x.FilesCategories.Select(a => a.Category)).Distinct();
 
             model = model.Skip(filterModel.Page * filterModel.PageSize).Take(1);
 

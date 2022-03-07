@@ -9,7 +9,7 @@ namespace FileUpload.Api.Domain.Entities
     {
         public File()
         {
-            FilesCategories = new List<FileCategory>();
+            Categories = new List<Category>();
         }
 
         public string FileName { get; set; }
@@ -19,7 +19,7 @@ namespace FileUpload.Api.Domain.Entities
         public string UserId { get; set; }
 
         [BsonIgnore]
-        public virtual ICollection<FileCategory> FilesCategories { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
         
         
 

@@ -37,6 +37,13 @@ namespace FileUpload.Api.Application.Features.Commands.Categories.Delete
             await _unitOfWork.GetRepository<Category>().Remove(x => x.UserId == request.UserId && x.Id == request.Id);
             await _unitOfWork.GetRepository<FileCategory>().RemoveRange(x=> x.CategoryId == request.Id);
 
+            bool result = await _unitOfWork.Commit();
+
+            if (!result)
+            {
+                return Response<bool>.Fail("Kayıt esnasında hata meydana geldi", 500);
+            }
+
             return Response<bool>.Success(true, 200);
         }
     }

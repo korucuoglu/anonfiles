@@ -6,6 +6,7 @@ using FileUpload.Api.Application.Wrappers;
 using FileUpload.Api.Domain.Entities;
 using MediatR;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,10 +31,24 @@ namespace FileUpload.Api.Application.Features.Queries.Files.GetAll
         public async Task<Response<FilesPagerViewModel>> Handle(GetAllFilesQueryRequest request, CancellationToken cancellationToken)
         {
             var repository = _unitOfWork.GetRepository<File>();
+            var FileCategoryRepository = _unitOfWork.GetRepository<FileCategory>();
+            var Categoryrepository = _unitOfWork.GetRepository<Category>();
 
             if (await repository.Any(x => x.UserId == request.UserId))
             {
-                return await Helper.Filter.FilterFile(repository.Where(x => x.UserId == request.UserId), request.FilterModel, _mapper);
+                var files = repository.Where(x => x.UserId == request.UserId).ToList();
+
+                foreach (var file in files)
+                {
+                    if (await FileCategoryRepository.Any(x=> x.FileId == file.Id))
+                    {
+                        var catId =  FileCategoryRepository.Where(x => x.FileId == file.Id).Select(x => x.CategoryId).FirstOrDefault();
+                        var category = await Categoryrepository.FirstOrDefaultAsync(x => x.Id == catId);
+                        file.Categories.Add(category);
+                    }
+                }
+
+                return await Helper.Filter.FilterFile(files.AsQueryable(), request.FilterModel, _mapper, _unitOfWork);
             }
 
             return Response<FilesPagerViewModel>.Success(new FilesPagerViewModel(), 200);

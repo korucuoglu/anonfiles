@@ -65,6 +65,13 @@ namespace FileUpload.Api.Application.Features.Commands.Files.Add
                 await userRepository.AddAsync(user);
             }
 
+            bool result = await _unitOfWork.Commit();
+
+            if (!result)
+            {
+                return Response<bool>.Fail("Kayıt esnasında hata meydana geldi", 500);
+            }
+
             return Response<bool>.Success(true, 200);
         }
     }

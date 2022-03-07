@@ -12,7 +12,7 @@ namespace FileUpload.Api.Domain.Entities
         public string Title { get; set; }
 
         [BsonIgnore]
-        public virtual ICollection<FileCategory> FilesCategories { get; set; }
+        public virtual ICollection<File> Files { get; set; }
         
     }
 }

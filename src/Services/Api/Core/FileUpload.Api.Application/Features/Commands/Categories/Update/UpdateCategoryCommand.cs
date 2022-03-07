@@ -49,6 +49,13 @@ namespace FileUpload.Api.Application.Features.Commands.Categories.Update
             var category = _mapper.Map<Category>(request);
             await repository.Update(category);
 
+            bool result = await _unitOfWork.Commit();
+
+            if (!result)
+            {
+                return Response<bool>.Fail("Kayıt esnasında hata meydana geldi", 500);
+            }
+
             return Response<bool>.Success(true, 200);
         }
     }

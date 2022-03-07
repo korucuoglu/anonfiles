@@ -45,7 +45,7 @@ namespace FileUpload.Api.Application.Features.Commands.Categories.Add
 
             if (!result)
             {
-                return Response<GetCategoryDto>.Fail("Hata meydana geldi", 500);
+                return Response<GetCategoryDto>.Fail("Kayıt esnasında hata meydana geldi", 500);
             }
 
             GetCategoryDto dto = _mapper.Map<GetCategoryDto>(entity);

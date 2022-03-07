@@ -59,6 +59,13 @@ namespace FileUpload.Api.Application.Features.Commands.Files.Delete
             await _unitOfWork.GetRepository<User>().Update(userInfo);
             await _unitOfWork.GetRepository<FileCategory>().RemoveRange(x=> x.FileId == request.FileId);
 
+            bool result = await _unitOfWork.Commit();
+
+            if (!result)
+            {
+                return Response<FilePagerViewModel>.Fail("Kayıt esnasında hata meydana geldi", 500);
+            }
+
             return data;
 
         }
