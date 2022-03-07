@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
 using FileUpload.Application.Features.Commands.Categories.Add;
 using FileUpload.Infrastructure.Hub;
@@ -45,11 +44,7 @@ namespace FileUpload.Api
             }).
            AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<AddCategoryCommandValidator>());
 
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FileUpload.Api", Version = "v1" });
-            });
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,8 +53,6 @@ namespace FileUpload.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FileUpload.Api v1"));
             }
 
             app.UseCors("CorsPolicy");
