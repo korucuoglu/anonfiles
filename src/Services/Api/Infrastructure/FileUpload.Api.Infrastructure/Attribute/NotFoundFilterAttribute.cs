@@ -1,4 +1,4 @@
-﻿using FileUpload.Application.Interfaces.Repositories;
+﻿using FileUpload.Api.Application.Interfaces.Repositories;
 using FileUpload.Application.Interfaces.Services;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Common; // yanlış
@@ -13,10 +13,10 @@ namespace FileUpload.Api.Filters
 
     public class NotFoundFilterAttribute<TEntity> : IAsyncActionFilter where TEntity : BaseIdentity
     {
-        private readonly IRepository<TEntity> _service;
+        private readonly IReadRepository<TEntity> _service;
         private readonly ISharedIdentityService _sharedIdentityService;
 
-        public NotFoundFilterAttribute(IRepository<TEntity> service, ISharedIdentityService sharedIdentityService)
+        public NotFoundFilterAttribute(IReadRepository<TEntity> service, ISharedIdentityService sharedIdentityService)
         {
             _service = service;
             _sharedIdentityService = sharedIdentityService;

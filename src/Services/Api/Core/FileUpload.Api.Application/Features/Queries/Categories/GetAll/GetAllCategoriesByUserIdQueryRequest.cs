@@ -28,7 +28,7 @@ namespace FileUpload.Application.Features.Queries.Categories.GetAll
 
         public async Task<Response<List<GetCategoryDto>>> Handle(GetAllCategoriesQueryRequest request, CancellationToken cancellationToken)
         {
-            var data = _unitOfWork.GetRepository<Category>().Where(x => x.ApplicationUserId == request.UserId);
+            var data = _unitOfWork.ReadRepository<Category>().Where(x => x.ApplicationUserId == request.UserId);
 
             var mapperData = await _mapper.ProjectTo<GetCategoryDto>(data).ToListAsync();
 
