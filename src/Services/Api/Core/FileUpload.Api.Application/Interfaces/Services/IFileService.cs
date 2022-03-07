@@ -1,7 +1,6 @@
-﻿using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Dtos.Files.Pager;
-using FileUpload.Application.Wrappers;
+﻿using FileUpload.Application.Wrappers;
+using FileUpload.Shared.Dtos.Files;
+using FileUpload.Shared.Dtos.Files.Pager;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

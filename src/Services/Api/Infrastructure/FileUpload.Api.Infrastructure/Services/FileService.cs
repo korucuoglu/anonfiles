@@ -3,9 +3,6 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Util;
 using AutoMapper;
-using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Dtos.Files.Pager;
 using FileUpload.Application.Features.Commands.Files.Add;
 using FileUpload.Application.Features.Commands.Files.Delete;
 using FileUpload.Application.Features.Queries.Files.GetAll;
@@ -15,6 +12,8 @@ using FileUpload.Application.Interfaces.Services;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
 using FileUpload.Infrastructure.Hub;
+using FileUpload.Shared.Dtos.Files;
+using FileUpload.Shared.Dtos.Files.Pager;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
@@ -23,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace FileUpload.Infrastructure.Services

@@ -1,11 +1,11 @@
-﻿using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Features.Commands.Categories.Add;
+﻿using FileUpload.Application.Features.Commands.Categories.Add;
 using FileUpload.Application.Features.Commands.Categories.Delete;
 using FileUpload.Application.Features.Commands.Categories.Update;
 using FileUpload.Application.Features.Queries.Categories.GetAll;
 using FileUpload.Application.Features.Queries.Categories.GetById;
 using FileUpload.Application.Interfaces.Services;
 using FileUpload.Application.Wrappers;
+using FileUpload.Shared.Dtos.Categories;
 using MediatR;
 using System;
 using System.Collections.Generic;

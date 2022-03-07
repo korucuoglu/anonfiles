@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace FileUpload.MVC.Application.Dtos.Files
+namespace FileUpload.Shared.Dtos.Files
 {
     public class AddFileDto
     {

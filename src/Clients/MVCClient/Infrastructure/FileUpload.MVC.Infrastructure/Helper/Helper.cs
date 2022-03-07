@@ -1,12 +1,9 @@
-﻿using FileUpload.MVC.Application.Dtos.Files;
+﻿using FileUpload.Shared.Dtos.Files;
 using Newtonsoft.Json;
-using System;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace FileUpload.MVC.Infrastructure.Helper
 {

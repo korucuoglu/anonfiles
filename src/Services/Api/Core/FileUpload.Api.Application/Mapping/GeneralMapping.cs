@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Dtos.Files;
+using FileUpload.Shared.Dtos.Categories;
+using FileUpload.Shared.Dtos.Files;
 using FileUpload.Application.Features.Commands.Categories.Add;
 using FileUpload.Application.Features.Commands.Categories.Update;
 using FileUpload.Domain.Entities;

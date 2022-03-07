@@ -1,5 +1,5 @@
-﻿using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Wrappers;
+﻿using FileUpload.Application.Wrappers;
+using FileUpload.Shared.Dtos.Files;
 using System.Threading.Tasks;
 
 namespace FileUpload.Application.Interfaces.Hub

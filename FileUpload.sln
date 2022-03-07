@@ -45,6 +45,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileUpload.Identity.Data", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileUpload.Identity.Server", "src\Services\Identity\FileUpload.Identity.Server\FileUpload.Identity.Server.csproj", "{CA3E8FC4-4E2B-4243-BC9E-3C5638FABC18}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{BFD003BA-EA58-433B-8D8F-F3960C77CA85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUpload.Shared", "src\Shared\FileUpload.Shared\FileUpload.Shared.csproj", "{54E4C11D-A25E-43A9-89CF-A7DEF0A774D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +95,10 @@ Global
 		{CA3E8FC4-4E2B-4243-BC9E-3C5638FABC18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA3E8FC4-4E2B-4243-BC9E-3C5638FABC18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA3E8FC4-4E2B-4243-BC9E-3C5638FABC18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54E4C11D-A25E-43A9-89CF-A7DEF0A774D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54E4C11D-A25E-43A9-89CF-A7DEF0A774D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54E4C11D-A25E-43A9-89CF-A7DEF0A774D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54E4C11D-A25E-43A9-89CF-A7DEF0A774D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +124,8 @@ Global
 		{1E8F6B2D-3F5F-4C53-A5C8-330A46E2177C} = {CBE7727C-C044-4D36-94C3-CDEEAA1D5E6E}
 		{65CC78C8-E282-4477-A264-CBF6FF9922C6} = {1E8F6B2D-3F5F-4C53-A5C8-330A46E2177C}
 		{CA3E8FC4-4E2B-4243-BC9E-3C5638FABC18} = {1E8F6B2D-3F5F-4C53-A5C8-330A46E2177C}
+		{BFD003BA-EA58-433B-8D8F-F3960C77CA85} = {D858785C-5F1F-4ECB-8C89-CBDDE5AF6D41}
+		{54E4C11D-A25E-43A9-89CF-A7DEF0A774D4} = {BFD003BA-EA58-433B-8D8F-F3960C77CA85}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E6FF9DC-FA88-43CB-9600-94F3D301ABBB}

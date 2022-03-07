@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Dtos.Files.Pager;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
+using FileUpload.Shared.Dtos.Categories;
+using FileUpload.Shared.Dtos.Files;
+using FileUpload.Shared.Dtos.Files.Enums;
+using FileUpload.Shared.Dtos.Files.Pager;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
