@@ -30,7 +30,20 @@ namespace FileUpload.Application.Helper
 
             model = OrderFiles(model, filterModel.OrderBy);
 
-            var categories = model.SelectMany(x => x.FilesCategories.Select(a => a.Category)).Distinct();
+
+            var categories = from file in model
+                             join category in model.SelectMany(x => x.FilesCategories) on file.Id equals category.FileId
+                             group category by new
+                             {
+                                 category.CategoryId,
+                                 category.Category.Title
+                             } into grp
+                             select new GetCategoryDto
+                             {
+                                 Id = grp.Key.CategoryId,
+                                 Title = grp.Key.Title,
+                                 Count = grp.Select(x => x.CategoryId).Count()
+                             };
 
             model = PaginationData(model, pager.CurrentPage, filterModel.PageSize);
 
@@ -39,7 +52,7 @@ namespace FileUpload.Application.Helper
             {
                 Pages = pager,
                 Files = await mapper.ProjectTo<GetFileDto>(model).ToListAsync(),
-                Categories = await mapper.ProjectTo<GetCategoryDto>(categories).ToListAsync(),
+                Categories = categories.ToList()
             };
 
 
@@ -107,23 +120,33 @@ namespace FileUpload.Application.Helper
 
             var count = model.Count();
 
-            Pager pager = new(count - 1, filterModel.Page, filterModel.PageSize);
+            Pager pager = new(count, filterModel.Page, filterModel.PageSize);
+            var categories = from file in model
+                             join category in model.SelectMany(x => x.FilesCategories) on file.Id equals category.FileId
+                             group category by new
+                             {
+                                 category.CategoryId,
+                                 category.Category.Title
+                             } into grp
+                             select new GetCategoryDto
+                             {
+                                 Id = grp.Key.CategoryId,
+                                 Title = grp.Key.Title,
+                                 Count = grp.Select(x => x.CategoryId).Count()
+                             };
 
             if (count <= (filterModel.Page * filterModel.PageSize))
             {
                 FilePagerViewModel data = new()
                 {
                     Pages = pager,
+                    Categories = categories.ToList()
                 };
 
                 return Response<FilePagerViewModel>.Success(data, 200);
             }
 
-           
-
             model = OrderFiles(model, filterModel.OrderBy);
-
-            var categories = model.SelectMany(x => x.FilesCategories.Select(a => a.Category)).Distinct();
 
             model = model.Skip(filterModel.Page * filterModel.PageSize).Take(1);
 
@@ -131,16 +154,10 @@ namespace FileUpload.Application.Helper
             {
                 Pages = pager,
                 File = await mapper.ProjectTo<GetFileDto>(model).FirstOrDefaultAsync(),
+                Categories = categories.ToList()
             };
 
-          
-
             return Response<FilePagerViewModel>.Success(dto, 200);
-
-
-
-
         }
-
     }
 }

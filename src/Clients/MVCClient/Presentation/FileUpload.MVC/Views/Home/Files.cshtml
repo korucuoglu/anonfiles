@@ -45,7 +45,7 @@
             <div class="form-check" v-for="(category, index) in categories" :key="category.id">
                 <input class="form-check-input" type="checkbox" :value="category.id" v-model="filter.CategoryIds" :id="index" @@change="filterData">
                 <label class="form-check-label" :for="index">
-                    {{ category.title }}
+                    {{ category.title }} ({{category.count}})
                 </label>
             </div>
 
@@ -161,6 +161,7 @@
                         }
 
                           this.pageInfo = response.data.value.pages
+                          this.categories = response.data.value.categories
                     }
                     else
                     {
