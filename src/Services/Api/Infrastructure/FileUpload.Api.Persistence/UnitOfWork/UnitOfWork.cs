@@ -1,8 +1,8 @@
-﻿using FileUpload.Application.Interfaces.Repositories;
+﻿using FileUpload.Api.Application.Interfaces.Repositories;
+using FileUpload.Api.Persistence.Repositories;
 using FileUpload.Application.Interfaces.UnitOfWork;
+using FileUpload.Domain.Common;
 using FileUpload.Persistence.Context;
-using FileUpload.Persistence.Repositories;
-using Microsoft.EntityFrameworkCore.Storage;
 using System.Threading.Tasks;
 
 namespace FileUpload.Persistence.UnitOfWork
@@ -14,16 +14,15 @@ namespace FileUpload.Persistence.UnitOfWork
         {
             _context = context;
         }
+        public IReadRepository<T> ReadRepository<T>() where T : BaseEntity
+         => new ReadRepository<T>(_context);
 
-        public IRepository<T> GetRepository<T>() where T : class
-        {
-            return new Repository<T>(_context);
-        }
-        public async ValueTask DisposeAsync() => await _context.DisposeAsync();
-
+        public IWriteRepository<T> WriteRepository<T>() where T : BaseEntity
+            => new WriteRepository<T>(_context);
+       
         public Task<int> SaveChangesAsync()
-        {
-            return _context.SaveChangesAsync();
-        }
+         => _context.SaveChangesAsync();
+
+        public async ValueTask DisposeAsync() => await _context.DisposeAsync();
     }
 }

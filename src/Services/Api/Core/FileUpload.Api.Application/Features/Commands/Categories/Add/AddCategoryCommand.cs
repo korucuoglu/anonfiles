@@ -39,7 +39,7 @@ namespace FileUpload.Application.Features.Commands.Categories.Add
         public async Task<Response<GetCategoryDto>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = _mapper.Map<Category>(request);
-            var entity = await _unitOfWork.GetRepository<Category>().AddAsync(category);
+            var entity = await _unitOfWork.WriteRepository<Category>().AddAsync(category);
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 
             if (!result)

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using FileUpload.Domain.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace FileUpload.Application.Interfaces.Repositories
+namespace FileUpload.Api.Application.Interfaces.Repositories
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IReadRepository<TEntity> where TEntity : BaseEntity
     {
         bool Any(Expression<Func<TEntity, bool>> predicate = null);
 
@@ -16,14 +17,5 @@ namespace FileUpload.Application.Interfaces.Repositories
 
         Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 
-        Task<TEntity> AddAsync(TEntity entity);
-        Task<bool> AddRangeAsync(TEntity[] entities);
-        Task<bool> AddRangeAsync(IEnumerable<TEntity> entities);
-
-        void Remove(TEntity entity);
-      
-        void Update(TEntity entity);
-
-       
     }
 }

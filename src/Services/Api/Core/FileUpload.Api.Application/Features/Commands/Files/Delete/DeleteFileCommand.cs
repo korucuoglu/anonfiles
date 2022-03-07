@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FileUpload.Application.Dtos.Files;
 using FileUpload.Application.Dtos.Files.Pager;
-using FileUpload.Application.Interfaces.Repositories;
 using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
@@ -44,15 +43,16 @@ namespace FileUpload.Application.Features.Commands.Files.Delete
 
         public async Task<Response<FilePagerViewModel>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
         {
-            var fileRepository = _unitOfWork.GetRepository<File>();
+            var fileReadRepository = _unitOfWork.ReadRepository<File>();
+            var fileWriteRepository = _unitOfWork.WriteRepository<File>();
             
-            var file = await fileRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId && x.Id == request.FileId);
+            var file = await fileReadRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId && x.Id == request.FileId);
 
-            (await _unitOfWork.GetRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId)).UsedSpace -= file.Size;
+            (await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId)).UsedSpace -= file.Size;
             
-            var data =  await Helper.Filter.GetDataInNextPageAfterRemovedFile(fileRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel, _mapper);
+            var data =  await Helper.Filter.GetDataInNextPageAfterRemovedFile(fileReadRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel, _mapper);
 
-            fileRepository.Remove(file);
+            fileWriteRepository.Remove(file);
 
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 

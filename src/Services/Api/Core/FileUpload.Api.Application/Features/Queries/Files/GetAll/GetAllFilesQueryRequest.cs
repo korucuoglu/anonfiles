@@ -29,7 +29,7 @@ namespace FileUpload.Application.Features.Queries.Files.GetAll
 
         public async Task<Response<FilesPagerViewModel>> Handle(GetAllFilesQueryRequest request, CancellationToken cancellationToken)
         {
-            var repository = _unitOfWork.GetRepository<File>();
+            var repository = _unitOfWork.ReadRepository<File>();
 
             if (repository.Any(x => x.ApplicationUserId == request.UserId))
             {
