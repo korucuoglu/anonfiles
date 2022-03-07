@@ -50,8 +50,6 @@ namespace FileUpload.Application.Features.Commands.Files.Delete
 
             (await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId)).UsedSpace -= file.Size;
             
-            var data =  await Helper.Filter.GetDataInNextPageAfterRemovedFile(fileReadRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel, _mapper);
-
             fileWriteRepository.Remove(file);
 
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
@@ -61,7 +59,7 @@ namespace FileUpload.Application.Features.Commands.Files.Delete
                 return Response<FilePagerViewModel>.Fail("Veri silme sırasında hata meydana geldi", 500);
             }
 
-            return data;
+            return await Helper.Filter.GetDataInNextPageAfterRemovedFile(fileReadRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel, _mapper);
 
         }
     }
