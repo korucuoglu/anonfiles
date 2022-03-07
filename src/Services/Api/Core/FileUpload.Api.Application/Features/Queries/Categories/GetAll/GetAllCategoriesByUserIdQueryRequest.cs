@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Dtos.Categories;
 using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
+using FileUpload.Shared.Dtos.Categories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;

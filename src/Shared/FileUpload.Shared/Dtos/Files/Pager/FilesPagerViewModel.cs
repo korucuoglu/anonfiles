@@ -1,11 +1,10 @@
-﻿using FileUpload.MVC.Application.Dtos.Categories;
+﻿using FileUpload.Shared.Dtos.Categories;
 using System.Collections.Generic;
 
-namespace FileUpload.MVC.Application.Dtos.Files.Pager
+namespace FileUpload.Shared.Dtos.Files.Pager
 {
     public class FilesPagerViewModel
     {
-
         public FilesPagerViewModel()
         {
             Files = new List<GetFileDto>();

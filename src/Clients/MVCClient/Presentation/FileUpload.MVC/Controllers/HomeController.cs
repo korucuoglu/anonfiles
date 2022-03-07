@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using FileUpload.MVC.Application.Interfaces.Services;
-using FileUpload.MVC.Application.Dtos.Files;
 using FileUpload.MVC.Application.Exceptions;
 using FileUpload.MVC.Application.Dtos.Error;
 using FileUpload.MVC.Application.Dtos.Categories;
+using FileUpload.Shared.Dtos.Files;
 
 namespace FileUpload.MVC.Controllers
 {

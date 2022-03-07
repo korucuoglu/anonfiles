@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace FileUpload.Application.Dtos.Categories
-
+namespace FileUpload.Shared.Dtos.Categories
 {
     public class GetCategoryDto
     {

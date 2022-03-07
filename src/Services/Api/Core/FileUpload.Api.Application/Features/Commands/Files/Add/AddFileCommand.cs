@@ -1,5 +1,4 @@
-﻿using FileUpload.Application.Dtos.Categories;
-using FileUpload.Application.Interfaces.UnitOfWork;
+﻿using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
 using FluentValidation;

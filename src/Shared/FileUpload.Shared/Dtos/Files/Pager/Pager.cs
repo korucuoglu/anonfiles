@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileUpload.MVC.Application.Dtos.Files.Pager
+namespace FileUpload.Shared.Dtos.Files.Pager
 {
     public class Pager
     {

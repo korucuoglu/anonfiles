@@ -1,9 +1,10 @@
 ﻿using FileUpload.MVC.Application.Dtos.Categories;
-using FileUpload.MVC.Application.Dtos.Files;
-using FileUpload.MVC.Application.Dtos.Files.Pager;
+using FileUpload.Shared.Dtos.Files;
+using FileUpload.Shared.Dtos.Files.Pager;
 using FileUpload.MVC.Application.Wrappers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FileUpload.Shared.Dtos.Categories;
 
 namespace FileUpload.MVC.Application.Interfaces.Services
 {

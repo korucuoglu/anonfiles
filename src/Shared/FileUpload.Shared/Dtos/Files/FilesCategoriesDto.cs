@@ -1,9 +1,8 @@
-﻿using FileUpload.MVC.Application.Dtos.Categories;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 
-namespace FileUpload.MVC.Application.Dtos.Files
+namespace FileUpload.Shared.Dtos.Files
 {
     public class FilesCategoriesDto
     {

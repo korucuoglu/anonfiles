@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Dtos.Files;
-using FileUpload.Application.Dtos.Files.Pager;
 using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
+using FileUpload.Shared.Dtos.Files;
+using FileUpload.Shared.Dtos.Files.Pager;
 using FluentValidation;
 using MediatR;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

@@ -14,7 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Shared\FileUpload.Shared\FileUpload.Shared.csproj" />
     <ProjectReference Include="..\FileUpload.Api.Domain\FileUpload.Api.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Dtos\" />
   </ItemGroup>
 
 </Project>
