@@ -72,7 +72,7 @@ namespace FileUpload.Application.Helper
 
         public static IQueryable<File> CategoryFilter(IQueryable<File> model, List<Guid> CategoryIds)
         {
-            if (CategoryIds.Count == 0)
+            if (!CategoryIds.Any())
             {
                 return model;
             }
