@@ -39,16 +39,9 @@ namespace FileUpload.Application.Features.Commands.Categories.Update
 
         public async Task<Response<bool>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var writeRepository = _unitOfWork.WriteRepository<Category>();
-            var readRepository = _unitOfWork.ReadRepository<Category>();
-
-            if (!readRepository.Any(x => x.ApplicationUserId == request.ApplicationUserId && x.Id == new Guid(request.Id)))
-            {
-                return Response<bool>.Fail(false, 200);
-            }
 
             var category = _mapper.Map<Category>(request);
-            writeRepository.Update(category);
+            _unitOfWork.WriteRepository<Category>().Update(category);
 
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 

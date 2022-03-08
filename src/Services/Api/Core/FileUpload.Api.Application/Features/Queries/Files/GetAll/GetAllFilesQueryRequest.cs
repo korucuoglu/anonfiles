@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FileUpload.Application.Helper;
 using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
@@ -33,7 +34,7 @@ namespace FileUpload.Application.Features.Queries.Files.GetAll
 
             if (repository.Any(x => x.ApplicationUserId == request.UserId))
             {
-                return await Helper.Filter.FilterFile(repository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel, _mapper);
+                return await Filter.FilterFile(repository.Where(x => x.ApplicationUserId == request.UserId, tracking: false), request.FilterModel, _mapper);
             }
 
             return Response<FilesPagerViewModel>.Success(new FilesPagerViewModel(), 200);

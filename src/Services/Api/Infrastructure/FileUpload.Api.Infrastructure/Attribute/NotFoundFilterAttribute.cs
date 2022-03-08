@@ -24,9 +24,7 @@ namespace FileUpload.Api.Filters
 
         public bool GetData(string id)
         {
-            var data = _service.Any(x => x.Id.ToString() == id && x.ApplicationUserId == _sharedIdentityService.GetUserId);
-
-            return data;
+            return _service.Any(x => x.Id.ToString() == id && x.ApplicationUserId == _sharedIdentityService.GetUserId);
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)

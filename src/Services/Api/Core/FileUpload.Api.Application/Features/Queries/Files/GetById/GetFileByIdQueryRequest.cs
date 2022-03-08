@@ -28,7 +28,7 @@ namespace FileUpload.Application.Features.Queries.Files.GetById
 
         public async Task<Response<GetFileDto>> Handle(GetFileByIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var data = _unitOfWork.ReadRepository<File>().Where(x => x.ApplicationUserId == request.UserId && x.Id == request.FileId);
+            var data = _unitOfWork.ReadRepository<File>().Where(x => x.ApplicationUserId == request.UserId && x.Id == request.FileId, tracking: false);
 
             var mapperData = await _mapper.ProjectTo<GetFileDto>(data).FirstOrDefaultAsync();
 
