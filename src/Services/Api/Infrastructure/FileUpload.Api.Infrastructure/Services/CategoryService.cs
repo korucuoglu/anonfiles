@@ -1,4 +1,5 @@
-﻿using FileUpload.Application.Features.Commands.Categories.Add;
+﻿using FileUpload.Api.Application.Interfaces.Redis;
+using FileUpload.Application.Features.Commands.Categories.Add;
 using FileUpload.Application.Features.Commands.Categories.Delete;
 using FileUpload.Application.Features.Commands.Categories.Update;
 using FileUpload.Application.Features.Queries.Categories.GetAll;
@@ -17,12 +18,14 @@ namespace FileUpload.Infrastructure.Services
     {
         private readonly IMediator _mediator;
         private readonly ISharedIdentityService _sharedIdentityService;
+        private readonly IRedisService _redisService;
 
 
-        public CategoryService(IMediator mediator, ISharedIdentityService sharedIdentityService)
+        public CategoryService(IMediator mediator, ISharedIdentityService sharedIdentityService, IRedisService redisService)
         {
             _mediator = mediator;
             _sharedIdentityService = sharedIdentityService;
+            _redisService = redisService;
         }
 
         public async Task<Response<List<GetCategoryDto>>> GetAllAsync()
@@ -37,6 +40,12 @@ namespace FileUpload.Infrastructure.Services
 
         public async Task<Response<GetCategoryDto>> GetByIdAsync(Guid id)
         {
+            if (await _redisService.IsKeyAsync($"categories-{id}"))
+            {
+                var data = await _redisService.GetAsync<GetCategoryDto>($"categories-{id}");
+                return Response<GetCategoryDto>.Success(data, 200);
+            }
+
             var query = new GetCategoryByIdQueryRequest()
             {
                 Id = id,

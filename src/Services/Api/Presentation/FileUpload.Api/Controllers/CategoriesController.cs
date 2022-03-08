@@ -2,7 +2,7 @@
 using FileUpload.Application.Features.Commands.Categories.Add;
 using FileUpload.Application.Features.Commands.Categories.Update;
 using FileUpload.Application.Interfaces.Services;
-using FileUpload.Domain.Entities; // yanlış
+using FileUpload.Domain.Entities;
 using FileUpload.Infrastructure.Attribute;
 using Microsoft.AspNetCore.Mvc;
 using System;

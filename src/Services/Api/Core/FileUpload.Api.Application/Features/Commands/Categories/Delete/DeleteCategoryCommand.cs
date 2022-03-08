@@ -1,4 +1,5 @@
-﻿using FileUpload.Application.Interfaces.UnitOfWork;
+﻿using FileUpload.Api.Application.Interfaces.Redis;
+using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
 using FluentValidation;
@@ -26,10 +27,12 @@ namespace FileUpload.Application.Features.Commands.Categories.Delete
     public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Response<bool>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRedisService _redisService;
 
-        public DeleteCategoryCommandHandler(IUnitOfWork unitOfWork)
+        public DeleteCategoryCommandHandler(IUnitOfWork unitOfWork, IRedisService redisService)
         {
             _unitOfWork = unitOfWork;
+            _redisService = redisService;
         }
 
         public async Task<Response<bool>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
@@ -42,6 +45,8 @@ namespace FileUpload.Application.Features.Commands.Categories.Delete
             {
                 return Response<bool>.Fail(result, 200);
             }
+
+            await _redisService.RemoveAsync($"categories-{request.Id}");
 
             return Response<bool>.Success(result, 200);
         }

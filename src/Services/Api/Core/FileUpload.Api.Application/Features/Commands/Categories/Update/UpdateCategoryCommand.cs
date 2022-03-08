@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FileUpload.Api.Application.Interfaces.Redis;
 using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
@@ -30,11 +31,13 @@ namespace FileUpload.Application.Features.Commands.Categories.Update
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IRedisService _redisService;
 
-        public UpdateCategoryCommandHandler(IMapper mapper, IUnitOfWork unitOfWork)
+        public UpdateCategoryCommandHandler(IMapper mapper, IUnitOfWork unitOfWork, IRedisService redisService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _redisService = redisService;
         }
 
         public async Task<Response<bool>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
@@ -49,6 +52,8 @@ namespace FileUpload.Application.Features.Commands.Categories.Update
             {
                 return Response<bool>.Fail(result, 200);
             }
+
+            await _redisService.SetAsync($"categories-{request.Id}", category);
 
             return Response<bool>.Success(result, 200);
         }
