@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FileUpload.Api.Application.Interfaces.Redis;
 using FileUpload.Application.Interfaces.UnitOfWork;
 using FileUpload.Application.Wrappers;
 using FileUpload.Domain.Entities;
@@ -29,11 +30,13 @@ namespace FileUpload.Application.Features.Commands.Categories.Add
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRedisService _redisService;
 
-        public AddCategoryCommandHandler(IMapper mapper, IUnitOfWork unitOfWork)
+        public AddCategoryCommandHandler(IMapper mapper, IUnitOfWork unitOfWork, IRedisService redisService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _redisService = redisService;
         }
 
         public async Task<Response<GetCategoryDto>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
@@ -47,7 +50,9 @@ namespace FileUpload.Application.Features.Commands.Categories.Add
                 return Response<GetCategoryDto>.Fail("Kaydetme sırasında hata meydana geldi",  500);
             }
 
-            GetCategoryDto dto = _mapper.Map<GetCategoryDto>(entity);   
+            GetCategoryDto dto = _mapper.Map<GetCategoryDto>(entity);
+
+            await _redisService.SetAsync($"categories-{entity.Id}", dto);
 
             return Response<GetCategoryDto>.Success(dto, 200);
         }

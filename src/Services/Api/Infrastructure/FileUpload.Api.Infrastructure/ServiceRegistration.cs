@@ -1,11 +1,14 @@
 ﻿
+using FileUpload.Api.Application.Interfaces.Redis;
 using FileUpload.Api.Filters;
+using FileUpload.Api.Infrastructure.Services.Redis;
 using FileUpload.Application.Interfaces.Services;
 using FileUpload.Infrastructure.Attribute;
 using FileUpload.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace FileUpload.Infrastructure
 {
@@ -19,6 +22,18 @@ namespace FileUpload.Infrastructure
             services.AddScoped<IFileService, FileService>();
             services.AddScoped(typeof(NotFoundFilterAttribute<>));
             services.AddScoped<ValidationFilterAttribute>();
+
+            #region Redis
+            services.Configure<RedisSettings>(configuration.GetSection("RedisSettings"));
+
+            services.AddSingleton<IRedisSettings>(sp =>
+            {
+                return sp.GetRequiredService<IOptions<RedisSettings>>().Value;
+            });
+
+            services.AddSingleton<IRedisService, RedisService>();
+
+            #endregion
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

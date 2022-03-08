@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using FluentValidation.AspNetCore;
 using FileUpload.Application.Features.Commands.Categories.Add;
 using FileUpload.Infrastructure.Hub;
+using FileUpload.Api.Infrastructure.Services.Redis;
 
 namespace FileUpload.Api
 {

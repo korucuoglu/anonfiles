@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileUpload.Identity.Server"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{BFD003BA-EA58-433B-8D8F-F3960C77CA85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUpload.Shared", "src\Shared\FileUpload.Shared\FileUpload.Shared.csproj", "{54E4C11D-A25E-43A9-89CF-A7DEF0A774D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileUpload.Shared", "src\Shared\FileUpload.Shared\FileUpload.Shared.csproj", "{54E4C11D-A25E-43A9-89CF-A7DEF0A774D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
