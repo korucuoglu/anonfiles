@@ -45,7 +45,11 @@ namespace FileUpload.Application.Features.Commands.Files.Delete
             
             var file = await fileReadRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId && x.Id == request.FileId);
 
-            (await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId)).UsedSpace -= file.Size;
+            var userInfo = await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId);
+
+            userInfo.UsedSpace -= file.Size;
+
+            _unitOfWork.WriteRepository<UserInfo>().Update(userInfo);
             
             fileWriteRepository.Remove(file);
 

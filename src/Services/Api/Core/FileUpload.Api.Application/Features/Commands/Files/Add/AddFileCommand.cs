@@ -35,24 +35,12 @@ namespace FileUpload.Application.Features.Commands.Files.Add
 
         public async Task<Response<bool>> Handle(AddFileCommand request, CancellationToken cancellationToken)
         {
-            var userInfoReadRepository = _unitOfWork.ReadRepository<UserInfo>();
 
-            if (userInfoReadRepository.Any(x => x.ApplicationUserId == request.AplicationUserId))
-            {
-                (await userInfoReadRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.AplicationUserId)).UsedSpace += request.Files.Sum(x => x.Size);
-            }
-            else
-            {
-                var userInfoModel = new UserInfo()
-                {
-                    ApplicationUserId = request.AplicationUserId,
-                    UsedSpace = request.Files.Sum(x => x.Size)
-                };
+            var userInfo = await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.AplicationUserId);
 
-                var userInfoWriteRepository = _unitOfWork.WriteRepository<UserInfo>();
+            userInfo.UsedSpace += request.Files.Sum(x => x.Size);
 
-                await userInfoWriteRepository.AddAsync(userInfoModel);
-            }
+            _unitOfWork.WriteRepository<UserInfo>().Update(userInfo);
 
             await _unitOfWork.WriteRepository<File>().AddRangeAsync(request.Files);
 
