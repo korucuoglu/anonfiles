@@ -9,12 +9,12 @@ namespace FileUpload.Shared.Dtos.Files.Pager
         {
             Files = new List<GetFileDto>();
             Pages = new Pager();
-            Categories = new List<GetCategoryDto>();
+            Categories = new List<GetCategoryDtoWithFileCount>();
         }
 
         public Pager Pages { get; set; }
         public List<GetFileDto> Files { get; set; }
-        public List<GetCategoryDto> Categories { get; set; }
+        public List<GetCategoryDtoWithFileCount> Categories { get; set; }
 
     }
 
