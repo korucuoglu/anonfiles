@@ -4,6 +4,7 @@
 
 
 using FileUpload.Data.Entity;
+using FileUpload.Identity.Data.Entity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FileUpload.IdentityServer
@@ -43,8 +45,8 @@ namespace FileUpload.IdentityServer
 
                     try
                     {
-                         applicationDbContext.Database.EnsureCreated();
-                         applicationDbContext.Database.Migrate();
+                        applicationDbContext.Database.EnsureCreated();
+                        applicationDbContext.Database.Migrate();
                     }
 
                     catch
@@ -68,23 +70,36 @@ namespace FileUpload.IdentityServer
                         {
                             UserName = "admin@gmail.com",
                             Email = "admin@gmail.com",
+                            UserInfo = new()
+                            {
+                                Id = Guid.NewGuid(),
+                                UsedSpace = 0
+                            }
                         };
 
                         userManager.CreateAsync(userAdmin, "Password123.,").Wait();
                         userManager.AddToRoleAsync(userAdmin, "Admin").Wait();
-
-                     
 
 
                         ApplicationUser user = new()
                         {
                             UserName = "user@gmail.com",
                             Email = "user@gmail.com",
+                            UserInfo = new()
+                            {
+                                 Id = Guid.NewGuid(),
+                                 UsedSpace = 0
+                            }
                         };
 
                         userManager.CreateAsync(user, "Password123.,").Wait();
                         userManager.AddToRoleAsync(user, "User").Wait();
 
+                        //applicationDbContext.UserInfo.AddRange(new List<UserInfo>
+                        //{
+                        //    new() { ApplicationUserId = userAdmin.Id, Id = Guid.NewGuid(), UsedSpace = 0  },
+                        //    new() { ApplicationUserId = user.Id, Id = Guid.NewGuid(), UsedSpace = 0  },
+                        //});
 
                         applicationDbContext.SaveChanges();
                     }

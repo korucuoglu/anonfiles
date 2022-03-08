@@ -3,6 +3,7 @@ using FileUpload.Identity.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using static IdentityServer4.IdentityServerConstants;
@@ -23,7 +24,7 @@ namespace FileUpload.IdentityServer.Controllers
         {
             _userManager = userManager;
         }
-       
+
         [HttpPost]
         public async Task<IActionResult> Signup(SignupInput dto)
         {
@@ -31,7 +32,12 @@ namespace FileUpload.IdentityServer.Controllers
             var user = new ApplicationUser()
             {
                 UserName = dto.Email,
-                Email = dto.Email
+                Email = dto.Email,
+                UserInfo = new()
+                {
+                    Id = Guid.NewGuid(),
+                    UsedSpace = 0,
+                }
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -40,11 +46,11 @@ namespace FileUpload.IdentityServer.Controllers
             {
                 return BadRequest(result.Errors.ToList());
             }
-           
+
             return NoContent();
 
         }
 
-        
+
     }
 }
