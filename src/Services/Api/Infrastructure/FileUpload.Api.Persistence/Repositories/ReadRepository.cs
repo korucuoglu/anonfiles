@@ -19,32 +19,53 @@ namespace FileUpload.Api.Persistence.Repositories
             _table = context.Set<TEntity>();
         }
 
-        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool tracking = true)
         {
-            return await _table.AsNoTracking().FirstOrDefaultAsync(predicate);
-        }
+            var query = _table.AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
 
-        public bool Any(Expression<Func<TEntity, bool>> predicate = null)
-        {
-            return predicate == null
-                       ? _table.AsNoTracking().Any()
-                       : _table.AsNoTracking().Any(predicate);
+            return await query.FirstOrDefaultAsync(predicate);
 
         }
 
-        public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate = null)
+        public bool Any(Expression<Func<TEntity, bool>> predicate = null, bool tracking = true)
         {
-            return predicate == null
-                       ? _table.AsQueryable()
-                       : _table.Where(predicate);
+            var query = _table.AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
+
+            return query.Any(predicate);
 
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = null)
+        public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate = null, bool tracking = true)
         {
+            var query = _table.AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
+
+            return query.Where(predicate);
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = null, bool tracking = true)
+        {
+            var query = _table.AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
+
+
             return predicate == null
-                 ? await _table.AsNoTracking().ToListAsync()
-                 : await _table.AsNoTracking().Where(predicate).ToListAsync();
+                 ? await query.ToListAsync()
+                 : await query.Where(predicate).ToListAsync();
+        }
+
+        public async Task<TEntity> FindAsync(Guid id, bool tracking = true)
+        {
+            return tracking 
+                 ? await _table.FindAsync(id)
+                 : await _table.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+
         }
     }
 }

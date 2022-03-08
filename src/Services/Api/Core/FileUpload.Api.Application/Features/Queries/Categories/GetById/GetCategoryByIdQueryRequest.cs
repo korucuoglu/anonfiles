@@ -30,7 +30,7 @@ namespace FileUpload.Application.Features.Queries.Categories.GetById
 
         public async Task<Response<GetCategoryDto>> Handle(GetCategoryByIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var data = _unitOfWork.ReadRepository<Category>().Where(x => x.ApplicationUserId == request.UserId && x.Id == request.Id);
+            var data = _unitOfWork.ReadRepository<Category>().Where(x => x.ApplicationUserId == request.UserId && x.Id == request.Id, false);
 
             var mapperData = await _mapper.ProjectTo<GetCategoryDto>(data).FirstOrDefaultAsync();
 
