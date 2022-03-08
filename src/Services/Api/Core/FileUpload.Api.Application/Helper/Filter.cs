@@ -39,7 +39,7 @@ namespace FileUpload.Application.Helper
                                  category.CategoryId,
                                  category.Category.Title
                              } into grp
-                             select new GetCategoryDto
+                             select new GetCategoryDtoWithFileCount
                              {
                                  Id = grp.Key.CategoryId,
                                  Title = grp.Key.Title,
@@ -129,7 +129,7 @@ namespace FileUpload.Application.Helper
                                  category.CategoryId,
                                  category.Category.Title
                              } into grp
-                             select new GetCategoryDto
+                             select new GetCategoryDtoWithFileCount
                              {
                                  Id = grp.Key.CategoryId,
                                  Title = grp.Key.Title,
