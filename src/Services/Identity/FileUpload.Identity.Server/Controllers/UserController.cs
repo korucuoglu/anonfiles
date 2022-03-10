@@ -3,6 +3,7 @@ using FileUpload.Shared.Dtos.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,10 +20,12 @@ namespace FileUpload.IdentityServer.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration configuration;
 
-        public UserController(UserManager<ApplicationUser> userManager)
+        public UserController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
+            this.configuration = configuration;
         }
 
         [HttpPost]
@@ -46,10 +49,27 @@ namespace FileUpload.IdentityServer.Controllers
                 return BadRequest(result.Errors.ToList());
             }
 
+            string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            UserCreatedEvent userCreatedEvent = new()
+            {
+                MailAdress = user.Email,
+                Message = $"{configuration.GetSection("MVCClient").Value}?userId={user.Id}&token={emailConfirmationToken}"
+            };
+
             return NoContent();
 
         }
 
+        [HttpGet]
+        public async Task<bool> ValidateUserEmail(string userId, string token)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
 
+            IdentityResult result = await _userManager.ConfirmEmailAsync(user, token);
+
+            return result.Succeeded;
+
+        }
     }
 }

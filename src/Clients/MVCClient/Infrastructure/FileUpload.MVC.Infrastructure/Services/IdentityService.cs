@@ -90,49 +90,6 @@ namespace FileUpload.MVC.Infrastructure.Services
             return token;
         }
 
-        public async Task<bool> SignUp(SignupInput signupInput)
-        {
-            // ilk olarak ClientId ve Secret ile birlikte ClientCredentials token alınır. Ardından request gönderilir. 
-
-            var ClientCredentialsToken = await _clientCredentialTokenService.GetToken();
-
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ClientCredentialsToken);
-
-            var signupInputContent = new StringContent(JsonConvert.SerializeObject(signupInput), Encoding.UTF8, "application/json");
-
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user"))
-            {
-                requestMessage.Headers.Authorization =
-                    new AuthenticationHeaderValue("Bearer", ClientCredentialsToken);
-
-                requestMessage.Content = signupInputContent;
-
-                var response = await _httpClient.SendAsync(requestMessage);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    return false;
-                }
-            }
-
-            // Kod buraya inerse kişi başarılı bir şekilde kayıt yapmış demektir. Kişi kayıt yaptığında aynı zamanda Login işlemini de gerçekleştirebiliriz. 
-
-            SigninInput signinInput = new()
-            {
-                UserName = signupInput.UserName,
-                Password = signupInput.Password
-            };
-
-            await SignIn(signinInput);
-
-            return true;
-
-
-
-
-
-        }
-
         public async Task RevokeRefreshToken()
         {
             var disco = await _httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
@@ -219,6 +176,67 @@ namespace FileUpload.MVC.Infrastructure.Services
             authenticationProperties.IsPersistent = true;
 
             await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, authenticationProperties);
+
+            return true;
+        }
+
+        public async Task<bool> SignUp(SignupInput signupInput)
+        {
+            // ilk olarak ClientId ve Secret ile birlikte ClientCredentials token alınır. Ardından request gönderilir. 
+
+            var clientCredentialsToken = await _clientCredentialTokenService.GetToken();
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
+
+            var signupInputContent = new StringContent(JsonConvert.SerializeObject(signupInput), Encoding.UTF8, "application/json");
+
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user"))
+            {
+                requestMessage.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
+
+                requestMessage.Content = signupInputContent;
+
+                var response = await _httpClient.SendAsync(requestMessage);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return false;
+                }
+            }
+
+            // Kod buraya inerse kişi başarılı bir şekilde kayıt yapmış demektir. Kişi kayıt yaptığında aynı zamanda Login işlemini de gerçekleştirebiliriz. 
+
+            SigninInput signinInput = new()
+            {
+                UserName = signupInput.UserName,
+                Password = signupInput.Password
+            };
+
+            await SignIn(signinInput);
+
+            return true;
+
+        }
+        public async Task<bool> ValidateUserEmail(string userId, string token)
+        {
+
+            var clientCredentialsToken = await _clientCredentialTokenService.GetToken();
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
+
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"{_serviceApiSettings.IdentityBaseUri}/api/user?userId={userId}&token={token}"))
+            {
+                requestMessage.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
+
+                var response = await _httpClient.SendAsync(requestMessage);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return false;
+                }
+            }
 
             return true;
         }

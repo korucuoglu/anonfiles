@@ -16,8 +16,7 @@ namespace FileUpload.MVC.Controllers
             _identityService = ıdentityService;
         }
 
-        [Route("[controller]/login")]
-        [HttpGet]
+        [HttpGet("[controller]/login")]
         public IActionResult Login()
         {
             return View();
@@ -44,8 +43,7 @@ namespace FileUpload.MVC.Controllers
             return RedirectToAction("Upload", "Home");
         }
 
-        [Route("[controller]/register")]
-        [HttpGet]
+        [HttpGet("[controller]/register")]
         public IActionResult Register()
         {
             return View();
@@ -70,21 +68,16 @@ namespace FileUpload.MVC.Controllers
 
             return RedirectToAction("Index", "Home");
 
-
         }
 
 
-        [Route("[controller]/info")]
-        [HttpGet]
+        [HttpGet("[controller]/info")]
         public IActionResult Info()
         {
             return View();
         }
 
-
-
-        [Route("[controller]/logout")]
-        [HttpGet]
+        [HttpGet("[controller]/logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -92,6 +85,15 @@ namespace FileUpload.MVC.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
+
+        [HttpGet("[controller]/confirmEmail")]
+        public async Task<IActionResult> ValidateUserEmail(string userId, string token)
+        {
+            var result = await _identityService.ValidateUserEmail(userId, token);
+
+            return RedirectToAction("Index", "Home");
+
+        }
 
     }
 }
