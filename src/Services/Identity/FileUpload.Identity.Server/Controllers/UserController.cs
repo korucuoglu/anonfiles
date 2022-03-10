@@ -6,10 +6,13 @@ using FileUpload.Shared.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using static IdentityServer4.IdentityServerConstants;
 
 namespace FileUpload.IdentityServer.Controllers
@@ -59,22 +62,16 @@ namespace FileUpload.IdentityServer.Controllers
 
                 }
 
-                string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                string encodedConfirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 
-                string link = Url.Action("confirmEmail", "user", new
-                {
-                    userId = user.Id,
-                    token = emailConfirmationToken
-                }, protocol: HttpContext.Request.Scheme, configuration.GetSection("MVCClient").Value
-
-                    );
+                string link = $"{configuration.GetSection("MVCClient").Value}/user/confirmEmail?userId={user.Id}&token={encodedConfirmationToken}";
 
 
                 UserCreatedEvent userCreatedEvent = new()
                 {
                     MailAdress = user.Email,
-                    Message = link
-                    // Message = $"{configuration.GetSection("MVCClient").Value}/user/confirmEmail?userId={user.Id}&token={emailConfirmationToken}"
+                    Message = $"<p>Mail adresini doğrulamak için <a href='{link}'>tıkla</a></p>"
                 };
 
                 _rabbitMQPublisher.Publish(userCreatedEvent);
@@ -95,7 +92,9 @@ namespace FileUpload.IdentityServer.Controllers
         {
             var user = await _userManager.FindByIdAsync(userId);
 
-            IdentityResult result = await _userManager.ConfirmEmailAsync(user, token);
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+
+            IdentityResult result = await _userManager.ConfirmEmailAsync(user, decodedToken);
 
             Response<NoContent> GetResult(IdentityResult result)
             {
