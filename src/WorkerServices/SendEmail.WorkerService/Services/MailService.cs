@@ -13,7 +13,7 @@ namespace SendEmail.WorkerService.Services
             _mailSettings = mailSettings;
         }
 
-        public void Send(string toMailAdress, string message, string subject)
+        public async Task Send(string toMailAdress, string message, string subject)
         {
             using var smtp = new SmtpClient
             {
@@ -27,8 +27,7 @@ namespace SendEmail.WorkerService.Services
             using var data = new MailMessage(_mailSettings.MailAdress, toMailAdress) { Subject = subject, Body = message };
             data.IsBodyHtml = true;
 
-            // Console.WriteLine(data);
-            smtp.Send(data);
+            await smtp.SendMailAsync(data);
         }
     }
 }

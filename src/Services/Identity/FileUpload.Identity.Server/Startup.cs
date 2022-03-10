@@ -3,6 +3,7 @@
 
 
 using FileUpload.Data.Entity;
+using FileUpload.Identity.Server.Services;
 using FileUpload.IdentityServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RabbitMQ.Client;
 using System;
 
 namespace FileUpload.IdentityServer
@@ -28,6 +30,11 @@ namespace FileUpload.IdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+           
+            services.AddSingleton<RabbitMQClientService>();
+            services.AddSingleton<RabbitMQPublisher>();
+
             services.AddLocalApiAuthentication(); // Buradan bize otomatik olarak Policy gelmektedir. Bunu User Controller'da kullandık. 
             services.AddControllersWithViews();
 

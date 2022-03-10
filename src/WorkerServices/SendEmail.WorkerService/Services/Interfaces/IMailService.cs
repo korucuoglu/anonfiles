@@ -8,6 +8,6 @@ namespace SendEmail.WorkerService.Services.Interfaces
 {
     public interface IMailService
     {
-        void Send(string toMailAdress, string message, string subject );
+        Task Send(string toMailAdress, string message, string subject );
     }
 }

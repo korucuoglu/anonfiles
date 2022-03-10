@@ -13,6 +13,7 @@ IHost host = Host.CreateDefaultBuilder(args).
             return sp.GetRequiredService<IOptions<MailSettings>>().Value;
         });
         services.AddSingleton<IMailService, MailService>();
+        services.AddSingleton<RabbitMQClientService>();
 
         services.AddHostedService<Worker>();
     })

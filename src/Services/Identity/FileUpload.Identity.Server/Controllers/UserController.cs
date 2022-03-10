@@ -1,5 +1,7 @@
 ﻿using FileUpload.Data.Entity;
+using FileUpload.Identity.Server.Services;
 using FileUpload.Shared.Dtos.User;
+using FileUpload.Shared.Event;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,11 +23,13 @@ namespace FileUpload.IdentityServer.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration configuration;
+        private readonly RabbitMQPublisher _rabbitMQPublisher;
 
-        public UserController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public UserController(UserManager<ApplicationUser> userManager, IConfiguration configuration, RabbitMQPublisher rabbitMQPublisher)
         {
             _userManager = userManager;
             this.configuration = configuration;
+            _rabbitMQPublisher = rabbitMQPublisher;
         }
 
         [HttpPost]
@@ -56,6 +60,8 @@ namespace FileUpload.IdentityServer.Controllers
                 MailAdress = user.Email,
                 Message = $"{configuration.GetSection("MVCClient").Value}?userId={user.Id}&token={emailConfirmationToken}"
             };
+
+            _rabbitMQPublisher.Publish(userCreatedEvent);
 
             return NoContent();
 

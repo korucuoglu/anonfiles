@@ -1,4 +1,4 @@
-﻿namespace FileUpload.Shared.Dtos.User
+﻿namespace FileUpload.Shared.Event
 {
     public class UserCreatedEvent
     {
