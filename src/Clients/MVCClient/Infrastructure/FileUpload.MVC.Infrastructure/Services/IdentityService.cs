@@ -1,6 +1,6 @@
 ﻿using FileUpload.MVC.Application.Dtos.Settings;
-using FileUpload.MVC.Application.Dtos.User;
 using FileUpload.MVC.Application.Interfaces.Services;
+using FileUpload.Shared.Dtos.User;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

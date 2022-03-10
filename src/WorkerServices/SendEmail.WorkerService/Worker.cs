@@ -17,7 +17,7 @@ namespace SendEmail.WorkerService
         {
             _mailService.Send("xhnedhdaaejyujnqau@nthrw.com", "deneme mesajýdýr", "Þifre Sýfýrlama");
 
-            return Task.CompletedTask;
+             await Task.CompletedTask;
         }
     }
 }
