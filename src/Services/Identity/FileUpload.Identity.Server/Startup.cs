@@ -43,7 +43,10 @@ namespace FileUpload.IdentityServer
 
             });
 
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>(opt =>
+            {
+                opt.User.RequireUniqueEmail = true;
+            })
              .AddEntityFrameworkStores<ApplicationDbContext>()
              .AddDefaultTokenProviders();
 

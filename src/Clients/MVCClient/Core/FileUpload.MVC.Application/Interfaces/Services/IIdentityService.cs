@@ -1,4 +1,4 @@
-﻿using FileUpload.MVC.Application.Dtos.User;
+﻿using FileUpload.Shared.Dtos.User;
 using IdentityModel.Client;
 using System.Threading.Tasks;
 
