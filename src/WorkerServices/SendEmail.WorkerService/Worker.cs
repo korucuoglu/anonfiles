@@ -1,21 +1,23 @@
+using SendEmail.WorkerService.Services.Interfaces;
+
 namespace SendEmail.WorkerService
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly IMailService _mailService;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, IMailService mailService)
         {
             _logger = logger;
+            _mailService = mailService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
-            }
+            _mailService.Send("xhnedhdaaejyujnqau@nthrw.com", "deneme mesajýdýr", "Þifre Sýfýrlama");
+
+            return Task.CompletedTask;
         }
     }
 }

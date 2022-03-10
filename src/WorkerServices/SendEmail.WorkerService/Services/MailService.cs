@@ -1,4 +1,4 @@
-﻿using SendEmail.WorkerService.Settings;
+﻿using SendEmail.WorkerService.Services.Interfaces;
 using System.Net;
 using System.Net.Mail;
 
@@ -26,6 +26,8 @@ namespace SendEmail.WorkerService.Services
             };
             using var data = new MailMessage(_mailSettings.MailAdress, toMailAdress) { Subject = subject, Body = message };
             data.IsBodyHtml = true;
+
+            // Console.WriteLine(data);
             smtp.Send(data);
         }
     }

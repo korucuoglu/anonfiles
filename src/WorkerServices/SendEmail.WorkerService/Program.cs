@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
 using SendEmail.WorkerService;
-using SendEmail.WorkerService.Settings;
+using SendEmail.WorkerService.Services;
+using SendEmail.WorkerService.Services.Interfaces;
 
 IHost host = Host.CreateDefaultBuilder(args).
     ConfigureServices((hostContext, services) =>
@@ -11,6 +12,7 @@ IHost host = Host.CreateDefaultBuilder(args).
         {
             return sp.GetRequiredService<IOptions<MailSettings>>().Value;
         });
+        services.AddSingleton<IMailService, MailService>();
 
         services.AddHostedService<Worker>();
     })

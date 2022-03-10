@@ -12,12 +12,10 @@ namespace FileUpload.IdentityServer.Services
     {
 
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public IdentityResourceOwnerPasswordValidator(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+        public IdentityResourceOwnerPasswordValidator(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
         }
 
         public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
