@@ -119,7 +119,7 @@ namespace FileUpload.MVC.Infrastructure.Services
 
             SigninInput signinInput = new()
             {
-                Email = signupInput.Email,
+                UserName = signupInput.UserName,
                 Password = signupInput.Password
             };
 
@@ -176,7 +176,7 @@ namespace FileUpload.MVC.Infrastructure.Services
             {
                 ClientId = _clientSettings.WebClientForUser.ClientId,
                 ClientSecret = _clientSettings.WebClientForUser.ClientSecret,
-                UserName = signinInput.Email,
+                UserName = signinInput.UserName,
                 Password = signinInput.Password,
                 Address = disco.TokenEndpoint
             };

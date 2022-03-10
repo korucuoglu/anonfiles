@@ -28,10 +28,9 @@ namespace FileUpload.IdentityServer.Controllers
         [HttpPost]
         public async Task<IActionResult> Signup(SignupInput dto)
         {
-
             var user = new ApplicationUser()
             {
-                UserName = dto.Email,
+                UserName = dto.UserName,
                 Email = dto.Email,
                 UserInfo = new()
                 {

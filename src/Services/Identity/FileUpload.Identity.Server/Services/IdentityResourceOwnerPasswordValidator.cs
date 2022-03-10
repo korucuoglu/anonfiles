@@ -20,7 +20,7 @@ namespace FileUpload.IdentityServer.Services
 
         public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
-            var user = await _userManager.FindByEmailAsync(context.UserName);
+            var user = await _userManager.FindByNameAsync(context.UserName);
 
             if (user == null)
             {

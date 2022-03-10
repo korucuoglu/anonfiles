@@ -68,7 +68,7 @@ namespace FileUpload.IdentityServer
                     {
                         ApplicationUser userAdmin = new()
                         {
-                            UserName = "admin@gmail.com",
+                            UserName = "admin",
                             Email = "admin@gmail.com",
                             UserInfo = new()
                             {
@@ -83,7 +83,7 @@ namespace FileUpload.IdentityServer
 
                         ApplicationUser user = new()
                         {
-                            UserName = "user@gmail.com",
+                            UserName = "user",
                             Email = "user@gmail.com",
                             UserInfo = new()
                             {
