@@ -2,6 +2,7 @@
 using FileUpload.Identity.Server.Services;
 using FileUpload.Shared.Dtos.User;
 using FileUpload.Shared.Event;
+using FileUpload.Shared.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -48,22 +49,37 @@ namespace FileUpload.IdentityServer.Controllers
 
             var result = await _userManager.CreateAsync(user, dto.Password);
 
-            if (!result.Succeeded)
+            async Task<Response<NoContent>> GetResult(IdentityResult result)
             {
-                return BadRequest(result.Errors.ToList());
+                if (!result.Succeeded)
+                {
+                   var error = result.Errors.First().Description;
+
+                    return Response<NoContent>.Fail(error, 500);
+
+                }
+
+                string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                UserCreatedEvent userCreatedEvent = new()
+                {
+                    MailAdress = user.Email,
+                    Message = $"{configuration.GetSection("MVCClient").Value}?userId={user.Id}&token={emailConfirmationToken}"
+                };
+
+                _rabbitMQPublisher.Publish(userCreatedEvent);
+
+                return Response<NoContent>.Success(200);
             }
 
-            string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var data = await GetResult(result);
 
-            UserCreatedEvent userCreatedEvent = new()
+            return new ObjectResult(data)
             {
-                MailAdress = user.Email,
-                Message = $"{configuration.GetSection("MVCClient").Value}?userId={user.Id}&token={emailConfirmationToken}"
+                StatusCode = data.StatusCode
             };
+           
 
-            _rabbitMQPublisher.Publish(userCreatedEvent);
-
-            return NoContent();
 
         }
 
