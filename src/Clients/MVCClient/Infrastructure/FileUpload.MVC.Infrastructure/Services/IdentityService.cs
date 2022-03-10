@@ -138,9 +138,7 @@ namespace FileUpload.MVC.Infrastructure.Services
 
             if (token.IsError)
             {
-
                 return false;
-
             }
 
             var userInfoRequest = new UserInfoRequest
@@ -211,9 +209,8 @@ namespace FileUpload.MVC.Infrastructure.Services
             //return true;
 
         }
-        public async Task<bool> ValidateUserEmail(string userId, string token)
+        public async Task<Response<NoContent>> ValidateUserEmail(string userId, string token)
         {
-
             var clientCredentialsToken = await _clientCredentialTokenService.GetToken();
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
@@ -225,13 +222,8 @@ namespace FileUpload.MVC.Infrastructure.Services
 
                 var response = await _httpClient.SendAsync(requestMessage);
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    return false;
-                }
+                return JsonConvert.DeserializeObject<Response<NoContent>>(await response.Content.ReadAsStringAsync());
             }
-
-            return true;
         }
     }
 }
