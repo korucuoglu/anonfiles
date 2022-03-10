@@ -5,8 +5,8 @@ namespace FileUpload.Shared.Dtos.User
     public class SigninInput
     {
         [Required]
-        [Display(Name = "Email adresiniz")]
-        public string Email { get; set; }
+        [Display(Name = "Kullanıcı Adınız")]
+        public string UserName { get; set; }
 
         [Required]
         [Display(Name = "Şifreniz")]
