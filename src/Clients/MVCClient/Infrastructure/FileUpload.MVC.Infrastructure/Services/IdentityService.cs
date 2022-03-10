@@ -1,6 +1,7 @@
 ﻿using FileUpload.MVC.Application.Dtos.Settings;
 using FileUpload.MVC.Application.Interfaces.Services;
 using FileUpload.Shared.Dtos.User;
+using FileUpload.Shared.Wrappers;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -27,7 +28,6 @@ namespace FileUpload.MVC.Infrastructure.Services
         private readonly ClientSettings _clientSettings;
         private readonly ServiceApiSettings _serviceApiSettings;
         private readonly IClientCredentialTokenService _clientCredentialTokenService;
-
         public IdentityService(HttpClient client, IHttpContextAccessor httpContextAccessor, IOptions<ClientSettings> clientSettings, IOptions<ServiceApiSettings> serviceApiSettings, IClientCredentialTokenService clientCredentialTokenService)
         {
             _httpClient = client;
@@ -36,8 +36,6 @@ namespace FileUpload.MVC.Infrastructure.Services
             _serviceApiSettings = serviceApiSettings.Value;
             _clientCredentialTokenService = clientCredentialTokenService;
         }
-
-
         public async Task<TokenResponse> GetAccessTokenByRefreshToken()
         {
             var disco = await _httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
@@ -89,7 +87,6 @@ namespace FileUpload.MVC.Infrastructure.Services
 
             return token;
         }
-
         public async Task RevokeRefreshToken()
         {
             var disco = await _httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
@@ -115,7 +112,6 @@ namespace FileUpload.MVC.Infrastructure.Services
 
             await _httpClient.RevokeTokenAsync(tokenRevocationRequest);
         }
-
         public async Task<bool> SignIn(SigninInput signinInput)
         {
             var disco = await _httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
@@ -179,8 +175,7 @@ namespace FileUpload.MVC.Infrastructure.Services
 
             return true;
         }
-
-        public async Task<bool> SignUp(SignupInput signupInput)
+        public async Task<Response<NoContent>> SignUp(SignupInput signupInput)
         {
             // ilk olarak ClientId ve Secret ile birlikte ClientCredentials token alınır. Ardından request gönderilir. 
 
@@ -199,23 +194,21 @@ namespace FileUpload.MVC.Infrastructure.Services
 
                 var response = await _httpClient.SendAsync(requestMessage);
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    return false;
-                }
+                return JsonConvert.DeserializeObject<Response<NoContent>>(await response.Content.ReadAsStringAsync());
+
             }
 
             // Kod buraya inerse kişi başarılı bir şekilde kayıt yapmış demektir. Kişi kayıt yaptığında aynı zamanda Login işlemini de gerçekleştirebiliriz. 
 
-            SigninInput signinInput = new()
-            {
-                UserName = signupInput.UserName,
-                Password = signupInput.Password
-            };
+            //SigninInput signinInput = new()
+            //{
+            //    UserName = signupInput.UserName,
+            //    Password = signupInput.Password
+            //};
 
-            await SignIn(signinInput);
+            //await SignIn(signinInput);
 
-            return true;
+            //return true;
 
         }
         public async Task<bool> ValidateUserEmail(string userId, string token)

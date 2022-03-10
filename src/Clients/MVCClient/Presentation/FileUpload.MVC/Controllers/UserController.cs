@@ -59,9 +59,9 @@ namespace FileUpload.MVC.Controllers
 
             var data = await _identityService.SignUp(model);
 
-            if (data is false)
+            if (!data.IsSuccessful)
             {
-                ModelState.AddModelError(string.Empty, "Hata meydana geldi.");
+                ModelState.AddModelError(string.Empty, data.Error);
 
                 return View();
             }
