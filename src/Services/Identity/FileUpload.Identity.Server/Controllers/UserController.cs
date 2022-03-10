@@ -53,7 +53,7 @@ namespace FileUpload.IdentityServer.Controllers
             {
                 if (!result.Succeeded)
                 {
-                   var error = result.Errors.First().Description;
+                    var error = result.Errors.First().Description;
 
                     return Response<NoContent>.Fail(error, 500);
 
@@ -61,10 +61,20 @@ namespace FileUpload.IdentityServer.Controllers
 
                 string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
+                string link = Url.Action("confirmEmail", "user", new
+                {
+                    userId = user.Id,
+                    token = emailConfirmationToken
+                }, protocol: HttpContext.Request.Scheme, configuration.GetSection("MVCClient").Value
+
+                    );
+
+
                 UserCreatedEvent userCreatedEvent = new()
                 {
                     MailAdress = user.Email,
-                    Message = $"{configuration.GetSection("MVCClient").Value}?userId={user.Id}&token={emailConfirmationToken}"
+                    Message = link
+                    // Message = $"{configuration.GetSection("MVCClient").Value}/user/confirmEmail?userId={user.Id}&token={emailConfirmationToken}"
                 };
 
                 _rabbitMQPublisher.Publish(userCreatedEvent);
@@ -78,19 +88,34 @@ namespace FileUpload.IdentityServer.Controllers
             {
                 StatusCode = data.StatusCode
             };
-           
-
-
         }
 
         [HttpGet]
-        public async Task<bool> ValidateUserEmail(string userId, string token)
+        public async Task<IActionResult> ValidateUserEmail(string userId, string token)
         {
             var user = await _userManager.FindByIdAsync(userId);
 
             IdentityResult result = await _userManager.ConfirmEmailAsync(user, token);
 
-            return result.Succeeded;
+            Response<NoContent> GetResult(IdentityResult result)
+            {
+                if (!result.Succeeded)
+                {
+                    var error = result.Errors.First().Description;
+
+                    return Response<NoContent>.Fail(error, 500);
+                }
+
+                return Response<NoContent>.Success(200);
+            }
+
+            var data = GetResult(result);
+
+            return new ObjectResult(data)
+            {
+                StatusCode = data.StatusCode
+            };
+
 
         }
     }

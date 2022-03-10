@@ -32,9 +32,8 @@ namespace FileUpload.MVC.Controllers
 
             var response = await _identityService.SignIn(model);
 
-            if (!response)
+            if (response is false)
             {
-
                 ModelState.AddModelError("", "Böyle bir kullanıcı bulunamadı");
 
                 return View();
@@ -52,7 +51,7 @@ namespace FileUpload.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(SignupInput model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid is false)
             {
                 return View();
             }
@@ -91,7 +90,9 @@ namespace FileUpload.MVC.Controllers
         {
             var result = await _identityService.ValidateUserEmail(userId, token);
 
-            return RedirectToAction("Index", "Home");
+            return Ok(result);
+
+            // return RedirectToAction("Index", "Home");
 
         }
 

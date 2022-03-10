@@ -50,6 +50,8 @@ namespace SendEmail.WorkerService
 
             _channel.BasicAck(@event.DeliveryTag, false);
 
+            _logger.Log(LogLevel.Information, $"{userCreatedEvent.MailAdress} adresine mail baþarýyla gönderildi");
+
         }
     }
 }
