@@ -1,4 +1,4 @@
-﻿using FileUpload.Application.Wrappers;
+﻿using FileUpload.Shared.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;

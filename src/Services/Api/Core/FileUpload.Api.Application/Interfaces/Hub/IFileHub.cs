@@ -1,4 +1,4 @@
-﻿using FileUpload.Application.Wrappers;
+﻿using FileUpload.Shared.Wrappers;
 using FileUpload.Shared.Dtos.Files;
 using System.Threading.Tasks;
 

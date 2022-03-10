@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using FileUpload.Application.Wrappers;
+using FileUpload.Shared.Wrappers;
 using FileUpload.Domain.Entities;
 using FileUpload.Shared.Dtos.Categories;
 using FileUpload.Shared.Dtos.Files;
