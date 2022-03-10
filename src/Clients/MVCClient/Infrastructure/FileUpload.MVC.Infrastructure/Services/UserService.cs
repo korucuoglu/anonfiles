@@ -4,7 +4,7 @@ using FileUpload.MVC.Application.Interfaces.Services;
 using FileUpload.MVC.Application.Dtos.Categories;
 using System.Net.Http;
 using FileUpload.MVC.Application.Extension;
-using FileUpload.MVC.Application.Wrappers;
+using FileUpload.Shared.Wrappers;
 using FileUpload.Shared.Dtos.Files;
 using FileUpload.Shared.Dtos.Files.Pager;
 using FileUpload.Shared.Dtos.Categories;

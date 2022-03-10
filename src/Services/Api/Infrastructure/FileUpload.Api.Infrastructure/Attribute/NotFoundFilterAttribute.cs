@@ -1,6 +1,6 @@
 ﻿using FileUpload.Api.Application.Interfaces.Repositories;
 using FileUpload.Application.Interfaces.Services;
-using FileUpload.Application.Wrappers;
+using FileUpload.Shared.Wrappers;
 using FileUpload.Domain.Common; // yanlış
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

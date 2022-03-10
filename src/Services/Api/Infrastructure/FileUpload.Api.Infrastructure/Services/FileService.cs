@@ -9,7 +9,7 @@ using FileUpload.Application.Features.Queries.Files.GetAll;
 using FileUpload.Application.Features.Queries.Files.GetById;
 using FileUpload.Application.Interfaces.Hub;
 using FileUpload.Application.Interfaces.Services;
-using FileUpload.Application.Wrappers;
+using FileUpload.Shared.Wrappers;
 using FileUpload.Domain.Entities;
 using FileUpload.Infrastructure.Hub;
 using FileUpload.Shared.Dtos.Files;

@@ -1,5 +1,5 @@
 ﻿using FileUpload.MVC.Application.Exceptions;
-using FileUpload.MVC.Application.Wrappers;
+using FileUpload.Shared.Wrappers;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;

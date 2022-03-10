@@ -1,6 +1,6 @@
 ﻿using FileUpload.Api.Application.Interfaces.Redis;
 using FileUpload.Application.Interfaces.UnitOfWork;
-using FileUpload.Application.Wrappers;
+using FileUpload.Shared.Wrappers;
 using FileUpload.Domain.Entities;
 using FluentValidation;
 using MediatR;
