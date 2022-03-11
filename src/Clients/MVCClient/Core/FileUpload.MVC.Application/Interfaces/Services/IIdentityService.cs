@@ -7,7 +7,7 @@ namespace FileUpload.MVC.Application.Interfaces.Services
 {
     public interface IIdentityService
     {
-        Task<bool> SignIn(SigninInput signinInput);
+        Task<Response<NoContent>> SignIn(SigninInput signinInput);
         Task<Response<NoContent>> SignUp(SignupInput signupInput);
         Task<Response<NoContent>> ValidateUserEmail(string userId, string token);
         Task<TokenResponse> GetAccessTokenByRefreshToken();

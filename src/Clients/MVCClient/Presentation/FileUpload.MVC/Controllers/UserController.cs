@@ -32,9 +32,9 @@ namespace FileUpload.MVC.Controllers
 
             var response = await _identityService.SignIn(model);
 
-            if (response is false)
+            if (response.IsSuccessful is false)
             {
-                ModelState.AddModelError("", "Böyle bir kullanıcı bulunamadı");
+                ModelState.AddModelError("", response.Error);
 
                 return View();
             }

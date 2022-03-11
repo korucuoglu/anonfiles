@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -112,7 +113,7 @@ namespace FileUpload.MVC.Infrastructure.Services
 
             await _httpClient.RevokeTokenAsync(tokenRevocationRequest);
         }
-        public async Task<bool> SignIn(SigninInput signinInput)
+        public async Task<Response<NoContent>> SignIn(SigninInput signinInput)
         {
             var disco = await _httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
             {
@@ -138,7 +139,8 @@ namespace FileUpload.MVC.Infrastructure.Services
 
             if (token.IsError)
             {
-                return false;
+                var data = JsonConvert.DeserializeObject<ResourceOwnerPasswordResponse>(token.Raw);
+                return Response<NoContent>.Fail(data.errors.First(), 500);
             }
 
             var userInfoRequest = new UserInfoRequest
@@ -171,7 +173,7 @@ namespace FileUpload.MVC.Infrastructure.Services
 
             await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, authenticationProperties);
 
-            return true;
+            return Response<NoContent>.Success(200);
         }
         public async Task<Response<NoContent>> SignUp(SignupInput signupInput)
         {

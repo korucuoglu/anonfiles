@@ -12,7 +12,6 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using static IdentityServer4.IdentityServerConstants;
 
 namespace FileUpload.IdentityServer.Controllers
@@ -76,7 +75,7 @@ namespace FileUpload.IdentityServer.Controllers
 
                 _rabbitMQPublisher.Publish(userCreatedEvent);
 
-                return Response<NoContent>.Success(200);
+                return Response<NoContent>.Success($"{user.Email} mail adresine doğrulama maili gönderildi", 200);
             }
 
             var data = await GetResult(result);
@@ -105,7 +104,7 @@ namespace FileUpload.IdentityServer.Controllers
                     return Response<NoContent>.Fail(error, 500);
                 }
 
-                return Response<NoContent>.Success(200);
+                return Response<NoContent>.Success($"{user.Email} mail adresi doğrulandı", 200);
             }
 
             var data = GetResult(result);

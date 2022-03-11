@@ -40,6 +40,14 @@ namespace FileUpload.IdentityServer.Services
                 return;
             }
 
+            if (!user.EmailConfirmed)
+            {
+                var errors = new Dictionary<string, object>();
+                errors.Add("errors", new List<string> { "Lüften mail adresinizi onaylayın." });
+                context.Result.CustomResponse = errors;
+                return;
+            }
+
 
 
             context.Result = new GrantValidationResult(user.Id.ToString(), OidcConstants.AuthenticationMethods.Password);
