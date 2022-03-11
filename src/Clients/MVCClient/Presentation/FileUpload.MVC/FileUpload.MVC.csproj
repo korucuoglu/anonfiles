@@ -4,6 +4,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>32033ba4-9a90-4d1d-8ef9-5ee4c6747127</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" />
+  </ItemGroup>
  
   <ItemGroup>
     <ProjectReference Include="..\..\Core\FileUpload.MVC.Application\FileUpload.MVC.Application.csproj" />

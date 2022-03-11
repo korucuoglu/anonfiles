@@ -177,52 +177,60 @@ namespace FileUpload.MVC.Infrastructure.Services
         }
         public async Task<Response<NoContent>> SignUp(SignupInput signupInput)
         {
-            // ilk olarak ClientId ve Secret ile birlikte ClientCredentials token alınır. Ardından request gönderilir. 
-
             var clientCredentialsToken = await _clientCredentialTokenService.GetToken();
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
 
             var signupInputContent = new StringContent(JsonConvert.SerializeObject(signupInput), Encoding.UTF8, "application/json");
 
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user"))
+            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user/signup"))
             {
-                requestMessage.Headers.Authorization =
+                request.Headers.Authorization =
                     new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
 
-                requestMessage.Content = signupInputContent;
+                request.Content = signupInputContent;
 
-                var response = await _httpClient.SendAsync(requestMessage);
+                var response = await _httpClient.SendAsync(request);
 
                 return JsonConvert.DeserializeObject<Response<NoContent>>(await response.Content.ReadAsStringAsync());
 
             }
-
-            // Kod buraya inerse kişi başarılı bir şekilde kayıt yapmış demektir. Kişi kayıt yaptığında aynı zamanda Login işlemini de gerçekleştirebiliriz. 
-
-            //SigninInput signinInput = new()
-            //{
-            //    UserName = signupInput.UserName,
-            //    Password = signupInput.Password
-            //};
-
-            //await SignIn(signinInput);
-
-            //return true;
-
         }
-        public async Task<Response<NoContent>> ValidateUserEmail(string userId, string token)
+        public async Task<Response<NoContent>> ValidateUserEmail(ConfirmEmailModel model)
         {
             var clientCredentialsToken = await _clientCredentialTokenService.GetToken();
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
 
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"{_serviceApiSettings.IdentityBaseUri}/api/user?userId={userId}&token={token}"))
-            {
-                requestMessage.Headers.Authorization =
-                    new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
+            var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
-                var response = await _httpClient.SendAsync(requestMessage);
+            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user/validateUserEmail"))
+            {
+                request.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
+                request.Content = content;
+
+                var response = await _httpClient.SendAsync(request);
+
+                return JsonConvert.DeserializeObject<Response<NoContent>>(await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async Task<Response<NoContent>> ResetPassword(string email)
+        {
+            var clientCredentialsToken = await _clientCredentialTokenService.GetToken();
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
+
+            var content = new StringContent(JsonConvert.SerializeObject(email), Encoding.UTF8, "application/json");
+
+            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user/resetPassword"))
+            {
+                request.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
+                request.Content = content;
+
+                var response = await _httpClient.SendAsync(request);
 
                 return JsonConvert.DeserializeObject<Response<NoContent>>(await response.Content.ReadAsStringAsync());
             }

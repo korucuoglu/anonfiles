@@ -22,8 +22,20 @@
                             <label for="password" class="form-label">Şifreniz</label>
                             <input type="password" class="form-control" v-model="data.Password" id="password" />
                         </div>
-                        <button @@click.prevent="Submit" class="btn btn-primary">Giriş yap</button>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button @@click.prevent="Submit" class="btn btn-primary">Giriş yap</button>
+                            </div>
+                             <div class="col-md-6">
+                                <a href="/user/reset-password" class="btn btn-link">
+                                   Şifremi Unuttum
+                                </a>
+                            </div>
+                        </div>
+
                     </form>
+
                 </div>
             </div>
         </div>

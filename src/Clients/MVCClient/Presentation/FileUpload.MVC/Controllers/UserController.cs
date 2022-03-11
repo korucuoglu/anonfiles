@@ -1,7 +1,9 @@
 ﻿using FileUpload.MVC.Application.Interfaces.Services;
 using FileUpload.Shared.Dtos.User;
+using FileUpload.Shared.Wrappers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -81,11 +83,23 @@ namespace FileUpload.MVC.Controllers
 
 
         [HttpGet("[controller]/confirmEmail")]
-        public async Task<IActionResult> ValidateUserEmail(string userId, string token)
+        public async Task<IActionResult> ValidateUserEmail(ConfirmEmailModel model)
         {
-            var result = await _identityService.ValidateUserEmail(userId, token);
+            var result = await _identityService.ValidateUserEmail(model);
 
             return Ok(result);
+        }
+
+        [HttpGet("[controller]/reset-password")]
+        public async Task<IActionResult> ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost("[controller]/reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] Mail model)
+        {
+            return Ok(model.Email);
         }
 
     }
