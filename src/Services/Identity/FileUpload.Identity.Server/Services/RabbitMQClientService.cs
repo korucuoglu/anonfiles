@@ -1,4 +1,4 @@
-﻿using FileUpload.Shared.Event;
+﻿using FileUpload.Shared.Const;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using System;
@@ -29,9 +29,9 @@ namespace FileUpload.Identity.Server.Services
             }
 
             _channel = _connection.CreateModel();
-            _channel.ExchangeDeclare(RabbitMQInfo.ExchangeName, type: ExchangeType.Direct, true, false);
-            _channel.QueueDeclare(RabbitMQInfo.QueueName, true, false, false, null);
-            _channel.QueueBind(RabbitMQInfo.QueueName, RabbitMQInfo.ExchangeName, RabbitMQInfo.RouteKey);
+            _channel.ExchangeDeclare(RabbitMQMail.ExchangeName, type: ExchangeType.Direct, true, false);
+            _channel.QueueDeclare(RabbitMQMail.QueueName, true, false, false, null);
+            _channel.QueueBind(RabbitMQMail.QueueName, RabbitMQMail.ExchangeName, RabbitMQMail.RouteKey);
 
             return _channel;
         }

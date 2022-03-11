@@ -1,3 +1,4 @@
+using FileUpload.Shared.Const;
 using FileUpload.Shared.Event;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -34,7 +35,7 @@ namespace SendEmail.WorkerService
         {
             var consumer = new AsyncEventingBasicConsumer(_channel);
 
-            _channel.BasicConsume(RabbitMQInfo.QueueName, false, consumer);
+            _channel.BasicConsume(RabbitMQMail.QueueName, false, consumer);
 
             consumer.Received += Consumer_Received;
 

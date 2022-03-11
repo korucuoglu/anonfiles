@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileUpload.Shared.Event
+namespace FileUpload.Shared.Const
 {
-    public static class RabbitMQInfo
+    public static class RabbitMQMail
     {
         public const string ExchangeName = "sendmail-direct-exchange";
         public const string RouteKey = "route-sendmail";

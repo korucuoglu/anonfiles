@@ -9,6 +9,7 @@ using FileUpload.MVC.Application.Exceptions;
 using FileUpload.MVC.Application.Dtos.Error;
 using FileUpload.MVC.Application.Dtos.Categories;
 using FileUpload.Shared.Dtos.Files;
+using FileUpload.Shared.Wrappers;
 
 namespace FileUpload.MVC.Controllers
 {
@@ -22,7 +23,6 @@ namespace FileUpload.MVC.Controllers
         }
 
         [HttpGet]
-
         public async Task<IActionResult> Index()
         {
 
@@ -97,5 +97,7 @@ namespace FileUpload.MVC.Controllers
 
             return Ok(data);
         }
+
+        
     }
 }
