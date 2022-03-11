@@ -12,7 +12,7 @@ namespace FileUpload.MVC.Application.Interfaces.Services
     {
         Task<AddFileDto> Upload(FilesCategoriesDto fileDto);
         Task<FilesPagerViewModel> GetMyFiles(FileFilterModel model);
-        Task<string> GetDirectLink(string id);
+        Task<Response<NoContent>> Download(string id);
         Task<Response<FilePagerViewModel>> DeleteFile(FileFilterModel model, string id);
         Task<List<GetCategoryDto>> GetCategories();
         Task<GetCategoryDto> AddCategory(AddCategoryDto dto);

@@ -211,7 +211,7 @@ namespace FileUpload.Infrastructure.Services
             }
         }
 
-        public async Task<Response<string>> Download(string id)
+        public async Task<Response<NoContent>> Download(string id)
         {
             var request = new GetPreSignedUrlRequest()
             {
@@ -222,7 +222,7 @@ namespace FileUpload.Infrastructure.Services
             };
             var data = client.GetPreSignedURL(request);
 
-            return await Task.FromResult(Response<string>.Success(data, 200));
+            return await Task.FromResult(Response<NoContent>.Success(message:data, statusCode:200));
         }
     }
 

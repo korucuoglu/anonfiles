@@ -15,7 +15,7 @@ namespace FileUpload.Application.Interfaces.Services
         Task<Response<GetFileDto>> GetFileById(Guid id);
         Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, Guid fileId);
 
-        Task<Response<string>> Download(string id);
+        Task<Response<NoContent>> Download(string id);
 
 
     }
