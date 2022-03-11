@@ -13,10 +13,17 @@ namespace FileUpload.Shared.Wrappers
 
         public string Error { get; set; }
 
+        public string Message { get; set; }
+
         // Static Factory Method
         public static Response<T> Success(T data, int statusCode)
         {
             return new Response<T> { Value = data, StatusCode = statusCode, IsSuccessful = true };
+        }
+
+        public static Response<T> Success(string message, int statusCode)
+        {
+            return new Response<T> { Value = default, StatusCode = statusCode, IsSuccessful = true, Message = message };
         }
 
         public static Response<T> Success(int statusCode)
