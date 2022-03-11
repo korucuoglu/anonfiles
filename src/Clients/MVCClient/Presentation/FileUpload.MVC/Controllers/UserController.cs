@@ -86,9 +86,6 @@ namespace FileUpload.MVC.Controllers
             var result = await _identityService.ValidateUserEmail(userId, token);
 
             return Ok(result);
-
-            // return RedirectToAction("Index", "Home");
-
         }
 
     }

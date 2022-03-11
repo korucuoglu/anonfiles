@@ -29,11 +29,11 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Upload">Upload</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Upload">Upload</a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Files">Dosyalarım</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Files">Dosyalarım</a>
                                 </li>
 
                             @if (User.IsInRole("Admin"))
@@ -55,7 +55,7 @@
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <li><a class="dropdown-item" asp-controller="User" asp-action="Info">Profil</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Home" asp-action="Files">Dosyalarım</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Files" asp-action="Files">Dosyalarım</a></li>
                                         <li><a class="dropdown-item" asp-controller="User" asp-action="Logout">Çıkış</a></li>
                                     </ul>
                                 </li>

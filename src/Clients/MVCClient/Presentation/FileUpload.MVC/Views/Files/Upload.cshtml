@@ -121,7 +121,7 @@
 
                     axios({
                         method: "post",
-                        url:  "/Home/AddCategory",
+                        url:  "/Categories/AddCategory",
                         data: {"Title": this.newCategory},
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
@@ -135,7 +135,7 @@
 
                     axios({
                         method: "get",
-                        url: "/Home/GetLink/" + fileId,
+                        url: "/files/download/" + fileId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                     }).then(response => {
@@ -178,7 +178,7 @@
 
                     axios({
                         method: "post",
-                        url: "/home/upload",
+                        url: "/files/upload",
                         data: formData,
                         contentType: "multipart/form-data",
                         dataType: "json",

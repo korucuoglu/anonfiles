@@ -33,9 +33,9 @@ namespace FileUpload.MVC.Infrastructure.Services
 
         }
 
-        public async Task<string> GetDirectLink(string id)
+        public async Task<Response<NoContent>> Download(string id)
         {
-            return await _client.CustomGetAsync<string>($"minio/download/{id}", true);
+            return await _client.CustomGetAsyncReturnsResponse<NoContent>($"minio/download/{id}", true);
         }
 
         public async Task<Response<FilePagerViewModel>> DeleteFile(FileFilterModel model, string id)

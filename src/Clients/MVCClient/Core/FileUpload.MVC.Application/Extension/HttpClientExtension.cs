@@ -57,6 +57,20 @@ namespace FileUpload.MVC.Application.Extension
             return !httpRes.IsSuccessful && ThrowSuccessException ? throw new ApiException(httpRes.Error) : httpRes.Value;
         }
 
+        public async static Task<Response<T>> CustomGetAsyncReturnsResponse<T>(this HttpClient Client, String Url, bool ThrowSuccessException = false)
+        {
+            var request = await Client.GetAsync(Url);
+
+            if (!request.IsSuccessStatusCode)
+            {
+                throw new ApiException("hata meydana geldi");
+            }
+
+            var httpRes = JsonConvert.DeserializeObject<Response<T>>(await request.Content.ReadAsStringAsync());
+
+            return !httpRes.IsSuccessful && ThrowSuccessException ? throw new ApiException(httpRes.Error) : httpRes;
+        }
+
         public async static Task<T> CustomDeleteAsync<T>(this HttpClient Client, String Url, bool ThrowSuccessException = false)
         {
             var request = await Client.DeleteAsync(Url);

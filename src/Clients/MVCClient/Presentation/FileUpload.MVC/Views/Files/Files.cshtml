@@ -83,7 +83,6 @@
 
 
              getQuery()
-
              {
                 let urlParams = new URLSearchParams(window.location.search);
 
@@ -103,83 +102,84 @@
                 {
                     this.filter.Extension = urlParams.get('extension');
                 }
+             },
 
-            },
-
-            getData(e) {
+            getData(e) 
+            {
 
              this.filter.Page = e;
              this.filterData();
 
             },
 
-        filterData(){
-                axios({
-                method: "post",
-                url:"/myfiles",
-                data: this.filter,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-            }).then(response => {
-
-                if (response.data)
-                {
-                   this.datas = response.data.files
-                   this.pageInfo = response.data.pages
-                   this.categories = response.data.categories
-                }
-                else
-                {
-                    alert("hata");
-                }
-            });
-        },
-
-
-            deleteFile(id) {
-
+            filterData()
+            {
                 axios({
                     method: "post",
-                    url:`/Home/Delete/${id}`,
+                    url:"/files/myfiles",
                     data: this.filter,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                 }).then(response => {
-                    if (response.data.isSuccessful)
+
+                    if (response.data)
                     {
-                       this.datas = this.datas.filter(data => data.id != id);
-
-                        if (response.data.value.file != null)
-                        {
-                             this.datas.push(
-                             {
-                                id: response.data.value.file.id,
-                                fileName: response.data.value.file.fileName,
-                                size: response.data.value.file.size,
-                                uploadedDate: response.data.value.file.uploadedDate,
-                            });
-                        }
-
-                          this.pageInfo = response.data.value.pages
-                          this.categories = response.data.value.categories
+                       this.datas = response.data.files
+                       this.pageInfo = response.data.pages
+                       this.categories = response.data.categories
                     }
                     else
                     {
                         alert("hata");
-
                     }
                 });
             },
 
-            Download(id) {
+
+            deleteFile(id) 
+            {
+
+                    axios({
+                        method: "post",
+                        url:`/files/delete/${id}`,
+                        data: this.filter,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                    }).then(response => {
+                        if (response.data.isSuccessful)
+                        {
+                           this.datas = this.datas.filter(data => data.id != id);
+
+                            if (response.data.value.file != null)
+                            {
+                                 this.datas.push(
+                                 {
+                                    id: response.data.value.file.id,
+                                    fileName: response.data.value.file.fileName,
+                                    size: response.data.value.file.size,
+                                    uploadedDate: response.data.value.file.uploadedDate,
+                                });
+                            }
+
+                              this.pageInfo = response.data.value.pages
+                              this.categories = response.data.value.categories
+                        }
+                        else
+                        {
+                            alert("hata");
+
+                        }
+                    });
+            },
+
+            Download(id) 
+            {
                 axios({
                     method: "get",
-                    url:`/Home/GetLink/${id}`,
+                    url:`/files/download/${id}`,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                 }).then(response => {
-                    console.log(response);
-
                     if (response.data) {
                         window.location.href = response.data;
                     }
