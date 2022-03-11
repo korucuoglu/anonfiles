@@ -1,4 +1,5 @@
-﻿using FileUpload.Shared.Event;
+﻿using FileUpload.Shared.Const;
+using FileUpload.Shared.Event;
 using System.Text;
 using System.Text.Json;
 
@@ -24,7 +25,7 @@ namespace FileUpload.Identity.Server.Services
             var properties = channel.CreateBasicProperties();
             properties.Persistent = true;
 
-            channel.BasicPublish(RabbitMQInfo.ExchangeName, RabbitMQInfo.RouteKey, false, properties, bodyByte);
+            channel.BasicPublish(RabbitMQMail.ExchangeName, RabbitMQMail.RouteKey, false, properties, bodyByte);
         }
     }
 }

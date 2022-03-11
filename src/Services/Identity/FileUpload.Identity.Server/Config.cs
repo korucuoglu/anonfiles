@@ -69,7 +69,7 @@ namespace FileUpload.IdentityServer
                     AccessTokenLifetime=1*60*60,
                     RefreshTokenExpiration=TokenExpiration.Absolute,
                     AbsoluteRefreshTokenLifetime= (int) (DateTime.Now.AddDays(60)- DateTime.Now).TotalSeconds,
-                    RefreshTokenUsage= TokenUsage.ReUse
+                    RefreshTokenUsage= TokenUsage.OneTimeOnly
                 },
 
                  new Client

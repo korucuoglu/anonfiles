@@ -22,8 +22,8 @@ namespace FileUpload.MVC.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Login(SigninInput model)
+        [HttpPost("[controller]/login")]
+        public async Task<IActionResult> Login([FromBody] SigninInput model)
         {
             if (!ModelState.IsValid)
             {
@@ -32,14 +32,16 @@ namespace FileUpload.MVC.Controllers
 
             var response = await _identityService.SignIn(model);
 
-            if (response.IsSuccessful is false)
-            {
-                ModelState.AddModelError("", response.Error);
+            return Ok(response);
 
-                return View();
-            }
+            //if (response.IsSuccessful is false)
+            //{
+            //    ModelState.AddModelError("", response.Error);
 
-            return RedirectToAction("Upload", "Home");
+            //    return View();
+            //}
+
+            //return RedirectToAction("Upload", "Home");
         }
 
         [HttpGet("[controller]/register")]
@@ -48,24 +50,17 @@ namespace FileUpload.MVC.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Register(SignupInput model)
+        [HttpPost("[controller]/register")]
+        public async Task<IActionResult> Register([FromBody] SignupInput model)
         {
             if (ModelState.IsValid is false)
             {
                 return View();
             }
 
-            var data = await _identityService.SignUp(model);
+            var response = await _identityService.SignUp(model);
 
-            if (!data.IsSuccessful)
-            {
-                ModelState.AddModelError(string.Empty, data.Error);
-
-                return View();
-            }
-
-            return RedirectToAction("Index", "Home");
+            return Ok(response);
 
         }
 
