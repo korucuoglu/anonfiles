@@ -47,7 +47,7 @@ namespace SendEmail.WorkerService
         {
             var userCreatedEvent = JsonSerializer.Deserialize<UserCreatedEvent>(Encoding.UTF8.GetString(@event.Body.ToArray()));
 
-             await _mailService.Send(userCreatedEvent.MailAdress, userCreatedEvent.Message, "Confirm Mail Adres");
+             await _mailService.Send(userCreatedEvent.MailAdress, userCreatedEvent.Message, userCreatedEvent.Subject);
 
             _channel.BasicAck(@event.DeliveryTag, false);
 

@@ -179,8 +179,6 @@ namespace FileUpload.MVC.Infrastructure.Services
         {
             var clientCredentialsToken = await _clientCredentialTokenService.GetToken();
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
-
             var signupInputContent = new StringContent(JsonConvert.SerializeObject(signupInput), Encoding.UTF8, "application/json");
 
             using (var request = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user/signup"))
@@ -196,35 +194,40 @@ namespace FileUpload.MVC.Infrastructure.Services
 
             }
         }
-        public async Task<Response<NoContent>> ValidateUserEmail(ConfirmEmailModel model)
+        public async Task<Response<NoContent>> ValidateUserEmail(string UserId, string token)
         {
             var clientCredentialsToken = await _clientCredentialTokenService.GetToken();
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
-
-            var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
-
-            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user/validateUserEmail"))
+            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user/validateUserEmail?userId={UserId}&token={token}"))
             {
                 request.Headers.Authorization =
                     new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
-                request.Content = content;
 
                 var response = await _httpClient.SendAsync(request);
 
                 return JsonConvert.DeserializeObject<Response<NoContent>>(await response.Content.ReadAsStringAsync());
             }
         }
-
         public async Task<Response<NoContent>> ResetPassword(string email)
         {
             var clientCredentialsToken = await _clientCredentialTokenService.GetToken();
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
+            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user/resetPassword/{email}"))
+            {
+                request.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", clientCredentialsToken);
 
-            var content = new StringContent(JsonConvert.SerializeObject(email), Encoding.UTF8, "application/json");
+                var response = await _httpClient.SendAsync(request);
 
-            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user/resetPassword"))
+                return JsonConvert.DeserializeObject<Response<NoContent>>(await response.Content.ReadAsStringAsync());
+            }
+        }
+        public async Task<Response<NoContent>> ResetPasswordConfirm(ResetPasswordModel model)
+        {
+            var clientCredentialsToken = await _clientCredentialTokenService.GetToken();
+            var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+
+            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{_serviceApiSettings.IdentityBaseUri}/api/user/resetPasswordConfirm"))
             {
                 request.Headers.Authorization =
                     new AuthenticationHeaderValue("Bearer", clientCredentialsToken);

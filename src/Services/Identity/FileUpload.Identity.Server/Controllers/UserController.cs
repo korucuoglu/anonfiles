@@ -67,7 +67,8 @@ namespace FileUpload.IdentityServer.Controllers
                 UserCreatedEvent userCreatedEvent = new()
                 {
                     MailAdress = user.Email,
-                    Message = $"<p>Mail adresini doğrulamak için <a href='{link}'>tıkla</a></p>"
+                    Message = $"<p>Mail adresini doğrulamak için <a href='{link}'>tıkla</a></p>", 
+                    Subject = "Mail Onaylama"
                 };
 
                 _rabbitMQPublisher.Publish(userCreatedEvent);
@@ -84,16 +85,21 @@ namespace FileUpload.IdentityServer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ValidateUserEmail(ConfirmEmailModel model)
+        public async Task<IActionResult> ValidateUserEmail([FromQuery] string userId, string token)
         {
-            var user = await _userManager.FindByIdAsync(model.UserId);
+            var user = await _userManager.FindByIdAsync(userId);
 
-            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
-
-            IdentityResult result = await _userManager.ConfirmEmailAsync(user, decodedToken);
-
-            Response<NoContent> GetResult(IdentityResult result)
+            async Task<Response<NoContent>> GetResult(ApplicationUser user)
             {
+                if (user == null)
+                {
+                    return Response<NoContent>.Fail("Böyle bir kullanıcı bulunamadı", 404);
+                }
+
+                var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+
+                IdentityResult result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+
                 if (!result.Succeeded)
                 {
                     var error = result.Errors.First().Description;
@@ -104,7 +110,7 @@ namespace FileUpload.IdentityServer.Controllers
                 return Response<NoContent>.Success($"{user.Email} mail adresi doğrulandı", 200);
             }
 
-            var data = GetResult(result);
+            var data = await GetResult(user);
 
             return new ObjectResult(data)
             {
@@ -114,8 +120,8 @@ namespace FileUpload.IdentityServer.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ResetPassword(string email)
+        [HttpPost("{email}")]
+        public async Task<IActionResult> ResetPassword([FromRoute] string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
@@ -129,18 +135,18 @@ namespace FileUpload.IdentityServer.Controllers
                 string token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 string encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-                string link = $"{configuration.GetSection("MVCClient").Value}/user/reset-password?userId={user.Id}&token={encodedToken}";
-
+                string link = $"{configuration.GetSection("MVCClient").Value}/user/reset-passwordConfirm?userId={user.Id}&token={encodedToken}";
 
                 UserCreatedEvent userCreatedEvent = new()
                 {
                     MailAdress = user.Email,
-                    Message = $"<p>Şifrenizi sıfırlamak için <a href='{link}'>tıklayınız</a></p>"
+                    Message = $"<p>Şifrenizi sıfırlamak için <a href='{link}'>tıklayınız</a></p>",
+                    Subject = "Şifre Sıfırlama"
                 };
 
                 _rabbitMQPublisher.Publish(userCreatedEvent);
 
-                return Response<NoContent>.Success($"{user.Email} mail adresine doğrulama maili gönderildi", 200);
+                return Response<NoContent>.Success($"{user.Email} adresine gerekli bilgiler gönderildi", 200);
             }
 
             var data = await GetResult(user);
@@ -151,16 +157,21 @@ namespace FileUpload.IdentityServer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ValidateResetPassword(ResetPasswordModel model)
+        public async Task<IActionResult> ResetPasswordConfirm(ResetPasswordModel model)
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
 
-            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
-
-            IdentityResult result = await _userManager.ResetPasswordAsync(user, decodedToken, model.NewPassword);
-
-            Response<NoContent> GetResult(IdentityResult result)
+            async Task<Response<NoContent>> GetResult(ApplicationUser user)
             {
+                if (user == null)
+                {
+                    return Response<NoContent>.Fail("Sistemde böyle bir mail hesabı bulunamadı", 500);
+                }
+
+                var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
+
+                IdentityResult result = await _userManager.ResetPasswordAsync(user, decodedToken, model.NewPassword);
+
                 if (!result.Succeeded)
                 {
                     var error = result.Errors.First().Description;
@@ -171,7 +182,7 @@ namespace FileUpload.IdentityServer.Controllers
                 return Response<NoContent>.Success("Şifre başarılı bir şekilde sıfırlandı", 200);
             }
 
-            var data = GetResult(result);
+            var data = await GetResult(user);
 
             return new ObjectResult(data)
             {

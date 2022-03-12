@@ -9,8 +9,9 @@ namespace FileUpload.MVC.Application.Interfaces.Services
     {
         Task<Response<NoContent>> SignIn(SigninInput signinInput);
         Task<Response<NoContent>> SignUp(SignupInput signupInput);
-        Task<Response<NoContent>> ValidateUserEmail(ConfirmEmailModel model);
+        Task<Response<NoContent>> ValidateUserEmail(string UserId, string token);
         Task<Response<NoContent>> ResetPassword(string email);
+        Task<Response<NoContent>> ResetPasswordConfirm(ResetPasswordModel model);
         Task<TokenResponse> GetAccessTokenByRefreshToken();
         Task RevokeRefreshToken();
     }
