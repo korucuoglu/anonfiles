@@ -35,15 +35,6 @@ namespace FileUpload.MVC.Controllers
             var response = await _identityService.SignIn(model);
 
             return Ok(response);
-
-            //if (response.IsSuccessful is false)
-            //{
-            //    ModelState.AddModelError("", response.Error);
-
-            //    return View();
-            //}
-
-            //return RedirectToAction("Upload", "Home");
         }
 
         [HttpGet("[controller]/register")]
@@ -83,9 +74,9 @@ namespace FileUpload.MVC.Controllers
 
 
         [HttpGet("[controller]/confirmEmail")]
-        public async Task<IActionResult> ValidateUserEmail(ConfirmEmailModel model)
+        public async Task<IActionResult> ValidateUserEmail([FromQuery] string userId, string token)
         {
-            var result = await _identityService.ValidateUserEmail(model);
+            var result = await _identityService.ValidateUserEmail(userId, token);
 
             return Ok(result);
         }
@@ -96,10 +87,31 @@ namespace FileUpload.MVC.Controllers
             return View();
         }
 
-        [HttpPost("[controller]/reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] Mail model)
+        [HttpPost("[controller]/reset-password/{mail}")]
+        public async Task<IActionResult> ResetPassword([FromRoute] string mail)
         {
-            return Ok(model.Email);
+            if (string.IsNullOrEmpty(mail))
+            {
+                return Ok(Response<NoContent>.Fail("mail bilgisi boş olamaz", 404));
+            }
+
+            var data = await _identityService.ResetPassword(mail);
+
+            return Ok(data);
+        }
+
+        [HttpGet("[controller]/reset-passwordConfirm")]
+        public async Task<IActionResult> ResetPasswordConfirm([FromQuery] [Bind("UserId, Token")] ResetPasswordModel model)
+        {
+            return View(model);
+        }
+
+        [HttpPost("[controller]/reset-passwordConfirm")]
+        public async Task<IActionResult> PostResetPasswordConfirm([FromBody] ResetPasswordModel model)
+        {
+            var data = await _identityService.ResetPasswordConfirm(model);
+
+            return Ok(data);
         }
 
     }
