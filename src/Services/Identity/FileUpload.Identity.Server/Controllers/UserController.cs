@@ -1,5 +1,6 @@
 ﻿using FileUpload.Data.Entity;
 using FileUpload.Identity.Server.Services;
+using FileUpload.Shared.Base;
 using FileUpload.Shared.Dtos.User;
 using FileUpload.Shared.Event;
 using FileUpload.Shared.Wrappers;
@@ -19,7 +20,7 @@ namespace FileUpload.IdentityServer.Controllers
     [Authorize(LocalApi.PolicyName)]
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseApiController
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration configuration;
@@ -54,7 +55,7 @@ namespace FileUpload.IdentityServer.Controllers
                 {
                     var error = result.Errors.First().Description;
 
-                    return Response<NoContent>.Fail(error, 500);
+                    return Shared.Wrappers.Response<NoContent>.Fail(error, 500);
 
                 }
 
@@ -73,7 +74,7 @@ namespace FileUpload.IdentityServer.Controllers
 
                 _rabbitMQPublisher.Publish(userCreatedEvent);
 
-                return Response<NoContent>.Success($"{user.Email} mail adresine doğrulama maili gönderildi", 200);
+                return Shared.Wrappers.Response<NoContent>.Success($"{user.Email} mail adresine doğrulama maili gönderildi", 200);
             }
 
             var data = await GetResult(result);
@@ -93,7 +94,7 @@ namespace FileUpload.IdentityServer.Controllers
             {
                 if (user == null)
                 {
-                    return Response<NoContent>.Fail("Böyle bir kullanıcı bulunamadı", 404);
+                    return Shared.Wrappers.Response<NoContent>.Fail("Böyle bir kullanıcı bulunamadı", 404);
                 }
 
                 var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
@@ -104,18 +105,15 @@ namespace FileUpload.IdentityServer.Controllers
                 {
                     var error = result.Errors.First().Description;
 
-                    return Response<NoContent>.Fail(error, 500);
+                    return Shared.Wrappers.Response<NoContent>.Fail(error, 500);
                 }
 
-                return Response<NoContent>.Success($"{user.Email} mail adresi doğrulandı", 200);
+                return Shared.Wrappers.Response<NoContent>.Success($"{user.Email} mail adresi doğrulandı", 200);
             }
 
             var data = await GetResult(user);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Response(data);
 
 
         }
@@ -129,7 +127,7 @@ namespace FileUpload.IdentityServer.Controllers
             {
                 if (user == null)
                 {
-                    return Response<NoContent>.Fail("Sistemde böyle bir mail hesabı bulunamadı", 500);
+                    return Shared.Wrappers.Response<NoContent>.Fail("Sistemde böyle bir mail hesabı bulunamadı", 500);
                 }
 
                 string token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -146,14 +144,11 @@ namespace FileUpload.IdentityServer.Controllers
 
                 _rabbitMQPublisher.Publish(userCreatedEvent);
 
-                return Response<NoContent>.Success($"{user.Email} adresine gerekli bilgiler gönderildi", 200);
+                return Shared.Wrappers.Response<NoContent>.Success($"{user.Email} adresine gerekli bilgiler gönderildi", 200);
             }
 
             var data = await GetResult(user);
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Response(data);
         }
 
         [HttpPost]
@@ -165,7 +160,7 @@ namespace FileUpload.IdentityServer.Controllers
             {
                 if (user == null)
                 {
-                    return Response<NoContent>.Fail("Sistemde böyle bir mail hesabı bulunamadı", 500);
+                    return Shared.Wrappers.Response<NoContent>.Fail("Sistemde böyle bir mail hesabı bulunamadı", 500);
                 }
 
                 var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
@@ -176,18 +171,15 @@ namespace FileUpload.IdentityServer.Controllers
                 {
                     var error = result.Errors.First().Description;
 
-                    return Response<NoContent>.Fail(error, 500);
+                    return Shared.Wrappers.Response<NoContent>.Fail(error, 500);
                 }
 
-                return Response<NoContent>.Success("Şifre başarılı bir şekilde sıfırlandı", 200);
+                return Shared.Wrappers.Response<NoContent>.Success("Şifre başarılı bir şekilde sıfırlandı", 200);
             }
 
             var data = await GetResult(user);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Response(data);
         }
     }
 }
