@@ -4,6 +4,7 @@ using FileUpload.Application.Features.Commands.Categories.Update;
 using FileUpload.Application.Interfaces.Services;
 using FileUpload.Domain.Entities;
 using FileUpload.Infrastructure.Attribute;
+using FileUpload.Shared.Base;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace FileUpload.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController : ControllerBase
+    public class CategoriesController : BaseApiController
     {
         private readonly ICategoryService _categoryService;
 
@@ -25,9 +26,9 @@ namespace FileUpload.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
+            var data = await _categoryService.GetAllAsync();
 
-            return Ok(await _categoryService.GetAllAsync());
-
+            return Response(data);
         }
 
         [HttpGet("{id}")]
@@ -36,10 +37,7 @@ namespace FileUpload.Api.Controllers
         {
             var data = await _categoryService.GetByIdAsync(id);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Response(data);
 
         }
 
@@ -49,10 +47,7 @@ namespace FileUpload.Api.Controllers
         {
             var data = await _categoryService.AddAsync(dto);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Response(data);
         }
 
         [HttpPut]
@@ -62,10 +57,7 @@ namespace FileUpload.Api.Controllers
         {
             var data = await _categoryService.UpdateAsync(dto);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Response(data);
 
         }
 
@@ -75,10 +67,7 @@ namespace FileUpload.Api.Controllers
         {
             var data = await _categoryService.DeleteByIdAsync(id);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Response(data);
 
         }
     }

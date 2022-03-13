@@ -34,7 +34,7 @@ namespace FileUpload.MVC.Controllers
         }
 
 
-        [HttpGet("[controller]/upload")]
+        [HttpGet]
         public async Task<IActionResult> Upload()
         {
             var data = await _userService.GetCategories();
@@ -42,7 +42,7 @@ namespace FileUpload.MVC.Controllers
             return await Task.FromResult(View(data));
         }
 
-        [HttpPost("[controller]/upload")]
+        [HttpPost]
         public async Task<IActionResult> Upload(FilesCategoriesDto dto)
         {
             await _userService.Upload(dto);

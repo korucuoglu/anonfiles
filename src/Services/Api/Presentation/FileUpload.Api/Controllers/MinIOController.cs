@@ -1,6 +1,7 @@
 ﻿using FileUpload.Api.Filters;
 using FileUpload.Application.Interfaces.Services;
 using FileUpload.Domain.Entities;
+using FileUpload.Shared.Base;
 using FileUpload.Shared.Dtos.Files;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,8 @@ namespace FileUpload.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MinIOController : ControllerBase
+    public class MinIOController : BaseApiController
     {
-
         private readonly IFileService _service;
 
         public MinIOController(IFileService service)
@@ -35,10 +35,7 @@ namespace FileUpload.Api.Controllers
 
             var data = await _service.UploadAsync(files, categoryIds);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Response(data);
 
         }
 
@@ -49,10 +46,7 @@ namespace FileUpload.Api.Controllers
 
             var data = await _service.GetAllFiles(filterModel);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Response(data);
         }
 
         [HttpGet("myfiles/{id}")]
@@ -60,10 +54,7 @@ namespace FileUpload.Api.Controllers
         {
             var data = await _service.GetFileById(id);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Response(data);
 
         }
 
@@ -75,10 +66,7 @@ namespace FileUpload.Api.Controllers
 
             var data = await _service.Remove(filterModel, id);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Response(data);
 
         }
 
@@ -88,12 +76,8 @@ namespace FileUpload.Api.Controllers
         {
             var data = await _service.Download(id);
 
-            return new ObjectResult(data)
-            {
-                StatusCode = data.StatusCode
-            };
+            return Response(data);
 
         }
-
     }
 }
