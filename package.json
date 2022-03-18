@@ -1,0 +1,14 @@
+{
+  "name": "files",
+  "version": "1.0.0",
+  "author": {
+    "email": "h.korucuoglu.16.06@gmail.com",
+    "name": "Abdullah Halit Korucuoglu",
+    "url": "https://github.com/korucuoglu"
+  },
+  "license": "MIT",
+  "scripts": {
+    "db-migrate": "cd ./src/Services/Api/Infrastructure/FileUpload.Api.Persistence/ && dotnet ef migrations add --startup-project=../../Presentation/FileUpload.Api",
+    "db-update": "cd ./src/Services/Api/Infrastructure/FileUpload.Api.Persistence/ && dotnet ef database update --startup-project=../Monova.Web"
+  }
+}
