@@ -1,7 +1,7 @@
 ﻿using FileUpload.Api.Application.Interfaces.Repositories;
 using FileUpload.Application.Interfaces.Services;
 using FileUpload.Shared.Wrappers;
-using FileUpload.Domain.Common; // yanlış
+using FileUpload.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Linq;
@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Api.Filters
 {
-
-
     public class NotFoundFilterAttribute<TEntity> : IAsyncActionFilter where TEntity : BaseIdentity
     {
         private readonly IReadRepository<TEntity> _service;
@@ -24,14 +22,14 @@ namespace FileUpload.Api.Filters
 
         public bool GetData(string id)
         {
-            return _service.Any(x => x.Id.ToString() == id && x.ApplicationUserId == _sharedIdentityService.GetUserId);
+            return _service.Any(x => x.Id.ToString() == id && x.ApplicationUserId == _sharedIdentityService.GetUserId, tracking: false);
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             string GetId()
             {
-               string routeId = (string)context.RouteData.Values["id"];
+                string routeId = (string)context.RouteData.Values["id"];
 
                 if (!string.IsNullOrEmpty(routeId))
                 {
@@ -55,20 +53,16 @@ namespace FileUpload.Api.Filters
 
             if (string.IsNullOrEmpty(id))
             {
-                context.Result = new NotFoundObjectResult(Response<TEntity>.Fail("Id değeri boş olamaz", 404));
+                context.Result = new NotFoundObjectResult(Response<NoContent>.Fail("Id değeri boş olamaz", 404));
                 return;
             }
 
             if (!GetData(id))
             {
-                var error = "Böyle bir veri bulunamadı.";
-                context.Result = new NotFoundObjectResult(Response<TEntity>.Fail(error, 404));
+                context.Result = new NotFoundObjectResult(Response<NoContent>.Fail("Böyle bir veri bulunamadı.", 404));
                 return;
             }
-
             await next();
-
-
         }
     }
 }
