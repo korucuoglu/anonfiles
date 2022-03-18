@@ -84,7 +84,8 @@ namespace FileUpload.MVC.Controllers
         [HttpGet("[controller]/reset-password")]
         public async Task<IActionResult> ResetPassword()
         {
-            return View();
+            return await Task.FromResult(View());
+
         }
 
         [HttpPost("[controller]/reset-password/{mail}")]
@@ -101,9 +102,9 @@ namespace FileUpload.MVC.Controllers
         }
 
         [HttpGet("[controller]/reset-passwordConfirm")]
-        public async Task<IActionResult> ResetPasswordConfirm([FromQuery] [Bind("UserId, Token")] ResetPasswordModel model)
+        public async Task<IActionResult> ResetPasswordConfirm([FromQuery][Bind("UserId, Token")] ResetPasswordModel model)
         {
-            return View(model);
+            return await Task.FromResult(View(model));
         }
 
         [HttpPost("[controller]/reset-passwordConfirm")]
