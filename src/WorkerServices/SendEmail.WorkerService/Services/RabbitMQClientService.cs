@@ -5,7 +5,7 @@ namespace SendEmail.WorkerService.Services
 {
     public class RabbitMQClientService : IDisposable
     {
-        private IConnection _connection; 
+        private IConnection _connection;
         private IModel _channel;
 
         IConfiguration configuration;
@@ -21,7 +21,7 @@ namespace SendEmail.WorkerService.Services
 
             _connection = connectionFactory.CreateConnection();
 
-            if (_channel is { IsOpen: true })
+            if (_channel.IsOpen is true)
             {
                 return _channel;
             }
@@ -36,9 +36,9 @@ namespace SendEmail.WorkerService.Services
 
         public void Dispose()
         {
-            _channel?.Close(); 
-            _channel?.Dispose(); 
-            _connection?.Close(); 
+            _channel?.Close();
+            _channel?.Dispose();
+            _connection?.Close();
             _connection?.Dispose();
         }
     }
