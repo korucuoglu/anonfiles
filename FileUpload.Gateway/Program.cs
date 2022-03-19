@@ -1,8 +1,11 @@
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddOcelot();
 
 var app = builder.Build();
 
@@ -10,6 +13,7 @@ var app = builder.Build();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseOcelot().Wait();
+
 
 app.Run();

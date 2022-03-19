@@ -16,20 +16,15 @@ namespace FileUpload.IdentityServer
 
         public static IEnumerable<ApiScope> ApiScopes => new ApiScope[]
         {
-                new ApiScope("api", "FileUpload.Api'ya full erişim iznidir."),
-                new ApiScope("api_password", "FileUpload.Api'ya full erişim iznidir."),
+                new ApiScope("upload_fullpermission", "FileUpload.Api'ya full erişim iznidir."),
                 new ApiScope(IdentityServerConstants.LocalApi.ScopeName),
 
                 // [1] İlk olarak upload-api adında bir scope tanımlaması yaptık. 
-              
         };
-
 
         public static IEnumerable<ApiResource> ApiResources => new ApiResource[]
         {
-
-                new ApiResource("resource_api"){Scopes = {"api"}},
-                new ApiResource("resource_api_password"){Scopes = {"api_password"}}
+                new ApiResource("resource_upload_fullpermission"){Scopes = {"upload_fullpermission"}}
 
                 // [2] Daha sonra Resource oluşturarak buna ait scope tanımladık. 
         };
@@ -43,9 +38,6 @@ namespace FileUpload.IdentityServer
 
         };
 
-
-
-
         public static IEnumerable<Client> Clients => new Client[]
         {
                 new Client
@@ -54,7 +46,7 @@ namespace FileUpload.IdentityServer
                     ClientName = "MVC Client Credentials Client",
                     ClientSecrets = { new Secret("secret".Sha256())},
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "api", IdentityServerConstants.LocalApi.ScopeName }
+                    AllowedScopes = {IdentityServerConstants.LocalApi.ScopeName }
                 },
 
 
@@ -65,7 +57,7 @@ namespace FileUpload.IdentityServer
                     AllowOfflineAccess=true,
                     ClientSecrets= {new Secret("secret".Sha256())},
                     AllowedGrantTypes= GrantTypes.ResourceOwnerPassword,
-                    AllowedScopes={ "api_password", IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess, IdentityServerConstants.LocalApi.ScopeName,"roles" },
+                    AllowedScopes={ "upload_fullpermission", IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess, IdentityServerConstants.LocalApi.ScopeName,"roles" },
                     AccessTokenLifetime=1*60*60,
                     RefreshTokenExpiration=TokenExpiration.Absolute,
                     AbsoluteRefreshTokenLifetime= (int) (DateTime.Now.AddDays(60)- DateTime.Now).TotalSeconds,
@@ -77,7 +69,7 @@ namespace FileUpload.IdentityServer
                     ClientName="Vue JS",
                     ClientId="vuejs",
                     AllowedGrantTypes= GrantTypes.Code,
-                    AllowedScopes={ "api_password", "about", IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess, IdentityServerConstants.LocalApi.ScopeName,"roles" },
+                    AllowedScopes={ "upload_fullpermission", IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess, IdentityServerConstants.LocalApi.ScopeName,"roles" },
                     AllowedCorsOrigins = { "http://localhost:8080" },
                     RedirectUris = new[] { "http://localhost:808" },
                     PostLogoutRedirectUris = new[] { "http://localhost:8080" },
