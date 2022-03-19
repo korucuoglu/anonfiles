@@ -34,7 +34,7 @@ namespace FileUpload.Persistence
             services.AddAuthentication().AddJwtBearer(options =>
             {
                 options.Authority = configuration.GetSection("ServiceApiSettings").GetSection("IdentityBaseUri").Value;
-                options.Audience = "resource_upload_fullpermission";
+                options.Audience = "resource_upload";
                 options.RequireHttpsMetadata = false;
 
                 options.TokenValidationParameters = new TokenValidationParameters
