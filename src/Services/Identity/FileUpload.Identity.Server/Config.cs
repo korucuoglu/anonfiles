@@ -17,6 +17,7 @@ namespace FileUpload.IdentityServer
         public static IEnumerable<ApiScope> ApiScopes => new ApiScope[]
         {
                 new ApiScope("upload_fullpermission", "FileUpload.Api'ya full erişim iznidir."),
+                new ApiScope("gateway_fullpermission", "Gateway API için full erişim iznidir."),
                 new ApiScope(IdentityServerConstants.LocalApi.ScopeName),
 
                 // [1] İlk olarak upload-api adında bir scope tanımlaması yaptık. 
@@ -24,7 +25,8 @@ namespace FileUpload.IdentityServer
 
         public static IEnumerable<ApiResource> ApiResources => new ApiResource[]
         {
-                new ApiResource("resource_upload_fullpermission"){Scopes = {"upload_fullpermission"}}
+                new ApiResource("resource_upload"){Scopes = {"upload_fullpermission"}},
+                new ApiResource("resource_gateway"){Scopes = {"gateway_fullpermission"}}
 
                 // [2] Daha sonra Resource oluşturarak buna ait scope tanımladık. 
         };
@@ -46,7 +48,7 @@ namespace FileUpload.IdentityServer
                     ClientName = "MVC Client Credentials Client",
                     ClientSecrets = { new Secret("secret".Sha256())},
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = {IdentityServerConstants.LocalApi.ScopeName }
+                    AllowedScopes = { "gateway_fullpermission", IdentityServerConstants.LocalApi.ScopeName }
                 },
 
 
@@ -57,7 +59,7 @@ namespace FileUpload.IdentityServer
                     AllowOfflineAccess=true,
                     ClientSecrets= {new Secret("secret".Sha256())},
                     AllowedGrantTypes= GrantTypes.ResourceOwnerPassword,
-                    AllowedScopes={ "upload_fullpermission", IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess, IdentityServerConstants.LocalApi.ScopeName,"roles" },
+                    AllowedScopes={ "gateway_fullpermission", "upload_fullpermission", IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess, IdentityServerConstants.LocalApi.ScopeName,"roles" },
                     AccessTokenLifetime=1*60*60,
                     RefreshTokenExpiration=TokenExpiration.Absolute,
                     AbsoluteRefreshTokenLifetime= (int) (DateTime.Now.AddDays(60)- DateTime.Now).TotalSeconds,
