@@ -16,8 +16,8 @@ namespace FileUpload.IdentityServer
 
         public static IEnumerable<ApiScope> ApiScopes => new ApiScope[]
         {
-                new ApiScope("upload_fullpermission", "FileUpload.Api'ya full erişim iznidir."),
-                new ApiScope("gateway_fullpermission", "Gateway API için full erişim iznidir."),
+                new ApiScope("upload_fullpermission", "Upload Api için full erişim iznidir."),
+                new ApiScope("gateway_fullpermission", "Gateway Api için full erişim iznidir."),
                 new ApiScope(IdentityServerConstants.LocalApi.ScopeName),
 
                 // [1] İlk olarak upload-api adında bir scope tanımlaması yaptık. 
