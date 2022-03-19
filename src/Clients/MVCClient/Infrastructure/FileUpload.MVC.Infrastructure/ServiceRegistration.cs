@@ -30,7 +30,7 @@ namespace FileUpload.MVC.Infrastructure
 
             services.AddHttpClient<IUserService, UserService>(opt =>
             {
-                opt.BaseAddress = new Uri(serviceApiSettings.ApiBaseUri);
+                opt.BaseAddress = new Uri($"{serviceApiSettings.GatewayBaseUri}/{serviceApiSettings.Upload.Path}");
 
             }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
