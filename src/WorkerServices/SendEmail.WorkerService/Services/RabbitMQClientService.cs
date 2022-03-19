@@ -17,11 +17,11 @@ namespace SendEmail.WorkerService.Services
 
         public IModel Connect()
         {
-            var connectionFactory = new ConnectionFactory() { HostName = configuration.GetConnectionString("RabbitMQ"), DispatchConsumersAsync = true };
+            var connectionFactory = new ConnectionFactory() { HostName = configuration.GetSection("RabbitMQ").Value, DispatchConsumersAsync = true };
 
             _connection = connectionFactory.CreateConnection();
 
-            if (_channel.IsOpen is true)
+            if (_channel is { IsOpen: true})
             {
                 return _channel;
             }

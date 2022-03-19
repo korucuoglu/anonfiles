@@ -4,22 +4,35 @@ services:
     image: postgres
   minio: 
     image: minio/minio
+  redisdb: 
+    image: redis 
+  rabbitmq:
+    image: rabbitmq:3.9.13-management
   upload.api:
-    image: upload_api_image
+    image: upload.api_image
     build:
-      context: /src/services/Api/
-      dockerfile: Presentation/FileUpload.Api/Dockerfile
+      context: .
+      dockerfile: /src/Services/Upload/Presentation/FileUpload.Upload.Api/Dockerfile
   identityserver.api:
-    image: identityserver_api_image
+    image: identityserver.api_image
     build:
-      context: /src/services/Api/
-      dockerfile: Presentation/FileUpload.Identity.Server/Dockerfile
+      context: .
+      dockerfile: /src/Services/Identity/FileUpload.Identity.Server/Dockerfile
   aspnetcoremvc.web:
     image: aspnetcoremvc.web_image
     build:
-      context: /src/Clients/MVCClient/
-      dockerfile: Presentation/FileUpload.MVC/Dockerfile
-
+      context: .
+      dockerfile: src/Clients/MVCClient/Presentation/FileUpload.MVC/Dockerfile
+  gateway.api:
+    image: gateway.api_image
+    build:
+      context: .
+      dockerfile: FileUpload.Gateway/Dockerfile
+  #sendmail.worker:
+  #  image: sendmail.workserservice_image
+  #  build:
+  #    context: .
+  #    dockerfile: src/WorkerService/SendEmail.WorkerService/Dockerfile
 volumes:
   postgresdb_volume:
   minio_volume:
