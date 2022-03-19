@@ -78,26 +78,23 @@ namespace FileUpload.Infrastructure.Services
             return await _mediator.Send(query);
         }
 
-        public async Task<string> GetBucketName()
-        {
-            if (!await AmazonS3Util.DoesS3BucketExistV2Async(client, _sharedIdentityService.GetUserId.ToString()))
-            {
-                var putBucketRequest = new PutBucketRequest
-                {
-                    BucketName = _sharedIdentityService.GetUserId.ToString(),
-                    UseClientRegion = true
-                };
-
-                await client.PutBucketAsync(putBucketRequest);
-            }
-
-            return _sharedIdentityService.GetUserId.ToString();
-
-        }
-
         public async Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, List<Guid> CategoriesId)
         {
-            Guid fileId;
+            async Task<string> GetBucketName()
+            {
+                if (await AmazonS3Util.DoesS3BucketExistV2Async(client, _sharedIdentityService.GetUserId.ToString()) is false)
+                {
+                    var putBucketRequest = new PutBucketRequest
+                    {
+                        BucketName = _sharedIdentityService.GetUserId.ToString(),
+                        UseClientRegion = true
+                    };
+
+                    await client.PutBucketAsync(putBucketRequest);
+                }
+
+                return _sharedIdentityService.GetUserId.ToString();
+            }
 
             Response<AddFileDto> data = new();
 
@@ -109,13 +106,12 @@ namespace FileUpload.Infrastructure.Services
             {
                 try
                 {
-                    if (!string.IsNullOrEmpty(ConnnnectionId))
+                    if (string.IsNullOrEmpty(ConnnnectionId) is false)
                     {
                         await _fileHub.Clients.Client(ConnnnectionId).FilesUploadStarting(file.FileName);
                     }
 
-
-                    fileId = Guid.NewGuid();
+                    var fileId = Guid.NewGuid();
                     var stream = file.OpenReadStream();
                     PutObjectRequest putObjectRequest = new()
                     {
@@ -137,7 +133,6 @@ namespace FileUpload.Infrastructure.Services
                         FileName = file.FileName,
                         Size = file.Length,
                         Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper(),
-                        
                     };
 
                     CategoriesId.ForEach(x =>
@@ -222,7 +217,7 @@ namespace FileUpload.Infrastructure.Services
             };
             var data = client.GetPreSignedURL(request);
 
-            return await Task.FromResult(Response<NoContent>.Success(message:data, statusCode:200));
+            return await Task.FromResult(Response<NoContent>.Success(message: data, statusCode: 200));
         }
     }
 
