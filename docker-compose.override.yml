@@ -11,40 +11,6 @@ services:
       - POSTGRES_USER=sa
       - POSTGRES_PASSWORD=AbcUser1234*
       - POSTGRES_DB=anonfiles
-  upload.api:
-    container_name: upload.api
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - "ServiceApiSettings:IdentityBaseUri=http://identityserver.api"
-      - "ServiceApiSettings:MVCClient=http://aspnetcoremvc.web"
-      - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
-      - "MinioAccessInfo:AccessKey=minioadmin"
-      - "MinioAccessInfo:SecretKey=minioadmin"
-      - "MinioAccessInfo:EndPoint=http://minio:9000"
-    ports:
-      - "5002:80"
-    depends_on:
-      - postgresdb
-      - identityserver.api
-   
-  identityserver.api:
-    container_name: identityserver.api
-    restart: on-failure
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
-    ports:
-      - "5001:80"
-    depends_on:
-      - postgresdb
-  aspnetcoremvc.web:
-    container_name: aspnetcoremvc.web
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ServiceApiSettings:IdentityBaseUri=http://identityserver.api
-      - ServiceApiSettings:ApiBaseUri=http://upload.api/api/
-    ports:
-      - "5003:80"
   minio:
     container_name: minio
     restart: always
@@ -58,3 +24,69 @@ services:
       - minio_volume:/minio/data:/data  
       - minio_volume:/minio/config:/root/.minio  
     command: server --address ":9000" --console-address ":9001" /data
+  redisdb:
+    container_name: redisdb
+    restart: always
+    ports:
+      - "6379:6379"
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  upload.api:
+    container_name: upload.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ServiceApiSettings:IdentityBaseUri=http://identityserver.api"
+      - "ServiceApiSettings:MVCClient=http://aspnetcoremvc.web"
+      - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
+      - "MinioAccessInfo:AccessKey=minioadmin"
+      - "MinioAccessInfo:SecretKey=minioadmin"
+      - RedisSettings:Port=6379
+      - RedisSettings:Host=redisdb
+    ports:
+      - "5002:80"
+    depends_on:
+      - postgresdb
+      - identityserver.api
+  identityserver.api:
+    container_name: identityserver.api
+    restart: on-failure
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "MVCClient=http://aspnetcoremvc.web"
+      - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
+      - RabbitMQ=rabbitmq
+    ports:
+      - "5001:80"
+    depends_on:
+      - postgresdb
+  aspnetcoremvc.web:
+    container_name: aspnetcoremvc.web
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ServiceApiSettings:IdentityBaseUri=http://identityserver.api
+      - ServiceApiSettings:GatewayBaseUri=http://gateway.api
+    ports:
+      - "5003:80"
+  gateway.api:
+    container_name: gateway.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - IdentityBaseUri=http://identityserver.api
+    ports:
+      - "5000:80"
+  #sendmail.worker:
+  # container_name: sendmail.worker
+  # environment:
+  #   - ASPNETCORE_ENVIRONMENT=Development
+  #   - RabbitMQ=rabbitmq
+  #   - MailSettings:MailAdress=hackrete@gmail.com
+  #   - MailSettings:MailPassword=486869865bursa
+  #   - MailSettings:Host=smtp.gmail.com
+  #   - MailSettings:Port=587
+
+  
+
