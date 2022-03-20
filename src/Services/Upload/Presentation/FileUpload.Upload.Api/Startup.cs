@@ -12,6 +12,7 @@ using FluentValidation.AspNetCore;
 using FileUpload.Upload.Application.Features.Commands.Categories.Add;
 using FileUpload.Upload.Infrastructure.Hub;
 using FileUpload.Upload.Infrastructure.Services.Redis;
+using Microsoft.AspNetCore.Http;
 
 namespace FileUpload.Upload
 {
@@ -26,6 +27,8 @@ namespace FileUpload.Upload
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddHealthChecks();
 
             services.AddApplicationServices();
             services.AddPersistenceServices(Configuration);
@@ -55,6 +58,14 @@ namespace FileUpload.Upload
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseHealthChecks("/healt", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
+            {
+                ResponseWriter = async (context, report) =>
+                {
+                    await context.Response.WriteAsync("OK");
+                }
+            });
 
             app.UseCors("CorsPolicy");
 

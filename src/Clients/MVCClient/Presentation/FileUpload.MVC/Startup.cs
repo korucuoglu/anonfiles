@@ -1,6 +1,7 @@
 using FileUpload.MVC.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,14 +22,14 @@ namespace FileUpload.MVC
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddHealthChecks();
+
             services.AddInfrastructureServices(Configuration);
 
             services.AddControllersWithViews();
 
 
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -42,6 +43,14 @@ namespace FileUpload.MVC
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            app.UseHealthChecks("/healt", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
+            {
+                ResponseWriter = async (context, report) =>
+                {
+                    await context.Response.WriteAsync("OK");
+                }
+            });
 
             app.UseStaticFiles();
 
