@@ -7,6 +7,7 @@ using FileUpload.Identity.Server.Services;
 using FileUpload.IdentityServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +32,7 @@ namespace FileUpload.IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddHealthChecks();
            
             services.AddSingleton<RabbitMQClientService>();
             services.AddSingleton<RabbitMQPublisher>();
@@ -85,6 +87,13 @@ namespace FileUpload.IdentityServer
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHealthChecks("/healt", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
+            {
+                ResponseWriter = async (context, report) =>
+                {
+                    await context.Response.WriteAsync("OK");
+                }
+            });
 
             app.UseStaticFiles();
             app.UseRouting();
