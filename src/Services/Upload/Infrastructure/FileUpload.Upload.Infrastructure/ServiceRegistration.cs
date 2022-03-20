@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace FileUpload.Upload.Infrastructure
 {
@@ -22,6 +24,21 @@ namespace FileUpload.Upload.Infrastructure
             services.AddScoped<IFileService, FileService>();
             services.AddScoped(typeof(NotFoundFilterAttribute<>));
             services.AddScoped<ValidationFilterAttribute>();
+
+            services.AddAuthentication().AddJwtBearer(options =>
+            {
+                options.Authority = configuration.GetSection("ServiceApiSettings").GetSection("IdentityBaseUri").Value;
+                options.Audience = "resource_upload";
+                options.RequireHttpsMetadata = false;
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false
+                };
+
+            });
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
 
             #region Redis
             services.Configure<RedisSettings>(configuration.GetSection("RedisSettings"));

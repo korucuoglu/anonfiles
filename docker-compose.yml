@@ -28,11 +28,11 @@ services:
     build:
       context: .
       dockerfile: FileUpload.Gateway/Dockerfile
-  #sendmail.worker:
-  #  image: sendmail.workserservice_image
-  #  build:
-  #    context: .
-  #    dockerfile: src/WorkerService/SendEmail.WorkerService/Dockerfile
+  sendmail.worker:
+   image: sendmail.workserservice_image
+   build:
+    context: .
+    dockerfile: src/WorkerServices/SendEmail.WorkerService/Dockerfile
 volumes:
   postgresdb_volume:
   minio_volume:

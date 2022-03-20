@@ -3,19 +3,12 @@
 
 
 
-using FileUpload.Data.Entity;
-using FileUpload.Identity.Data.Entity;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FileUpload.IdentityServer
 {
@@ -36,76 +29,6 @@ namespace FileUpload.IdentityServer
             try
             {
                 var host = CreateHostBuilder(args).Build();
-
-                using (var scope = host.Services.CreateScope())
-                {
-                    var serviceProvider = scope.ServiceProvider;
-
-                    var applicationDbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
-
-                    try
-                    {
-                        applicationDbContext.Database.EnsureCreated();
-                        applicationDbContext.Database.Migrate();
-                    }
-
-                    catch
-                    {
-                        Log.Warning("Migration kısmında hata meydana geldi");
-                    }
-
-
-                    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                    var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-
-                    if (!roleManager.Roles.Any())
-                    {
-                        roleManager.CreateAsync(new ApplicationRole { Name = "Admin" }).Wait();
-                        roleManager.CreateAsync(new ApplicationRole { Name = "User" }).Wait();
-                    }
-
-                    if (!userManager.Users.Any())
-                    {
-                        ApplicationUser userAdmin = new()
-                        {
-                            UserName = "admin",
-                            Email = "admin@gmail.com",
-                            UserInfo = new()
-                            {
-                                Id = Guid.NewGuid(),
-                                UsedSpace = 0
-                            }
-                        };
-
-                        userManager.CreateAsync(userAdmin, "Password123.,").Wait();
-                        userManager.AddToRoleAsync(userAdmin, "Admin").Wait();
-
-
-                        ApplicationUser user = new()
-                        {
-                            UserName = "user",
-                            Email = "user@gmail.com",
-                            UserInfo = new()
-                            {
-                                 Id = Guid.NewGuid(),
-                                 UsedSpace = 0
-                            }
-                        };
-
-                        userManager.CreateAsync(user, "Password123.,").Wait();
-                        userManager.AddToRoleAsync(user, "User").Wait();
-
-                        //applicationDbContext.UserInfo.AddRange(new List<UserInfo>
-                        //{
-                        //    new() { ApplicationUserId = userAdmin.Id, Id = Guid.NewGuid(), UsedSpace = 0  },
-                        //    new() { ApplicationUserId = user.Id, Id = Guid.NewGuid(), UsedSpace = 0  },
-                        //});
-
-                        applicationDbContext.SaveChanges();
-                    }
-
-
-                }
 
                 Log.Information("Starting host...");
                 host.Run();

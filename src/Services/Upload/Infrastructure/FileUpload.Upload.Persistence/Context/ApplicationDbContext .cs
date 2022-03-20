@@ -10,7 +10,6 @@ namespace FileUpload.Upload.Persistence.Context
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IApplicationDbContext
     {
-
         public DbSet<File> Files { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<FileCategory> FilesCategories { get; set; }
@@ -20,10 +19,12 @@ namespace FileUpload.Upload.Persistence.Context
         {
             ChangeTracker.LazyLoadingEnabled = false;
             ChangeTracker.AutoDetectChangesEnabled = false;
+
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
             builder.HasPostgresExtension("uuid-ossp");
 
             builder.Entity<FileCategory>(entity =>
@@ -44,18 +45,18 @@ namespace FileUpload.Upload.Persistence.Context
 
             });
 
-
-
             builder.Entity<ApplicationUser>(b =>
             {
                 b.Property(u => u.Id).HasColumnType("uuid").HasDefaultValueSql("uuid_generate_v4()").IsRequired();
             });
 
-
             builder.Entity<ApplicationRole>(b =>
             {
                 b.Property(u => u.Id).HasDefaultValueSql("uuid_generate_v4()").IsRequired();
             });
+
+            Seed.AddData(builder);
+            
 
             base.OnModelCreating(builder);
         }

@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "db-migrate": "cd ./src/Services/Api/Infrastructure/FileUpload.Api.Persistence/ && dotnet ef migrations add --startup-project=../../Presentation/FileUpload.Api",
-    "db-update": "cd ./src/Services/Api/Infrastructure/FileUpload.Api.Persistence/ && dotnet ef database update --startup-project=../Monova.Web"
+    "db-migrate": "cd ./src/Services/Upload/Infrastructure/FileUpload.Upload.Persistence/ && dotnet ef migrations add --startup-project=../../Presentation/FileUpload.Upload.Api",
+    "db-update": "cd ./src/Services/Upload/Infrastructure/FileUpload.Upload.Persistence/ && dotnet ef database update --startup-project=../../Presentation/FileUpload.Upload.Api"
   }
 }
