@@ -8,8 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+
 
 namespace FileUpload.Upload.Persistence
 {
@@ -30,21 +29,7 @@ namespace FileUpload.Upload.Persistence
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
                .AddDefaultTokenProviders();
-
-            services.AddAuthentication().AddJwtBearer(options =>
-            {
-                options.Authority = configuration.GetSection("ServiceApiSettings").GetSection("IdentityBaseUri").Value;
-                options.Audience = "resource_upload";
-                options.RequireHttpsMetadata = false;
-
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = false
-                };
-
-            });
-
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+           
 
             services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
             services.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));

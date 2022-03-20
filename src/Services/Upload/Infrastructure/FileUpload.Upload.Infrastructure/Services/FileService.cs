@@ -51,7 +51,7 @@ namespace FileUpload.Upload.Infrastructure.Services
                 ForcePathStyle = true,
                 SignatureVersion = "2"
             };
-            client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
+             client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
             _fileHub = fileHub;
             _mapper = mapper;
         }

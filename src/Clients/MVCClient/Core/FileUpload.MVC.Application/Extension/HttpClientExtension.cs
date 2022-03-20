@@ -49,7 +49,6 @@ namespace FileUpload.MVC.Application.Extension
             return !res.IsSuccessful && ThrowSuccessException ? throw new ApiException(res.Error) : res;
         }
 
-
         public async static Task<T> CustomGetAsync<T>(this HttpClient Client, String Url, bool ThrowSuccessException = false)
         {
             var httpRes = await Client.GetFromJsonAsync<Response<T>>(Url);

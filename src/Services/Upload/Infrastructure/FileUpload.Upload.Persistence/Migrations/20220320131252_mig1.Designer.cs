@@ -12,14 +12,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FileUpload.Upload.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220308112809_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220320131252_mig1")]
+    partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
@@ -45,6 +45,50 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("1e4068fe-9039-43d6-be7d-3edbdc72d262"),
+                            ApplicationUserId = new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"),
+                            CreatedDate = new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8318),
+                            Title = "Ödevler"
+                        },
+                        new
+                        {
+                            Id = new Guid("cfc2ce26-e6ef-4738-8c39-4d9bbb4b1f6c"),
+                            ApplicationUserId = new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"),
+                            CreatedDate = new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8323),
+                            Title = "Tasarımlar"
+                        },
+                        new
+                        {
+                            Id = new Guid("6ead4aa2-f507-4338-867f-520fc594d4cc"),
+                            ApplicationUserId = new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"),
+                            CreatedDate = new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8325),
+                            Title = "Dosyalar"
+                        },
+                        new
+                        {
+                            Id = new Guid("e986849b-6ea4-4515-80a2-6c227dcdab69"),
+                            ApplicationUserId = new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"),
+                            CreatedDate = new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8326),
+                            Title = "Ödevler"
+                        },
+                        new
+                        {
+                            Id = new Guid("eafe6da8-36b4-447a-b188-dfdc95bfb42d"),
+                            ApplicationUserId = new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"),
+                            CreatedDate = new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8327),
+                            Title = "Tasarımlar"
+                        },
+                        new
+                        {
+                            Id = new Guid("f1efe9f4-3436-4a6d-9aeb-156f21d033de"),
+                            ApplicationUserId = new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"),
+                            CreatedDate = new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8329),
+                            Title = "Dosyalar"
+                        });
                 });
 
             modelBuilder.Entity("FileUpload.Upload.Domain.Entities.File", b =>
@@ -139,6 +183,22 @@ namespace FileUpload.Upload.Persistence.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("35ca5fd2-8f0b-4cf9-a349-3e1dfb532c91"),
+                            ConcurrencyStamp = "afdf8c4d-825e-445d-b091-21a720a8ffc8",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("5552d2f5-1fcd-4d97-9f78-680de524e89c"),
+                            ConcurrencyStamp = "afef254e-f3d3-4bf6-bf2e-381f5f4260fe",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("FileUpload.Upload.Persistence.Identity.ApplicationUser", b =>
@@ -205,6 +265,40 @@ namespace FileUpload.Upload.Persistence.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "c540139e-e4f8-4180-822f-ca493917208a",
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAENdCmHSocqUQ8inylOewcECUarBRevpT8XyBaXAlhdb8+qrRFC9bp6mziNJUjrLGcQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "f370c505-c642-4478-859e-90f5977832f9",
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "704311fb-3b25-4a5f-90cd-a9be34c97005",
+                            Email = "user@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER@GMAIL.COM",
+                            NormalizedUserName = "USER",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMX9tpmGVdryuDO7bNXKoepAnWTgOBaraIINmX3I68kuLHF4wPd5cGmTETZcUrEQQg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "327029e3-c320-4bc0-9c7e-2f295d1e399b",
+                            TwoFactorEnabled = false,
+                            UserName = "user"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -284,11 +378,17 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<Guid>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -308,6 +408,25 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("FileUpload.Upload.Persistence.Identity.ApplicationUserRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
+
+                    b.HasDiscriminator().HasValue("ApplicationUserRole");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"),
+                            RoleId = new Guid("35ca5fd2-8f0b-4cf9-a349-3e1dfb532c91")
+                        },
+                        new
+                        {
+                            UserId = new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"),
+                            RoleId = new Guid("5552d2f5-1fcd-4d97-9f78-680de524e89c")
+                        });
                 });
 
             modelBuilder.Entity("FileUpload.Upload.Domain.Entities.Category", b =>
