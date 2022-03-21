@@ -30,19 +30,16 @@ namespace FileUpload.Upload.Infrastructure.Services
     {
         private readonly IMediator _mediator;
         private readonly ISharedIdentityService _sharedIdentityService;
-        private readonly IConfiguration configuration;
         private readonly IHubContext<FileHub, IFileHub> _fileHub;
-        private readonly IMapper _mapper;
         public AmazonS3Client client { get; set; }
 
         public FileService(IMediator mediator,
             ISharedIdentityService sharedIdentityService,
             IConfiguration configuration,
-            IHubContext<FileHub, IFileHub> fileHub, IMapper mapper)
+            IHubContext<FileHub, IFileHub> fileHub)
         {
             _mediator = mediator;
             _sharedIdentityService = sharedIdentityService;
-            this.configuration = configuration;
 
             var config = new AmazonS3Config
             {
@@ -51,9 +48,8 @@ namespace FileUpload.Upload.Infrastructure.Services
                 ForcePathStyle = true,
                 SignatureVersion = "2"
             };
-             client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
+            client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
             _fileHub = fileHub;
-            _mapper = mapper;
         }
 
         public async Task<Response<FilesPagerViewModel>> GetAllFiles(FileFilterModel model)
@@ -106,7 +102,7 @@ namespace FileUpload.Upload.Infrastructure.Services
             {
                 try
                 {
-                    if (string.IsNullOrEmpty(ConnnnectionId) is false)
+                    if (!string.IsNullOrEmpty(ConnnnectionId))
                     {
                         await _fileHub.Clients.Client(ConnnnectionId).FilesUploadStarting(file.FileName);
                     }
@@ -135,10 +131,13 @@ namespace FileUpload.Upload.Infrastructure.Services
                         Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper(),
                     };
 
-                    CategoriesId.ForEach(x =>
+                    if (CategoriesId.Any())
                     {
-                        fileEntity.FilesCategories.Add(new FileCategory() { CategoryId = x });
-                    });
+                        CategoriesId.ForEach(x =>
+                        {
+                            fileEntity.FilesCategories.Add(new FileCategory() { CategoryId = x });
+                        });
+                    }
 
                     fileListEntity.Add(fileEntity);
 

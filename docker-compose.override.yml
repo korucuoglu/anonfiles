@@ -53,17 +53,17 @@ services:
       - postgresdb
       - identityserver.api
   identityserver.api:
-    container_name: identityserver.api
-    restart: on-failure
-    environment:
-      - "MVCClient=http://aspnetcoremvc.web"
-      - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
-      - ConnectionStrings:RabbitMQ=rabbitmq
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "5001:80"
-    depends_on:
-      - postgresdb
+   container_name: identityserver.api
+   restart: on-failure
+   environment:
+     - "MVCClient=http://localhost:5003"
+     - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
+     - ConnectionStrings:RabbitMQ=rabbitmq
+     - ASPNETCORE_ENVIRONMENT=Development
+   ports:
+     - "5001:80"
+   depends_on:
+    - postgresdb
   aspnetcoremvc.web:
     container_name: aspnetcoremvc.web
     environment:
@@ -84,12 +84,11 @@ services:
   sendmail.worker:
    container_name: sendmail.worker
    environment:
-     - ASPNETCORE_ENVIRONMENT=Development
-     - RabbitMQ=rabbitmq
-     - MailSettings:MailAdress=***REMOVED***
-     - MailSettings:MailPassword=***REMOVED***
-     - MailSettings:Host=smtp.gmail.com
-     - MailSettings:Port=587
-
-  
-
+    - ASPNETCORE_ENVIRONMENT=Development
+    - RabbitMQ=rabbitmq
+    - MailSettings:MailAdress=***REMOVED***
+    - MailSettings:MailPassword=***REMOVED***
+    - MailSettings:Host=smtp.gmail.com
+    - MailSettings:Port=587
+   depends_on:
+    - rabbitmq

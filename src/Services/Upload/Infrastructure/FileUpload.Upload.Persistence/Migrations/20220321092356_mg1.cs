@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace FileUpload.Upload.Persistence.Migrations
 {
-    public partial class mig1 : Migration
+    public partial class mg1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -250,8 +250,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("35ca5fd2-8f0b-4cf9-a349-3e1dfb532c91"), "afdf8c4d-825e-445d-b091-21a720a8ffc8", "Admin", "ADMIN" },
-                    { new Guid("5552d2f5-1fcd-4d97-9f78-680de524e89c"), "afef254e-f3d3-4bf6-bf2e-381f5f4260fe", "User", "USER" }
+                    { new Guid("165346c9-293e-43d7-9483-cbcfddca5bb1"), "451c798f-0ec8-4689-b88f-15a6a881c811", "User", "USER" },
+                    { new Guid("34383170-557f-4cff-a742-262188c4c1ef"), "9356657e-ae7a-4e75-bd4a-84bbe0b90a60", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
@@ -259,8 +259,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"), 0, "c540139e-e4f8-4180-822f-ca493917208a", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAENdCmHSocqUQ8inylOewcECUarBRevpT8XyBaXAlhdb8+qrRFC9bp6mziNJUjrLGcQ==", null, false, "f370c505-c642-4478-859e-90f5977832f9", false, "admin" },
-                    { new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"), 0, "704311fb-3b25-4a5f-90cd-a9be34c97005", "user@gmail.com", true, false, null, "USER@GMAIL.COM", "USER", "AQAAAAEAACcQAAAAEMX9tpmGVdryuDO7bNXKoepAnWTgOBaraIINmX3I68kuLHF4wPd5cGmTETZcUrEQQg==", null, false, "327029e3-c320-4bc0-9c7e-2f295d1e399b", false, "user" }
+                    { new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"), 0, "d5d72c37-5ab4-4a52-92ec-7b5a29eaec5f", "user@gmail.com", true, false, null, "USER@GMAIL.COM", "USER", "AQAAAAEAACcQAAAAEFesEVK0jGGN47MoqRm/U2AeUXG6gRfg8wNgOwRtek4Svz/B8NnX1BCkzFR+cr7aRw==", null, false, "1ead594a-e01b-425e-b39a-1d09171976f2", false, "user" },
+                    { new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"), 0, "5f1a7ef4-34fa-49c4-b997-4152a1fc4b91", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEHSOSMtM91aGNW+nJxyzPl9+aGHd5lONb+gWfH8sw06xlasEoxjVc0n/r4dtUo7HTA==", null, false, "712793ef-dba8-47ea-8289-cbcac772cf85", false, "admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -268,8 +268,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "RoleId", "UserId", "Discriminator" },
                 values: new object[,]
                 {
-                    { new Guid("35ca5fd2-8f0b-4cf9-a349-3e1dfb532c91"), new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"), "ApplicationUserRole" },
-                    { new Guid("5552d2f5-1fcd-4d97-9f78-680de524e89c"), new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"), "ApplicationUserRole" }
+                    { new Guid("165346c9-293e-43d7-9483-cbcfddca5bb1"), new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"), "ApplicationUserRole" },
+                    { new Guid("34383170-557f-4cff-a742-262188c4c1ef"), new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"), "ApplicationUserRole" }
                 });
 
             migrationBuilder.InsertData(
@@ -277,12 +277,21 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "Id", "ApplicationUserId", "CreatedDate", "Title" },
                 values: new object[,]
                 {
-                    { new Guid("1e4068fe-9039-43d6-be7d-3edbdc72d262"), new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"), new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8318), "Ödevler" },
-                    { new Guid("6ead4aa2-f507-4338-867f-520fc594d4cc"), new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"), new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8325), "Dosyalar" },
-                    { new Guid("cfc2ce26-e6ef-4738-8c39-4d9bbb4b1f6c"), new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"), new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8323), "Tasarımlar" },
-                    { new Guid("e986849b-6ea4-4515-80a2-6c227dcdab69"), new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"), new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8326), "Ödevler" },
-                    { new Guid("eafe6da8-36b4-447a-b188-dfdc95bfb42d"), new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"), new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8327), "Tasarımlar" },
-                    { new Guid("f1efe9f4-3436-4a6d-9aeb-156f21d033de"), new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"), new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8329), "Dosyalar" }
+                    { new Guid("58940230-7203-4879-9d01-7fb4221c9212"), new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2958), "Dosyalar" },
+                    { new Guid("66628870-028c-4458-bb2b-f8ccca9a4566"), new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2956), "Tasarımlar" },
+                    { new Guid("70bf11d8-e23a-4558-9ca5-f57851fccd8e"), new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2965), "Dosyalar" },
+                    { new Guid("7e8f47a1-eaed-4578-93ea-b55ecd07bcbd"), new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2955), "Ödevler" },
+                    { new Guid("e3b9cc12-6f11-474a-9d2e-0cc26d9d1865"), new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2964), "Tasarımlar" },
+                    { new Guid("e8377090-188e-437c-9d29-35ec639cee54"), new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2963), "Ödevler" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "UserInfo",
+                columns: new[] { "Id", "ApplicationUserId", "CreatedDate", "UsedSpace" },
+                values: new object[,]
+                {
+                    { new Guid("4e6ede80-c9c1-4461-a98e-46788f155c2e"), new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2934), 0L },
+                    { new Guid("69918bf9-8f22-48f1-8feb-39de62fc64af"), new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2930), 0L }
                 });
 
             migrationBuilder.CreateIndex(
