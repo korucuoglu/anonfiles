@@ -16,6 +16,7 @@ namespace FileUpload.Upload.Persistence
             builder.Entity<ApplicationRole>().HasData(new ApplicationRole { Id = AdminRoleId, Name = "Admin", NormalizedName = "ADMIN" });
 
             var hasher = new PasswordHasher<ApplicationUser>();
+
             builder.Entity<ApplicationUser>().HasData(
                 new ApplicationUser
                 {
@@ -37,6 +38,7 @@ namespace FileUpload.Upload.Persistence
                     UserId = AdminUserId
                 }
             );
+
 
             var userRoleId = Guid.NewGuid();
             var userId = Guid.NewGuid();
@@ -65,6 +67,20 @@ namespace FileUpload.Upload.Persistence
                 }
             );
 
+            builder.Entity<UserInfo>().HasData(
+
+               new UserInfo()
+               {
+                   Id = Guid.NewGuid(),
+                   UsedSpace = 0,
+                   ApplicationUserId = AdminUserId,
+               },
+                new UserInfo()
+                {
+                    Id = Guid.NewGuid(),
+                    UsedSpace = 0,
+                    ApplicationUserId = userId,
+                });
 
             builder.Entity<Category>().HasData(
                 new Category()

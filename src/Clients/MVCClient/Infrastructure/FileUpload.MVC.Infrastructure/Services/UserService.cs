@@ -29,7 +29,7 @@ namespace FileUpload.MVC.Infrastructure.Services
 
         public async Task<FilesPagerViewModel> GetMyFiles(FileFilterModel model)
         {
-            return await _client.CustomPostAsync<FilesPagerViewModel, FileFilterModel>("minio/myfiles", model, true);
+            return await _client.CustomPostAsync<FilesPagerViewModel, FileFilterModel>("minio/myfiles", model, false);
 
         }
 

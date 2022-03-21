@@ -26,12 +26,7 @@ namespace FileUpload.Upload.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload([FromForm] IFormFile[] files, [FromForm] string categories)
         {
-            var categoryIds = new List<Guid>();
-
-            if (String.IsNullOrEmpty(categories) is false)
-            {
-                categoryIds = JsonSerializer.Deserialize<List<Guid>>(categories);
-            }
+            var categoryIds = JsonSerializer.Deserialize<List<Guid>>(categories);
 
             var data = await _service.UploadAsync(files, categoryIds);
 

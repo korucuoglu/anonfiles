@@ -47,44 +47,44 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1e4068fe-9039-43d6-be7d-3edbdc72d262"),
-                            ApplicationUserId = new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"),
-                            CreatedDate = new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8318),
+                            Id = new Guid("7e8f47a1-eaed-4578-93ea-b55ecd07bcbd"),
+                            ApplicationUserId = new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"),
+                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2955),
                             Title = "Ödevler"
                         },
                         new
                         {
-                            Id = new Guid("cfc2ce26-e6ef-4738-8c39-4d9bbb4b1f6c"),
-                            ApplicationUserId = new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"),
-                            CreatedDate = new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8323),
+                            Id = new Guid("66628870-028c-4458-bb2b-f8ccca9a4566"),
+                            ApplicationUserId = new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"),
+                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2956),
                             Title = "Tasarımlar"
                         },
                         new
                         {
-                            Id = new Guid("6ead4aa2-f507-4338-867f-520fc594d4cc"),
-                            ApplicationUserId = new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"),
-                            CreatedDate = new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8325),
+                            Id = new Guid("58940230-7203-4879-9d01-7fb4221c9212"),
+                            ApplicationUserId = new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"),
+                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2958),
                             Title = "Dosyalar"
                         },
                         new
                         {
-                            Id = new Guid("e986849b-6ea4-4515-80a2-6c227dcdab69"),
-                            ApplicationUserId = new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"),
-                            CreatedDate = new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8326),
+                            Id = new Guid("e8377090-188e-437c-9d29-35ec639cee54"),
+                            ApplicationUserId = new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"),
+                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2963),
                             Title = "Ödevler"
                         },
                         new
                         {
-                            Id = new Guid("eafe6da8-36b4-447a-b188-dfdc95bfb42d"),
-                            ApplicationUserId = new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"),
-                            CreatedDate = new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8327),
+                            Id = new Guid("e3b9cc12-6f11-474a-9d2e-0cc26d9d1865"),
+                            ApplicationUserId = new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"),
+                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2964),
                             Title = "Tasarımlar"
                         },
                         new
                         {
-                            Id = new Guid("f1efe9f4-3436-4a6d-9aeb-156f21d033de"),
-                            ApplicationUserId = new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"),
-                            CreatedDate = new DateTime(2022, 3, 20, 13, 12, 52, 37, DateTimeKind.Utc).AddTicks(8329),
+                            Id = new Guid("70bf11d8-e23a-4558-9ca5-f57851fccd8e"),
+                            ApplicationUserId = new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"),
+                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2965),
                             Title = "Dosyalar"
                         });
                 });
@@ -153,6 +153,22 @@ namespace FileUpload.Upload.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("UserInfo");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("69918bf9-8f22-48f1-8feb-39de62fc64af"),
+                            ApplicationUserId = new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"),
+                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2930),
+                            UsedSpace = 0L
+                        },
+                        new
+                        {
+                            Id = new Guid("4e6ede80-c9c1-4461-a98e-46788f155c2e"),
+                            ApplicationUserId = new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"),
+                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2934),
+                            UsedSpace = 0L
+                        });
                 });
 
             modelBuilder.Entity("FileUpload.Upload.Persistence.Identity.ApplicationRole", b =>
@@ -185,15 +201,15 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("35ca5fd2-8f0b-4cf9-a349-3e1dfb532c91"),
-                            ConcurrencyStamp = "afdf8c4d-825e-445d-b091-21a720a8ffc8",
+                            Id = new Guid("34383170-557f-4cff-a742-262188c4c1ef"),
+                            ConcurrencyStamp = "9356657e-ae7a-4e75-bd4a-84bbe0b90a60",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("5552d2f5-1fcd-4d97-9f78-680de524e89c"),
-                            ConcurrencyStamp = "afef254e-f3d3-4bf6-bf2e-381f5f4260fe",
+                            Id = new Guid("165346c9-293e-43d7-9483-cbcfddca5bb1"),
+                            ConcurrencyStamp = "451c798f-0ec8-4689-b88f-15a6a881c811",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -267,33 +283,33 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"),
+                            Id = new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c540139e-e4f8-4180-822f-ca493917208a",
+                            ConcurrencyStamp = "5f1a7ef4-34fa-49c4-b997-4152a1fc4b91",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAENdCmHSocqUQ8inylOewcECUarBRevpT8XyBaXAlhdb8+qrRFC9bp6mziNJUjrLGcQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHSOSMtM91aGNW+nJxyzPl9+aGHd5lONb+gWfH8sw06xlasEoxjVc0n/r4dtUo7HTA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f370c505-c642-4478-859e-90f5977832f9",
+                            SecurityStamp = "712793ef-dba8-47ea-8289-cbcac772cf85",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
                         new
                         {
-                            Id = new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"),
+                            Id = new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "704311fb-3b25-4a5f-90cd-a9be34c97005",
+                            ConcurrencyStamp = "d5d72c37-5ab4-4a52-92ec-7b5a29eaec5f",
                             Email = "user@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@GMAIL.COM",
                             NormalizedUserName = "USER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMX9tpmGVdryuDO7bNXKoepAnWTgOBaraIINmX3I68kuLHF4wPd5cGmTETZcUrEQQg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFesEVK0jGGN47MoqRm/U2AeUXG6gRfg8wNgOwRtek4Svz/B8NnX1BCkzFR+cr7aRw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "327029e3-c320-4bc0-9c7e-2f295d1e399b",
+                            SecurityStamp = "1ead594a-e01b-425e-b39a-1d09171976f2",
                             TwoFactorEnabled = false,
                             UserName = "user"
                         });
@@ -417,13 +433,13 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("9153ce3e-981b-4b31-96b4-3909cb235970"),
-                            RoleId = new Guid("35ca5fd2-8f0b-4cf9-a349-3e1dfb532c91")
+                            UserId = new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"),
+                            RoleId = new Guid("34383170-557f-4cff-a742-262188c4c1ef")
                         },
                         new
                         {
-                            UserId = new Guid("a08e956a-de0a-4206-b1f2-fbc2b2e81ece"),
-                            RoleId = new Guid("5552d2f5-1fcd-4d97-9f78-680de524e89c")
+                            UserId = new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"),
+                            RoleId = new Guid("165346c9-293e-43d7-9483-cbcfddca5bb1")
                         });
                 });
 
