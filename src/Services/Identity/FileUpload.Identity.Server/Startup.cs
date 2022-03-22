@@ -52,6 +52,14 @@ namespace FileUpload.IdentityServer
 
             });
 
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.WithOrigins("http://localhost:8080").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                });
+            });
+
             services.AddIdentity<ApplicationUser, ApplicationRole>(opt =>
             {
                 opt.User.RequireUniqueEmail = true;
@@ -94,6 +102,8 @@ namespace FileUpload.IdentityServer
                     await context.Response.WriteAsync("OK");
                 }
             });
+
+            app.UseCors("CorsPolicy");
 
             app.UseStaticFiles();
             app.UseRouting();

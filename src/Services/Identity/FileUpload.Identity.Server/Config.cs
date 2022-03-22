@@ -51,7 +51,6 @@ namespace FileUpload.IdentityServer
                     AllowedScopes = { "gateway_fullpermission", IdentityServerConstants.LocalApi.ScopeName }
                 },
 
-
                  new Client
                 {
                     ClientName="Asp.Net Core MVC",
@@ -65,21 +64,26 @@ namespace FileUpload.IdentityServer
                     AbsoluteRefreshTokenLifetime= (int) (DateTime.Now.AddDays(60)- DateTime.Now).TotalSeconds,
                     RefreshTokenUsage= TokenUsage.OneTimeOnly
                 },
-
                  new Client
                 {
-                    ClientName="Vue JS",
-                    ClientId="vuejs",
-                    AllowedGrantTypes= GrantTypes.Code,
-                    AllowedScopes={ "upload_fullpermission", IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess, IdentityServerConstants.LocalApi.ScopeName,"roles" },
-                    AllowedCorsOrigins = { "http://localhost:8080" },
-                    RedirectUris = new[] { "http://localhost:808" },
-                    PostLogoutRedirectUris = new[] { "http://localhost:8080" },
-                    AccessTokenLifetime=1*60*60,
-                    RefreshTokenExpiration=TokenExpiration.Absolute,
-                    AbsoluteRefreshTokenLifetime= (int) (DateTime.Now.AddDays(60)- DateTime.Now).TotalSeconds,
-                    RefreshTokenUsage= TokenUsage.ReUse
-                },
+                    ClientId = "vue",
+                    ClientName = "Vue Client",
+                    RequireClientSecret = false,
+                    // AllowAccessTokensViaBrowser =true,
+                    AllowedScopes = {
+                       "gateway_fullpermission",
+                       "upload_fullpermission",
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "Roles"
+                    },
+                    RedirectUris = {"http://localhost:8080"},
+                    AllowedCorsOrigins = {"http://localhost:8080"},
+                    PostLogoutRedirectUris = {"http://localhost:8080"},
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                }
 
         };
     }

@@ -114,7 +114,7 @@ namespace IdentityServerHost.Quickstart.UI
             {
                 // validate username/password against in-memory store
 
-                var user = await _userManager.FindByEmailAsync(model.Username);
+                var user = await _userManager.FindByNameAsync(model.Username);
 
                 if (user != null)
                 {
