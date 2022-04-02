@@ -23,7 +23,6 @@ namespace FileUpload.Upload.Infrastructure
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped(typeof(NotFoundFilterAttribute<>));
-            services.AddScoped<ValidationFilterAttribute>();
 
             services.AddAuthentication().AddJwtBearer(options =>
             {
@@ -57,12 +56,14 @@ namespace FileUpload.Upload.Infrastructure
                 options.SuppressModelStateInvalidFilter = true;
             });
 
+            #region SignalR & Cors
+          
             services.AddSignalR(e =>
             {
                 e.MaximumReceiveMessageSize = 102400000;
                 e.EnableDetailedErrors = true;
             });
-
+           
             services.AddCors(opt =>
             {
                 opt.AddPolicy("CorsPolicy", builder =>
@@ -70,6 +71,7 @@ namespace FileUpload.Upload.Infrastructure
                     builder.WithOrigins(configuration.GetSection("ServiceApiSettings").GetSection("MVCClient").Value).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
             });
+            #endregion
         }
     }
 }

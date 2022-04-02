@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace FileUpload.Shared.Wrappers
 {
@@ -13,7 +14,7 @@ namespace FileUpload.Shared.Wrappers
         public bool IsSuccessful { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string Error { get; set; }
+        public List<string> Errors { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Message { get; set; }
@@ -39,7 +40,18 @@ namespace FileUpload.Shared.Wrappers
         {
             return new Response<T>
             {
-                Error = error,
+                Errors = new() { error },
+                StatusCode = statusCode,
+                IsSuccessful = false
+            };
+        }
+
+        public static Response<T> Fail(List<string> errors, int statusCode)
+
+        {
+            return new Response<T>
+            {
+                Errors = errors,
                 StatusCode = statusCode,
                 IsSuccessful = false
             };
