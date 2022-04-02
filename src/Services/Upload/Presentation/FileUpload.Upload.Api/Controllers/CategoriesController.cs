@@ -42,7 +42,7 @@ namespace FileUpload.Upload.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ValidationFilter]
         public async Task<IActionResult> AddAsync(AddCategoryCommand dto)
         {
             var data = await _categoryService.AddAsync(dto);
@@ -51,7 +51,7 @@ namespace FileUpload.Upload.Controllers
         }
 
         [HttpPut]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ValidationFilter]
         [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
         public async Task<IActionResult> UpdateAsync(UpdateCategoryCommand dto)
         {

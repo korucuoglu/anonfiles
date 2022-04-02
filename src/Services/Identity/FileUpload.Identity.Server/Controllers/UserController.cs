@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,10 +54,9 @@ namespace FileUpload.IdentityServer.Controllers
             {
                 if (!result.Succeeded)
                 {
-                    var error = result.Errors.First().Description;
+                    var errors = result.Errors.Select(x => x.Description).ToList();
 
-                    return Shared.Wrappers.Response<NoContent>.Fail(error, 500);
-
+                    return Shared.Wrappers.Response<NoContent>.Fail(errors, 500);
                 }
 
                 string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);

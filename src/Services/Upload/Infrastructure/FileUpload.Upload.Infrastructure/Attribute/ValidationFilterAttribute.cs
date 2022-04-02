@@ -8,22 +8,16 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Infrastructure.Attribute
 {
-    public class ValidationFilterAttribute: IAsyncActionFilter
+    public class ValidationFilterAttribute: ActionFilterAttribute
     { 
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (!context.ModelState.IsValid)
             {
-                List<string> errors = new();
 
-                IEnumerable<ModelError> modelErrors = context.ModelState.Values.SelectMany(i => i.Errors);
+                var errors = context.ModelState.Values.SelectMany(i => i.Errors).Select(x => x.ErrorMessage).ToList();
 
-                foreach (var item in modelErrors)
-                {
-                    errors.Add(item.ErrorMessage);
-                }
-
-                context.Result = new BadRequestObjectResult(Response<NoContent>.Fail(modelErrors.First().ErrorMessage, 400));
+                context.Result = new NotFoundObjectResult(Response<NoContent>.Fail(errors, 400));
 
                 return;
 
