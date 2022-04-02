@@ -15,7 +15,7 @@ namespace FileUpload.Upload.Application.Features.Queries.Files.GetAll
     public class GetAllFilesQueryRequest : IRequest<Response<FilesPagerViewModel>>
     {
         public FileFilterModel FilterModel { get; set; }
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
     }
     public class GetAllFilesQueryRequestHandler : IRequestHandler<GetAllFilesQueryRequest, Response<FilesPagerViewModel>>
     {

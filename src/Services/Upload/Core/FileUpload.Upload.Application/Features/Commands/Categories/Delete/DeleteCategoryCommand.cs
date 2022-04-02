@@ -12,8 +12,8 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories.Delete
 {
     public class DeleteCategoryCommand : IRequest<Response<bool>>
     {
-        public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public int Id { get; set; }
+        public int UserId { get; set; }
     }
 
     public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>

@@ -38,7 +38,7 @@ namespace FileUpload.Upload.Infrastructure.Services
             return await _mediator.Send(query);
         }
 
-        public async Task<Response<GetCategoryDto>> GetByIdAsync(Guid id)
+        public async Task<Response<GetCategoryDto>> GetByIdAsync(int id)
         {
             if (await _redisService.IsKeyAsync($"categories-{id}"))
             {
@@ -68,7 +68,7 @@ namespace FileUpload.Upload.Infrastructure.Services
             return await _mediator.Send(dto);
         }
 
-        public async Task<Response<bool>> DeleteByIdAsync(Guid id)
+        public async Task<Response<bool>> DeleteByIdAsync(int id)
         {
             var query = new DeleteCategoryCommand()
             {

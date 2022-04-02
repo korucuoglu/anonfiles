@@ -6,18 +6,16 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace FileUpload.Upload.Persistence.Migrations
 {
-    public partial class mg1 : Migration
+    public partial class mig1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("Npgsql:PostgresExtension:uuid-ossp", ",,");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuid_generate_v4()"),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
@@ -31,7 +29,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuid_generate_v4()"),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -58,7 +57,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoleId = table.Column<int>(type: "integer", nullable: false),
                     ClaimType = table.Column<string>(type: "text", nullable: true),
                     ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
@@ -79,7 +78,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
                     ClaimType = table.Column<string>(type: "text", nullable: true),
                     ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
@@ -101,7 +100,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                     LoginProvider = table.Column<string>(type: "text", nullable: false),
                     ProviderKey = table.Column<string>(type: "text", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -118,8 +117,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    RoleId = table.Column<int>(type: "integer", nullable: false),
                     Discriminator = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -143,7 +142,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
                     LoginProvider = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Value = table.Column<string>(type: "text", nullable: true)
@@ -163,10 +162,11 @@ namespace FileUpload.Upload.Persistence.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "text", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ApplicationUserId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -183,12 +183,13 @@ namespace FileUpload.Upload.Persistence.Migrations
                 name: "Files",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FileName = table.Column<string>(type: "text", nullable: true),
                     Extension = table.Column<string>(type: "text", nullable: true),
                     Size = table.Column<long>(type: "bigint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ApplicationUserId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -205,10 +206,11 @@ namespace FileUpload.Upload.Persistence.Migrations
                 name: "UserInfo",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UsedSpace = table.Column<long>(type: "bigint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ApplicationUserId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -225,8 +227,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 name: "FilesCategories",
                 columns: table => new
                 {
-                    FileId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false)
+                    FileId = table.Column<int>(type: "integer", nullable: false),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -250,8 +252,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("165346c9-293e-43d7-9483-cbcfddca5bb1"), "451c798f-0ec8-4689-b88f-15a6a881c811", "User", "USER" },
-                    { new Guid("34383170-557f-4cff-a742-262188c4c1ef"), "9356657e-ae7a-4e75-bd4a-84bbe0b90a60", "Admin", "ADMIN" }
+                    { 1, "5b93999f-1743-41bf-aa51-8b95be56003c", "Admin", "ADMIN" },
+                    { 2, "3d244cb1-7c9e-4219-a34c-fc4236cc8e05", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -259,8 +261,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"), 0, "d5d72c37-5ab4-4a52-92ec-7b5a29eaec5f", "user@gmail.com", true, false, null, "USER@GMAIL.COM", "USER", "AQAAAAEAACcQAAAAEFesEVK0jGGN47MoqRm/U2AeUXG6gRfg8wNgOwRtek4Svz/B8NnX1BCkzFR+cr7aRw==", null, false, "1ead594a-e01b-425e-b39a-1d09171976f2", false, "user" },
-                    { new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"), 0, "5f1a7ef4-34fa-49c4-b997-4152a1fc4b91", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEHSOSMtM91aGNW+nJxyzPl9+aGHd5lONb+gWfH8sw06xlasEoxjVc0n/r4dtUo7HTA==", null, false, "712793ef-dba8-47ea-8289-cbcac772cf85", false, "admin" }
+                    { 1, 0, "5ec09282-b101-47ed-a68f-2c2d44328859", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAELEmyTl2MhZQac+8NoLX3pOxOz5hymRj/n4NRcnppdLrytJR4rhZJJemm3SIa+bqqA==", null, false, "5b5a2153-ae83-43a8-a115-957139b02c52", false, "admin" },
+                    { 2, 0, "efae5c15-926a-407b-a4a4-cc5f490781fb", "user@gmail.com", true, false, null, "USER@GMAIL.COM", "USER", "AQAAAAEAACcQAAAAELKxZmcPa0YUur7bHgV0VOAzRGOE/E0EbQ8X5pFD+Vz0QykWpPlTzjZUNpsdI7qPnw==", null, false, "64218ceb-dcd2-4ea6-8f47-7b3faacfe4ec", false, "user" }
                 });
 
             migrationBuilder.InsertData(
@@ -268,8 +270,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "RoleId", "UserId", "Discriminator" },
                 values: new object[,]
                 {
-                    { new Guid("165346c9-293e-43d7-9483-cbcfddca5bb1"), new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"), "ApplicationUserRole" },
-                    { new Guid("34383170-557f-4cff-a742-262188c4c1ef"), new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"), "ApplicationUserRole" }
+                    { 1, 1, "ApplicationUserRole" },
+                    { 2, 2, "ApplicationUserRole" }
                 });
 
             migrationBuilder.InsertData(
@@ -277,12 +279,12 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "Id", "ApplicationUserId", "CreatedDate", "Title" },
                 values: new object[,]
                 {
-                    { new Guid("58940230-7203-4879-9d01-7fb4221c9212"), new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2958), "Dosyalar" },
-                    { new Guid("66628870-028c-4458-bb2b-f8ccca9a4566"), new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2956), "Tasarımlar" },
-                    { new Guid("70bf11d8-e23a-4558-9ca5-f57851fccd8e"), new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2965), "Dosyalar" },
-                    { new Guid("7e8f47a1-eaed-4578-93ea-b55ecd07bcbd"), new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2955), "Ödevler" },
-                    { new Guid("e3b9cc12-6f11-474a-9d2e-0cc26d9d1865"), new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2964), "Tasarımlar" },
-                    { new Guid("e8377090-188e-437c-9d29-35ec639cee54"), new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2963), "Ödevler" }
+                    { 1, 1, new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(876), "Ödevler" },
+                    { 2, 1, new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(878), "Tasarımlar" },
+                    { 3, 1, new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(879), "Dosyalar" },
+                    { 4, 2, new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(880), "Ödevler" },
+                    { 5, 2, new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(881), "Tasarımlar" },
+                    { 6, 2, new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(882), "Dosyalar" }
                 });
 
             migrationBuilder.InsertData(
@@ -290,8 +292,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "Id", "ApplicationUserId", "CreatedDate", "UsedSpace" },
                 values: new object[,]
                 {
-                    { new Guid("4e6ede80-c9c1-4461-a98e-46788f155c2e"), new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2934), 0L },
-                    { new Guid("69918bf9-8f22-48f1-8feb-39de62fc64af"), new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"), new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2930), 0L }
+                    { 1, 1, new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(822), 0L },
+                    { 2, 2, new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(828), 0L }
                 });
 
             migrationBuilder.CreateIndex(

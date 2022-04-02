@@ -33,7 +33,7 @@ namespace FileUpload.Upload.Controllers
 
         [HttpGet("{id}")]
         [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
-        public async Task<IActionResult> GetByIdAsync(Guid id)
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
             var data = await _categoryService.GetByIdAsync(id);
 
@@ -63,7 +63,7 @@ namespace FileUpload.Upload.Controllers
 
         [HttpDelete("{id}")]
         [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
-        public async Task<IActionResult> DeleteByIdAsync(Guid id)
+        public async Task<IActionResult> DeleteByIdAsync(int id)
         {
             var data = await _categoryService.DeleteByIdAsync(id);
 

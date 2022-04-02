@@ -13,14 +13,14 @@ namespace FileUpload.Upload.Application.Features.Commands.Files.Add
 {
     public class AddFileCommand : IRequest<Response<bool>>
     {
-        public List<File> Files { get; set; }
-        public Guid AplicationUserId { get; set; }
+        public File File { get; set; }
+        public int AplicationUserId { get; set; }
     }
     public class AddFileCommandValidator : AbstractValidator<AddFileCommand>
     {
         public AddFileCommandValidator()
         {
-            RuleFor(x => x.Files).NotNull().NotEmpty().WithMessage("Lütfen dosyayı giriniz");
+            RuleFor(x => x.File).NotNull().NotEmpty().WithMessage("Lütfen dosyayı giriniz");
         }
     }
 
@@ -38,11 +38,11 @@ namespace FileUpload.Upload.Application.Features.Commands.Files.Add
 
             var userInfo = await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.AplicationUserId);
 
-            userInfo.UsedSpace += request.Files.Sum(x => x.Size);
+            userInfo.UsedSpace += request.File.Size;
 
             _unitOfWork.WriteRepository<UserInfo>().Update(userInfo);
 
-            await _unitOfWork.WriteRepository<File>().AddRangeAsync(request.Files);
+            await _unitOfWork.WriteRepository<File>().AddAsync(request.File);
 
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 

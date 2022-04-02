@@ -60,7 +60,7 @@ namespace FileUpload.Upload.Persistence.Repositories
                  : await query.Where(predicate).ToListAsync();
         }
 
-        public async Task<TEntity> FindAsync(Guid id, bool tracking = true)
+        public async Task<TEntity> FindAsync(int id, bool tracking = true)
         {
             return tracking 
                  ? await _table.FindAsync(id)

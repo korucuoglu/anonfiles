@@ -70,7 +70,7 @@ namespace FileUpload.Upload.Application.Helper
             return model.Where(x => x.Extension.ToUpper() == extension.ToUpper());
         }
 
-        public static IQueryable<File> CategoryFilter(IQueryable<File> model, List<Guid> categoriesIds)
+        public static IQueryable<File> CategoryFilter(IQueryable<File> model, List<int> categoriesIds)
         {
             if (!categoriesIds.Any())
             {

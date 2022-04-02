@@ -13,7 +13,7 @@ namespace FileUpload.Shared.Dtos.Files
             PageSize = 10;
             OrderBy = 1;
             Extension = String.Empty;
-            CategoryIds = new List<Guid>();
+            CategoryIds = new List<int>();
         }
         public FileFilterModel(FileFilterModel model)
         {
@@ -45,7 +45,7 @@ namespace FileUpload.Shared.Dtos.Files
         public int PageSize { get; set; } 
         public int OrderBy { get; set; } 
         public string Extension { get; set; }
-        public List<Guid> CategoryIds { get; set; }
+        public List<int> CategoryIds { get; set; }
 
     }
 }

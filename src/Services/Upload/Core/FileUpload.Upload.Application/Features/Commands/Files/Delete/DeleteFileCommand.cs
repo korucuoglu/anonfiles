@@ -14,8 +14,8 @@ namespace FileUpload.Upload.Application.Features.Commands.Files.Delete
 {
     public class DeleteFileCommand : IRequest<Response<FilePagerViewModel>>
     {
-        public Guid FileId { get; set; }
-        public Guid UserId { get; set; }
+        public int FileId { get; set; }
+        public int UserId { get; set; }
         public FileFilterModel FilterModel { get; set; }
     }
     public class DeleteFileCommandValidator : AbstractValidator<DeleteFileCommand>

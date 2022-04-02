@@ -4,7 +4,7 @@ using System;
 namespace FileUpload.Upload.Persistence.Identity
 {
     // Add profile data for application users by adding properties to the ApplicationUser class
-    public class ApplicationUserRole : IdentityUserRole<Guid>
+    public class ApplicationUserRole : IdentityUserRole<int>
     {
 
     }

@@ -15,7 +15,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories.Update
     {
         public string Id { get; set; }
         public string Title { get; set; }
-        public Guid ApplicationUserId { get; set; }
+        public int ApplicationUserId { get; set; }
     }
 
     public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>

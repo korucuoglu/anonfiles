@@ -5,7 +5,7 @@ namespace FileUpload.Upload.Application.Interfaces.Services
 {
     public interface ISharedIdentityService
     {
-        public Guid GetUserId { get; }
+        public int GetUserId { get; }
     }
 
    

@@ -4,7 +4,7 @@ namespace FileUpload.Upload.Domain.Common
 {
     public abstract class BaseEntity
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     }
 }

@@ -8,12 +8,12 @@ namespace FileUpload.Shared.Dtos.Files
     {
         public FilesCategoriesDto()
         {
-            CategoriesId = new List<Guid>();
+            CategoriesId = new List<int>();
         }
 
         public IFormFile[] Files { get; set; }
 
-        public List<Guid> CategoriesId { get; set; }
+        public List<int> CategoriesId { get; set; }
 
     }
 }

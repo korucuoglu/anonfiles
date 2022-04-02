@@ -10,8 +10,8 @@ namespace FileUpload.Upload.Persistence
     {
         public static void AddData(ModelBuilder builder)
         {
-            var AdminRoleId = Guid.NewGuid();
-            var AdminUserId = Guid.NewGuid();
+            var AdminRoleId = 1;
+            var AdminUserId = 1;
 
             builder.Entity<ApplicationRole>().HasData(new ApplicationRole { Id = AdminRoleId, Name = "Admin", NormalizedName = "ADMIN" });
 
@@ -40,8 +40,8 @@ namespace FileUpload.Upload.Persistence
             );
 
 
-            var userRoleId = Guid.NewGuid();
-            var userId = Guid.NewGuid();
+            var userRoleId = 2;
+            var userId = 2;
 
             builder.Entity<ApplicationRole>().HasData(new ApplicationRole { Id = userRoleId, Name = "User", NormalizedName = "USER" });
 
@@ -71,13 +71,13 @@ namespace FileUpload.Upload.Persistence
 
                new UserInfo()
                {
-                   Id = Guid.NewGuid(),
+                   Id = 1,
                    UsedSpace = 0,
                    ApplicationUserId = AdminUserId,
                },
                 new UserInfo()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 2,
                     UsedSpace = 0,
                     ApplicationUserId = userId,
                 });
@@ -85,37 +85,37 @@ namespace FileUpload.Upload.Persistence
             builder.Entity<Category>().HasData(
                 new Category()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 1,
                     ApplicationUserId = AdminUserId,
                     Title = "Ödevler",
                 },
                 new Category()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 2,
                     ApplicationUserId = AdminUserId,
                     Title = "Tasarımlar",
                 },
                 new Category()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 3,
                     ApplicationUserId = AdminUserId,
                     Title = "Dosyalar",
                 },
                 new Category()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 4,
                     ApplicationUserId = userId,
                     Title = "Ödevler",
                 },
                 new Category()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 5,
                     ApplicationUserId = userId,
                     Title = "Tasarımlar",
                 },
                 new Category()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 6,
                     ApplicationUserId = userId,
                     Title = "Dosyalar",
                 }
