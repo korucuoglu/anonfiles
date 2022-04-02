@@ -14,8 +14,8 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories.GetById
 {
     public class GetCategoryByIdQueryRequest : IRequest<Response<GetCategoryDto>>
     {
-        public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public int Id { get; set; }
+        public int UserId { get; set; }
     }
 
     public class GetCategoryByIdQueryRequestHandler : IRequestHandler<GetCategoryByIdQueryRequest, Response<GetCategoryDto>>

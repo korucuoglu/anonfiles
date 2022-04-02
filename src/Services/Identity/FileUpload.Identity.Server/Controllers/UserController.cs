@@ -41,11 +41,6 @@ namespace FileUpload.IdentityServer.Controllers
             {
                 UserName = dto.UserName,
                 Email = dto.Email,
-                UserInfo = new()
-                {
-                    Id = Guid.NewGuid(),
-                    UsedSpace = 0,
-                }
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);

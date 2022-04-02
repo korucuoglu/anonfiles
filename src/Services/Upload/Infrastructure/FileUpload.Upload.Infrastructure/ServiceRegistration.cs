@@ -22,6 +22,7 @@ namespace FileUpload.Upload.Infrastructure
             services.AddSingleton<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IMinioService, MinioService>();
             services.AddScoped(typeof(NotFoundFilterAttribute<>));
 
             services.AddAuthentication().AddJwtBearer(options =>

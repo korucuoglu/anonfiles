@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Persistence.Context
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IApplicationDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>, IApplicationDbContext
     {
         public DbSet<File> Files { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -25,7 +25,6 @@ namespace FileUpload.Upload.Persistence.Context
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.HasPostgresExtension("uuid-ossp");
 
             builder.Entity<FileCategory>(entity =>
             {
@@ -47,12 +46,12 @@ namespace FileUpload.Upload.Persistence.Context
 
             builder.Entity<ApplicationUser>(b =>
             {
-                b.Property(u => u.Id).HasColumnType("uuid").HasDefaultValueSql("uuid_generate_v4()").IsRequired();
+                b.Property(u => u.Id).UseIdentityColumn().UseSerialColumn();
             });
 
             builder.Entity<ApplicationRole>(b =>
             {
-                b.Property(u => u.Id).HasDefaultValueSql("uuid_generate_v4()").IsRequired();
+                b.Property(u => u.Id).UseIdentityColumn().UseSerialColumn();
             });
 
             Seed.AddData(builder);

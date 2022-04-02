@@ -17,7 +17,7 @@ namespace FileUpload.Upload.Application.Interfaces.Repositories
 
         Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool tracking = true);
 
-        Task<TEntity> FindAsync(Guid id, bool tracking = true);
+        Task<TEntity> FindAsync(int id, bool tracking = true);
 
     }
 }

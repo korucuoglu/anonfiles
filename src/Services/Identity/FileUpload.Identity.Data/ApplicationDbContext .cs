@@ -5,7 +5,7 @@ using System;
 
 namespace FileUpload.Data.Entity
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
 
         public DbSet<UserInfo> UserInfo { get; set; }
@@ -15,18 +15,21 @@ namespace FileUpload.Data.Entity
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.HasPostgresExtension("uuid-ossp");
-
-
             builder.Entity<ApplicationUser>(b =>
             {
-                b.Property(u => u.Id).HasColumnType("uuid").HasDefaultValueSql("uuid_generate_v4()").IsRequired();
+                b.Property(u => u.Id).UseIdentityColumn().UseSerialColumn();
             });
 
 
             builder.Entity<ApplicationRole>(b =>
             {
-                b.Property(u => u.Id).HasDefaultValueSql("uuid_generate_v4()");
+                b.Property(u => u.Id).UseIdentityColumn().UseSerialColumn();
+            });
+
+            builder.Entity<UserInfo>(b =>
+            {
+                b.Property(u => u.Id).UseIdentityColumn().UseSerialColumn();
+                b.Property(x => x.UsedSpace).HasDefaultValue(0);
             });
 
 

@@ -30,26 +30,20 @@ namespace FileUpload.Upload.Infrastructure.Services
     {
         private readonly IMediator _mediator;
         private readonly ISharedIdentityService _sharedIdentityService;
+        private readonly IMinioService _minioService;
         private readonly IHubContext<FileHub, IFileHub> _fileHub;
         public AmazonS3Client client { get; set; }
 
         public FileService(IMediator mediator,
             ISharedIdentityService sharedIdentityService,
-            IConfiguration configuration,
-            IHubContext<FileHub, IFileHub> fileHub)
+            IHubContext<FileHub, IFileHub> fileHub, IMinioService minioService)
         {
             _mediator = mediator;
             _sharedIdentityService = sharedIdentityService;
 
-            var config = new AmazonS3Config
-            {
-                RegionEndpoint = RegionEndpoint.GetBySystemName("us-east-1"),
-                ServiceURL = configuration["MinioAccessInfo:EndPoint"],
-                ForcePathStyle = true,
-                SignatureVersion = "2"
-            };
-            client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
+
             _fileHub = fileHub;
+            _minioService = minioService;
         }
 
         public async Task<Response<FilesPagerViewModel>> GetAllFiles(FileFilterModel model)
@@ -63,7 +57,7 @@ namespace FileUpload.Upload.Infrastructure.Services
             return await _mediator.Send(query);
         }
 
-        public async Task<Response<GetFileDto>> GetFileById(Guid id)
+        public async Task<Response<GetFileDto>> GetFileById(int id)
         {
             GetFileByIdQueryRequest query = new()
             {
@@ -74,114 +68,67 @@ namespace FileUpload.Upload.Infrastructure.Services
             return await _mediator.Send(query);
         }
 
-        public async Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, List<Guid> CategoriesId)
+        public async Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, List<int> CategoriesId)
         {
-            async Task<string> GetBucketName()
-            {
-                if (await AmazonS3Util.DoesS3BucketExistV2Async(client, _sharedIdentityService.GetUserId.ToString()) is false)
-                {
-                    var putBucketRequest = new PutBucketRequest
-                    {
-                        BucketName = _sharedIdentityService.GetUserId.ToString(),
-                        UseClientRegion = true
-                    };
-
-                    await client.PutBucketAsync(putBucketRequest);
-                }
-
-                return _sharedIdentityService.GetUserId.ToString();
-            }
 
             Response<AddFileDto> data = new();
 
             var ConnnnectionId = HubData.ClientsData.Where(x => x.UserId == "1").Select(x => x.ConnectionId).FirstOrDefault();
 
-            List<Domain.Entities.File> fileListEntity = new();
-
             foreach (var file in files)
             {
-                try
+
+                if (!string.IsNullOrEmpty(ConnnnectionId))
                 {
-                    if (!string.IsNullOrEmpty(ConnnnectionId))
-                    {
-                        await _fileHub.Clients.Client(ConnnnectionId).FilesUploadStarting(file.FileName);
-                    }
-
-                    var fileId = Guid.NewGuid();
-                    var stream = file.OpenReadStream();
-                    PutObjectRequest putObjectRequest = new()
-                    {
-                        BucketName = await GetBucketName(),
-                        InputStream = stream,
-                        AutoCloseStream = true,
-                        Key = $"{fileId}",
-                        ContentType = file.ContentType
-                    };
-                    var encodedFilename = Uri.EscapeDataString(file.FileName);
-                    putObjectRequest.Metadata.Add("original-filename", encodedFilename);
-                    putObjectRequest.Headers.ContentDisposition = $"attachment; filename=\"{encodedFilename}\"";
-                    await client.PutObjectAsync(putObjectRequest);
-
-                    Domain.Entities.File fileEntity = new()
-                    {
-                        Id = fileId,
-                        ApplicationUserId = _sharedIdentityService.GetUserId,
-                        FileName = file.FileName,
-                        Size = file.Length,
-                        Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper(),
-                    };
-
-                    if (CategoriesId.Any())
-                    {
-                        CategoriesId.ForEach(x =>
-                        {
-                            fileEntity.FilesCategories.Add(new FileCategory() { CategoryId = x });
-                        });
-                    }
-
-                    fileListEntity.Add(fileEntity);
-
-
-                    data = Response<AddFileDto>.Success(new AddFileDto { FileId = fileId, FileName = file.FileName }, 200);
-
+                    await _fileHub.Clients.Client(ConnnnectionId).FilesUploadStarting(file.FileName);
                 }
 
-                catch (Exception e)
+                bool result = await _minioService.Upload(file);
+
+                if (!result)
                 {
-                    data = Response<AddFileDto>.Fail(e.Message, 500);
+                    continue;
                 }
 
-                finally
+                Domain.Entities.File fileEntity = new()
                 {
-                    if (!string.IsNullOrEmpty(ConnnnectionId))
+                    ApplicationUserId = _sharedIdentityService.GetUserId,
+                    FileName = file.FileName,
+                    Size = file.Length,
+                    Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper(),
+                };
+
+                AddFileCommand command = new()
+                {
+                    File = fileEntity,
+                    AplicationUserId = _sharedIdentityService.GetUserId
+                };
+
+                await _mediator.Send(command);
+
+                if (CategoriesId.Any())
+                {
+                    CategoriesId.ForEach(x =>
                     {
-                        await _fileHub.Clients.Client(ConnnnectionId).FilesUploaded(data);
-                    }
+                        fileEntity.FilesCategories.Add(new FileCategory() { CategoryId = x });
+                    });
                 }
+
+                data = Response<AddFileDto>.Success(new AddFileDto { FileId = fileEntity.Id, FileName = file.FileName }, 200);
             }
 
-            AddFileCommand command = new()
-            {
-                Files = fileListEntity,
-                AplicationUserId = _sharedIdentityService.GetUserId
-            };
 
-            await _mediator.Send(command);
+
+           
 
             return Response<AddFileDto>.Success(200);
         }
 
-        public async Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, Guid fileId)
+        public async Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, int fileId)
         {
             try
             {
-                var deleteObjectRequest = new DeleteObjectRequest
-                {
-                    BucketName = _sharedIdentityService.GetUserId.ToString(),
-                    Key = fileId.ToString()
-                };
-
-                await client.DeleteObjectAsync(deleteObjectRequest);
+                await _minioService.Remove(fileId.ToString());
 
                 DeleteFileCommand command = new()
                 {
@@ -207,14 +154,7 @@ namespace FileUpload.Upload.Infrastructure.Services
 
         public async Task<Response<NoContent>> Download(string id)
         {
-            var request = new GetPreSignedUrlRequest()
-            {
-                BucketName = _sharedIdentityService.GetUserId.ToString(),
-                Key = id,
-                Protocol = Protocol.HTTP,
-                Expires = DateTime.Now.AddMinutes(30)
-            };
-            var data = client.GetPreSignedURL(request);
+            var data = _minioService.Download(id);
 
             return await Task.FromResult(Response<NoContent>.Success(message: data, statusCode: 200));
         }

@@ -26,7 +26,7 @@ namespace FileUpload.Upload.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload([FromForm] IFormFile[] files, [FromForm] string categories)
         {
-            var categoryIds = JsonSerializer.Deserialize<List<Guid>>(categories);
+            List<int> categoryIds = string.IsNullOrEmpty(categories) ? new List<int>() : JsonSerializer.Deserialize<List<int>>(categories);
 
             var data = await _service.UploadAsync(files, categoryIds);
 
@@ -45,7 +45,7 @@ namespace FileUpload.Upload.Controllers
         }
 
         [HttpGet("myfiles/{id}")]
-        public async Task<IActionResult> GetByIdAsync(Guid id)
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
             var data = await _service.GetFileById(id);
 
@@ -55,7 +55,7 @@ namespace FileUpload.Upload.Controllers
 
         [HttpPost("{id}")]
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
-        public async Task<IActionResult> Remove([FromBody] FileFilterModel model, Guid id)
+        public async Task<IActionResult> Remove([FromBody] FileFilterModel model, int id)
         {
             FileFilterModel filterModel = new(model);
 

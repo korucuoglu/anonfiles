@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FileUpload.Upload.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220321092356_mg1")]
-    partial class mg1
+    [Migration("20220402195133_mig1")]
+    partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,17 +22,18 @@ namespace FileUpload.Upload.Persistence.Migrations
                 .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("FileUpload.Upload.Domain.Entities.Category", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -49,56 +50,58 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7e8f47a1-eaed-4578-93ea-b55ecd07bcbd"),
-                            ApplicationUserId = new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"),
-                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2955),
+                            Id = 1,
+                            ApplicationUserId = 1,
+                            CreatedDate = new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(876),
                             Title = "Ödevler"
                         },
                         new
                         {
-                            Id = new Guid("66628870-028c-4458-bb2b-f8ccca9a4566"),
-                            ApplicationUserId = new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"),
-                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2956),
+                            Id = 2,
+                            ApplicationUserId = 1,
+                            CreatedDate = new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(878),
                             Title = "Tasarımlar"
                         },
                         new
                         {
-                            Id = new Guid("58940230-7203-4879-9d01-7fb4221c9212"),
-                            ApplicationUserId = new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"),
-                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2958),
+                            Id = 3,
+                            ApplicationUserId = 1,
+                            CreatedDate = new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(879),
                             Title = "Dosyalar"
                         },
                         new
                         {
-                            Id = new Guid("e8377090-188e-437c-9d29-35ec639cee54"),
-                            ApplicationUserId = new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"),
-                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2963),
+                            Id = 4,
+                            ApplicationUserId = 2,
+                            CreatedDate = new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(880),
                             Title = "Ödevler"
                         },
                         new
                         {
-                            Id = new Guid("e3b9cc12-6f11-474a-9d2e-0cc26d9d1865"),
-                            ApplicationUserId = new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"),
-                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2964),
+                            Id = 5,
+                            ApplicationUserId = 2,
+                            CreatedDate = new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(881),
                             Title = "Tasarımlar"
                         },
                         new
                         {
-                            Id = new Guid("70bf11d8-e23a-4558-9ca5-f57851fccd8e"),
-                            ApplicationUserId = new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"),
-                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2965),
+                            Id = 6,
+                            ApplicationUserId = 2,
+                            CreatedDate = new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(882),
                             Title = "Dosyalar"
                         });
                 });
 
             modelBuilder.Entity("FileUpload.Upload.Domain.Entities.File", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -121,11 +124,11 @@ namespace FileUpload.Upload.Persistence.Migrations
 
             modelBuilder.Entity("FileUpload.Upload.Domain.Entities.FileCategory", b =>
                 {
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("FileId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("FileId")
+                        .HasColumnType("integer");
 
                     b.HasKey("CategoryId", "FileId");
 
@@ -136,12 +139,14 @@ namespace FileUpload.Upload.Persistence.Migrations
 
             modelBuilder.Entity("FileUpload.Upload.Domain.Entities.UserInfo", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -159,26 +164,27 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("69918bf9-8f22-48f1-8feb-39de62fc64af"),
-                            ApplicationUserId = new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"),
-                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2930),
+                            Id = 1,
+                            ApplicationUserId = 1,
+                            CreatedDate = new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(822),
                             UsedSpace = 0L
                         },
                         new
                         {
-                            Id = new Guid("4e6ede80-c9c1-4461-a98e-46788f155c2e"),
-                            ApplicationUserId = new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"),
-                            CreatedDate = new DateTime(2022, 3, 21, 9, 23, 56, 545, DateTimeKind.Utc).AddTicks(2934),
+                            Id = 2,
+                            ApplicationUserId = 2,
+                            CreatedDate = new DateTime(2022, 4, 2, 19, 51, 33, 112, DateTimeKind.Utc).AddTicks(828),
                             UsedSpace = 0L
                         });
                 });
 
             modelBuilder.Entity("FileUpload.Upload.Persistence.Identity.ApplicationRole", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("uuid_generate_v4()");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -203,15 +209,15 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("34383170-557f-4cff-a742-262188c4c1ef"),
-                            ConcurrencyStamp = "9356657e-ae7a-4e75-bd4a-84bbe0b90a60",
+                            Id = 1,
+                            ConcurrencyStamp = "5b93999f-1743-41bf-aa51-8b95be56003c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("165346c9-293e-43d7-9483-cbcfddca5bb1"),
-                            ConcurrencyStamp = "451c798f-0ec8-4689-b88f-15a6a881c811",
+                            Id = 2,
+                            ConcurrencyStamp = "3d244cb1-7c9e-4219-a34c-fc4236cc8e05",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -219,10 +225,11 @@ namespace FileUpload.Upload.Persistence.Migrations
 
             modelBuilder.Entity("FileUpload.Upload.Persistence.Identity.ApplicationUser", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("uuid_generate_v4()");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
@@ -285,39 +292,39 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"),
+                            Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5f1a7ef4-34fa-49c4-b997-4152a1fc4b91",
+                            ConcurrencyStamp = "5ec09282-b101-47ed-a68f-2c2d44328859",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHSOSMtM91aGNW+nJxyzPl9+aGHd5lONb+gWfH8sw06xlasEoxjVc0n/r4dtUo7HTA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELEmyTl2MhZQac+8NoLX3pOxOz5hymRj/n4NRcnppdLrytJR4rhZJJemm3SIa+bqqA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "712793ef-dba8-47ea-8289-cbcac772cf85",
+                            SecurityStamp = "5b5a2153-ae83-43a8-a115-957139b02c52",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
                         new
                         {
-                            Id = new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"),
+                            Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d5d72c37-5ab4-4a52-92ec-7b5a29eaec5f",
+                            ConcurrencyStamp = "efae5c15-926a-407b-a4a4-cc5f490781fb",
                             Email = "user@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@GMAIL.COM",
                             NormalizedUserName = "USER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFesEVK0jGGN47MoqRm/U2AeUXG6gRfg8wNgOwRtek4Svz/B8NnX1BCkzFR+cr7aRw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELKxZmcPa0YUur7bHgV0VOAzRGOE/E0EbQ8X5pFD+Vz0QykWpPlTzjZUNpsdI7qPnw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1ead594a-e01b-425e-b39a-1d09171976f2",
+                            SecurityStamp = "64218ceb-dcd2-4ea6-8f47-7b3faacfe4ec",
                             TwoFactorEnabled = false,
                             UserName = "user"
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -331,8 +338,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -341,7 +348,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -355,8 +362,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -365,7 +372,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text");
@@ -376,8 +383,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -386,13 +393,13 @@ namespace FileUpload.Upload.Persistence.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
@@ -404,13 +411,13 @@ namespace FileUpload.Upload.Persistence.Migrations
 
                     b.ToTable("AspNetUserRoles", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<Guid>");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<int>");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text");
@@ -428,20 +435,20 @@ namespace FileUpload.Upload.Persistence.Migrations
 
             modelBuilder.Entity("FileUpload.Upload.Persistence.Identity.ApplicationUserRole", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<int>");
 
                     b.HasDiscriminator().HasValue("ApplicationUserRole");
 
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("4e6148b4-27e5-4ca9-8a0a-ac0e4a480088"),
-                            RoleId = new Guid("34383170-557f-4cff-a742-262188c4c1ef")
+                            UserId = 1,
+                            RoleId = 1
                         },
                         new
                         {
-                            UserId = new Guid("2a7d40c6-3cd0-4dd4-a081-aed1f023484d"),
-                            RoleId = new Guid("165346c9-293e-43d7-9483-cbcfddca5bb1")
+                            UserId = 2,
+                            RoleId = 2
                         });
                 });
 
@@ -491,7 +498,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("FileUpload.Upload.Persistence.Identity.ApplicationRole", null)
                         .WithMany()
@@ -500,7 +507,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
                     b.HasOne("FileUpload.Upload.Persistence.Identity.ApplicationUser", null)
                         .WithMany()
@@ -509,7 +516,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.HasOne("FileUpload.Upload.Persistence.Identity.ApplicationUser", null)
                         .WithMany()
@@ -518,7 +525,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
                     b.HasOne("FileUpload.Upload.Persistence.Identity.ApplicationRole", null)
                         .WithMany()
@@ -533,7 +540,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
                     b.HasOne("FileUpload.Upload.Persistence.Identity.ApplicationUser", null)
                         .WithMany()

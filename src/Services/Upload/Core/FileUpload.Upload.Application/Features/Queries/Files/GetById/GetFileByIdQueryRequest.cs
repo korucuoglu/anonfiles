@@ -13,8 +13,8 @@ namespace FileUpload.Upload.Application.Features.Queries.Files.GetById
 {
     public class GetFileByIdQueryRequest : IRequest<Response<GetFileDto>>
     {
-        public Guid UserId { get; set; }
-        public Guid FileId { get; set; }
+        public int UserId { get; set; }
+        public int FileId { get; set; }
     }
     public class GetAllFilesQueryRequestHandler : IRequestHandler<GetFileByIdQueryRequest, Response<GetFileDto>>
     {
