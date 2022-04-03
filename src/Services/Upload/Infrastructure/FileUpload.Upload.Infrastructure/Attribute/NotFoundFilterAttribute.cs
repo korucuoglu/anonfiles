@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Linq;
 using System.Threading.Tasks;
+using FileUpload.Shared.Services;
 
 namespace FileUpload.Upload.Filters
 {
@@ -13,16 +14,26 @@ namespace FileUpload.Upload.Filters
     {
         private readonly IReadRepository<TEntity> _service;
         private readonly ISharedIdentityService _sharedIdentityService;
+        private readonly IHashService _hashService;
 
-        public NotFoundFilterAttribute(IReadRepository<TEntity> service, ISharedIdentityService sharedIdentityService)
+        public NotFoundFilterAttribute(IReadRepository<TEntity> service, ISharedIdentityService sharedIdentityService, IHashService hashService)
         {
             _service = service;
             _sharedIdentityService = sharedIdentityService;
+            _hashService = hashService;
         }
 
         public bool GetData(string id)
         {
-            return _service.Any(x => x.Id.ToString() == id && x.ApplicationUserId == _sharedIdentityService.GetUserId, tracking: false);
+
+            int decodeId = _hashService.Decode(id);
+
+            if (decodeId == 0) return false;
+           
+            return _service.Any(x => x.Id == decodeId && x.ApplicationUserId == _sharedIdentityService.GetUserId, tracking: false);
+
+
+
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -46,7 +57,6 @@ namespace FileUpload.Upload.Filters
                 }
 
                 return null;
-
             }
 
             var id = GetId();
@@ -66,5 +76,5 @@ namespace FileUpload.Upload.Filters
         }
     }
 
-   
+
 }

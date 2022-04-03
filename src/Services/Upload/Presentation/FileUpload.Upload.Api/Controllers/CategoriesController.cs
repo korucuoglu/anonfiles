@@ -8,6 +8,7 @@ using FileUpload.Shared.Base;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using FileUpload.Shared.Services;
 
 namespace FileUpload.Upload.Controllers
 {
@@ -16,10 +17,12 @@ namespace FileUpload.Upload.Controllers
     public class CategoriesController : BaseApiController
     {
         private readonly ICategoryService _categoryService;
+        private readonly IHashService _hashService;
 
-        public CategoriesController(ICategoryService categoryService)
+        public CategoriesController(ICategoryService categoryService, IHashService hashService)
         {
             _categoryService = categoryService;
+            _hashService = hashService;
         }
 
 
@@ -33,9 +36,11 @@ namespace FileUpload.Upload.Controllers
 
         [HttpGet("{id}")]
         [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<IActionResult> GetByIdAsync(string id)
         {
-            var data = await _categoryService.GetByIdAsync(id);
+            int ids = _hashService.Decode(id);
+
+            var data = await _categoryService.GetByIdAsync(ids);
 
             return Response(data);
 
