@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using FileUpload.Shared.Services;
 
 namespace FileUpload.Upload.Infrastructure
 {
@@ -23,6 +24,7 @@ namespace FileUpload.Upload.Infrastructure
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IMinioService, MinioService>();
+            services.AddScoped<IHashService, HashService>();
             services.AddScoped(typeof(NotFoundFilterAttribute<>));
 
             services.AddAuthentication().AddJwtBearer(options =>

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hashids.net" Version="1.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.15" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
