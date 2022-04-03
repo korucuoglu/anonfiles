@@ -10,12 +10,14 @@ namespace FileUpload.Upload.Application.Interfaces.Services
 {
     public interface IFileService
     {
-        Task<Response<AddFileDto>> UploadAsync(IFormFile[] files, List<int> CategoriesId);
+        Task<Response<AddFileDto>> UploadAsync(IFormFile file, List<int> CategoriesId);
         Task<Response<FilesPagerViewModel>> GetAllFiles(FileFilterModel model);
         Task<Response<GetFileDto>> GetFileById(int id);
-        Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, int fileId);
+        Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, int id);
 
-        Task<Response<NoContent>> Download(string id);
+        Task<Response<NoContent>> Download(int id);
+
+        Task<Response<string>> GetFileKeyById(int id);
 
 
     }

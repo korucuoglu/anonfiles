@@ -1,6 +1,7 @@
-﻿using FileUpload.Upload.Application.Interfaces.Services;
+﻿using FileUpload.Shared.Const;
+using FileUpload.Upload.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
-using System;
+using System.Security.Claims;
 
 namespace FileUpload.Upload.Infrastructure.Services
 {
@@ -13,7 +14,8 @@ namespace FileUpload.Upload.Infrastructure.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public int GetUserId =>  int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("sub").Value.ToString());
-
+        public int GetUserId =>  int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue("sub"));
+        public string GetMail => _httpContextAccessor.HttpContext.User.FindFirstValue(CustomCustomClaimTypes.Mail);
+        public string GetUserName => _httpContextAccessor.HttpContext.User.FindFirstValue(CustomCustomClaimTypes.UserName);
     }
 }

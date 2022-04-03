@@ -33,11 +33,9 @@ namespace FileUpload.IdentityServer
 
         public static IEnumerable<IdentityResource> IdentityResources => new IdentityResource[]
         {
-             new IdentityResources.Email(),
+                       new IdentityResources.Email(),
                        new IdentityResources.OpenId(),
                        new IdentityResources.Profile(),
-                       new IdentityResource(){ Name="roles", DisplayName="Roles", Description="Kullanıcı rolleri", UserClaims=new []{ "role"} }
-
         };
 
         public static IEnumerable<Client> Clients => new Client[]

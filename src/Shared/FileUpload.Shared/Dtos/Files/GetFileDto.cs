@@ -8,5 +8,7 @@ namespace FileUpload.Shared.Dtos.Files
         public string FileName { get; set; }
         public DateTime CreatedDate { get; set; }
         public long Size { get; set; }
+        public string FileKey { get; set; }
+
     }
 }

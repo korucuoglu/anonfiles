@@ -8,11 +8,14 @@ namespace FileUpload.Data.Entity
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser<int>
     {
+
         public ApplicationUser()
         {
-            UserInfo = new();
+            UserInfo = new()
+            {
+                UsedSpace = 0
+            };
         }
-
         public UserInfo UserInfo { get; set; }
     }
 }

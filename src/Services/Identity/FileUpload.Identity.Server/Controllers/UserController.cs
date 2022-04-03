@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using static IdentityServer4.IdentityServerConstants;
@@ -53,12 +54,14 @@ namespace FileUpload.IdentityServer.Controllers
 
                     return Shared.Wrappers.Response<NoContent>.Fail(errors, 500);
                 }
+                await _userManager.AddClaimAsync(user, new Claim("role", "user"));
+                await _userManager.AddClaimAsync(user, new Claim("email", user.Email));
+
 
                 string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 string encodedConfirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 
                 string link = $"{configuration.GetSection("MVCClient").Value}/user/confirmEmail?userId={user.Id}&token={encodedConfirmationToken}";
-
 
                 UserCreatedEvent userCreatedEvent = new()
                 {

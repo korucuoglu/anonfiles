@@ -44,15 +44,6 @@ namespace FileUpload.Upload.Persistence.Context
 
             });
 
-            builder.Entity<ApplicationUser>(b =>
-            {
-                b.Property(u => u.Id).UseIdentityColumn().UseSerialColumn();
-            });
-
-            builder.Entity<ApplicationRole>(b =>
-            {
-                b.Property(u => u.Id).UseIdentityColumn().UseSerialColumn();
-            });
 
             Seed.AddData(builder);
             
