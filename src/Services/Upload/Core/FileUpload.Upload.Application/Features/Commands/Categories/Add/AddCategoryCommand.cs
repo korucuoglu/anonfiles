@@ -6,7 +6,6 @@ using FileUpload.Upload.Domain.Entities;
 using FileUpload.Shared.Dtos.Categories;
 using FluentValidation;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +14,6 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories.Add
     public class AddCategoryCommand : IRequest<Response<GetCategoryDto>>
     {
         public string Title { get; set; }
-
         public int ApplicationUserId { get; set; }
     }
     public class AddCategoryCommandValidator : AbstractValidator<AddCategoryCommand>

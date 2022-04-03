@@ -8,7 +8,7 @@ namespace FileUpload.Shared.Services
 
         public HashService()
         {
-            _hashids = new Hashids("my_saltkey");
+            _hashids = new Hashids("my_saltkey", 8);
         }
 
         public string Encode(int id)
@@ -18,8 +18,15 @@ namespace FileUpload.Shared.Services
 
         public int Decode(string key)
         {
-            return _hashids.DecodeSingle(key);
+            if (_hashids.TryDecodeSingle(key, out int number))
+            {
+                return number;
+            }
+
+            return 0;
         }
-        
     }
+
 }
+
+
