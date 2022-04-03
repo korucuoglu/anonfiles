@@ -73,11 +73,11 @@ namespace FileUpload.Upload.Infrastructure.Services
                 await _fileHub.Clients.Client(ConnnnectionId).FilesUploadStarting(file.FileName);
             }
 
-            var minioResult = await _minioService.Upload(file);
+            var fileKey = await _minioService.Upload(file);
 
-            if (!minioResult.IsSuccessful)
+            if (!fileKey.IsSuccessful)
             {
-                data = Response<AddFileDto>.Fail(minioResult.Errors.First(), 500);
+                data = Response<AddFileDto>.Fail(fileKey.Errors.First(), 500);
             }
             else
             {
@@ -87,7 +87,7 @@ namespace FileUpload.Upload.Infrastructure.Services
                     FileName = file.FileName,
                     Size = file.Length,
                     Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper(),
-                    FileKey = minioResult.Value,
+                    FileKey = fileKey.Value,
                 };
 
                 if (CategoriesId.Any())
