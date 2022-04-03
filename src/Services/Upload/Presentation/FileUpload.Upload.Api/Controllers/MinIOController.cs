@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FileUpload.Shared.Wrappers;
+using FileUpload.Shared.Services;
 
 namespace FileUpload.Upload.Controllers
 {
@@ -18,10 +19,12 @@ namespace FileUpload.Upload.Controllers
     public class MinIOController : BaseApiController
     {
         private readonly IFileService _service;
+        private readonly IHashService _hashService;
 
-        public MinIOController(IFileService service)
+        public MinIOController(IFileService service, IHashService hashService)
         {
             _service = service;
+            _hashService = hashService;
         }
 
         [HttpPost]
@@ -51,10 +54,13 @@ namespace FileUpload.Upload.Controllers
             return Response(data);
         }
 
+        [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
         [HttpGet("myfiles/{id}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<IActionResult> GetByIdAsync(string id)
         {
-            var data = await _service.GetFileById(id);
+            int hasId = _hashService.Decode(id);
+
+            var data = await _service.GetFileById(hasId);
 
             return Response(data);
 
@@ -62,11 +68,13 @@ namespace FileUpload.Upload.Controllers
 
         [HttpPost("{id}")]
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
-        public async Task<IActionResult> Remove([FromBody] FileFilterModel model, int id)
+        public async Task<IActionResult> Remove([FromBody] FileFilterModel model, string id)
         {
+            int hasId = _hashService.Decode(id);
+
             FileFilterModel filterModel = new(model);
 
-            var data = await _service.Remove(filterModel, id);
+            var data = await _service.Remove(filterModel, hasId);
 
             return Response(data);
 
@@ -74,9 +82,11 @@ namespace FileUpload.Upload.Controllers
 
         [HttpGet("download/{id}")]
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
-        public async Task<IActionResult> Download(int id)
+        public async Task<IActionResult> Download(string id)
         {
-            var data = await _service.Download(id);
+            int hasId = _hashService.Decode(id);
+
+            var data = await _service.Download(hasId);
 
             return Response(data);
 

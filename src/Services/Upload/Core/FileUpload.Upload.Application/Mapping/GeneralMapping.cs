@@ -35,7 +35,11 @@ namespace FileUpload.Upload.Application.Mapping
 
             #region File
 
-              CreateMap<File, GetFileDto>();
+            CreateMap<File, GetFileDto>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => _hashService.Encode(src.Id)));
+
+            // CreateMap<AddFileDto, File>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => _hashService.Decode(src.FileId)));
+
+            CreateMap<File, AddFileDto>().ForMember(dest => dest.FileId, opt => opt.MapFrom(src => _hashService.Encode(src.Id)));
 
             #endregion
         }

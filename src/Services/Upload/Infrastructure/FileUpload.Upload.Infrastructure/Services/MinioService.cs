@@ -103,7 +103,6 @@ namespace FileUpload.Upload.Infrastructure.Services
         }
         public async Task<Response<NoContent>> Download(string fileKey)
         {
-
             bool result = await FileExist(_sharedIdentityService.GetUserName, fileKey);
 
             if (!result)
@@ -122,7 +121,7 @@ namespace FileUpload.Upload.Infrastructure.Services
                 };
                 var data = client.GetPreSignedURL(request);
 
-                return Response<NoContent>.Success(message: data);
+                return Response<NoContent>.Success(message: data, 200);
             }
 
             catch (Exception e)
