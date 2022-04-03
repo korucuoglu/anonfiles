@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileUpload.Shared.Const
+﻿namespace FileUpload.Shared.Const
 {
     public static class RabbitMQMail
     {

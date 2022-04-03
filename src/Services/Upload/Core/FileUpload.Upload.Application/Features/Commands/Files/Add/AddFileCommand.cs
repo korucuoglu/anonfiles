@@ -14,7 +14,6 @@ namespace FileUpload.Upload.Application.Features.Commands.Files.Add
     public class AddFileCommand : IRequest<Response<bool>>
     {
         public File File { get; set; }
-        public int AplicationUserId { get; set; }
     }
     public class AddFileCommandValidator : AbstractValidator<AddFileCommand>
     {
@@ -36,7 +35,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files.Add
         public async Task<Response<bool>> Handle(AddFileCommand request, CancellationToken cancellationToken)
         {
 
-            var userInfo = await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.AplicationUserId);
+            var userInfo = await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.File.ApplicationUserId);
 
             userInfo.UsedSpace += request.File.Size;
 

@@ -5,6 +5,7 @@
 using FileUpload.Data.Entity;
 using FileUpload.Identity.Server.Services;
 using FileUpload.IdentityServer.Services;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -32,7 +33,9 @@ namespace FileUpload.IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
 
+
             services.AddHealthChecks();
+
            
             services.AddSingleton<RabbitMQClientService>();
             services.AddSingleton<RabbitMQPublisher>();
@@ -83,6 +86,7 @@ namespace FileUpload.IdentityServer
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>()
+                .AddProfileService<IdentityClaimsProfileService>()
                 .AddDeveloperSigningCredential();
 
 

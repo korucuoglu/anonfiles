@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FileUpload.Shared.Wrappers;
+using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Application.Interfaces.Services
@@ -6,13 +7,11 @@ namespace FileUpload.Upload.Application.Interfaces.Services
     public interface IMinioService
     {
 
-        public Task CreateBucket(string bucketName);
-
-        public Task<bool> Upload(IFormFile file);
-
         public Task<bool> BucketExist(string bucketName);
-
-        public Task Remove(string fileId);
-        public string Download(string fileId);
+        public Task<bool> FileExist(string bucketName, string fileKey);
+        public Task<string> CreateBucket();
+        public Task<Response<string>> Upload(IFormFile file);
+        public Task<Response<NoContent>> Remove(string fileKey);
+        public Task<Response<NoContent>> Download(string fileKey);
     }
 }

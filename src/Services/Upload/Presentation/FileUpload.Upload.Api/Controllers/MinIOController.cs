@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
+using FileUpload.Shared.Wrappers;
 
 namespace FileUpload.Upload.Controllers
 {
@@ -28,9 +29,15 @@ namespace FileUpload.Upload.Controllers
         {
             List<int> categoryIds = string.IsNullOrEmpty(categories) ? new List<int>() : JsonSerializer.Deserialize<List<int>>(categories);
 
-            var data = await _service.UploadAsync(files, categoryIds);
+            List<Response<AddFileDto>> result = new();
 
-            return Response(data);
+            foreach (var file in files)
+            {
+                var data = await _service.UploadAsync(file, categoryIds);
+
+                result.Add(data);
+            }
+            return Ok(result);
 
         }
 
@@ -67,7 +74,7 @@ namespace FileUpload.Upload.Controllers
 
         [HttpGet("download/{id}")]
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
-        public async Task<IActionResult> Download(string id)
+        public async Task<IActionResult> Download(int id)
         {
             var data = await _service.Download(id);
 

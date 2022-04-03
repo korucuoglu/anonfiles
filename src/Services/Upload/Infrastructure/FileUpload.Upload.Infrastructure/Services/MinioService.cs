@@ -2,6 +2,7 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Util;
+using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -27,9 +28,13 @@ namespace FileUpload.Upload.Infrastructure.Services
             client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
             _sharedIdentityService = sharedIdentityService;
         }
-
-        public async Task CreateBucket(string bucketName)
+        public async Task<bool> BucketExist(string bucketName)
         {
+            return await AmazonS3Util.DoesS3BucketExistV2Async(client, bucketName);
+        }
+        public async Task<string> CreateBucket()
+        {
+            string bucketName = _sharedIdentityService.GetUserName;
 
             if (!await BucketExist(bucketName))
             {
@@ -40,25 +45,18 @@ namespace FileUpload.Upload.Infrastructure.Services
                 };
                 await client.PutBucketAsync(putBucketRequest);
             }
-        }
-        public async Task<bool> BucketExist(string bucketName)
-        {
-            return await AmazonS3Util.DoesS3BucketExistV2Async(client, bucketName);
-        }
 
-        public async Task<bool> Upload(IFormFile file)
-        {
-            bool result = false;
+            return bucketName;
 
+        }
+        public async Task<Response<string>> Upload(IFormFile file)
+        {
             try
             {
-                var guid = Guid.NewGuid().ToString();
-                await CreateBucket(guid);
-
                 var stream = file.OpenReadStream();
                 PutObjectRequest putObjectRequest = new()
                 {
-                    BucketName = guid,
+                    BucketName = await CreateBucket(),
                     InputStream = stream,
                     AutoCloseStream = true,
                     Key = Guid.NewGuid().ToString(),
@@ -69,40 +67,86 @@ namespace FileUpload.Upload.Infrastructure.Services
                 putObjectRequest.Headers.ContentDisposition = $"attachment; filename=\"{encodedFilename}\"";
                 await client.PutObjectAsync(putObjectRequest);
 
-                result = true;
+               return Response<string>.Success(data: putObjectRequest.Key);
             }
 
-            catch
+            catch (Exception e)
             {
-                result = false;
+               return Response<string>.Fail(e.Message);
             }
 
-            return await Task.FromResult(result);
-
-
         }
-
-        public async Task Remove(string fileId)
+        public async Task<Response<NoContent>> Remove(string fileKey)
         {
-            var deleteObjectRequest = new DeleteObjectRequest
+            bool result = await FileExist(_sharedIdentityService.GetUserName, fileKey);
+
+            if (!result)
             {
-                BucketName = _sharedIdentityService.GetUserId.ToString(),
-                Key = fileId.ToString()
+                return Response<NoContent>.Fail("Böyle bir dosya bulunamadı");
+            }
+            try
+            {
+                var deleteObjectRequest = new DeleteObjectRequest
+                {
+                    BucketName = await CreateBucket(),
+                    Key = fileKey
+                };
+
+                await client.DeleteObjectAsync(deleteObjectRequest);
+
+                return Response<NoContent>.Success();
+            }
+            catch (Exception e)
+            {
+               return Response<NoContent>.Fail(e.Message);
+            }
+        }
+        public async Task<Response<NoContent>> Download(string fileKey)
+        {
+
+            bool result = await FileExist(_sharedIdentityService.GetUserName, fileKey);
+
+            if (!result)
+            {
+                return Response<NoContent>.Fail("Böyle bir dosya bulunamadı");
+            }
+
+            try
+            {
+                var request = new GetPreSignedUrlRequest()
+                {
+                    BucketName = await CreateBucket(),
+                    Key = fileKey,
+                    Protocol = Protocol.HTTP,
+                    Expires = DateTime.Now.AddMinutes(30)
+                };
+                var data = client.GetPreSignedURL(request);
+
+                return Response<NoContent>.Success(message: data);
+            }
+
+            catch (Exception e)
+            {
+                return Response<NoContent>.Fail(e.Message);
+            }
+        }
+        public async Task<bool> FileExist(string bucketName, string fileKey)
+        {
+            GetObjectMetadataRequest request = new GetObjectMetadataRequest()
+            {
+                BucketName = bucketName,
+                Key = fileKey
             };
 
-            await client.DeleteObjectAsync(deleteObjectRequest);
-        }
-
-        public string Download(string fileId)
-        {
-            var request = new GetPreSignedUrlRequest()
+            try
             {
-                BucketName = _sharedIdentityService.GetUserId.ToString(),
-                Key = fileId,
-                Protocol = Protocol.HTTP,
-                Expires = DateTime.Now.AddMinutes(30)
-            };
-            return client.GetPreSignedURL(request);
+                await client.GetObjectMetadataAsync(request);
+                return true;
+            }
+            catch 
+            {
+                return false;
+            }
         }
     }
 }

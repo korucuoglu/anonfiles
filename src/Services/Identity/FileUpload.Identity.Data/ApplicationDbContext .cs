@@ -29,7 +29,6 @@ namespace FileUpload.Data.Entity
             builder.Entity<UserInfo>(b =>
             {
                 b.Property(u => u.Id).UseIdentityColumn().UseSerialColumn();
-                b.Property(x => x.UsedSpace).HasDefaultValue(0);
             });
 
 
