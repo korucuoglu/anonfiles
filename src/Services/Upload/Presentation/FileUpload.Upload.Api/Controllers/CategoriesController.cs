@@ -6,7 +6,6 @@ using FileUpload.Upload.Domain.Entities;
 using FileUpload.Upload.Infrastructure.Attribute;
 using FileUpload.Shared.Base;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 using FileUpload.Shared.Services;
 

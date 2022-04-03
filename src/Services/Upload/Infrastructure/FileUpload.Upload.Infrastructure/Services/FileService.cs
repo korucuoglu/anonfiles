@@ -60,12 +60,9 @@ namespace FileUpload.Upload.Infrastructure.Services
 
             return await _mediator.Send(query);
         }
-
         public async Task<Response<AddFileDto>> UploadAsync(IFormFile file, List<int> CategoriesId)
         {
-
-            Response<AddFileDto> data = new();
-
+           
             var ConnnnectionId = HubData.ClientsData.Where(x => x.UserId == "1").Select(x => x.ConnectionId).FirstOrDefault();
 
             if (!string.IsNullOrEmpty(ConnnnectionId))
@@ -73,14 +70,15 @@ namespace FileUpload.Upload.Infrastructure.Services
                 await _fileHub.Clients.Client(ConnnnectionId).FilesUploadStarting(file.FileName);
             }
 
-            var fileKey = await _minioService.Upload(file);
+            async Task<Response<AddFileDto>> GetResult()
+            {
+                var fileKey = await _minioService.Upload(file);
 
-            if (!fileKey.IsSuccessful)
-            {
-                data = Response<AddFileDto>.Fail(fileKey.Errors.First(), 500);
-            }
-            else
-            {
+                if (!fileKey.IsSuccessful)
+                {
+                    return Response<AddFileDto>.Fail(fileKey.Errors.First(), 500);
+                }
+
                 Domain.Entities.File fileEntity = new()
                 {
                     ApplicationUserId = _sharedIdentityService.GetUserId,
@@ -103,24 +101,17 @@ namespace FileUpload.Upload.Infrastructure.Services
                     File = fileEntity,
                 };
 
-                var result = await _mediator.Send(command);
-
-                if (result.IsSuccessful)
-                {
-                    data = Response<AddFileDto>.Success(new AddFileDto { FileId = fileEntity.Id, FileName = file.FileName }, 200);
-                }
-                else
-                {
-                    data = Response<AddFileDto>.Fail("veritabanına kayıt yapılırken hata oluştu", 500);
-                }
+                return await _mediator.Send(command);
             }
+
+            var result = await GetResult();
 
             if (!string.IsNullOrEmpty(ConnnnectionId))
             {
-                await _fileHub.Clients.Client(ConnnnectionId).FilesUploaded(data);
+                await _fileHub.Clients.Client(ConnnnectionId).FilesUploaded(result);
             }
 
-            return data;
+            return result;
         }
 
         public async Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, int id)

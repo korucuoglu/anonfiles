@@ -8,10 +8,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FileUpload.Shared.Dtos.Files;
+using AutoMapper;
 
 namespace FileUpload.Upload.Application.Features.Commands.Files.Add
 {
-    public class AddFileCommand : IRequest<Response<bool>>
+    public class AddFileCommand : IRequest<Response<AddFileDto>>
     {
         public File File { get; set; }
     }
@@ -23,16 +25,18 @@ namespace FileUpload.Upload.Application.Features.Commands.Files.Add
         }
     }
 
-    public class AddFileCommandHandler : IRequestHandler<AddFileCommand, Response<bool>>
+    public class AddFileCommandHandler : IRequestHandler<AddFileCommand, Response<AddFileDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public AddFileCommandHandler(IUnitOfWork unitOfWork)
+        public AddFileCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<Response<bool>> Handle(AddFileCommand request, CancellationToken cancellationToken)
+        public async Task<Response<AddFileDto>> Handle(AddFileCommand request, CancellationToken cancellationToken)
         {
 
             var userInfo = await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.File.ApplicationUserId);
@@ -41,16 +45,18 @@ namespace FileUpload.Upload.Application.Features.Commands.Files.Add
 
             _unitOfWork.WriteRepository<UserInfo>().Update(userInfo);
 
-            await _unitOfWork.WriteRepository<File>().AddAsync(request.File);
+            var data = await _unitOfWork.WriteRepository<File>().AddAsync(request.File);
 
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 
             if (!result)
             {
-                return Response<bool>.Fail(result, 200);
+                return Response<AddFileDto>.Fail("Dosyanın kaydedilmesi sırasında hata meydana geldi", 500);
             }
 
-            return Response<bool>.Success(result, 200);
+            var mapperData = _mapper.Map<AddFileDto>(data);
+
+            return Response<AddFileDto>.Success(mapperData, 200);
         }
     }
 }
