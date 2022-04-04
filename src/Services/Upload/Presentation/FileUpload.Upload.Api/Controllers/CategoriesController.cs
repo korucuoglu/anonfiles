@@ -1,6 +1,5 @@
 ﻿using FileUpload.Upload.Filters;
-using FileUpload.Upload.Application.Features.Commands.Categories.Add;
-using FileUpload.Upload.Application.Features.Commands.Categories.Update;
+using FileUpload.Upload.Application.Features.Commands.Categories;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Domain.Entities;
 using FileUpload.Upload.Infrastructure.Attribute;

@@ -7,7 +7,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FileUpload.Upload.Application.Features.Commands.Categories.Delete
+namespace FileUpload.Upload.Application.Features.Commands.Categories
 {
     public class DeleteCategoryCommand : IRequest<Response<bool>>
     {

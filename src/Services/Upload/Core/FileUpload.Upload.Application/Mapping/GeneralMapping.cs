@@ -2,8 +2,7 @@
 using FileUpload.Shared.Dtos.Categories;
 using FileUpload.Shared.Dtos.Files;
 using FileUpload.Shared.Services;
-using FileUpload.Upload.Application.Features.Commands.Categories.Add;
-using FileUpload.Upload.Application.Features.Commands.Categories.Update;
+using FileUpload.Upload.Application.Features.Commands.Categories;
 using FileUpload.Upload.Domain.Entities;
 using System.Collections.Generic;
 

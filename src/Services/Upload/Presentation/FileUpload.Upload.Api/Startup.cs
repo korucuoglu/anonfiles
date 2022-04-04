@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using FluentValidation.AspNetCore;
-using FileUpload.Upload.Application.Features.Commands.Categories.Add;
+using FileUpload.Upload.Application.Features.Commands.Categories;
 using FileUpload.Upload.Infrastructure.Hub;
 using Microsoft.AspNetCore.Http;
 using FileUpload.Shared.Middlewares;

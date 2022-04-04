@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FileUpload.Upload.Application.Mapping;
 
-namespace FileUpload.Upload.Application.Features.Commands.Categories.Add
+namespace FileUpload.Upload.Application.Features.Commands.Categories
 {
     public class AddCategoryCommand : IRequest<Response<GetCategoryDto>>
     {
