@@ -67,7 +67,7 @@ namespace FileUpload.Upload.Controllers
 
         [HttpPost("{id}")]
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
-        public async Task<IActionResult> Remove([FromBody] FileFilterModel model, string id)
+        public async Task<IActionResult> Remove(string id, [FromBody] FileFilterModel model)
         {
             int hasId = _hashService.Decode(id);
 

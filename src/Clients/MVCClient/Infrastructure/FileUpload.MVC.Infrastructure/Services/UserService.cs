@@ -14,7 +14,7 @@ namespace FileUpload.MVC.Infrastructure.Services
     public class UserService : IUserService
     {
         private readonly HttpClient _client;
-        
+
         public UserService(HttpClient client)
         {
             _client = client;
@@ -24,35 +24,42 @@ namespace FileUpload.MVC.Infrastructure.Services
         {
             var content = await Helper.Helper.GetMultipartContentAsync(fileDto);
 
-            return await _client.CustomPostAsyncWithHttpContent<AddFileDto>("minio", content, true);
+            var data = await _client.CustomPostAsync<List<Response<AddFileDto>>>("minio", content);
+
+            return new AddFileDto();
         }
 
         public async Task<FilesPagerViewModel> GetMyFiles(FileFilterModel model)
         {
-            return await _client.CustomPostAsync<FilesPagerViewModel, FileFilterModel>("minio/myfiles", model, false);
+            var data =  await _client.CustomPostAsync<Response<FilesPagerViewModel>, FileFilterModel>("minio/myfiles", model);
 
+            return data.Value;
         }
 
         public async Task<Response<NoContent>> Download(string id)
         {
-            return await _client.CustomGetAsyncReturnsResponse<NoContent>($"minio/download/{id}", true);
+            return await _client.CustomGetAsync<Response<NoContent>>($"minio/download/{id}");
         }
 
         public async Task<Response<FilePagerViewModel>> DeleteFile(FileFilterModel model, string id)
         {
-            return await _client.CustomPostAsyncReturnsResponse<FilePagerViewModel, FileFilterModel>($"minio/{id}", model, true);
+            return await _client.CustomPostAsync<Response<FilePagerViewModel>, FileFilterModel>($"minio/{id}", model);
 
         }
 
         public async Task<List<GetCategoryDto>> GetCategories()
         {
-            return await _client.CustomGetAsync<List<GetCategoryDto>>("categories", true);
-         
+            var data = await _client.CustomGetAsync<Response<List<GetCategoryDto>>>("categories");
+
+            return data.Value;
+
         }
 
         public async Task<GetCategoryDto> AddCategory(AddCategoryDto dto)
         {
-            return await _client.CustomPostAsync<GetCategoryDto, AddCategoryDto>("categories", dto, true);
+            var data = await _client.CustomPostAsync<Response<GetCategoryDto>, AddCategoryDto>("categories", dto);
+
+            return data.Value;
         }
     }
 }
