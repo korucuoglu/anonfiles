@@ -3,7 +3,6 @@ using FileUpload.Upload.Application.Interfaces.Redis;
 using FileUpload.Upload.Filters;
 using FileUpload.Upload.Infrastructure.Services.Redis;
 using FileUpload.Upload.Application.Interfaces.Services;
-using FileUpload.Upload.Infrastructure.Attribute;
 using FileUpload.Upload.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;

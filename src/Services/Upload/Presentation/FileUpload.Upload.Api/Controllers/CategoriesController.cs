@@ -37,9 +37,9 @@ namespace FileUpload.Upload.Controllers
         [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
         public async Task<IActionResult> GetByIdAsync(string id)
         {
-            int ids = _hashService.Decode(id);
+            int hasId = _hashService.Decode(id);
 
-            var data = await _categoryService.GetByIdAsync(ids);
+            var data = await _categoryService.GetByIdAsync(hasId);
 
             return Result(data);
 
@@ -54,7 +54,6 @@ namespace FileUpload.Upload.Controllers
             return Result(data);
         }
 
-        [HttpPut]
         [ValidationFilter]
         [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
         public async Task<IActionResult> UpdateAsync(UpdateCategoryCommand dto)
@@ -67,9 +66,11 @@ namespace FileUpload.Upload.Controllers
 
         [HttpDelete("{id}")]
         [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
-        public async Task<IActionResult> DeleteByIdAsync(int id)
+        public async Task<IActionResult> DeleteByIdAsync(string id)
         {
-            var data = await _categoryService.DeleteByIdAsync(id);
+            int hasId = _hashService.Decode(id);
+
+            var data = await _categoryService.DeleteByIdAsync(hasId);
 
             return Result(data);
 

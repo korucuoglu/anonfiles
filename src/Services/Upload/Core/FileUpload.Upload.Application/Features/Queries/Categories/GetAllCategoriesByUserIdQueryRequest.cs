@@ -1,14 +1,13 @@
-﻿using AutoMapper;
-using FileUpload.Upload.Application.Interfaces.UnitOfWork;
+﻿using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Domain.Entities;
 using FileUpload.Shared.Dtos.Categories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using FileUpload.Upload.Application.Mapping;
 
 namespace FileUpload.Upload.Application.Features.Queries.Categories.GetAll
 {
@@ -18,11 +17,9 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories.GetAll
     }
     public class GetAllCategoriesQueryRequestHandler : IRequestHandler<GetAllCategoriesQueryRequest, Response<List<GetCategoryDto>>>
     {
-        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        public GetAllCategoriesQueryRequestHandler( IMapper mapper, IUnitOfWork unitOfWork)
+        public GetAllCategoriesQueryRequestHandler( IUnitOfWork unitOfWork)
         {
-            _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
 
@@ -30,7 +27,7 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories.GetAll
         {
             var data = _unitOfWork.ReadRepository<Category>().Where(x => x.ApplicationUserId == request.UserId, false);
 
-            var mapperData = await _mapper.ProjectTo<GetCategoryDto>(data).ToListAsync();
+            var mapperData = await ObjectMapper.Mapper.ProjectTo<GetCategoryDto>(data).ToListAsync();
 
             return Response<List<GetCategoryDto>>.Success(mapperData, 200);
 

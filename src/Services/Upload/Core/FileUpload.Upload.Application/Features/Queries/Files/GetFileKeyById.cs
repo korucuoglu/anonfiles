@@ -1,11 +1,8 @@
-﻿using AutoMapper;
-using FileUpload.Upload.Application.Interfaces.UnitOfWork;
+﻿using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Domain.Entities;
-using FileUpload.Shared.Dtos.Files;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
