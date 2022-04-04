@@ -11,7 +11,6 @@ using Microsoft.Extensions.Hosting;
 using FluentValidation.AspNetCore;
 using FileUpload.Upload.Application.Features.Commands.Categories.Add;
 using FileUpload.Upload.Infrastructure.Hub;
-using FileUpload.Upload.Infrastructure.Services.Redis;
 using Microsoft.AspNetCore.Http;
 using FileUpload.Shared.Middlewares;
 
@@ -35,8 +34,6 @@ namespace FileUpload.Upload
             services.AddPersistenceServices(Configuration);
             services.AddInfrastructureServices(Configuration);
 
-           
-
             services.AddControllers(opt =>
             {
                 var policy = new AuthorizationPolicyBuilder("Bearer").RequireAuthenticatedUser().Build();
@@ -48,7 +45,6 @@ namespace FileUpload.Upload
 
             }).
            AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<AddCategoryCommandValidator>());
-
            
         }
 

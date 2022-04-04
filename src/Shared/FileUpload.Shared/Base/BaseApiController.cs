@@ -6,7 +6,7 @@ namespace FileUpload.Shared.Base
     public class BaseApiController: ControllerBase
     {
         [NonAction]
-        public IActionResult Response<T>(Response<T> response)
+        public IActionResult Result<T>(Response<T> response)
         {
             return new ObjectResult(response)
             {
