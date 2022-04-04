@@ -7,14 +7,12 @@ namespace SendEmail.WorkerService.Services
     {
         private IConnection _connection;
         private IModel _channel;
-
-        IConfiguration configuration;
+        private readonly IConfiguration configuration;
 
         public RabbitMQClientService(IConfiguration configuration)
         {
             this.configuration = configuration;
         }
-
         public IModel Connect()
         {
             var connectionFactory = new ConnectionFactory() { HostName = configuration.GetSection("RabbitMQ").Value, DispatchConsumersAsync = true };

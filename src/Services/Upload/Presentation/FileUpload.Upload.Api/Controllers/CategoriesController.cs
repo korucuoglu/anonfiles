@@ -30,7 +30,7 @@ namespace FileUpload.Upload.Controllers
         {
             var data = await _categoryService.GetAllAsync();
 
-            return Response(data);
+            return Result(data);
         }
 
         [HttpGet("{id}")]
@@ -41,7 +41,7 @@ namespace FileUpload.Upload.Controllers
 
             var data = await _categoryService.GetByIdAsync(ids);
 
-            return Response(data);
+            return Result(data);
 
         }
 
@@ -51,7 +51,7 @@ namespace FileUpload.Upload.Controllers
         {
             var data = await _categoryService.AddAsync(dto);
 
-            return Response(data);
+            return Result(data);
         }
 
         [HttpPut]
@@ -61,7 +61,7 @@ namespace FileUpload.Upload.Controllers
         {
             var data = await _categoryService.UpdateAsync(dto);
 
-            return Response(data);
+            return Result(data);
 
         }
 
@@ -71,7 +71,7 @@ namespace FileUpload.Upload.Controllers
         {
             var data = await _categoryService.DeleteByIdAsync(id);
 
-            return Response(data);
+            return Result(data);
 
         }
     }

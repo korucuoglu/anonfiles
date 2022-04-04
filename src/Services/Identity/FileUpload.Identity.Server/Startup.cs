@@ -6,7 +6,6 @@ using FileUpload.Data.Entity;
 using FileUpload.Identity.Server.Services;
 using FileUpload.IdentityServer.Services;
 using FileUpload.Shared.Middlewares;
-using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,8 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RabbitMQ.Client;
-using System;
 
 namespace FileUpload.IdentityServer
 {

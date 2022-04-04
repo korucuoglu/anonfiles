@@ -5,7 +5,6 @@ using FileUpload.Shared.Base;
 using FileUpload.Shared.Dtos.Files;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -51,7 +50,7 @@ namespace FileUpload.Upload.Controllers
 
             var data = await _service.GetAllFiles(filterModel);
 
-            return Response(data);
+            return Result(data);
         }
 
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
@@ -62,7 +61,7 @@ namespace FileUpload.Upload.Controllers
 
             var data = await _service.GetFileById(hasId);
 
-            return Response(data);
+            return Result(data);
 
         }
 
@@ -76,7 +75,7 @@ namespace FileUpload.Upload.Controllers
 
             var data = await _service.Remove(filterModel, hasId);
 
-            return Response(data);
+            return Result(data);
 
         }
 
@@ -88,7 +87,7 @@ namespace FileUpload.Upload.Controllers
 
             var data = await _service.Download(hasId);
 
-            return Response(data);
+            return Result(data);
 
         }
     }
