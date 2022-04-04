@@ -13,6 +13,7 @@ using FileUpload.Upload.Application.Features.Commands.Categories.Add;
 using FileUpload.Upload.Infrastructure.Hub;
 using FileUpload.Upload.Infrastructure.Services.Redis;
 using Microsoft.AspNetCore.Http;
+using FileUpload.Shared.Middlewares;
 
 namespace FileUpload.Upload
 {
@@ -66,6 +67,8 @@ namespace FileUpload.Upload
                     await context.Response.WriteAsync("OK");
                 }
             });
+
+            app.UseGlobalExceptionHandler();
 
             app.UseCors("CorsPolicy");
 
