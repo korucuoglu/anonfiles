@@ -1,13 +1,12 @@
-﻿using AutoMapper;
-using FileUpload.Upload.Application.Interfaces.Redis;
+﻿using FileUpload.Upload.Application.Interfaces.Redis;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Domain.Entities;
 using FluentValidation;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FileUpload.Upload.Application.Mapping;
 
 namespace FileUpload.Upload.Application.Features.Commands.Categories.Update
 {
@@ -22,20 +21,18 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories.Update
     {
         public UpdateCategoryCommandValidator()
         {
-            RuleFor(x => x.Id).NotEmpty().NotNull().WithMessage("Id boş olamaz");
             RuleFor(x => x.Title).NotEmpty().NotNull().WithMessage("Title boş olamaz");
+            RuleFor(x => x.Id).NotEmpty().NotNull().WithMessage("Id boş olamaz");
         }
     }
 
     public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Response<bool>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly IRedisService _redisService;
 
-        public UpdateCategoryCommandHandler(IMapper mapper, IUnitOfWork unitOfWork, IRedisService redisService)
+        public UpdateCategoryCommandHandler( IUnitOfWork unitOfWork, IRedisService redisService)
         {
-            _mapper = mapper;
             _unitOfWork = unitOfWork;
             _redisService = redisService;
         }
@@ -43,17 +40,17 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories.Update
         public async Task<Response<bool>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
 
-            var category = _mapper.Map<Category>(request);
+            var category = ObjectMapper.Mapper.Map<Category>(request);
             _unitOfWork.WriteRepository<Category>().Update(category);
 
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 
             if (!result)
             {
-                return Response<bool>.Fail(result, 200);
+                return Response<bool>.Fail(result, 500);
             }
 
-            await _redisService.SetAsync($"categories-{request.Id}", category);
+            await _redisService.SetAsync($"categories-{category.Id}", category);
 
             return Response<bool>.Success(result, 200);
         }

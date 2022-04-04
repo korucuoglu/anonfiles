@@ -8,7 +8,6 @@ using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Shared.Dtos.Categories;
 using MediatR;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -40,11 +39,6 @@ namespace FileUpload.Upload.Infrastructure.Services
 
         public async Task<Response<GetCategoryDto>> GetByIdAsync(int id)
         {
-            if (await _redisService.IsKeyAsync($"categories-{id}"))
-            {
-                var data = await _redisService.GetAsync<GetCategoryDto>($"categories-{id}");
-                return Response<GetCategoryDto>.Success(data, 200);
-            }
 
             var query = new GetCategoryByIdQueryRequest()
             {

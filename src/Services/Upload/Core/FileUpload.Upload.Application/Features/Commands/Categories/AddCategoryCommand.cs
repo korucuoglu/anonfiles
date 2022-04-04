@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FileUpload.Upload.Application.Interfaces.Redis;
+﻿using FileUpload.Upload.Application.Interfaces.Redis;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Domain.Entities;
@@ -8,6 +7,7 @@ using FluentValidation;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using FileUpload.Upload.Application.Mapping;
 
 namespace FileUpload.Upload.Application.Features.Commands.Categories.Add
 {
@@ -26,20 +26,18 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories.Add
 
     public class AddCategoryCommandHandler : IRequestHandler<AddCategoryCommand, Response<GetCategoryDto>>
     {
-        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRedisService _redisService;
 
-        public AddCategoryCommandHandler(IMapper mapper, IUnitOfWork unitOfWork, IRedisService redisService)
+        public AddCategoryCommandHandler(IUnitOfWork unitOfWork, IRedisService redisService)
         {
-            _mapper = mapper;
             _unitOfWork = unitOfWork;
             _redisService = redisService;
         }
 
         public async Task<Response<GetCategoryDto>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = _mapper.Map<Category>(request);
+            var category = ObjectMapper.Mapper.Map<Category>(request);
             var entity = await _unitOfWork.WriteRepository<Category>().AddAsync(category);
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 
@@ -48,7 +46,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories.Add
                 return Response<GetCategoryDto>.Fail("Kaydetme sırasında hata meydana geldi",  500);
             }
 
-            GetCategoryDto dto = _mapper.Map<GetCategoryDto>(entity);
+            GetCategoryDto dto = ObjectMapper.Mapper.Map<GetCategoryDto>(entity);
 
             await _redisService.SetAsync($"categories-{entity.Id}", dto);
 

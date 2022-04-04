@@ -4,7 +4,6 @@ using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Domain.Entities;
 using FluentValidation;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 

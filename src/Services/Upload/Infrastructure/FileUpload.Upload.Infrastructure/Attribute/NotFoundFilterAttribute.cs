@@ -31,9 +31,6 @@ namespace FileUpload.Upload.Filters
             if (decodeId == 0) return false;
            
             return _service.Any(x => x.Id == decodeId && x.ApplicationUserId == _sharedIdentityService.GetUserId, tracking: false);
-
-
-
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)

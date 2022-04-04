@@ -3,13 +3,10 @@ using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Domain.Entities;
 using FluentValidation;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FileUpload.Shared.Dtos.Files;
-using AutoMapper;
+using FileUpload.Upload.Application.Mapping;
 
 namespace FileUpload.Upload.Application.Features.Commands.Files.Add
 {
@@ -28,12 +25,10 @@ namespace FileUpload.Upload.Application.Features.Commands.Files.Add
     public class AddFileCommandHandler : IRequestHandler<AddFileCommand, Response<AddFileDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
 
-        public AddFileCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public AddFileCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         public async Task<Response<AddFileDto>> Handle(AddFileCommand request, CancellationToken cancellationToken)
@@ -54,7 +49,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files.Add
                 return Response<AddFileDto>.Fail("Dosyanın kaydedilmesi sırasında hata meydana geldi", 500);
             }
 
-            var mapperData = _mapper.Map<AddFileDto>(data);
+            var mapperData = ObjectMapper.Mapper.Map<AddFileDto>(data);
 
             return Response<AddFileDto>.Success(mapperData, 200);
         }
