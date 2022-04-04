@@ -10,17 +10,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using FileUpload.Upload.Application.Mapping;
 
-namespace FileUpload.Upload.Application.Features.Queries.Files.GetById
+namespace FileUpload.Upload.Application.Features.Queries.Files
 {
     public class GetFileByIdQueryRequest : IRequest<Response<GetFileDto>>
     {
         public int UserId { get; set; }
         public int FileId { get; set; }
     }
-    public class GetAllFilesQueryRequestHandler : IRequestHandler<GetFileByIdQueryRequest, Response<GetFileDto>>
+    public class GetFileByIdQueryRequestHandler : IRequestHandler<GetFileByIdQueryRequest, Response<GetFileDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public GetAllFilesQueryRequestHandler(IUnitOfWork unitOfWork)
+        public GetFileByIdQueryRequestHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

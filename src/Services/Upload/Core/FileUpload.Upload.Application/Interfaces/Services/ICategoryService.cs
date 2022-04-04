@@ -1,9 +1,8 @@
-﻿using FileUpload.Upload.Application.Features.Commands.Categories.Add;
-using FileUpload.Upload.Application.Features.Commands.Categories.Update;
-using FileUpload.Shared.Wrappers;
+﻿using FileUpload.Shared.Wrappers;
 using FileUpload.Shared.Dtos.Categories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FileUpload.Upload.Application.Features.Commands.Categories;
 
 namespace FileUpload.Upload.Application.Interfaces.Services
 {

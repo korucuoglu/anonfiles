@@ -1,8 +1,4 @@
-﻿using Amazon.S3;
-using FileUpload.Upload.Application.Features.Commands.Files.Add;
-using FileUpload.Upload.Application.Features.Commands.Files.Delete;
-using FileUpload.Upload.Application.Features.Queries.Files.GetAll;
-using FileUpload.Upload.Application.Features.Queries.Files.GetById;
+﻿using FileUpload.Upload.Application.Features.Commands.Files;
 using FileUpload.Upload.Application.Interfaces.Hub;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Shared.Wrappers;
@@ -17,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using FileUpload.Upload.Application.Features.Queries.Files;
 
 namespace FileUpload.Upload.Infrastructure.Services
 {
@@ -26,7 +23,6 @@ namespace FileUpload.Upload.Infrastructure.Services
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IMinioService _minioService;
         private readonly IHubContext<FileHub, IFileHub> _fileHub;
-        public AmazonS3Client client { get; set; }
 
         public FileService(IMediator mediator,
             ISharedIdentityService sharedIdentityService,

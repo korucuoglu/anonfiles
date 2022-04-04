@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FileUpload.Upload.Application.Mapping;
 
-namespace FileUpload.Upload.Application.Features.Commands.Categories.Update
+namespace FileUpload.Upload.Application.Features.Commands.Categories
 {
     public class UpdateCategoryCommand : IRequest<Response<bool>>
     {

@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace FileUpload.Upload.Application.Features.Queries.Files.GetById
+namespace FileUpload.Upload.Application.Features.Queries.Files
 {
     public class GetFileKeyById : IRequest<Response<string>>
     {

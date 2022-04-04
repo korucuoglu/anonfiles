@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FileUpload.Upload.Application.Mapping;
 
-namespace FileUpload.Upload.Application.Features.Queries.Files.GetAll
+namespace FileUpload.Upload.Application.Features.Queries.Files
 {
     public class GetAllFilesQueryRequest : IRequest<Response<FilesPagerViewModel>>
     {

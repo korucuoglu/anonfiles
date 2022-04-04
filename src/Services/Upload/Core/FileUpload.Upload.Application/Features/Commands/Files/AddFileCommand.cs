@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using FileUpload.Shared.Dtos.Files;
 using FileUpload.Upload.Application.Mapping;
 
-namespace FileUpload.Upload.Application.Features.Commands.Files.Add
+namespace FileUpload.Upload.Application.Features.Commands.Files
 {
     public class AddFileCommand : IRequest<Response<AddFileDto>>
     {

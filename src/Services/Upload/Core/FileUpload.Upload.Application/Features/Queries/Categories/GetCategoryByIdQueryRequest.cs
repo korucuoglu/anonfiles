@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FileUpload.Upload.Application.Mapping;
 
-namespace FileUpload.Upload.Application.Features.Queries.Categories.GetById
+namespace FileUpload.Upload.Application.Features.Queries.Categories
 {
     public class GetCategoryByIdQueryRequest : IRequest<Response<GetCategoryDto>>
     {

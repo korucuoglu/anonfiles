@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FileUpload.Upload.Application.Mapping;
 
-namespace FileUpload.Upload.Application.Features.Commands.Files.Delete
+namespace FileUpload.Upload.Application.Features.Commands.Files
 {
     public class DeleteFileCommand : IRequest<Response<FilePagerViewModel>>
     {
