@@ -5,6 +5,7 @@
 using FileUpload.Data.Entity;
 using FileUpload.Identity.Server.Services;
 using FileUpload.IdentityServer.Services;
+using FileUpload.Shared.Middlewares;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -98,6 +99,8 @@ namespace FileUpload.IdentityServer
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseGlobalExceptionHandler();
 
             app.UseHealthChecks("/healt", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
             {
