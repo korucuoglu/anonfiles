@@ -110,28 +110,27 @@ namespace FileUpload.Upload.Infrastructure.Services
             return result;
         }
 
-        public async Task<Response<FilePagerViewModel>> Remove(FileFilterModel model, int id)
+        public async Task<Response<NoContent>> Remove(int id)
         {
 
             var fileKey = await GetFileKeyById(id);
 
             if (!fileKey.IsSuccessful)
             {
-                return Response<FilePagerViewModel>.Fail(fileKey.Errors.First(), 500);
+                return Response<NoContent>.Fail(fileKey.Errors.First(), 500);
             }
 
             var result = await _minioService.Remove(fileKey.Value);
 
             if (!result.IsSuccessful)
             {
-                return Response<FilePagerViewModel>.Fail(result.Errors.First());
+                return Response<NoContent>.Fail(result.Errors.First());
             }
 
             DeleteFileCommand command = new()
             {
                 UserId = _sharedIdentityService.GetUserId,
                 FileId = id,
-                FilterModel = model
             };
 
             return await _mediator.Send(command);

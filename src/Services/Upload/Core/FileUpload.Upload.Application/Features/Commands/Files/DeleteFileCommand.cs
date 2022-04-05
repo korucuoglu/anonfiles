@@ -11,11 +11,10 @@ using FileUpload.Upload.Application.Mapping;
 
 namespace FileUpload.Upload.Application.Features.Commands.Files
 {
-    public class DeleteFileCommand : IRequest<Response<FilePagerViewModel>>
+    public class DeleteFileCommand : IRequest<Response<NoContent>>
     {
         public int FileId { get; set; }
         public int UserId { get; set; }
-        public FileFilterModel FilterModel { get; set; }
     }
     public class DeleteFileCommandValidator : AbstractValidator<DeleteFileCommand>
     {
@@ -26,7 +25,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
         }
     }
 
-    public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand, Response<FilePagerViewModel>>
+    public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand, Response<NoContent>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -35,7 +34,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Response<FilePagerViewModel>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
+        public async Task<Response<NoContent>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
         {
             var fileReadRepository = _unitOfWork.ReadRepository<File>();
             var fileWriteRepository = _unitOfWork.WriteRepository<File>();
@@ -54,10 +53,11 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
 
             if (!result)
             {
-                return Response<FilePagerViewModel>.Fail("Veri silme sırasında hata meydana geldi", 500);
+                return Response<NoContent>.Fail("Veri silme sırasında hata meydana geldi", 500);
             }
 
-            return await Helper.Filter.GetDataInNextPageAfterRemovedFile(fileReadRepository.Where(x => x.ApplicationUserId == request.UserId), request.FilterModel, ObjectMapper.Mapper);
+            return Response<NoContent>.Success(200);
+
 
         }
     }
