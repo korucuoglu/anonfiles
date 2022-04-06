@@ -28,9 +28,24 @@
         }
       ],
       "UpstreamPathTemplate": "/services/minio/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Head" ],
+      "UpstreamScheme": "http"
+    },
+
+    {
+      "DownstreamPathTemplate": "/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9000
+        }
+      ],
+      "UpstreamPathTemplate": "/services/minio",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Head" ],
       "UpstreamScheme": "http"
     }
+
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:5000"

@@ -8,7 +8,7 @@ namespace FileUpload.Upload.Application.Interfaces.Services
     {
 
         public Task<bool> BucketExist(string bucketName);
-        public Task<bool> FileExist(string bucketName, string fileKey);
+        public Task<Response<NoContent>> FileExist(string bucketName, string fileKey);
         public Task<string> CreateBucket();
         public Task<Response<string>> Upload(IFormFile file);
         public Task<Response<NoContent>> Remove(string fileKey);

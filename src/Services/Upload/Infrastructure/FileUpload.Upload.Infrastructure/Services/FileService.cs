@@ -124,7 +124,7 @@ namespace FileUpload.Upload.Infrastructure.Services
 
             if (!result.IsSuccessful)
             {
-                return Response<NoContent>.Fail(result.Errors.First());
+                return Response<NoContent>.Fail(result.Errors.First(), 500);
             }
 
             DeleteFileCommand command = new()

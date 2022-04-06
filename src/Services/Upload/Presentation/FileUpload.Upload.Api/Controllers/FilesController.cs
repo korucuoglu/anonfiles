@@ -15,12 +15,12 @@ namespace FileUpload.Upload.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MinIOController : BaseApiController
+    public class FilesController : BaseApiController
     {
         private readonly IFileService _service;
         private readonly IHashService _hashService;
 
-        public MinIOController(IFileService service, IHashService hashService)
+        public FilesController(IFileService service, IHashService hashService)
         {
             _service = service;
             _hashService = hashService;
