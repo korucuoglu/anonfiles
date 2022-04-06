@@ -72,17 +72,17 @@ namespace FileUpload.Upload.Infrastructure.Services
 
             catch (Exception e)
             {
-               return Response<string>.Fail(e.Message);
+               return Response<string>.Fail(e.Message, 500);
             }
 
         }
         public async Task<Response<NoContent>> Remove(string fileKey)
         {
-            bool result = await FileExist(_sharedIdentityService.GetUserName, fileKey);
+            var result = await FileExist(_sharedIdentityService.GetUserName, fileKey);
 
-            if (!result)
+            if (!result.IsSuccessful)
             {
-                return Response<NoContent>.Fail("Böyle bir dosya bulunamadı");
+                return result;
             }
             try
             {
@@ -103,11 +103,11 @@ namespace FileUpload.Upload.Infrastructure.Services
         }
         public async Task<Response<NoContent>> Download(string fileKey)
         {
-            bool result = await FileExist(_sharedIdentityService.GetUserName, fileKey);
+            var result = await FileExist(_sharedIdentityService.GetUserName, fileKey);
 
-            if (!result)
+            if (!result.IsSuccessful)
             {
-                return Response<NoContent>.Fail("Böyle bir dosya bulunamadı");
+                return result;
             }
 
             try
@@ -126,10 +126,10 @@ namespace FileUpload.Upload.Infrastructure.Services
 
             catch (Exception e)
             {
-                return Response<NoContent>.Fail(e.Message);
+                return Response<NoContent>.Fail(e.Message, 500);
             }
         }
-        public async Task<bool> FileExist(string bucketName, string fileKey)
+        public async Task<Response<NoContent>> FileExist(string bucketName, string fileKey)
         {
             GetObjectMetadataRequest request = new GetObjectMetadataRequest()
             {
@@ -140,11 +140,11 @@ namespace FileUpload.Upload.Infrastructure.Services
             try
             {
                 await client.GetObjectMetadataAsync(request);
-                return true;
+                return Response<NoContent>.Success();
             }
-            catch 
+            catch (Exception e)
             {
-                return false;
+                return Response<NoContent>.Fail(e.Message, 500);
             }
         }
     }
