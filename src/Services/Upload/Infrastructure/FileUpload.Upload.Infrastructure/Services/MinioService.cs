@@ -14,9 +14,9 @@ namespace FileUpload.Upload.Infrastructure.Services
     internal class MinioService : IMinioService
     {
         public AmazonS3Client client { get; set; }
-        public ISharedIdentityService _sharedIdentityService;
+        public const string BucketName = "admin";
 
-        public MinioService(IConfiguration configuration, ISharedIdentityService sharedIdentityService = null)
+        public MinioService(IConfiguration configuration)
         {
             var config = new AmazonS3Config
             {
@@ -26,7 +26,6 @@ namespace FileUpload.Upload.Infrastructure.Services
                 SignatureVersion = "2"
             };
             client = new AmazonS3Client(configuration["MinioAccessInfo:AccessKey"], configuration["MinioAccessInfo:SecretKey"], config);
-            _sharedIdentityService = sharedIdentityService;
         }
         public async Task<bool> BucketExist(string bucketName)
         {
@@ -34,19 +33,18 @@ namespace FileUpload.Upload.Infrastructure.Services
         }
         public async Task<string> CreateBucket()
         {
-            string bucketName = _sharedIdentityService.GetUserName;
 
-            if (!await BucketExist(bucketName))
+            if (!await BucketExist(BucketName))
             {
                 var putBucketRequest = new PutBucketRequest
                 {
-                    BucketName = bucketName,
+                    BucketName = BucketName,
                     UseClientRegion = true
                 };
                 await client.PutBucketAsync(putBucketRequest);
             }
 
-            return bucketName;
+            return BucketName;
 
         }
         public async Task<Response<string>> Upload(IFormFile file)
@@ -67,7 +65,7 @@ namespace FileUpload.Upload.Infrastructure.Services
                 putObjectRequest.Headers.ContentDisposition = $"attachment; filename=\"{encodedFilename}\"";
                 await client.PutObjectAsync(putObjectRequest);
 
-               return Response<string>.Success(data: putObjectRequest.Key);
+               return Response<string>.Success(data: putObjectRequest.Key, 200);
             }
 
             catch (Exception e)
@@ -78,7 +76,7 @@ namespace FileUpload.Upload.Infrastructure.Services
         }
         public async Task<Response<NoContent>> Remove(string fileKey)
         {
-            var result = await FileExist(_sharedIdentityService.GetUserName, fileKey);
+            var result = await FileExist(BucketName, fileKey);
 
             if (!result.IsSuccessful)
             {
@@ -94,16 +92,16 @@ namespace FileUpload.Upload.Infrastructure.Services
 
                 await client.DeleteObjectAsync(deleteObjectRequest);
 
-                return Response<NoContent>.Success();
+                return Response<NoContent>.Success(200);
             }
             catch (Exception e)
             {
-               return Response<NoContent>.Fail(e.Message);
+               return Response<NoContent>.Fail(e.Message, 500);
             }
         }
         public async Task<Response<NoContent>> Download(string fileKey)
         {
-            var result = await FileExist(_sharedIdentityService.GetUserName, fileKey);
+            var result = await FileExist(BucketName, fileKey);
 
             if (!result.IsSuccessful)
             {
@@ -140,7 +138,7 @@ namespace FileUpload.Upload.Infrastructure.Services
             try
             {
                 await client.GetObjectMetadataAsync(request);
-                return Response<NoContent>.Success();
+                return Response<NoContent>.Success(200);
             }
             catch (Exception e)
             {

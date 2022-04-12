@@ -7,25 +7,29 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
-using FileUpload.Upload.Application.Mapping;
+using FileUpload.Upload.Application.Interfaces.Services;
+using AutoMapper;
 
 namespace FileUpload.Upload.Application.Features.Queries.Categories
 {
     public class GetCategoryByIdQueryRequest : IRequest<Response<GetCategoryDto>>
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
     }
 
     public class GetCategoryByIdQueryRequestHandler : IRequestHandler<GetCategoryByIdQueryRequest, Response<GetCategoryDto>>
     {
         private readonly IRedisService _redisService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ISharedIdentityService _sharedIdentityService;
+        private readonly IMapper _mapper;
 
-        public GetCategoryByIdQueryRequestHandler(IUnitOfWork unitOfWork, IRedisService redisService)
+        public GetCategoryByIdQueryRequestHandler(IUnitOfWork unitOfWork, IRedisService redisService, ISharedIdentityService sharedIdentityService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _redisService = redisService;
+            _sharedIdentityService = sharedIdentityService;
+            _mapper = mapper;
         }
 
         public async Task<Response<GetCategoryDto>> Handle(GetCategoryByIdQueryRequest request, CancellationToken cancellationToken)
@@ -37,11 +41,11 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories
                 return Response<GetCategoryDto>.Success(redisData, 200);
             }
 
-            var data = await _unitOfWork.ReadRepository<Category>().Where(x => x.ApplicationUserId == request.UserId && x.Id == request.Id, false).FirstOrDefaultAsync();
+            var data = _unitOfWork.ReadRepository<Category>().Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == request.Id, false);
 
-            var mapperData = ObjectMapper.Mapper.Map<GetCategoryDto>(data);
+            var mapperData = await _mapper.ProjectTo<GetCategoryDto>(data).FirstOrDefaultAsync();
 
-            await _redisService.SetAsync($"categories-{data.Id}", mapperData);
+            await _redisService.SetAsync($"categories-{request.Id}", mapperData);
 
             return Response<GetCategoryDto>.Success(mapperData, 200);
         }

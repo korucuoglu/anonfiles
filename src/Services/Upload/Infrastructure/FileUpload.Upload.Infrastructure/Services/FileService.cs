@@ -20,17 +20,13 @@ namespace FileUpload.Upload.Infrastructure.Services
     public class FileService : IFileService
     {
         private readonly IMediator _mediator;
-        private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IMinioService _minioService;
         private readonly IHubContext<FileHub, IFileHub> _fileHub;
 
         public FileService(IMediator mediator,
-            ISharedIdentityService sharedIdentityService,
             IHubContext<FileHub, IFileHub> fileHub, IMinioService minioService)
         {
             _mediator = mediator;
-            _sharedIdentityService = sharedIdentityService;
-
             _fileHub = fileHub;
             _minioService = minioService;
         }
@@ -40,7 +36,6 @@ namespace FileUpload.Upload.Infrastructure.Services
             GetAllFilesQueryRequest query = new()
             {
                 FilterModel = model,
-                UserId = _sharedIdentityService.GetUserId
             };
 
             return await _mediator.Send(query);
@@ -50,7 +45,6 @@ namespace FileUpload.Upload.Infrastructure.Services
         {
             GetFileByIdQueryRequest query = new()
             {
-                UserId = _sharedIdentityService.GetUserId,
                 FileId = id
             };
 
@@ -77,7 +71,6 @@ namespace FileUpload.Upload.Infrastructure.Services
 
                 Domain.Entities.File fileEntity = new()
                 {
-                    ApplicationUserId = _sharedIdentityService.GetUserId,
                     FileName = file.FileName,
                     Size = file.Length,
                     Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper(),
@@ -129,7 +122,6 @@ namespace FileUpload.Upload.Infrastructure.Services
 
             DeleteFileCommand command = new()
             {
-                UserId = _sharedIdentityService.GetUserId,
                 FileId = id,
             };
 
@@ -154,7 +146,6 @@ namespace FileUpload.Upload.Infrastructure.Services
         {
             GetFileKeyById query = new()
             {
-                UserId = _sharedIdentityService.GetUserId,
                 FileId = id
             };
 

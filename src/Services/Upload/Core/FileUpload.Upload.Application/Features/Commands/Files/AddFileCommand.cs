@@ -6,7 +6,8 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using FileUpload.Shared.Dtos.Files;
-using FileUpload.Upload.Application.Mapping;
+using AutoMapper;
+using FileUpload.Upload.Application.Interfaces.Services;
 
 namespace FileUpload.Upload.Application.Features.Commands.Files
 {
@@ -25,14 +26,19 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
     public class AddFileCommandHandler : IRequestHandler<AddFileCommand, Response<AddFileDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly ISharedIdentityService _sharedIdentityService;
 
-        public AddFileCommandHandler(IUnitOfWork unitOfWork)
+        public AddFileCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ISharedIdentityService sharedIdentityService)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _sharedIdentityService = sharedIdentityService;
         }
 
         public async Task<Response<AddFileDto>> Handle(AddFileCommand request, CancellationToken cancellationToken)
         {
+            request.File.ApplicationUserId = _sharedIdentityService.GetUserId;
 
             var userInfo = await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.File.ApplicationUserId);
 
@@ -49,9 +55,9 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
                 return Response<AddFileDto>.Fail("Dosyanın kaydedilmesi sırasında hata meydana geldi", 500);
             }
 
-            var mapperData = ObjectMapper.Mapper.Map<AddFileDto>(data);
+            var mapperData = _mapper.Map<AddFileDto>(data);
 
-            return Response<AddFileDto>.Success(mapperData, 200);
+            return Response<AddFileDto>.Success(mapperData, 201);
         }
     }
 }

@@ -1,37 +1,35 @@
 ﻿using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Domain.Entities;
-using FileUpload.Shared.Dtos.Files;
-using FileUpload.Shared.Dtos.Files.Pager;
 using FluentValidation;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using FileUpload.Upload.Application.Mapping;
+using FileUpload.Upload.Application.Interfaces.Services;
 
 namespace FileUpload.Upload.Application.Features.Commands.Files
 {
     public class DeleteFileCommand : IRequest<Response<NoContent>>
     {
         public int FileId { get; set; }
-        public int UserId { get; set; }
     }
     public class DeleteFileCommandValidator : AbstractValidator<DeleteFileCommand>
     {
         public DeleteFileCommandValidator()
         {
             RuleFor(x => x.FileId).NotNull().NotEmpty().WithMessage("FileId boş bırakılamaz");
-            RuleFor(x => x.UserId).NotNull().NotEmpty().WithMessage("UserId boş bırakılamaz");
         }
     }
 
     public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand, Response<NoContent>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ISharedIdentityService _sharedIdentityService;
 
-        public DeleteFileCommandHandler(IUnitOfWork unitOfWork)
+        public DeleteFileCommandHandler(IUnitOfWork unitOfWork, ISharedIdentityService sharedIdentityService)
         {
             _unitOfWork = unitOfWork;
+            _sharedIdentityService = sharedIdentityService;
         }
 
         public async Task<Response<NoContent>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
@@ -39,9 +37,11 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
             var fileReadRepository = _unitOfWork.ReadRepository<File>();
             var fileWriteRepository = _unitOfWork.WriteRepository<File>();
             
-            var file = await fileReadRepository.FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId && x.Id == request.FileId);
+            var file = await fileReadRepository.FirstOrDefaultAsync(
+                x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == request.FileId);
 
-            var userInfo = await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.UserId);
+            var userInfo = await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(
+                x => x.ApplicationUserId == _sharedIdentityService.GetUserId);
 
             userInfo.UsedSpace -= file.Size;
 
@@ -56,7 +56,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
                 return Response<NoContent>.Fail("Veri silme sırasında hata meydana geldi", 500);
             }
 
-            return Response<NoContent>.Success(200);
+            return Response<NoContent>.Success(204);
 
 
         }

@@ -1,12 +1,13 @@
 ﻿using FileUpload.Upload.Filters;
 using FileUpload.Upload.Application.Features.Commands.Categories;
-using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Domain.Entities;
 using FileUpload.Upload.Infrastructure.Attribute;
 using FileUpload.Shared.Base;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using FileUpload.Shared.Services;
+using MediatR;
+using FileUpload.Upload.Application.Features.Queries.Categories;
 
 namespace FileUpload.Upload.Controllers
 {
@@ -14,12 +15,12 @@ namespace FileUpload.Upload.Controllers
     [ApiController]
     public class CategoriesController : BaseApiController
     {
-        private readonly ICategoryService _categoryService;
+        private readonly IMediator _mediator;
         private readonly IHashService _hashService;
 
-        public CategoriesController(ICategoryService categoryService, IHashService hashService)
+        public CategoriesController(IMediator mediator, IHashService hashService)
         {
-            _categoryService = categoryService;
+            _mediator = mediator;
             _hashService = hashService;
         }
 
@@ -27,7 +28,7 @@ namespace FileUpload.Upload.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var data = await _categoryService.GetAllAsync();
+            var data = await _mediator.Send(new GetAllCategoriesQueryRequest());
 
             return Result(data);
         }
@@ -38,26 +39,25 @@ namespace FileUpload.Upload.Controllers
         {
             int hasId = _hashService.Decode(id);
 
-            var data = await _categoryService.GetByIdAsync(hasId);
+            var data = await _mediator.Send(new GetCategoryByIdQueryRequest() { Id = hasId });
 
             return Result(data);
-
         }
 
         [HttpPost]
         [ValidationFilter]
-        public async Task<IActionResult> AddAsync(AddCategoryCommand dto)
+        public async Task<IActionResult> AddAsync(AddCategoryCommand model)
         {
-            var data = await _categoryService.AddAsync(dto);
+            var data = await _mediator.Send(model);
 
             return Result(data);
         }
 
         [ValidationFilter]
         [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
-        public async Task<IActionResult> UpdateAsync(UpdateCategoryCommand dto)
+        public async Task<IActionResult> UpdateAsync(UpdateCategoryCommand model)
         {
-            var data = await _categoryService.UpdateAsync(dto);
+            var data = await _mediator.Send(model);
 
             return Result(data);
 
@@ -69,7 +69,7 @@ namespace FileUpload.Upload.Controllers
         {
             int hasId = _hashService.Decode(id);
 
-            var data = await _categoryService.DeleteByIdAsync(hasId);
+            var data = await _mediator.Send(new DeleteCategoryCommand() { Id = hasId});
 
             return Result(data);
 
