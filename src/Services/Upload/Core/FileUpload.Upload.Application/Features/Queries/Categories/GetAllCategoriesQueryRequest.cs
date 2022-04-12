@@ -1,15 +1,13 @@
 ﻿using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Shared.Wrappers;
-using FileUpload.Upload.Domain.Entities;
 using FileUpload.Shared.Dtos.Categories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FileUpload.Upload.Application.Interfaces.Services;
 using AutoMapper;
-using FileUpload.Upload.Application.Interfaces.Repositories;
+using FileUpload.Upload.Application.Interfaces.Repositories.Dapper;
 
 namespace FileUpload.Upload.Application.Features.Queries.Categories
 {
@@ -33,7 +31,7 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories
 
         public async Task<Response<List<GetCategoryDto>>> Handle(GetAllCategoriesQueryRequest request, CancellationToken cancellationToken)
         {
-            var data = await _categoryRepository.GetAll(_sharedIdentityService.GetUserId);
+            var data = await _categoryRepository.GetAll();
 
             var mapperData = _mapper.Map<List<GetCategoryDto>>(data);
 

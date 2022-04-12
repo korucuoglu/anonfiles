@@ -32,7 +32,7 @@ namespace FileUpload.Upload.Persistence.Context
                 entity.Property(x => x.CategoryId).HasColumnName("category_id");
                 entity.Property(x => x.FileId).HasColumnName("file_id");
 
-                entity.ToTable("file_category");
+                entity.ToTable("filecategory");
                 entity.HasKey(table => new
                 {
                     table.CategoryId,
@@ -52,7 +52,7 @@ namespace FileUpload.Upload.Persistence.Context
 
             builder.Entity<File>(entity =>
             {
-                entity.ToTable("files");
+                entity.ToTable("file");
 
                 entity.Property(x => x.FileKey).HasColumnName("filekey");
                 entity.Property(x => x.FileName).HasColumnName("filename");
@@ -65,7 +65,7 @@ namespace FileUpload.Upload.Persistence.Context
 
             builder.Entity<Category>(entity =>
             {
-                entity.ToTable("categories");
+                entity.ToTable("category");
 
                 entity.Property(x => x.Id).HasColumnName("id");
                 entity.Property(x => x.CreatedDate).HasColumnName("created_date");
@@ -75,7 +75,7 @@ namespace FileUpload.Upload.Persistence.Context
 
             builder.Entity<UserInfo>(entity =>
             {
-                entity.ToTable("user_info");
+                entity.ToTable("userinfo");
 
                 entity.Property(x => x.Id).HasColumnName("id");
                 entity.Property(x => x.CreatedDate).HasColumnName("created_date");

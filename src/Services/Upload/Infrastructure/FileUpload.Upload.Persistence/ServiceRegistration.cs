@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data;
 using Npgsql;
+using FileUpload.Upload.Application.Interfaces.Repositories.Dapper;
+using FileUpload.Upload.Persistence.Repositories.Dapper;
 
 namespace FileUpload.Upload.Persistence
 {
@@ -36,9 +38,12 @@ namespace FileUpload.Upload.Persistence
 
             services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
             services.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));
+            
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+
+
 
         }
     }
