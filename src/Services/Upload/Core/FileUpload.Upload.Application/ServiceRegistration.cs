@@ -11,8 +11,7 @@ namespace FileUpload.Upload.Application
             var assm = Assembly.GetExecutingAssembly();
 
             services.AddMediatR(assm);
-
-
+            services.AddAutoMapper(assm);
 
         }
     }

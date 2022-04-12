@@ -7,14 +7,13 @@ using FluentValidation;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using FileUpload.Upload.Application.Mapping;
+using AutoMapper;
 
 namespace FileUpload.Upload.Application.Features.Commands.Categories
 {
     public class AddCategoryCommand : IRequest<Response<GetCategoryDto>>
     {
         public string Title { get; set; }
-        public int ApplicationUserId { get; set; }
     }
     public class AddCategoryCommandValidator : AbstractValidator<AddCategoryCommand>
     {
@@ -28,16 +27,18 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRedisService _redisService;
+        private readonly IMapper _mapper;
 
-        public AddCategoryCommandHandler(IUnitOfWork unitOfWork, IRedisService redisService)
+        public AddCategoryCommandHandler(IUnitOfWork unitOfWork, IRedisService redisService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _redisService = redisService;
+            _mapper = mapper;
         }
 
         public async Task<Response<GetCategoryDto>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = ObjectMapper.Mapper.Map<Category>(request);
+            var category = _mapper.Map<Category>(request);
             var entity = await _unitOfWork.WriteRepository<Category>().AddAsync(category);
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 
@@ -46,11 +47,11 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
                 return Response<GetCategoryDto>.Fail("Kaydetme sırasında hata meydana geldi",  500);
             }
 
-            GetCategoryDto dto = ObjectMapper.Mapper.Map<GetCategoryDto>(entity);
+            GetCategoryDto dto = _mapper.Map<GetCategoryDto>(entity);
 
             await _redisService.SetAsync($"categories-{entity.Id}", dto);
 
-            return Response<GetCategoryDto>.Success(dto, 200);
+            return Response<GetCategoryDto>.Success(dto, 201);
         }
     }
 }

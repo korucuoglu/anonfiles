@@ -70,7 +70,7 @@ namespace FileUpload.Shared.Wrappers
         }
     }
 
-    public class NoContent
+    public struct NoContent
     {
 
     }
