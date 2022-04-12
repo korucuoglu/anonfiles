@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using System.Data;
+using Npgsql;
 
 namespace FileUpload.Upload.Persistence
 {
@@ -16,6 +17,8 @@ namespace FileUpload.Upload.Persistence
     {
         public static void AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
                 opt.EnableSensitiveDataLogging(true);
@@ -33,6 +36,7 @@ namespace FileUpload.Upload.Persistence
 
             services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
             services.AddScoped(typeof(IWriteRepository<>), typeof(WriteRepository<>));
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 

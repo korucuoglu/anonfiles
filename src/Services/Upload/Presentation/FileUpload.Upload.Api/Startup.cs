@@ -42,7 +42,7 @@ namespace FileUpload.Upload
             AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-
+                opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             }).
            AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<AddCategoryCommandValidator>());
            

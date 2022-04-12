@@ -26,66 +26,70 @@ namespace FileUpload.Upload.Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ApplicationUserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_date");
 
                     b.Property<string>("Title")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("title");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("categories", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             ApplicationUserId = 1,
-                            CreatedDate = new DateTime(2022, 4, 3, 13, 20, 22, 884, DateTimeKind.Utc).AddTicks(1577),
+                            CreatedDate = new DateTime(2022, 4, 12, 11, 31, 34, 549, DateTimeKind.Utc).AddTicks(658),
                             Title = "Ödevler"
                         },
                         new
                         {
                             Id = 2,
                             ApplicationUserId = 1,
-                            CreatedDate = new DateTime(2022, 4, 3, 13, 20, 22, 884, DateTimeKind.Utc).AddTicks(1579),
+                            CreatedDate = new DateTime(2022, 4, 12, 11, 31, 34, 549, DateTimeKind.Utc).AddTicks(660),
                             Title = "Tasarımlar"
                         },
                         new
                         {
                             Id = 3,
                             ApplicationUserId = 1,
-                            CreatedDate = new DateTime(2022, 4, 3, 13, 20, 22, 884, DateTimeKind.Utc).AddTicks(1580),
+                            CreatedDate = new DateTime(2022, 4, 12, 11, 31, 34, 549, DateTimeKind.Utc).AddTicks(661),
                             Title = "Dosyalar"
                         },
                         new
                         {
                             Id = 4,
                             ApplicationUserId = 2,
-                            CreatedDate = new DateTime(2022, 4, 3, 13, 20, 22, 884, DateTimeKind.Utc).AddTicks(1581),
+                            CreatedDate = new DateTime(2022, 4, 12, 11, 31, 34, 549, DateTimeKind.Utc).AddTicks(661),
                             Title = "Ödevler"
                         },
                         new
                         {
                             Id = 5,
                             ApplicationUserId = 2,
-                            CreatedDate = new DateTime(2022, 4, 3, 13, 20, 22, 884, DateTimeKind.Utc).AddTicks(1581),
+                            CreatedDate = new DateTime(2022, 4, 12, 11, 31, 34, 549, DateTimeKind.Utc).AddTicks(758),
                             Title = "Tasarımlar"
                         },
                         new
                         {
                             Id = 6,
                             ApplicationUserId = 2,
-                            CreatedDate = new DateTime(2022, 4, 3, 13, 20, 22, 884, DateTimeKind.Utc).AddTicks(1582),
+                            CreatedDate = new DateTime(2022, 4, 12, 11, 31, 34, 549, DateTimeKind.Utc).AddTicks(759),
                             Title = "Dosyalar"
                         });
                 });
@@ -94,87 +98,100 @@ namespace FileUpload.Upload.Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ApplicationUserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_date");
 
                     b.Property<string>("Extension")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("extension");
 
                     b.Property<string>("FileKey")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("filekey");
 
                     b.Property<string>("FileName")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("filename");
 
                     b.Property<long>("Size")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("size");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Files");
+                    b.ToTable("files", (string)null);
                 });
 
             modelBuilder.Entity("FileUpload.Upload.Domain.Entities.FileCategory", b =>
                 {
                     b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("category_id");
 
                     b.Property<int>("FileId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("file_id");
 
                     b.HasKey("CategoryId", "FileId");
 
                     b.HasIndex("FileId");
 
-                    b.ToTable("FilesCategories");
+                    b.ToTable("file_category", (string)null);
                 });
 
             modelBuilder.Entity("FileUpload.Upload.Domain.Entities.UserInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ApplicationUserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_date");
 
                     b.Property<long>("UsedSpace")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("used_space");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId")
                         .IsUnique();
 
-                    b.ToTable("UserInfo");
+                    b.ToTable("user_info", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             ApplicationUserId = 1,
-                            CreatedDate = new DateTime(2022, 4, 3, 13, 20, 22, 884, DateTimeKind.Utc).AddTicks(1505),
+                            CreatedDate = new DateTime(2022, 4, 12, 11, 31, 34, 549, DateTimeKind.Utc).AddTicks(623),
                             UsedSpace = 0L
                         },
                         new
                         {
                             Id = 2,
                             ApplicationUserId = 2,
-                            CreatedDate = new DateTime(2022, 4, 3, 13, 20, 22, 884, DateTimeKind.Utc).AddTicks(1512),
+                            CreatedDate = new DateTime(2022, 4, 12, 11, 31, 34, 549, DateTimeKind.Utc).AddTicks(625),
                             UsedSpace = 0L
                         });
                 });
@@ -211,14 +228,14 @@ namespace FileUpload.Upload.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "38ab08c9-5301-4b1b-a0d7-d379ba975da2",
+                            ConcurrencyStamp = "02872eef-b684-4e75-91f3-483e434d7690",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "42a30706-4513-4359-b62d-ba849231f002",
+                            ConcurrencyStamp = "cd8a35b8-e7f1-4bc5-ad07-ac311ef4e6ff",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -295,15 +312,15 @@ namespace FileUpload.Upload.Persistence.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ea6bb447-b08a-4e7c-8b45-ef40f57fcf0c",
+                            ConcurrencyStamp = "a7ca8030-87db-466c-8f44-343e5c3c6c26",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMLOPPR/5amD2BBWvT+ZDSEV1Bw/MMfhf8DoSZimPfVJdhji+tft1POab2oriGIYsw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBLP9jkHjnADs3sKnb5DGZwO/jkG5s/h5FCEyK18TT8kHpG+LQA2OGK0fGJS6jjO4Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a58d3ce9-a707-4b41-b5f9-24e5e18a177b",
+                            SecurityStamp = "0c97a22b-9ab4-4865-8e34-3dd062b18db9",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
@@ -311,15 +328,15 @@ namespace FileUpload.Upload.Persistence.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6ce02658-403a-4377-b7b5-496bd4663afb",
+                            ConcurrencyStamp = "9ac17754-839a-4fd0-9041-20d711d6c1b8",
                             Email = "user@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@GMAIL.COM",
                             NormalizedUserName = "USER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBeN1Zhbg0Vm0ZvREENFEC4JaO1Z5igh8qgxzXwmJY7HqF3s2Zw/89PbJ13mSJbodQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPsNF8klywyn2jvL/vBVP9RISVaTCa25/h7bmF+glMRN/9OuZWIL8peLUcADnfnXQg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2223b4b6-5ca9-404e-b505-f0fb5a82ddc7",
+                            SecurityStamp = "796c6610-57f8-451b-868b-3bddf9521c85",
                             TwoFactorEnabled = false,
                             UserName = "user"
                         });
