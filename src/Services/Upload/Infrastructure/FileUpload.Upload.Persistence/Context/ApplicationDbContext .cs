@@ -28,6 +28,11 @@ namespace FileUpload.Upload.Persistence.Context
 
             builder.Entity<FileCategory>(entity =>
             {
+
+                entity.Property(x => x.CategoryId).HasColumnName("category_id");
+                entity.Property(x => x.FileId).HasColumnName("file_id");
+
+                entity.ToTable("file_category");
                 entity.HasKey(table => new
                 {
                     table.CategoryId,
@@ -42,7 +47,42 @@ namespace FileUpload.Upload.Persistence.Context
               .WithMany(x => x.FilesCategories)
               .HasForeignKey(x => x.CategoryId);
 
+
             });
+
+            builder.Entity<File>(entity =>
+            {
+                entity.ToTable("files");
+
+                entity.Property(x => x.FileKey).HasColumnName("filekey");
+                entity.Property(x => x.FileName).HasColumnName("filename");
+                entity.Property(x => x.ApplicationUserId).HasColumnName("user_id");
+                entity.Property(x => x.Size).HasColumnName("size");
+                entity.Property(x => x.Extension).HasColumnName("extension");
+                entity.Property(x => x.CreatedDate).HasColumnName("created_date");
+                entity.Property(x => x.Id).HasColumnName("id");
+            });
+
+            builder.Entity<Category>(entity =>
+            {
+                entity.ToTable("categories");
+
+                entity.Property(x => x.Id).HasColumnName("id");
+                entity.Property(x => x.CreatedDate).HasColumnName("created_date");
+                entity.Property(x => x.ApplicationUserId).HasColumnName("user_id");
+                entity.Property(x => x.Title).HasColumnName("title");
+            });
+
+            builder.Entity<UserInfo>(entity =>
+            {
+                entity.ToTable("user_info");
+
+                entity.Property(x => x.Id).HasColumnName("id");
+                entity.Property(x => x.CreatedDate).HasColumnName("created_date");
+                entity.Property(x => x.ApplicationUserId).HasColumnName("user_id");
+                entity.Property(x => x.UsedSpace).HasColumnName("used_space");
+            });
+
 
 
             Seed.AddData(builder);

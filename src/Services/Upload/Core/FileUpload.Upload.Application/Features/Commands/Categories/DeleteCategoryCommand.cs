@@ -49,7 +49,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
 
             await _redisService.RemoveAsync($"categories-{request.Id}");
 
-            return Response<NoContent>.Success(204);
+            return Response<NoContent>.Success(200);
         }
     }
 }

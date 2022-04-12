@@ -5,19 +5,15 @@ namespace FileUpload.Shared.Wrappers
 {
     public class Response<T>
     {
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public T Value { get; set; }
 
         [JsonIgnore]
         public int StatusCode { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public bool IsSuccessful { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<string> Errors { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Message { get; set; }
 
         // Static Factory Method
@@ -70,7 +66,7 @@ namespace FileUpload.Shared.Wrappers
         }
     }
 
-    public struct NoContent
+    public class NoContent
     {
 
     }
