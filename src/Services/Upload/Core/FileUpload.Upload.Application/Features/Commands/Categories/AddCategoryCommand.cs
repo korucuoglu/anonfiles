@@ -7,7 +7,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using FileUpload.Upload.Application.Interfaces.Repositories;
+using FileUpload.Upload.Application.Interfaces.Repositories.Dapper;
 
 namespace FileUpload.Upload.Application.Features.Commands.Categories
 {
@@ -41,7 +41,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
         public async Task<Response<int>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = _mapper.Map<Category>(request);
-            var data = await _categoryRepository.Save(category);
+            var data = await _categoryRepository.Insert(category);
 
             return Response<int>.Success(data, 201);
 

@@ -1,13 +1,14 @@
 ﻿using FileUpload.Upload.Application.Interfaces.Redis;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Shared.Wrappers;
-using FileUpload.Upload.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using FileUpload.Upload.Application.Interfaces.Repositories;
+using FileUpload.Upload.Application.Interfaces.Repositories.Dapper;
+using FileUpload.Shared.Services;
+using FileUpload.Upload.Domain.Entities;
 
 namespace FileUpload.Upload.Application.Features.Commands.Categories
 {
@@ -32,20 +33,21 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
         private readonly IRedisService _redisService;
         private readonly IMapper _mapper;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IHashService _hashService;
 
-        public UpdateCategoryCommandHandler(IUnitOfWork unitOfWork, IRedisService redisService, IMapper mapper, ICategoryRepository categoryRepository)
+        public UpdateCategoryCommandHandler(IUnitOfWork unitOfWork, IRedisService redisService, IMapper mapper, ICategoryRepository categoryRepository, IHashService hashService)
         {
             _unitOfWork = unitOfWork;
             _redisService = redisService;
             _mapper = mapper;
             _categoryRepository = categoryRepository;
+            _hashService = hashService;
         }
 
         public async Task<Response<NoContent>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = _mapper.Map<Category>(request);
-
-            bool result = await _categoryRepository.Update(category);
+            
+            bool result = await _categoryRepository.Update(request.Title, _hashService.Decode(request.Id));
 
             if (!result)
             {
