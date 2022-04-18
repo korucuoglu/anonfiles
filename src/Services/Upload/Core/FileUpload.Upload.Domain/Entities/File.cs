@@ -11,7 +11,6 @@ namespace FileUpload.Upload.Domain.Entities
         }
 
         public string FileName { get; set; }
-        public string Extension { get; set; }
         public long Size { get; set; }
         public string FileKey { get; set; }
 

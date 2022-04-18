@@ -4,6 +4,7 @@ using FileUpload.Upload.Persistence.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Persistence.Context
@@ -19,75 +20,13 @@ namespace FileUpload.Upload.Persistence.Context
         {
             ChangeTracker.LazyLoadingEnabled = false;
             ChangeTracker.AutoDetectChangesEnabled = false;
-
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
-            builder.Entity<FileCategory>(entity =>
-            {
-                entity.Property(x => x.CategoryId).HasColumnName("categoryId");
-                entity.Property(x => x.FileId).HasColumnName("fileId");
-
-                entity.ToTable("filecategory");
-                entity.HasKey(table => new
-                {
-                    table.CategoryId,
-                    table.FileId
-                });
-
-                entity.HasOne(x => x.File)
-              .WithMany(x => x.FilesCategories)
-              .HasForeignKey(x => x.FileId);
-
-                entity.HasOne(x => x.Category)
-              .WithMany(x => x.FilesCategories)
-              .HasForeignKey(x => x.CategoryId);
-
-
-            });
-
-            builder.Entity<File>(entity =>
-            {
-                entity.ToTable("file");
-
-                entity.Property(x => x.FileKey).HasColumnName("fileKey");
-                entity.Property(x => x.FileName).HasColumnName("fileName");
-                entity.Property(x => x.UserId).HasColumnName("userId");
-                entity.Property(x => x.Size).HasColumnName("size");
-                entity.Property(x => x.Extension).HasColumnName("extension");
-                entity.Property(x => x.CreatedDate).HasColumnName("createdDate");
-                entity.Property(x => x.Id).HasColumnName("id");
-            });
-
-            builder.Entity<Category>(entity =>
-            {
-                entity.ToTable("category");
-
-                entity.Property(x => x.Id).HasColumnName("id");
-                entity.Property(x => x.CreatedDate).HasColumnName("createdDate");
-                entity.Property(x => x.UserId).HasColumnName("userId");
-                entity.Property(x => x.Title).HasColumnName("title");
-            });
-
-            builder.Entity<UserInfo>(entity =>
-            {
-                entity.ToTable("userinfo");
-
-                entity.Property(x => x.Id).HasColumnName("id");
-                entity.Property(x => x.CreatedDate).HasColumnName("createdDate");
-                entity.Property(x => x.UserId).HasColumnName("userId");
-                entity.Property(x => x.UsedSpace).HasColumnName("usedSpace");
-            });
-
-
-
-            Seed.AddData(builder);
-
-
             base.OnModelCreating(builder);
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            Seed.AddData(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

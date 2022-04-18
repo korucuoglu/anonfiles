@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using System;
 
 #nullable disable
 
@@ -159,45 +159,44 @@ namespace FileUpload.Upload.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "category",
+                name: "categories",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    title = table.Column<string>(type: "text", nullable: true),
-                    createdDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    userId = table.Column<int>(type: "integer", nullable: false)
+                    title = table.Column<string>(type: "text", nullable: false),
+                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()"),
+                    user_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_category", x => x.id);
+                    table.PrimaryKey("PK_categories", x => x.id);
                     table.ForeignKey(
-                        name: "FK_category_AspNetUsers_userId",
-                        column: x => x.userId,
+                        name: "FK_categories_AspNetUsers_user_id",
+                        column: x => x.user_id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "file",
+                name: "files",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    fileName = table.Column<string>(type: "text", nullable: true),
-                    extension = table.Column<string>(type: "text", nullable: true),
-                    size = table.Column<long>(type: "bigint", nullable: false),
-                    fileKey = table.Column<string>(type: "text", nullable: true),
-                    createdDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    userId = table.Column<int>(type: "integer", nullable: false)
+                    file_name = table.Column<string>(type: "text", nullable: false),
+                    size = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
+                    file_key = table.Column<string>(type: "text", nullable: false),
+                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()"),
+                    user_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_file", x => x.id);
+                    table.PrimaryKey("PK_files", x => x.id);
                     table.ForeignKey(
-                        name: "FK_file_AspNetUsers_userId",
-                        column: x => x.userId,
+                        name: "FK_files_AspNetUsers_user_id",
+                        column: x => x.user_id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -209,16 +208,16 @@ namespace FileUpload.Upload.Persistence.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    usedSpace = table.Column<long>(type: "bigint", nullable: false),
-                    createdDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    userId = table.Column<int>(type: "integer", nullable: false)
+                    used_space = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
+                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()"),
+                    user_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_userinfo", x => x.id);
                     table.ForeignKey(
-                        name: "FK_userinfo_AspNetUsers_userId",
-                        column: x => x.userId,
+                        name: "FK_userinfo_AspNetUsers_user_id",
+                        column: x => x.user_id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -228,22 +227,22 @@ namespace FileUpload.Upload.Persistence.Migrations
                 name: "filecategory",
                 columns: table => new
                 {
-                    fileId = table.Column<int>(type: "integer", nullable: false),
-                    categoryId = table.Column<int>(type: "integer", nullable: false)
+                    file_id = table.Column<int>(type: "integer", nullable: false),
+                    category_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_filecategory", x => new { x.categoryId, x.fileId });
+                    table.PrimaryKey("PK_filecategory", x => new { x.category_id, x.file_id });
                     table.ForeignKey(
-                        name: "FK_filecategory_category_categoryId",
-                        column: x => x.categoryId,
-                        principalTable: "category",
+                        name: "FK_filecategory_categories_category_id",
+                        column: x => x.category_id,
+                        principalTable: "categories",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_filecategory_file_fileId",
-                        column: x => x.fileId,
-                        principalTable: "file",
+                        name: "FK_filecategory_files_file_id",
+                        column: x => x.file_id,
+                        principalTable: "files",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -253,8 +252,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "e3ce66f4-4919-4797-a5c0-bf3b3c27b93e", "Admin", "ADMIN" },
-                    { 2, "099583fb-933e-49d7-bff1-ebd90a4ecd70", "User", "USER" }
+                    { 1, "533a3048-fdf2-41e9-bedf-9911f1c3bd5a", "Admin", "ADMIN" },
+                    { 2, "2e7b559f-b2ad-4a05-bd61-acd19d3380f3", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -262,8 +261,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { 1, 0, "82e1d3a4-f4bc-4c21-abbc-ab363155d8c7", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEFPtMMTPOimlehsH4tdZSPNQJ/7Nj9oKqKTKhyE/8ESGvvrP937z7zIv/sdHNdjehQ==", null, false, "ec1170b6-12b1-44a2-8c64-6ce217f98ee7", false, "admin" },
-                    { 2, 0, "88b9b09a-2f3a-4064-941b-2e8628d7c307", "user@gmail.com", true, false, null, "USER@GMAIL.COM", "USER", "AQAAAAEAACcQAAAAEDP2wD5c499PkszFdAgSWKO/uOKAr1n4cqW+fso0y/84qIXf0Nyigq9jFFXCGX8GJw==", null, false, "4b62d412-b5b3-4aad-84bc-70dc222e247c", false, "user" }
+                    { 1, 0, "6e73ce00-d9d8-4586-94c8-17de34d65fad", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEGbao2uALrbyAJH4aiDRVTnXVez4750W/6dAgM8kQ6/CMD1j0HYNTI1yhOqEgSujhw==", null, false, "fc846c57-a2fe-4a04-be76-cc2f8a094bec", false, "admin" },
+                    { 2, 0, "b8ef2822-9f6b-4d33-a19f-94dd5de5c727", "user@gmail.com", true, false, null, "USER@GMAIL.COM", "USER", "AQAAAAEAACcQAAAAEAwtoeUgNhqfCcd3+C6yzQFHAAq0WvRZYFB7b3DvZLOVD/ypEeBSkOguYYJ4cA+ZNg==", null, false, "7c8339f6-ad2d-49fd-bb14-f51f17558dd3", false, "user" }
                 });
 
             migrationBuilder.InsertData(
@@ -276,25 +275,25 @@ namespace FileUpload.Upload.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "category",
-                columns: new[] { "id", "createdDate", "title", "userId" },
+                table: "categories",
+                columns: new[] { "id", "created_date", "title", "user_id" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 4, 18, 13, 25, 41, 963, DateTimeKind.Utc).AddTicks(5568), "Ödevler", 1 },
-                    { 2, new DateTime(2022, 4, 18, 13, 25, 41, 963, DateTimeKind.Utc).AddTicks(5576), "Tasarımlar", 1 },
-                    { 3, new DateTime(2022, 4, 18, 13, 25, 41, 963, DateTimeKind.Utc).AddTicks(5577), "Dosyalar", 1 },
-                    { 4, new DateTime(2022, 4, 18, 13, 25, 41, 963, DateTimeKind.Utc).AddTicks(5577), "Ödevler", 2 },
-                    { 5, new DateTime(2022, 4, 18, 13, 25, 41, 963, DateTimeKind.Utc).AddTicks(5578), "Tasarımlar", 2 },
-                    { 6, new DateTime(2022, 4, 18, 13, 25, 41, 963, DateTimeKind.Utc).AddTicks(5578), "Dosyalar", 2 }
+                    { 1, new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7825), "Ödevler", 1 },
+                    { 2, new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7826), "Tasarımlar", 1 },
+                    { 3, new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7827), "Dosyalar", 1 },
+                    { 4, new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7827), "Ödevler", 2 },
+                    { 5, new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7828), "Tasarımlar", 2 },
+                    { 6, new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7828), "Dosyalar", 2 }
                 });
 
             migrationBuilder.InsertData(
                 table: "userinfo",
-                columns: new[] { "id", "createdDate", "usedSpace", "userId" },
+                columns: new[] { "id", "created_date", "user_id" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 4, 18, 13, 25, 41, 963, DateTimeKind.Utc).AddTicks(5387), 0L, 1 },
-                    { 2, new DateTime(2022, 4, 18, 13, 25, 41, 963, DateTimeKind.Utc).AddTicks(5394), 0L, 2 }
+                    { 1, new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7784), 1 },
+                    { 2, new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7787), 2 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -335,24 +334,25 @@ namespace FileUpload.Upload.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_category_userId",
-                table: "category",
-                column: "userId");
+                name: "IX_categories_user_id_title",
+                table: "categories",
+                columns: new[] { "user_id", "title" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_file_userId",
-                table: "file",
-                column: "userId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_filecategory_fileId",
+                name: "IX_filecategory_file_id",
                 table: "filecategory",
-                column: "fileId");
+                column: "file_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_userinfo_userId",
+                name: "IX_files_user_id",
+                table: "files",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_userinfo_user_id",
                 table: "userinfo",
-                column: "userId",
+                column: "user_id",
                 unique: true);
         }
 
@@ -383,10 +383,10 @@ namespace FileUpload.Upload.Persistence.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "category");
+                name: "categories");
 
             migrationBuilder.DropTable(
-                name: "file");
+                name: "files");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

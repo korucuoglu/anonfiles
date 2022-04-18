@@ -16,9 +16,6 @@ namespace FileUpload.Upload.Application.Helper
     {
         public static async Task<Response<FilesPagerViewModel>> FilterFile(IQueryable<File> model, FileFilterModel filterModel, IMapper mapper)
         {
-
-            model = ExtensionFilter(model, filterModel.Extension);
-
             model = CategoryFilter(model, filterModel.CategoryIds);
 
             if (!model.Any())
@@ -57,16 +54,6 @@ namespace FileUpload.Upload.Application.Helper
 
 
             return Response<FilesPagerViewModel>.Success(dto, 200);
-        }
-
-        public static IQueryable<File> ExtensionFilter(IQueryable<File> model, string extension)
-        {
-            if (string.IsNullOrEmpty(extension))
-            {
-                return model;
-            }
-
-            return model.Where(x => x.Extension.ToUpper() == extension.ToUpper());
         }
 
         public static IQueryable<File> CategoryFilter(IQueryable<File> model, List<int> categoriesIds)
@@ -114,7 +101,6 @@ namespace FileUpload.Upload.Application.Helper
 
         public static async Task<Response<FilePagerViewModel>> GetDataInNextPageAfterRemovedFile(IQueryable<File> model, FileFilterModel filterModel, IMapper mapper)
         {
-            model = ExtensionFilter(model, filterModel.Extension);
 
             model = CategoryFilter(model, filterModel.CategoryIds);
 

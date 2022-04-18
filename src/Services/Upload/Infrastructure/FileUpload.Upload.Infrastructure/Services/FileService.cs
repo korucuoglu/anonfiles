@@ -73,8 +73,7 @@ namespace FileUpload.Upload.Infrastructure.Services
                 {
                     FileName = file.FileName,
                     Size = file.Length,
-                    Extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper(),
-                    FileKey = fileKey.Value,
+                    FileKey = fileKey.Value
                 };
 
                 if (CategoriesId.Any())
