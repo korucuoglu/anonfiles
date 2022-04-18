@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FileUpload.Shared.Base
 {
-    public class BaseApiController: ControllerBase
+    [Route("api/[controller]")]
+    [ApiController]
+    public class BaseApiController : ControllerBase
     {
         [NonAction]
         public IActionResult Result<T>(Response<T> response)

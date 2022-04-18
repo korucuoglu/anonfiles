@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -66,7 +64,7 @@ namespace FileUpload.IdentityServer.Controllers
                 UserCreatedEvent userCreatedEvent = new()
                 {
                     MailAdress = user.Email,
-                    Message = $"<p>Mail adresini doğrulamak için <a href='{link}'>tıkla</a></p>", 
+                    Message = $"<p>Mail adresini doğrulamak için <a href='{link}'>tıkla</a></p>",
                     Subject = "Mail Onaylama"
                 };
 

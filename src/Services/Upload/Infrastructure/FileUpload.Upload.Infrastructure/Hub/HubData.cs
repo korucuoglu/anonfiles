@@ -1,5 +1,4 @@
-﻿using FileUpload.Upload.Application.Interfaces.Services;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace FileUpload.Upload.Infrastructure.Hub
 {

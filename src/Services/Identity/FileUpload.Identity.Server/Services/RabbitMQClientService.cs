@@ -7,7 +7,7 @@ namespace FileUpload.Identity.Server.Services
 {
     public class RabbitMQClientService : IDisposable
     {
-        private IConnection _connection; 
+        private IConnection _connection;
         private IModel _channel;
 
         IConfiguration configuration;
@@ -38,9 +38,9 @@ namespace FileUpload.Identity.Server.Services
 
         public void Dispose()
         {
-            _channel?.Close(); 
-            _channel?.Dispose(); 
-            _connection?.Close(); 
+            _channel?.Close();
+            _channel?.Dispose();
+            _connection?.Close();
             _connection?.Dispose();
         }
     }

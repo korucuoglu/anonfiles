@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FileUpload.MVC.Application.Dtos.Error;
+using FileUpload.MVC.Application.Exceptions;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
-using FileUpload.MVC.Application.Interfaces.Services;
-using FileUpload.MVC.Application.Exceptions;
-using FileUpload.MVC.Application.Dtos.Error;
-using FileUpload.MVC.Application.Dtos.Categories;
-using FileUpload.Shared.Dtos.Files;
-using FileUpload.Shared.Wrappers;
 
 namespace FileUpload.MVC.Controllers
 {
@@ -34,6 +29,6 @@ namespace FileUpload.MVC.Controllers
             }
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        
+
     }
 }

@@ -19,7 +19,7 @@ namespace SendEmail.WorkerService.Services
 
             _connection = connectionFactory.CreateConnection();
 
-            if (_channel is { IsOpen: true})
+            if (_channel is { IsOpen: true })
             {
                 return _channel;
             }

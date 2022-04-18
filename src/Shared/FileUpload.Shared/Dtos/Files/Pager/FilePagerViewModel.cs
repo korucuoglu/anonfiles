@@ -8,7 +8,7 @@ namespace FileUpload.Shared.Dtos.Files.Pager
         public Pager Pages { get; set; }
         public GetFileDto File { get; set; }
         public List<GetCategoryDtoWithFileCount> Categories { get; set; }
-      
+
     }
 
 }

@@ -23,7 +23,7 @@ namespace FileUpload.Upload.Infrastructure.Services.Redis
             {
                 return default;
             }
-            
+
             var value = await Db.StringGetAsync(key);
 
             if (value.IsNullOrEmpty)

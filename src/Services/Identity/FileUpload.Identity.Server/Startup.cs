@@ -34,7 +34,7 @@ namespace FileUpload.IdentityServer
 
             services.AddHealthChecks();
 
-           
+
             services.AddSingleton<RabbitMQClientService>();
             services.AddSingleton<RabbitMQPublisher>();
 

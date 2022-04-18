@@ -1,13 +1,13 @@
-﻿using FileUpload.Upload.Application.Interfaces.UnitOfWork;
+﻿using AutoMapper;
+using FileUpload.Shared.Dtos.Files;
 using FileUpload.Shared.Wrappers;
+using FileUpload.Upload.Application.Interfaces.Services;
+using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Upload.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using FileUpload.Shared.Dtos.Files;
-using AutoMapper;
-using FileUpload.Upload.Application.Interfaces.Services;
 
 namespace FileUpload.Upload.Application.Features.Commands.Files
 {

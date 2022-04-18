@@ -1,20 +1,19 @@
-﻿using FileUpload.Upload.Filters;
+﻿using FileUpload.Shared.Base;
+using FileUpload.Shared.Dtos.Files;
+using FileUpload.Shared.Services;
+using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Domain.Entities;
-using FileUpload.Shared.Base;
-using FileUpload.Shared.Dtos.Files;
+using FileUpload.Upload.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
-using FileUpload.Shared.Wrappers;
-using FileUpload.Shared.Services;
 
 namespace FileUpload.Upload.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+
     public class FilesController : BaseApiController
     {
         private readonly IFileService _service;

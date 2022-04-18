@@ -1,16 +1,16 @@
 ﻿
+using FileUpload.Shared.Services;
 using FileUpload.Upload.Application.Interfaces.Redis;
-using FileUpload.Upload.Filters;
-using FileUpload.Upload.Infrastructure.Services.Redis;
 using FileUpload.Upload.Application.Interfaces.Services;
+using FileUpload.Upload.Filters;
 using FileUpload.Upload.Infrastructure.Services;
+using FileUpload.Upload.Infrastructure.Services.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using FileUpload.Shared.Services;
 
 namespace FileUpload.Upload.Infrastructure
 {
@@ -58,13 +58,13 @@ namespace FileUpload.Upload.Infrastructure
             });
 
             #region SignalR & Cors
-          
+
             services.AddSignalR(e =>
             {
                 e.MaximumReceiveMessageSize = 102400000;
                 e.EnableDetailedErrors = true;
             });
-           
+
             services.AddCors(opt =>
             {
                 opt.AddPolicy("CorsPolicy", builder =>

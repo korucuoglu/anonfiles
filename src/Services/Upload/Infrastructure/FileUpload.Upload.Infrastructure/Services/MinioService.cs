@@ -65,12 +65,12 @@ namespace FileUpload.Upload.Infrastructure.Services
                 putObjectRequest.Headers.ContentDisposition = $"attachment; filename=\"{encodedFilename}\"";
                 await client.PutObjectAsync(putObjectRequest);
 
-               return Response<string>.Success(data: putObjectRequest.Key, 200);
+                return Response<string>.Success(data: putObjectRequest.Key, 200);
             }
 
             catch (Exception e)
             {
-               return Response<string>.Fail(e.Message, 500);
+                return Response<string>.Fail(e.Message, 500);
             }
 
         }
@@ -96,7 +96,7 @@ namespace FileUpload.Upload.Infrastructure.Services
             }
             catch (Exception e)
             {
-               return Response<NoContent>.Fail(e.Message, 500);
+                return Response<NoContent>.Fail(e.Message, 500);
             }
         }
         public async Task<Response<NoContent>> Download(string fileKey)
