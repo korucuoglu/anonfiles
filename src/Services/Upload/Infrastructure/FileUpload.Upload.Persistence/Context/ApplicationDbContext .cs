@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Persistence.Context
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>, IApplicationDbContext
+    public class ApplicationDbContext : IdentityDbContext<User, ApplicationRole, int>, IApplicationDbContext
     {
         public DbSet<File> Files { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -28,9 +28,8 @@ namespace FileUpload.Upload.Persistence.Context
 
             builder.Entity<FileCategory>(entity =>
             {
-
-                entity.Property(x => x.CategoryId).HasColumnName("category_id");
-                entity.Property(x => x.FileId).HasColumnName("file_id");
+                entity.Property(x => x.CategoryId).HasColumnName("categoryId");
+                entity.Property(x => x.FileId).HasColumnName("fileId");
 
                 entity.ToTable("filecategory");
                 entity.HasKey(table => new
@@ -54,12 +53,12 @@ namespace FileUpload.Upload.Persistence.Context
             {
                 entity.ToTable("file");
 
-                entity.Property(x => x.FileKey).HasColumnName("filekey");
-                entity.Property(x => x.FileName).HasColumnName("filename");
-                entity.Property(x => x.ApplicationUserId).HasColumnName("user_id");
+                entity.Property(x => x.FileKey).HasColumnName("fileKey");
+                entity.Property(x => x.FileName).HasColumnName("fileName");
+                entity.Property(x => x.UserId).HasColumnName("userId");
                 entity.Property(x => x.Size).HasColumnName("size");
                 entity.Property(x => x.Extension).HasColumnName("extension");
-                entity.Property(x => x.CreatedDate).HasColumnName("created_date");
+                entity.Property(x => x.CreatedDate).HasColumnName("createdDate");
                 entity.Property(x => x.Id).HasColumnName("id");
             });
 
@@ -68,8 +67,8 @@ namespace FileUpload.Upload.Persistence.Context
                 entity.ToTable("category");
 
                 entity.Property(x => x.Id).HasColumnName("id");
-                entity.Property(x => x.CreatedDate).HasColumnName("created_date");
-                entity.Property(x => x.ApplicationUserId).HasColumnName("user_id");
+                entity.Property(x => x.CreatedDate).HasColumnName("createdDate");
+                entity.Property(x => x.UserId).HasColumnName("userId");
                 entity.Property(x => x.Title).HasColumnName("title");
             });
 
@@ -78,9 +77,9 @@ namespace FileUpload.Upload.Persistence.Context
                 entity.ToTable("userinfo");
 
                 entity.Property(x => x.Id).HasColumnName("id");
-                entity.Property(x => x.CreatedDate).HasColumnName("created_date");
-                entity.Property(x => x.ApplicationUserId).HasColumnName("user_id");
-                entity.Property(x => x.UsedSpace).HasColumnName("used_space");
+                entity.Property(x => x.CreatedDate).HasColumnName("createdDate");
+                entity.Property(x => x.UserId).HasColumnName("userId");
+                entity.Property(x => x.UsedSpace).HasColumnName("usedSpace");
             });
 
 

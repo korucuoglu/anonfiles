@@ -10,9 +10,9 @@ namespace FileUpload.IdentityServer.Services
     public class IdentityResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
 
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public IdentityResourceOwnerPasswordValidator(UserManager<ApplicationUser> userManager)
+        public IdentityResourceOwnerPasswordValidator(UserManager<User> userManager)
         {
             _userManager = userManager;
         }

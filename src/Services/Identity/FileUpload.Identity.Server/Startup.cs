@@ -61,7 +61,7 @@ namespace FileUpload.IdentityServer
                 });
             });
 
-            services.AddIdentity<ApplicationUser, ApplicationRole>(opt =>
+            services.AddIdentity<User, ApplicationRole>(opt =>
             {
                 opt.User.RequireUniqueEmail = true;
             })
@@ -82,7 +82,7 @@ namespace FileUpload.IdentityServer
                 .AddInMemoryApiScopes(Config.ApiScopes)
                 .AddInMemoryClients(Config.Clients)
                 .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddAspNetIdentity<ApplicationUser>()
+                .AddAspNetIdentity<User>()
                 .AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>()
                 .AddProfileService<IdentityClaimsProfileService>()
                 .AddDeveloperSigningCredential();

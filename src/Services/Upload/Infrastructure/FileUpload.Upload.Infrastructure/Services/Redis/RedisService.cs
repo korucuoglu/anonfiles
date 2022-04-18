@@ -43,7 +43,6 @@ namespace FileUpload.Upload.Infrastructure.Services.Redis
             var serializeData = Serialize(data);
             await Db.StringSetAsync(key, serializeData);
         }
-
         public async Task<bool> IsKeyAsync(string key)
         {
             return await Db.KeyExistsAsync(key);

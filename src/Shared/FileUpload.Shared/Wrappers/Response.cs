@@ -10,6 +10,7 @@ namespace FileUpload.Shared.Wrappers
         [JsonIgnore]
         public int StatusCode { get; set; }
 
+        [JsonIgnore]
         public bool IsSuccessful { get; set; }
 
         public List<string> Errors { get; set; }

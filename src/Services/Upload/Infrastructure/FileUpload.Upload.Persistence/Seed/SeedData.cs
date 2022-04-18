@@ -15,10 +15,10 @@ namespace FileUpload.Upload.Persistence
 
             builder.Entity<ApplicationRole>().HasData(new ApplicationRole { Id = AdminRoleId, Name = "Admin", NormalizedName = "ADMIN" });
 
-            var hasher = new PasswordHasher<ApplicationUser>();
+            var hasher = new PasswordHasher<User>();
 
-            builder.Entity<ApplicationUser>().HasData(
-                new ApplicationUser
+            builder.Entity<User>().HasData(
+                new User
                 {
                     Id = AdminUserId,
                     Email = "admin@gmail.com",
@@ -45,8 +45,8 @@ namespace FileUpload.Upload.Persistence
 
             builder.Entity<ApplicationRole>().HasData(new ApplicationRole { Id = userRoleId, Name = "User", NormalizedName = "USER" });
 
-            builder.Entity<ApplicationUser>().HasData(
-                new ApplicationUser
+            builder.Entity<User>().HasData(
+                new User
                 {
                     Id = userId,
                     Email = "user@gmail.com",
@@ -73,50 +73,50 @@ namespace FileUpload.Upload.Persistence
                {
                    Id = 1,
                    UsedSpace = 0,
-                   ApplicationUserId = AdminUserId,
+                   UserId = AdminUserId,
                },
                 new UserInfo()
                 {
                     Id = 2,
                     UsedSpace = 0,
-                    ApplicationUserId = userId,
+                    UserId = userId,
                 });
 
             builder.Entity<Category>().HasData(
                 new Category()
                 {
                     Id = 1,
-                    ApplicationUserId = AdminUserId,
+                    UserId = AdminUserId,
                     Title = "Ödevler",
                 },
                 new Category()
                 {
                     Id = 2,
-                    ApplicationUserId = AdminUserId,
+                    UserId = AdminUserId,
                     Title = "Tasarımlar",
                 },
                 new Category()
                 {
                     Id = 3,
-                    ApplicationUserId = AdminUserId,
+                    UserId = AdminUserId,
                     Title = "Dosyalar",
                 },
                 new Category()
                 {
                     Id = 4,
-                    ApplicationUserId = userId,
+                    UserId = userId,
                     Title = "Ödevler",
                 },
                 new Category()
                 {
                     Id = 5,
-                    ApplicationUserId = userId,
+                    UserId = userId,
                     Title = "Tasarımlar",
                 },
                 new Category()
                 {
                     Id = 6,
-                    ApplicationUserId = userId,
+                    UserId = userId,
                     Title = "Dosyalar",
                 }
             );

@@ -1,4 +1,5 @@
-﻿namespace FileUpload.Upload.Application.Interfaces.Repositories.File
+﻿
+namespace FileUpload.Upload.Application.Interfaces.Repositories
 {
     public interface IFileWriteRepository : IWriteRepository<Domain.Entities.File>
     {

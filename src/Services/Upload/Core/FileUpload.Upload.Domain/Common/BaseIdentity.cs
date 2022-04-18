@@ -2,6 +2,6 @@
 {
     public abstract class BaseIdentity : BaseEntity
     {
-        public int ApplicationUserId { get; set; }
+        public int UserId { get; set; }
     }
 }

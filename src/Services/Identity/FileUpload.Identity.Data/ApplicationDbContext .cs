@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FileUpload.Data.Entity
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
+    public class ApplicationDbContext : IdentityDbContext<User, ApplicationRole, int>
     {
 
         public DbSet<UserInfo> UserInfo { get; set; }
@@ -14,7 +14,7 @@ namespace FileUpload.Data.Entity
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<ApplicationUser>(b =>
+            builder.Entity<User>(b =>
             {
                 b.Property(u => u.Id).UseIdentityColumn().UseSerialColumn();
             });

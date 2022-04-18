@@ -4,6 +4,7 @@ using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Redis;
 using FileUpload.Upload.Application.Interfaces.Repositories.Dapper;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
+using FileUpload.Upload.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using System.Threading;
@@ -45,29 +46,19 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
 
         public async Task<Response<NoContent>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
+            var category = _mapper.Map<Category>(request);
 
-            bool result = await _categoryRepository.Update(request.Title, _hashService.Decode(request.Id));
+            _unitOfWork.CategoryWriteRepository().Update(category);
+
+            bool result = await _unitOfWork.SaveChangesAsync() > 0;
 
             if (!result)
             {
                 return Response<NoContent>.Fail(error: "Hata meydana geldi", statusCode: 500);
             }
+            await _redisService.SetAsync($"categories-{category.Id}", category);
 
             return Response<NoContent>.Success(200);
-
-
-            //_unitOfWork.WriteRepository<Category>().Update(category);
-
-            //bool result = await _unitOfWork.SaveChangesAsync() > 0;
-
-            //if (!result)
-            //{
-            //    return Response<NoContent>.Fail("Güncelleme sırasında hata meydana geldi", 500);
-            //}
-
-            //await _redisService.SetAsync($"categories-{category.Id}", category);
-
-            //return Response<NoContent>.Success(204);
         }
     }
 }
