@@ -33,7 +33,7 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories
 
             return Response<List<GetCategoryDto>>.Success(await _mapper.ProjectTo<GetCategoryDto>(data).ToListAsync(), 200);
 
-          
+
         }
     }
 }

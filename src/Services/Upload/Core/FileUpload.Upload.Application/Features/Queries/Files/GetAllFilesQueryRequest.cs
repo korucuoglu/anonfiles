@@ -5,7 +5,6 @@ using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Helper;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
-using FileUpload.Upload.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;

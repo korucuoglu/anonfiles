@@ -38,7 +38,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
         public async Task<Response<NoContent>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
             await _unitOfWork.CategoryWriteRepository().
-                RemoveAsync(x=> x.Id == request.Id && x.UserId == _sharedIdentityService.GetUserId);
+                RemoveAsync(x => x.Id == request.Id && x.UserId == _sharedIdentityService.GetUserId);
 
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 

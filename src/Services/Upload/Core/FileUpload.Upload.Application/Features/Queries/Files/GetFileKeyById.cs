@@ -1,7 +1,6 @@
 ﻿using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
-using FileUpload.Upload.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;

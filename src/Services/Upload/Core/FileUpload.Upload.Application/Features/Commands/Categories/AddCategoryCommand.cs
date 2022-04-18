@@ -3,7 +3,6 @@ using FileUpload.Shared.Dtos.Categories;
 using FileUpload.Shared.Services;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Redis;
-using FileUpload.Upload.Application.Interfaces.Repositories.Dapper;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Upload.Domain.Entities;
 using FluentValidation;

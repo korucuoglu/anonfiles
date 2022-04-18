@@ -1,7 +1,6 @@
 ﻿using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
-using FileUpload.Upload.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using System.Threading;
