@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FileUpload.Shared.Dtos.Categories
+﻿namespace FileUpload.Shared.Dtos.Categories
 {
     public class GetCategoryDto
     {
@@ -8,5 +6,5 @@ namespace FileUpload.Shared.Dtos.Categories
         public string Title { get; set; }
     }
 
-    
+
 }

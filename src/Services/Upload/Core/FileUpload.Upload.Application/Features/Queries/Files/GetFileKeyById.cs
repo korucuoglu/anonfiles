@@ -1,12 +1,12 @@
-﻿using FileUpload.Upload.Application.Interfaces.UnitOfWork;
-using FileUpload.Shared.Wrappers;
+﻿using FileUpload.Shared.Wrappers;
+using FileUpload.Upload.Application.Interfaces.Services;
+using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Upload.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
-using FileUpload.Upload.Application.Interfaces.Services;
 
 namespace FileUpload.Upload.Application.Features.Queries.Files
 {
@@ -29,7 +29,7 @@ namespace FileUpload.Upload.Application.Features.Queries.Files
             var repository = _unitOfWork.ReadRepository<File>();
 
             var data = await repository.Where(
-                x=> x.Id == request.FileId && x.ApplicationUserId == _sharedIdentityService.GetUserId, tracking: false).Select(x=> x.FileKey).FirstOrDefaultAsync();
+                x => x.Id == request.FileId && x.ApplicationUserId == _sharedIdentityService.GetUserId, tracking: false).Select(x => x.FileKey).FirstOrDefaultAsync();
 
             if (string.IsNullOrEmpty(data))
             {

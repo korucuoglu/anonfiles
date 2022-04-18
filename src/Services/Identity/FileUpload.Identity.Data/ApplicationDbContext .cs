@@ -1,7 +1,6 @@
 ﻿using FileUpload.Identity.Data.Entity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace FileUpload.Data.Entity
 {

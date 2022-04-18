@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FileUpload.Shared.Dtos.Categories
+﻿namespace FileUpload.Shared.Dtos.Categories
 {
     public class GetCategoryDtoWithFileCount
     {
@@ -9,5 +7,5 @@ namespace FileUpload.Shared.Dtos.Categories
         public int Count { get; set; }
     }
 
-    
+
 }

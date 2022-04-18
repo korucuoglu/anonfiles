@@ -62,7 +62,7 @@ namespace FileUpload.Upload.Persistence.Repositories
 
         public async Task<TEntity> FindAsync(int id, bool tracking = true)
         {
-            return tracking 
+            return tracking
                  ? await _table.FindAsync(id)
                  : await _table.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 

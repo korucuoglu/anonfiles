@@ -1,13 +1,11 @@
-﻿using FileUpload.Upload.Filters;
+﻿using FileUpload.Shared.Base;
+using FileUpload.Shared.Services;
 using FileUpload.Upload.Application.Features.Commands.Categories;
-using FileUpload.Upload.Domain.Entities;
+using FileUpload.Upload.Application.Features.Queries.Categories;
 using FileUpload.Upload.Infrastructure.Attribute;
-using FileUpload.Shared.Base;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using FileUpload.Shared.Services;
-using MediatR;
-using FileUpload.Upload.Application.Features.Queries.Categories;
 
 namespace FileUpload.Upload.Controllers
 {
@@ -69,7 +67,7 @@ namespace FileUpload.Upload.Controllers
         {
             int hasId = _hashService.Decode(id);
 
-            var data = await _mediator.Send(new DeleteCategoryCommand() { Id = hasId});
+            var data = await _mediator.Send(new DeleteCategoryCommand() { Id = hasId });
 
             return Result(data);
 

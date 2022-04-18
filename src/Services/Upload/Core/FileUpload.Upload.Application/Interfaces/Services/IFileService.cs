@@ -1,6 +1,6 @@
-﻿using FileUpload.Shared.Wrappers;
-using FileUpload.Shared.Dtos.Files;
+﻿using FileUpload.Shared.Dtos.Files;
 using FileUpload.Shared.Dtos.Files.Pager;
+using FileUpload.Shared.Wrappers;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -1,8 +1,8 @@
 ﻿using FileUpload.Upload.Application.Interfaces.Repositories;
-using FileUpload.Upload.Persistence.Repositories;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Upload.Domain.Common;
 using FileUpload.Upload.Persistence.Context;
+using FileUpload.Upload.Persistence.Repositories;
 using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Persistence.UnitOfWork
@@ -19,7 +19,7 @@ namespace FileUpload.Upload.Persistence.UnitOfWork
 
         public IWriteRepository<T> WriteRepository<T>() where T : BaseEntity
             => new WriteRepository<T>(_context);
-       
+
         public Task<int> SaveChangesAsync()
          => _context.SaveChangesAsync();
 

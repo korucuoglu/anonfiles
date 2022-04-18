@@ -1,6 +1,5 @@
 ﻿using FileUpload.Upload.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
 
 namespace FileUpload.Upload.Persistence.Identity

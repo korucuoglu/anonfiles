@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-
-namespace FileUpload.Upload.Application.Interfaces.Services
+﻿namespace FileUpload.Upload.Application.Interfaces.Services
 {
     public interface ISharedIdentityService
     {
@@ -10,5 +7,5 @@ namespace FileUpload.Upload.Application.Interfaces.Services
         public string GetUserName { get; }
     }
 
-   
+
 }

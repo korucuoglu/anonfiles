@@ -1,6 +1,6 @@
-﻿using FileUpload.Upload.Application.Interfaces.Hub;
+﻿using FileUpload.Shared.Dtos.Files;
 using FileUpload.Shared.Wrappers;
-using FileUpload.Shared.Dtos.Files;
+using FileUpload.Upload.Application.Interfaces.Hub;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Linq;

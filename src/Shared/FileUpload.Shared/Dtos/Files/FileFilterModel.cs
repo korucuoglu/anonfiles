@@ -41,9 +41,9 @@ namespace FileUpload.Shared.Dtos.Files
             Extension = model.Extension;
         }
 
-        public int Page { get; set; } 
-        public int PageSize { get; set; } 
-        public int OrderBy { get; set; } 
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public int OrderBy { get; set; }
         public string Extension { get; set; }
         public List<int> CategoryIds { get; set; }
 

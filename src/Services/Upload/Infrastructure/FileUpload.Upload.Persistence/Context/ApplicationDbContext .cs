@@ -86,7 +86,7 @@ namespace FileUpload.Upload.Persistence.Context
 
 
             Seed.AddData(builder);
-            
+
 
             base.OnModelCreating(builder);
         }

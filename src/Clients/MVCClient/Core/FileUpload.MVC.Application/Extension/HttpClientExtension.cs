@@ -1,8 +1,4 @@
-﻿using FileUpload.MVC.Application.Exceptions;
-using FileUpload.Shared.Wrappers;
-using Newtonsoft.Json;
-using System;
-using System.Linq;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -25,7 +21,7 @@ namespace FileUpload.MVC.Application.Extension
 
         public async static Task<TResult> CustomPostAsync<TResult, TValue>(this HttpClient Client, String Url, TValue Value)
         {
-           var result = await Client.PostAsJsonAsync(Url, Value);
+            var result = await Client.PostAsJsonAsync(Url, Value);
 
             return await result.Content.ReadFromJsonAsync<TResult>();
         }

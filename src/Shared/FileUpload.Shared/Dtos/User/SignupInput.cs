@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FileUpload.Shared.Dtos.User
+﻿namespace FileUpload.Shared.Dtos.User
 {
     public class SignupInput
     {
@@ -10,6 +8,6 @@ namespace FileUpload.Shared.Dtos.User
 
         public string Password { get; set; }
 
-        
+
     }
 }

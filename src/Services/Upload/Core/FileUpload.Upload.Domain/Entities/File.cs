@@ -16,6 +16,6 @@ namespace FileUpload.Upload.Domain.Entities
         public string FileKey { get; set; }
 
         public virtual ICollection<FileCategory> FilesCategories { get; set; }
-        
+
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FileUpload.Shared.Dtos.User
+﻿namespace FileUpload.Shared.Dtos.User
 {
     public class ResetPasswordModel
     {

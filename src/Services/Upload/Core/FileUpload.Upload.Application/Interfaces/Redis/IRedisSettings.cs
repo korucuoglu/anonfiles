@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileUpload.Upload.Application.Interfaces.Redis
+﻿namespace FileUpload.Upload.Application.Interfaces.Redis
 {
     public interface IRedisSettings
     {

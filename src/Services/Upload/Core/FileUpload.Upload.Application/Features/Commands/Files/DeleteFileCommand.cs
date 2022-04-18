@@ -1,11 +1,11 @@
-﻿using FileUpload.Upload.Application.Interfaces.UnitOfWork;
-using FileUpload.Shared.Wrappers;
+﻿using FileUpload.Shared.Wrappers;
+using FileUpload.Upload.Application.Interfaces.Services;
+using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Upload.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using FileUpload.Upload.Application.Interfaces.Services;
 
 namespace FileUpload.Upload.Application.Features.Commands.Files
 {
@@ -36,7 +36,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
         {
             var fileReadRepository = _unitOfWork.ReadRepository<File>();
             var fileWriteRepository = _unitOfWork.WriteRepository<File>();
-            
+
             var file = await fileReadRepository.FirstOrDefaultAsync(
                 x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == request.FileId);
 
@@ -46,7 +46,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
             userInfo.UsedSpace -= file.Size;
 
             _unitOfWork.WriteRepository<UserInfo>().Update(userInfo);
-            
+
             fileWriteRepository.Remove(file);
 
             bool result = await _unitOfWork.SaveChangesAsync() > 0;

@@ -1,13 +1,13 @@
-﻿using FileUpload.Upload.Application.Interfaces.Redis;
-using FileUpload.Upload.Application.Interfaces.UnitOfWork;
-using FileUpload.Shared.Wrappers;
+﻿using AutoMapper;
 using FileUpload.Shared.Dtos.Categories;
+using FileUpload.Shared.Wrappers;
+using FileUpload.Upload.Application.Interfaces.Redis;
+using FileUpload.Upload.Application.Interfaces.Repositories.Dapper;
+using FileUpload.Upload.Application.Interfaces.Services;
+using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using FileUpload.Upload.Application.Interfaces.Services;
-using AutoMapper;
-using FileUpload.Upload.Application.Interfaces.Repositories.Dapper;
 
 namespace FileUpload.Upload.Application.Features.Queries.Categories
 {

@@ -1,11 +1,12 @@
-﻿using FileUpload.Upload.Application.Features.Commands.Files;
+﻿using FileUpload.Shared.Dtos.Files;
+using FileUpload.Shared.Dtos.Files.Pager;
+using FileUpload.Shared.Wrappers;
+using FileUpload.Upload.Application.Features.Commands.Files;
+using FileUpload.Upload.Application.Features.Queries.Files;
 using FileUpload.Upload.Application.Interfaces.Hub;
 using FileUpload.Upload.Application.Interfaces.Services;
-using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Domain.Entities;
 using FileUpload.Upload.Infrastructure.Hub;
-using FileUpload.Shared.Dtos.Files;
-using FileUpload.Shared.Dtos.Files.Pager;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
@@ -13,7 +14,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using FileUpload.Upload.Application.Features.Queries.Files;
 
 namespace FileUpload.Upload.Infrastructure.Services
 {
@@ -52,7 +52,7 @@ namespace FileUpload.Upload.Infrastructure.Services
         }
         public async Task<Response<AddFileDto>> UploadAsync(IFormFile file, List<int> CategoriesId)
         {
-           
+
             var ConnnnectionId = HubData.ClientsData.Where(x => x.UserId == "1").Select(x => x.ConnectionId).FirstOrDefault();
 
             if (!string.IsNullOrEmpty(ConnnnectionId))

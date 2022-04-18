@@ -1,13 +1,13 @@
-﻿using System.Threading.Tasks;
-using System.Collections.Generic;
-using FileUpload.MVC.Application.Interfaces.Services;
-using FileUpload.MVC.Application.Dtos.Categories;
-using System.Net.Http;
+﻿using FileUpload.MVC.Application.Dtos.Categories;
 using FileUpload.MVC.Application.Extension;
-using FileUpload.Shared.Wrappers;
+using FileUpload.MVC.Application.Interfaces.Services;
+using FileUpload.Shared.Dtos.Categories;
 using FileUpload.Shared.Dtos.Files;
 using FileUpload.Shared.Dtos.Files.Pager;
-using FileUpload.Shared.Dtos.Categories;
+using FileUpload.Shared.Wrappers;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace FileUpload.MVC.Infrastructure.Services
 {
@@ -31,7 +31,7 @@ namespace FileUpload.MVC.Infrastructure.Services
 
         public async Task<FilesPagerViewModel> GetMyFiles(FileFilterModel model)
         {
-            var data =  await _client.CustomPostAsync<Response<FilesPagerViewModel>, FileFilterModel>("minio/myfiles", model);
+            var data = await _client.CustomPostAsync<Response<FilesPagerViewModel>, FileFilterModel>("minio/myfiles", model);
 
             return data.Value;
         }

@@ -1,12 +1,12 @@
-﻿using FileUpload.Upload.Application.Interfaces.Repositories;
-using FileUpload.Upload.Application.Interfaces.Services;
+﻿using FileUpload.Shared.Services;
 using FileUpload.Shared.Wrappers;
+using FileUpload.Upload.Application.Interfaces.Repositories;
+using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Linq;
 using System.Threading.Tasks;
-using FileUpload.Shared.Services;
 
 namespace FileUpload.Upload.Filters
 {
@@ -29,7 +29,7 @@ namespace FileUpload.Upload.Filters
             int decodeId = _hashService.Decode(id);
 
             if (decodeId == 0) return false;
-           
+
             return _service.Any(x => x.Id == decodeId && x.ApplicationUserId == _sharedIdentityService.GetUserId, tracking: false);
         }
 

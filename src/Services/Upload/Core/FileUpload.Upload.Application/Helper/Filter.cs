@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using FileUpload.Shared.Wrappers;
-using FileUpload.Upload.Domain.Entities;
 using FileUpload.Shared.Dtos.Categories;
 using FileUpload.Shared.Dtos.Files;
 using FileUpload.Shared.Dtos.Files.Enums;
 using FileUpload.Shared.Dtos.Files.Pager;
+using FileUpload.Shared.Wrappers;
+using FileUpload.Upload.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
