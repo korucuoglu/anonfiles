@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FileUpload.Upload.Persistence.EntityConfigurations
 {
-    public class FileEntityConfiguration: BaseIdentityEntityConfiguration<File>
+    public class FileEntityConfiguration: BaseIdentityConfiguration<File>
     {
         public override void Configure(EntityTypeBuilder<File> builder)
         {

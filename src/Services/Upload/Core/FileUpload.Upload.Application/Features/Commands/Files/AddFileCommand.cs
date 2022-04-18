@@ -40,7 +40,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
         {
             request.File.UserId = _sharedIdentityService.GetUserId;
 
-            var userInfo = await _unitOfWork.UserInfoReadRepository().FirstOrDefaultAsync(x => x.UserId == request.File.UserId);
+            var userInfo = await _unitOfWork.UserInfoReadRepository().FirstOrDefaultAsync(x => x.Id == request.File.UserId);
 
             userInfo.UsedSpace += request.File.Size;
 

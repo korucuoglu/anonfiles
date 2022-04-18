@@ -73,13 +73,11 @@ namespace FileUpload.Upload.Persistence
                {
                    Id = 1,
                    UsedSpace = 0,
-                   UserId = AdminUserId,
                },
                 new UserInfo()
                 {
                     Id = 2,
                     UsedSpace = 0,
-                    UserId = userId,
                 });
 
             builder.Entity<Category>().HasData(
