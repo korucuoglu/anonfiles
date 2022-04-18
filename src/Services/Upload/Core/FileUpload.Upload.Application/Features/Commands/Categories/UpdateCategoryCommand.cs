@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using FileUpload.Shared.Services;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Redis;
-using FileUpload.Upload.Application.Interfaces.Repositories.Dapper;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Upload.Domain.Entities;
 using FluentValidation;
@@ -32,16 +30,12 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRedisService _redisService;
         private readonly IMapper _mapper;
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IHashService _hashService;
 
-        public UpdateCategoryCommandHandler(IUnitOfWork unitOfWork, IRedisService redisService, IMapper mapper, ICategoryRepository categoryRepository, IHashService hashService)
+        public UpdateCategoryCommandHandler(IUnitOfWork unitOfWork, IRedisService redisService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _redisService = redisService;
             _mapper = mapper;
-            _categoryRepository = categoryRepository;
-            _hashService = hashService;
         }
 
         public async Task<Response<NoContent>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
