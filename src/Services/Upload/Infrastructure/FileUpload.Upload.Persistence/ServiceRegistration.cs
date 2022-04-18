@@ -1,13 +1,10 @@
-﻿using FileUpload.Upload.Application.Interfaces.Context;
-using FileUpload.Upload.Application.Interfaces.Repositories;
+﻿using FileUpload.Upload.Application.Interfaces.Repositories;
 using FileUpload.Upload.Application.Interfaces.Repositories.Dapper;
-using FileUpload.Upload.Application.Interfaces.Repositories.File;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Upload.Persistence.Context;
 using FileUpload.Upload.Persistence.Identity;
 using FileUpload.Upload.Persistence.Repositories;
 using FileUpload.Upload.Persistence.Repositories.Dapper;
-using FileUpload.Upload.Persistence.Repositories.File;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,19 +30,22 @@ namespace FileUpload.Upload.Persistence
                 });
             });
 
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
+            services.AddIdentity<User, ApplicationRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
                .AddDefaultTokenProviders();
 
-           
+
             services.AddScoped<IFileReadRepository, FileReadRepository>();
             services.AddScoped<IFileWriteRepository, FileWriteRepository>();
 
-            services.AddScoped(typeof(IReadRepository<>), typeof(IWriteRepository<>));
+            services.AddScoped<IUserInfoReadRepository, UserInfoReadRepository>();
+            services.AddScoped<IUserInfoWriteRepository, UserInfoWriteRepository>();
+
+            services.AddScoped<ICategoryReadRepository, CategoryReadRepository>();
+            services.AddScoped<ICategoryWriteRepository, CategoryWriteRepository>();
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
-            services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
 
 

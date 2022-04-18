@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace FileUpload.Upload.Application.Interfaces.Repositories.File
+namespace FileUpload.Upload.Application.Interfaces.Repositories
 {
     public interface IWriteRepository<TEntity> where TEntity : BaseEntity
     {

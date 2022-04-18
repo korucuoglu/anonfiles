@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FileUpload.Shared.Dtos.Categories;
+using FileUpload.Shared.Services;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Redis;
 using FileUpload.Upload.Application.Interfaces.Repositories.Dapper;
@@ -26,40 +28,34 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
     public class AddCategoryCommandHandler : IRequestHandler<AddCategoryCommand, Response<int>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICategoryRepository _categoryRepository;
         private readonly IRedisService _redisService;
         private readonly IMapper _mapper;
+        private readonly IHashService _hashService;
 
-        public AddCategoryCommandHandler(IUnitOfWork unitOfWork, IRedisService redisService, IMapper mapper, ICategoryRepository categoryRepository)
+        public AddCategoryCommandHandler(IUnitOfWork unitOfWork, IRedisService redisService, IMapper mapper, IHashService hashService)
         {
             _unitOfWork = unitOfWork;
             _redisService = redisService;
             _mapper = mapper;
-            _categoryRepository = categoryRepository;
+            _hashService = hashService;
         }
 
         public async Task<Response<int>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = _mapper.Map<Category>(request);
-            var data = await _categoryRepository.Insert(category);
+            await _unitOfWork.CategoryWriteRepository().AddAsync(category);
+            var result = await _unitOfWork.SaveChangesAsync() > 0;
 
-            return Response<int>.Success(data, 201);
+            if (!result)
+            {
+                return Response<int>.Fail("Kayıt sırasında hata meydana geldi");
+            }
 
+            var dto = _mapper.Map<GetCategoryDto>(category);
+            await _redisService.SetAsync($"categories-{category.Id}", dto);
 
-            //var category = _mapper.Map<Category>(request);
-            //var entity = await _unitOfWork.WriteRepository<Category>().AddAsync(category);
-            //bool result = await _unitOfWork.SaveChangesAsync() > 0;
+            return Response<int>.Success(_hashService.Encode(category.Id), 201);
 
-            //if (!result)
-            //{
-            //    return Response<GetCategoryDto>.Fail("Kaydetme sırasında hata meydana geldi",  500);
-            //}
-
-            //GetCategoryDto dto = _mapper.Map<GetCategoryDto>(entity);
-
-            //await _redisService.SetAsync($"categories-{entity.Id}", dto);
-
-            //return Response<GetCategoryDto>.Success(dto, 201);
         }
     }
 }

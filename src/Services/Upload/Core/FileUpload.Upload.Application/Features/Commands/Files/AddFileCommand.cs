@@ -38,15 +38,15 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
 
         public async Task<Response<AddFileDto>> Handle(AddFileCommand request, CancellationToken cancellationToken)
         {
-            request.File.ApplicationUserId = _sharedIdentityService.GetUserId;
+            request.File.UserId = _sharedIdentityService.GetUserId;
 
-            var userInfo = await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(x => x.ApplicationUserId == request.File.ApplicationUserId);
+            var userInfo = await _unitOfWork.UserInfoReadRepository().FirstOrDefaultAsync(x => x.UserId == request.File.UserId);
 
             userInfo.UsedSpace += request.File.Size;
 
-            _unitOfWork.WriteRepository<UserInfo>().Update(userInfo);
+            _unitOfWork.UserInfoWriteRepository().Update(userInfo);
 
-            var data = await _unitOfWork.WriteRepository<File>().AddAsync(request.File);
+            var data = await _unitOfWork.FileWriteRepository().AddAsync(request.File);
 
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 
@@ -55,9 +55,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
                 return Response<AddFileDto>.Fail("Dosyanın kaydedilmesi sırasında hata meydana geldi", 500);
             }
 
-            var mapperData = _mapper.Map<AddFileDto>(data);
-
-            return Response<AddFileDto>.Success(mapperData, 201);
+            return Response<AddFileDto>.Success(_mapper.Map<AddFileDto>(data), 201);
         }
     }
 }

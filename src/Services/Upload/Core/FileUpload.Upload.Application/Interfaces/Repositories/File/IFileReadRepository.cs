@@ -1,6 +1,6 @@
-﻿namespace FileUpload.Upload.Application.Interfaces.Repositories.File
+﻿namespace FileUpload.Upload.Application.Interfaces.Repositories
 {
-    public interface IFileReadRepository: IReadRepository<Domain.Entities.File>
+    public interface IFileReadRepository : IReadRepository<Domain.Entities.File>
     {
     }
 }

@@ -22,11 +22,11 @@ namespace FileUpload.IdentityServer.Controllers
     [ApiController]
     public class UserController : BaseApiController
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IConfiguration configuration;
         private readonly RabbitMQPublisher _rabbitMQPublisher;
 
-        public UserController(UserManager<ApplicationUser> userManager, IConfiguration configuration, RabbitMQPublisher rabbitMQPublisher)
+        public UserController(UserManager<User> userManager, IConfiguration configuration, RabbitMQPublisher rabbitMQPublisher)
         {
             _userManager = userManager;
             this.configuration = configuration;
@@ -36,7 +36,7 @@ namespace FileUpload.IdentityServer.Controllers
         [HttpPost]
         public async Task<IActionResult> Signup(SignupInput dto)
         {
-            var user = new ApplicationUser()
+            var user = new User()
             {
                 UserName = dto.UserName,
                 Email = dto.Email,
@@ -83,7 +83,7 @@ namespace FileUpload.IdentityServer.Controllers
         {
             var user = await _userManager.FindByIdAsync(userId);
 
-            async Task<Response<NoContent>> GetResult(ApplicationUser user)
+            async Task<Response<NoContent>> GetResult(User user)
             {
                 if (user == null)
                 {
@@ -116,7 +116,7 @@ namespace FileUpload.IdentityServer.Controllers
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            async Task<Response<NoContent>> GetResult(ApplicationUser user)
+            async Task<Response<NoContent>> GetResult(User user)
             {
                 if (user == null)
                 {
@@ -149,7 +149,7 @@ namespace FileUpload.IdentityServer.Controllers
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
 
-            async Task<Response<NoContent>> GetResult(ApplicationUser user)
+            async Task<Response<NoContent>> GetResult(User user)
             {
                 if (user == null)
                 {

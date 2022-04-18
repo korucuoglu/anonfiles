@@ -18,18 +18,18 @@ namespace FileUpload.Upload.Application.Mapping
             #region Category
 
             CreateMap<AddCategoryCommand, Category>()
-                .ForMember(dest => dest.ApplicationUserId, opt => opt.MapFrom<IdentityResolver<AddCategoryCommand, Category>>());
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom<IdentityResolver<AddCategoryCommand, Category>>());
 
 
             CreateMap<UpdateCategoryCommand, Category>()
-                .ForMember(dest => dest.ApplicationUserId, opt => opt.MapFrom<IdentityResolver<UpdateCategoryCommand, Category>>())
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom<IdentityResolver<UpdateCategoryCommand, Category>>())
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => _hashService.Decode(src.Id)));
 
             CreateMap<Category, GetCategoryDto>().
                 ForMember(dest => dest.Id, opt => opt.MapFrom(src => _hashService.Encode(src.Id)));
 
             CreateMap<GetCategoryDto, Category>()
-                .ForMember(dest => dest.ApplicationUserId, opt => opt.MapFrom<IdentityResolver<GetCategoryDto, Category>>())
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom<IdentityResolver<GetCategoryDto, Category>>())
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => _hashService.Decode(src.Id)));
 
             #endregion

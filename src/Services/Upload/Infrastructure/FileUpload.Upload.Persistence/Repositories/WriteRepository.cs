@@ -1,4 +1,4 @@
-﻿using FileUpload.Upload.Application.Interfaces.Repositories.File;
+﻿using FileUpload.Upload.Application.Interfaces.Repositories;
 using FileUpload.Upload.Domain.Common;
 using FileUpload.Upload.Persistence.Context;
 using Microsoft.EntityFrameworkCore;

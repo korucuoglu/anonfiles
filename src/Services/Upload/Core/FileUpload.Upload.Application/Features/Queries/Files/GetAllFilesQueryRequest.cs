@@ -31,12 +31,12 @@ namespace FileUpload.Upload.Application.Features.Queries.Files
 
         public async Task<Response<FilesPagerViewModel>> Handle(GetAllFilesQueryRequest request, CancellationToken cancellationToken)
         {
-            var repository = _unitOfWork.ReadRepository<File>();
+            var repository = _unitOfWork.FileReadRepository();
 
-            if (repository.Any(x => x.ApplicationUserId == _sharedIdentityService.GetUserId))
+            if (repository.Any(x => x.UserId == _sharedIdentityService.GetUserId))
             {
                 return await Filter.FilterFile(
-                    repository.Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId, tracking: false), request.FilterModel, _mapper);
+                    repository.Where(x => x.UserId == _sharedIdentityService.GetUserId, tracking: false), request.FilterModel, _mapper);
             }
 
             return Response<FilesPagerViewModel>.Success(new FilesPagerViewModel(), 200);

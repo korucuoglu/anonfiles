@@ -3,10 +3,11 @@ using FileUpload.Upload.Persistence.Context;
 
 namespace FileUpload.Upload.Persistence.Repositories
 {
-    public class FileWriteRepository : WriteRepository<Domain.Entities.File>, IFileWriteRepository
+    public class CategoryWriteRepository : WriteRepository<Domain.Entities.Category>, ICategoryWriteRepository
     {
-        public FileWriteRepository(ApplicationDbContext context) : base(context)
+        public CategoryWriteRepository(ApplicationDbContext context) : base(context)
         {
+
         }
     }
 }

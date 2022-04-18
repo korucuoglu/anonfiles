@@ -26,10 +26,10 @@ namespace FileUpload.Upload.Application.Features.Queries.Files
 
         public async Task<Response<string>> Handle(GetFileKeyById request, CancellationToken cancellationToken)
         {
-            var repository = _unitOfWork.ReadRepository<File>();
+            var repository = _unitOfWork.FileReadRepository();
 
             var data = await repository.Where(
-                x => x.Id == request.FileId && x.ApplicationUserId == _sharedIdentityService.GetUserId, tracking: false).Select(x => x.FileKey).FirstOrDefaultAsync();
+                x => x.Id == request.FileId && x.UserId == _sharedIdentityService.GetUserId, tracking: false).Select(x => x.FileKey).FirstOrDefaultAsync();
 
             if (string.IsNullOrEmpty(data))
             {

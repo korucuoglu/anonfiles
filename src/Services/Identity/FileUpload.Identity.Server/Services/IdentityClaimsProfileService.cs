@@ -12,10 +12,10 @@ namespace FileUpload.Identity.Server.Services
 {
     public class IdentityClaimsProfileService : IProfileService
     {
-        private readonly IUserClaimsPrincipalFactory<ApplicationUser> _claimsFactory;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserClaimsPrincipalFactory<User> _claimsFactory;
+        private readonly UserManager<User> _userManager;
 
-        public IdentityClaimsProfileService(IUserClaimsPrincipalFactory<ApplicationUser> claimsFactory, UserManager<ApplicationUser> userManager)
+        public IdentityClaimsProfileService(IUserClaimsPrincipalFactory<User> claimsFactory, UserManager<User> userManager)
         {
             _claimsFactory = claimsFactory;
             _userManager = userManager;

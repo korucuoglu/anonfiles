@@ -2,10 +2,10 @@
 using FileUpload.Shared.Dtos.Categories;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Redis;
-using FileUpload.Upload.Application.Interfaces.Repositories.Dapper;
+using FileUpload.Upload.Application.Interfaces.Repositories;
 using FileUpload.Upload.Application.Interfaces.Services;
-using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,14 +19,12 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories
     public class GetCategoryByIdQueryRequestHandler : IRequestHandler<GetCategoryByIdQueryRequest, Response<GetCategoryDto>>
     {
         private readonly IRedisService _redisService;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IMapper _mapper;
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICategoryReadRepository _categoryRepository;
 
-        public GetCategoryByIdQueryRequestHandler(IUnitOfWork unitOfWork, IRedisService redisService, ISharedIdentityService sharedIdentityService, IMapper mapper, ICategoryRepository categoryRepository)
+        public GetCategoryByIdQueryRequestHandler(IRedisService redisService, ISharedIdentityService sharedIdentityService, IMapper mapper, ICategoryReadRepository categoryRepository)
         {
-            _unitOfWork = unitOfWork;
             _redisService = redisService;
             _sharedIdentityService = sharedIdentityService;
             _mapper = mapper;
@@ -35,26 +33,24 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories
 
         public async Task<Response<GetCategoryDto>> Handle(GetCategoryByIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var data = await _categoryRepository.GetById(request.Id);
+            var result = await _redisService.IsKeyAsync($"categories-{request.Id}");
 
-            var mapperData = _mapper.Map<GetCategoryDto>(data);
+            if (result)
+            {
+                var redisData = await _redisService.GetAsync<GetCategoryDto>($"categories-{request.Id}");
+                return Response<GetCategoryDto>.Success(redisData, 200);
+            }
 
-            return Response<GetCategoryDto>.Success(mapperData, 200);
+            var entity = _categoryRepository.Where(
+                x => x.Id == request.Id &&
+                x.UserId == _sharedIdentityService.GetUserId,
+                tracking: false);
 
-            //var redisData = await _redisService.GetAsync<GetCategoryDto>($"categories-{request.Id}");
+            var data = await _mapper.ProjectTo<GetCategoryDto>(entity).FirstOrDefaultAsync();
 
-            //if (redisData != null)
-            //{
-            //    return Response<GetCategoryDto>.Success(redisData, 200);
-            //}
+            await _redisService.SetAsync($"categories-{request.Id}", data);
 
-            //var data = _unitOfWork.ReadRepository<Category>().Where(x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == request.Id, false);
-
-            //var mapperData = await _mapper.ProjectTo<GetCategoryDto>(data).FirstOrDefaultAsync();
-
-            //await _redisService.SetAsync($"categories-{request.Id}", mapperData);
-
-            //return Response<GetCategoryDto>.Success(mapperData, 200);
+            return Response<GetCategoryDto>.Success(data, 200);
         }
     }
 }
