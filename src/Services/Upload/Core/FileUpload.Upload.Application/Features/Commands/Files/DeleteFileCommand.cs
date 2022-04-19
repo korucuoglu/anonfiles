@@ -3,6 +3,8 @@ using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,18 +25,33 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
     public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand, Response<NoContent>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMinioService _minioService;
         private readonly ISharedIdentityService _sharedIdentityService;
 
-        public DeleteFileCommandHandler(IUnitOfWork unitOfWork, ISharedIdentityService sharedIdentityService)
+        public DeleteFileCommandHandler(IUnitOfWork unitOfWork, ISharedIdentityService sharedIdentityService, IMinioService minioService)
         {
             _unitOfWork = unitOfWork;
             _sharedIdentityService = sharedIdentityService;
+            _minioService = minioService;
         }
 
         public async Task<Response<NoContent>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
         {
+            var fileKey = await _unitOfWork.FileReadRepository().GetFileKey(request.FileId, _sharedIdentityService.GetUserId);
 
-             bool result = await _unitOfWork.FileWriteRepository().DeleteFileWithSp(request.FileId, _sharedIdentityService.GetUserId);
+            if (string.IsNullOrEmpty(fileKey))
+            {
+                return Response<NoContent>.Fail("Böyle bir dosya bulunamadı", 500);
+            }
+
+            var minioResult = await _minioService.Remove(fileKey);
+
+            if (!minioResult.IsSuccessful)
+            {
+                return minioResult;
+            }
+
+            bool result = await _unitOfWork.FileWriteRepository().DeleteFileWithSp(request.FileId, _sharedIdentityService.GetUserId);
 
             if (!result)
             {
@@ -42,33 +59,6 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
             }
 
             return Response<NoContent>.Success(200);
-
-
-            //var fileReadRepository = _unitOfWork.ReadRepository<File>();
-            //var fileWriteRepository = _unitOfWork.WriteRepository<File>();
-
-            //var file = await fileReadRepository.FirstOrDefaultAsync(
-            //    x => x.ApplicationUserId == _sharedIdentityService.GetUserId && x.Id == request.FileId);
-
-            //var userInfo = await _unitOfWork.ReadRepository<UserInfo>().FirstOrDefaultAsync(
-            //    x => x.ApplicationUserId == _sharedIdentityService.GetUserId);
-
-            //userInfo.UsedSpace -= file.Size;
-
-            //_unitOfWork.WriteRepository<UserInfo>().Update(userInfo);
-
-            //fileWriteRepository.Remove(file);
-
-            //bool result = await _unitOfWork.SaveChangesAsync() > 0;
-
-            //if (!result)
-            //{
-            //    return Response<NoContent>.Fail("Veri silme sırasında hata meydana geldi", 500);
-            //}
-
-            return Response<NoContent>.Success(200);
-
-
         }
     }
 }

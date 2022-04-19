@@ -1,53 +1,49 @@
-﻿using FileUpload.Shared.Dtos.Files;
-using FileUpload.Shared.Services;
-using FileUpload.Shared.Wrappers;
+﻿using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
-using FileUpload.Upload.Domain.Entities;
-using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Application.Features.Commands.Files
 {
-    public class AddFileCommand : IRequest<Response<AddFileDto>>
+    public class AddFileCommand : IRequest<Response<NoContent>>
     {
-        public File File { get; set; }
-    }
-    public class AddFileCommandValidator : AbstractValidator<AddFileCommand>
-    {
-        public AddFileCommandValidator()
-        {
-            RuleFor(x => x.File).NotNull().NotEmpty().WithMessage("Lütfen dosyayı giriniz");
-        }
+        public IFormFile File { get; set; }
     }
 
-    public class AddFileCommandHandler : IRequestHandler<AddFileCommand, Response<AddFileDto>>
+    public class AddFileCommandHandler : IRequestHandler<AddFileCommand, Response<NoContent>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IHashService _hashService;
+        private readonly IMinioService _minioService;
         private readonly ISharedIdentityService _sharedIdentityService;
 
-        public AddFileCommandHandler(IUnitOfWork unitOfWork, IHashService hashService, ISharedIdentityService sharedIdentityService)
+        public AddFileCommandHandler(IUnitOfWork unitOfWork, ISharedIdentityService sharedIdentityService, IMinioService minioService)
         {
             _unitOfWork = unitOfWork;
-            _hashService = hashService;
             _sharedIdentityService = sharedIdentityService;
+            _minioService = minioService;
         }
 
-        public async Task<Response<AddFileDto>> Handle(AddFileCommand request, CancellationToken cancellationToken)
+        public async Task<Response<NoContent>> Handle(AddFileCommand request, CancellationToken cancellationToken)
         {
-            request.File.UserId = _sharedIdentityService.GetUserId;
+            var fileKey = await _minioService.Upload(request.File);
 
-            bool result = await _unitOfWork.FileWriteRepository().AddFileWithSp(request.File);
+            if (!fileKey.IsSuccessful)
+            {
+                return Response<NoContent>.Fail("Dosyanın kaydedilmesi sırasında hata meydana geldi", 500);
+            }
+
+            bool result = await _unitOfWork.FileWriteRepository().
+                AddFileWithSp(request.File.FileName, request.File.Length, fileKey.Value, _sharedIdentityService.GetUserId);
 
             if (!result)
             {
-                return Response<AddFileDto>.Fail("Dosyanın kaydedilmesi sırasında hata meydana geldi", 500);
+                return Response<NoContent>.Fail("Dosyanın kaydedilmesi sırasında hata meydana geldi", 500);
             }
 
-            return Response<AddFileDto>.Success($"{request.File.FileName} başarıyla kaydedildi", 200);
+            return Response<NoContent>.Success($"{request.File.FileName} başarıyla kaydedildi", 200);
         }
     }
 }

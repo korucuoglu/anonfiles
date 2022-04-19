@@ -2,13 +2,14 @@
 using FileUpload.Shared.Dtos.Files;
 using FileUpload.Shared.Services;
 using FileUpload.Shared.Wrappers;
-using FileUpload.Upload.Application.Interfaces.Services;
+using FileUpload.Upload.Application.Features.Commands.Files;
+using FileUpload.Upload.Application.Features.Queries.Files;
 using FileUpload.Upload.Domain.Entities;
 using FileUpload.Upload.Filters;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Controllers
@@ -16,25 +17,23 @@ namespace FileUpload.Upload.Controllers
 
     public class FilesController : BaseApiController
     {
-        private readonly IFileService _service;
         private readonly IHashService _hashService;
+        private readonly IMediator _mediator;
 
-        public FilesController(IFileService service, IHashService hashService)
+        public FilesController( IHashService hashService, IMediator mediator)
         {
-            _service = service;
             _hashService = hashService;
+            _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload([FromForm] IFormFile[] files, [FromForm] string categories)
+        public async Task<IActionResult> Upload([FromForm] IFormFile[] files)
         {
-            List<int> categoryIds = string.IsNullOrEmpty(categories) ? new List<int>() : JsonSerializer.Deserialize<List<int>>(categories);
-
-            List<Response<AddFileDto>> result = new();
+            List<Response<NoContent>> result = new();
 
             foreach (var file in files)
             {
-                var data = await _service.UploadAsync(file, categoryIds);
+                var data = await _mediator.Send(new AddFileCommand() { File = file});
 
                 result.Add(data);
             }
@@ -43,49 +42,59 @@ namespace FileUpload.Upload.Controllers
         }
 
         [HttpPost("myfiles")]
-        public async Task<IActionResult> GetAllAsync([FromBody] FileFilterModel model)
+        public async Task<IActionResult> GetAllAsync(FileFilterModel model)
         {
-            FileFilterModel filterModel = new(model);
-
-            var data = await _service.GetAllFiles(filterModel);
+            GetAllFilesQueryRequest query = new()
+            {
+                FilterModel = new(model)
+            };
+            var data = await _mediator.Send(query);
 
             return Result(data);
+
         }
 
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
         [HttpGet("myfiles/{id}")]
         public async Task<IActionResult> GetByIdAsync(string id)
         {
-            int hasId = _hashService.Decode(id);
 
-            var data = await _service.GetFileById(hasId);
+            GetFileByIdQueryRequest query = new()
+            {
+                FileId = _hashService.Decode(id)
+            };
+
+            var data = await _mediator.Send(query);
 
             return Result(data);
-
         }
 
         [HttpDelete("{id}")]
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
         public async Task<IActionResult> Remove(string id)
         {
-            int hasId = _hashService.Decode(id);
+            DeleteFileCommand command = new()
+            {
+                FileId = _hashService.Decode(id)
+            };
 
-            var data = await _service.Remove(hasId);
+            var data = await _mediator.Send(command);
 
             return Result(data);
-
         }
 
         [HttpGet("download/{id}")]
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
         public async Task<IActionResult> Download(string id)
         {
-            int hasId = _hashService.Decode(id);
+            GetDownloadLink query = new()
+            {
+                FileId = _hashService.Decode(id)
+            };
 
-            var data = await _service.Download(hasId);
+            var data = await _mediator.Send(query);
 
             return Result(data);
-
         }
     }
 }

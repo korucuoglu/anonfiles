@@ -2,6 +2,8 @@
 using FileUpload.Shared.Services;
 using FileUpload.Upload.Application.Features.Commands.Categories;
 using FileUpload.Upload.Application.Features.Queries.Categories;
+using FileUpload.Upload.Domain.Entities;
+using FileUpload.Upload.Filters;
 using FileUpload.Upload.Infrastructure.Attribute;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +34,7 @@ namespace FileUpload.Upload.Controllers
         }
 
         [HttpGet("{id}")]
-        // [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
+        [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
         public async Task<IActionResult> GetByIdAsync(string id)
         {
             int hasId = _hashService.Decode(id);
@@ -52,7 +54,7 @@ namespace FileUpload.Upload.Controllers
         }
 
         [ValidationFilter]
-        //[ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
+        [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
         public async Task<IActionResult> UpdateAsync(UpdateCategoryCommand model)
         {
             var data = await _mediator.Send(model);
@@ -62,7 +64,7 @@ namespace FileUpload.Upload.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
+        [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
         public async Task<IActionResult> DeleteByIdAsync(string id)
         {
             int hasId = _hashService.Decode(id);

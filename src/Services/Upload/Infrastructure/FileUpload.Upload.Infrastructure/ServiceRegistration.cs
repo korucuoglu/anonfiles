@@ -19,11 +19,19 @@ namespace FileUpload.Upload.Infrastructure
         public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpContextAccessor();
+            
             services.AddSingleton<ISharedIdentityService, SharedIdentityService>();
-            services.AddScoped<IFileService, FileService>();
             services.AddScoped<IMinioService, MinioService>();
             services.AddScoped<IHashService, HashService>();
+
             services.AddScoped(typeof(NotFoundFilterAttribute<>));
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
+            #region JWT
 
             services.AddAuthentication().AddJwtBearer(options =>
             {
@@ -40,6 +48,8 @@ namespace FileUpload.Upload.Infrastructure
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
 
+            #endregion
+
             #region Redis
             services.Configure<RedisSettings>(configuration.GetSection("RedisSettings"));
 
@@ -51,11 +61,6 @@ namespace FileUpload.Upload.Infrastructure
             services.AddSingleton<IRedisService, RedisService>();
 
             #endregion
-
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.SuppressModelStateInvalidFilter = true;
-            });
 
             #region SignalR & Cors
 
