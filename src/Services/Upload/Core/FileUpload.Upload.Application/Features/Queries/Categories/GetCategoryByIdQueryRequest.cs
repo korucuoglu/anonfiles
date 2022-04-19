@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FileUpload.Shared.Dtos.Categories;
+using FileUpload.Shared.Services;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Redis;
 using FileUpload.Upload.Application.Interfaces.Services;
@@ -13,22 +14,24 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories
 {
     public class GetCategoryByIdQueryRequest : IRequest<Response<GetCategoryDto>>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 
     public class GetCategoryByIdQueryRequestHandler : IRequestHandler<GetCategoryByIdQueryRequest, Response<GetCategoryDto>>
     {
+        private readonly IHashService _hashService;
         private readonly IRedisService _redisService;
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public GetCategoryByIdQueryRequestHandler(IRedisService redisService, ISharedIdentityService sharedIdentityService, IMapper mapper, IUnitOfWork unitOfWork)
+        public GetCategoryByIdQueryRequestHandler(IRedisService redisService, ISharedIdentityService sharedIdentityService, IMapper mapper, IUnitOfWork unitOfWork, IHashService hashService)
         {
             _redisService = redisService;
             _sharedIdentityService = sharedIdentityService;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _hashService = hashService;
         }
 
         public async Task<Response<GetCategoryDto>> Handle(GetCategoryByIdQueryRequest request, CancellationToken cancellationToken)
@@ -42,7 +45,7 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories
             }
 
             var entity = _unitOfWork.CategoryReadRepository().Where(
-                x => x.Id == request.Id &&
+                x => x.Id == _hashService.Decode(request.Id) &&
                 x.UserId == _sharedIdentityService.GetUserId,
                 tracking: false);
 

@@ -1,4 +1,5 @@
-﻿using FileUpload.Shared.Wrappers;
+﻿using FileUpload.Shared.Services;
+using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Redis;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
@@ -11,7 +12,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
 {
     public class DeleteCategoryCommand : IRequest<Response<NoContent>>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 
     public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
@@ -24,21 +25,23 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
 
     public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Response<NoContent>>
     {
+        private readonly IHashService _hashService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRedisService _redisService;
         private readonly ISharedIdentityService _sharedIdentityService;
 
-        public DeleteCategoryCommandHandler(IUnitOfWork unitOfWork, IRedisService redisService, ISharedIdentityService sharedIdentityService)
+        public DeleteCategoryCommandHandler(IUnitOfWork unitOfWork, IRedisService redisService, ISharedIdentityService sharedIdentityService, IHashService hashService)
         {
             _unitOfWork = unitOfWork;
             _redisService = redisService;
             _sharedIdentityService = sharedIdentityService;
+            _hashService = hashService;
         }
 
         public async Task<Response<NoContent>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
             await _unitOfWork.CategoryWriteRepository().
-                RemoveAsync(x => x.Id == request.Id && x.UserId == _sharedIdentityService.GetUserId);
+                RemoveAsync(x => x.Id == _hashService.Decode(request.Id) && x.UserId == _sharedIdentityService.GetUserId);
 
             bool result = await _unitOfWork.SaveChangesAsync() > 0;
 

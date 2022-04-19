@@ -1,5 +1,4 @@
 ﻿using FileUpload.Shared.Base;
-using FileUpload.Shared.Services;
 using FileUpload.Upload.Application.Features.Commands.Categories;
 using FileUpload.Upload.Application.Features.Queries.Categories;
 using FileUpload.Upload.Domain.Entities;
@@ -16,14 +15,10 @@ namespace FileUpload.Upload.Controllers
     public class CategoriesController : BaseApiController
     {
         private readonly IMediator _mediator;
-        private readonly IHashService _hashService;
-
-        public CategoriesController(IMediator mediator, IHashService hashService)
+        public CategoriesController(IMediator mediator)
         {
             _mediator = mediator;
-            _hashService = hashService;
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
@@ -37,9 +32,7 @@ namespace FileUpload.Upload.Controllers
         [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
         public async Task<IActionResult> GetByIdAsync(string id)
         {
-            int hasId = _hashService.Decode(id);
-
-            var data = await _mediator.Send(new GetCategoryByIdQueryRequest() { Id = hasId });
+            var data = await _mediator.Send(new GetCategoryByIdQueryRequest() { Id = id });
 
             return Result(data);
         }
@@ -67,9 +60,7 @@ namespace FileUpload.Upload.Controllers
         [ServiceFilter(typeof(NotFoundFilterAttribute<Category>))]
         public async Task<IActionResult> DeleteByIdAsync(string id)
         {
-            int hasId = _hashService.Decode(id);
-
-            var data = await _mediator.Send(new DeleteCategoryCommand() { Id = hasId });
+            var data = await _mediator.Send(new DeleteCategoryCommand() { Id = id });
 
             return Result(data);
 

@@ -50,7 +50,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
             {
                 return Response<NoContent>.Fail(error: "Hata meydana geldi", statusCode: 500);
             }
-            await _redisService.SetAsync($"categories-{category.Id}", category);
+            await _redisService.SetAsync($"categories-{request.Id}", category);
 
             return Response<NoContent>.Success(200);
         }

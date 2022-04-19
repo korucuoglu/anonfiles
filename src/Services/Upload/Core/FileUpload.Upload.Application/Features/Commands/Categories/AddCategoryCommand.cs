@@ -51,9 +51,12 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
             }
 
             var dto = _mapper.Map<GetCategoryDto>(category);
-            await _redisService.SetAsync($"categories-{category.Id}", dto);
 
-            return Response<int>.Success(_hashService.Encode(category.Id), 201);
+            var hashId = _hashService.Encode(category.Id);
+
+            await _redisService.SetAsync($"categories-{hashId}", dto);
+
+            return Response<int>.Success(hashId, 201);
 
         }
     }
