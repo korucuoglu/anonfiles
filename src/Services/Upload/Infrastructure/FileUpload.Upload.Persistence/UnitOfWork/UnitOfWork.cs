@@ -21,7 +21,7 @@ namespace FileUpload.Upload.Persistence.UnitOfWork
             return _context.SaveChangesAsync();
         }
 
-        public IReadRepository<T> ReadRepository<T>() where T: BaseEntity => new ReadRepository<T>(_context);
+        public IReadRepository<T> ReadRepository<T>() where T : BaseEntity => new ReadRepository<T>(_context);
         public IFileReadRepository FileReadRepository() => new FileReadRepository(_context);
         public IFileWriteRepository FileWriteRepository() => new FileWriteRepository(_context);
         public IUserInfoWriteRepository UserInfoWriteRepository() => new UserInfoWriteRepository(_context);

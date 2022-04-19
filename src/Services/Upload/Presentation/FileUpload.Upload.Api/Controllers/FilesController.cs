@@ -1,6 +1,5 @@
 ﻿using FileUpload.Shared.Base;
 using FileUpload.Shared.Dtos.Files;
-using FileUpload.Shared.Services;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Features.Commands.Files;
 using FileUpload.Upload.Application.Features.Queries.Files;
@@ -17,15 +16,12 @@ namespace FileUpload.Upload.Controllers
 
     public class FilesController : BaseApiController
     {
-        private readonly IHashService _hashService;
         private readonly IMediator _mediator;
 
-        public FilesController( IHashService hashService, IMediator mediator)
+        public FilesController(IMediator mediator)
         {
-            _hashService = hashService;
             _mediator = mediator;
         }
-
         [HttpPost]
         public async Task<IActionResult> Upload([FromForm] IFormFile[] files)
         {
@@ -33,39 +29,25 @@ namespace FileUpload.Upload.Controllers
 
             foreach (var file in files)
             {
-                var data = await _mediator.Send(new AddFileCommand() { File = file});
+                var data = await _mediator.Send(new AddFileCommand() { File = file });
 
                 result.Add(data);
             }
             return Ok(result);
-
         }
 
         [HttpPost("myfiles")]
         public async Task<IActionResult> GetAllAsync(FileFilterModel model)
         {
-            GetAllFilesQueryRequest query = new()
-            {
-                FilterModel = new(model)
-            };
-            var data = await _mediator.Send(query);
-
+            var data = await _mediator.Send(new GetAllFilesQueryRequest() { FilterModel = new(model) });
             return Result(data);
-
         }
 
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
         [HttpGet("myfiles/{id}")]
         public async Task<IActionResult> GetByIdAsync(string id)
         {
-
-            GetFileByIdQueryRequest query = new()
-            {
-                FileId = _hashService.Decode(id)
-            };
-
-            var data = await _mediator.Send(query);
-
+            var data = await _mediator.Send(new GetFileByIdQueryRequest() { FileId = id });
             return Result(data);
         }
 
@@ -73,13 +55,7 @@ namespace FileUpload.Upload.Controllers
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
         public async Task<IActionResult> Remove(string id)
         {
-            DeleteFileCommand command = new()
-            {
-                FileId = _hashService.Decode(id)
-            };
-
-            var data = await _mediator.Send(command);
-
+            var data = await _mediator.Send(new DeleteFileCommand() { FileId = id });
             return Result(data);
         }
 
@@ -87,13 +63,7 @@ namespace FileUpload.Upload.Controllers
         [ServiceFilter(typeof(NotFoundFilterAttribute<File>))]
         public async Task<IActionResult> Download(string id)
         {
-            GetDownloadLink query = new()
-            {
-                FileId = _hashService.Decode(id)
-            };
-
-            var data = await _mediator.Send(query);
-
+            var data = await _mediator.Send(new GetDownloadLink() { FileId = id });
             return Result(data);
         }
     }

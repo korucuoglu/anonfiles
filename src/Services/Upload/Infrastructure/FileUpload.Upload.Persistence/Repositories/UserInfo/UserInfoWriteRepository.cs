@@ -1,6 +1,5 @@
 ﻿using FileUpload.Upload.Application.Interfaces.Repositories;
 using FileUpload.Upload.Persistence.Context;
-using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Persistence.Repositories
 {

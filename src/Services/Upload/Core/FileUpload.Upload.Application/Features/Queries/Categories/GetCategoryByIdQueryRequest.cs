@@ -2,7 +2,6 @@
 using FileUpload.Shared.Dtos.Categories;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Redis;
-using FileUpload.Upload.Application.Interfaces.Repositories;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using MediatR;

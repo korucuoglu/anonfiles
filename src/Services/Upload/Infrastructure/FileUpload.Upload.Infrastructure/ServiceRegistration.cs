@@ -19,7 +19,7 @@ namespace FileUpload.Upload.Infrastructure
         public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpContextAccessor();
-            
+
             services.AddSingleton<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<IMinioService, MinioService>();
             services.AddScoped<IHashService, HashService>();

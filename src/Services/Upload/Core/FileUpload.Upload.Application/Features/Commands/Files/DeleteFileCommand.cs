@@ -1,10 +1,9 @@
-﻿using FileUpload.Shared.Wrappers;
+﻿using FileUpload.Shared.Services;
+using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +11,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
 {
     public class DeleteFileCommand : IRequest<Response<NoContent>>
     {
-        public int FileId { get; set; }
+        public string FileId { get; set; }
     }
     public class DeleteFileCommandValidator : AbstractValidator<DeleteFileCommand>
     {
@@ -25,19 +24,22 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
     public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand, Response<NoContent>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHashService _hashService;
         private readonly IMinioService _minioService;
         private readonly ISharedIdentityService _sharedIdentityService;
 
-        public DeleteFileCommandHandler(IUnitOfWork unitOfWork, ISharedIdentityService sharedIdentityService, IMinioService minioService)
+        public DeleteFileCommandHandler(IUnitOfWork unitOfWork, ISharedIdentityService sharedIdentityService, IMinioService minioService, IHashService hashService)
         {
             _unitOfWork = unitOfWork;
             _sharedIdentityService = sharedIdentityService;
             _minioService = minioService;
+            _hashService = hashService;
         }
 
         public async Task<Response<NoContent>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
         {
-            var fileKey = await _unitOfWork.FileReadRepository().GetFileKey(request.FileId, _sharedIdentityService.GetUserId);
+            var fileKey = await _unitOfWork.FileReadRepository().
+                GetFileKey(_hashService.Decode(request.FileId), _sharedIdentityService.GetUserId);
 
             if (string.IsNullOrEmpty(fileKey))
             {
@@ -51,7 +53,8 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
                 return minioResult;
             }
 
-            bool result = await _unitOfWork.FileWriteRepository().DeleteFileWithSp(request.FileId, _sharedIdentityService.GetUserId);
+            bool result = await _unitOfWork.FileWriteRepository().
+                DeleteFileWithSp(_hashService.Decode(request.FileId), _sharedIdentityService.GetUserId);
 
             if (!result)
             {

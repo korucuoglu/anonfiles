@@ -19,9 +19,9 @@ namespace FileUpload.Upload.Persistence.EntityConfigurations
               .WithMany(x => x.FilesCategories)
               .HasForeignKey(x => x.FileId);
 
-           builder.HasOne(x => x.Category)
-              .WithMany(x => x.FilesCategories)
-              .HasForeignKey(x => x.CategoryId);
+            builder.HasOne(x => x.Category)
+               .WithMany(x => x.FilesCategories)
+               .HasForeignKey(x => x.CategoryId);
         }
     }
 }
