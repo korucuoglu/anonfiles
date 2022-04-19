@@ -33,6 +33,17 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
 
         public async Task<Response<NoContent>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
         {
+
+             bool result = await _unitOfWork.FileWriteRepository().DeleteFileWithSp(request.FileId, _sharedIdentityService.GetUserId);
+
+            if (!result)
+            {
+                return Response<NoContent>.Fail("Silme sırasında hata meydana geldi", 500);
+            }
+
+            return Response<NoContent>.Success(200);
+
+
             //var fileReadRepository = _unitOfWork.ReadRepository<File>();
             //var fileWriteRepository = _unitOfWork.WriteRepository<File>();
 
@@ -55,7 +66,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
             //    return Response<NoContent>.Fail("Veri silme sırasında hata meydana geldi", 500);
             //}
 
-            return Response<NoContent>.Success(204);
+            return Response<NoContent>.Success(200);
 
 
         }

@@ -4,6 +4,7 @@ using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Redis;
 using FileUpload.Upload.Application.Interfaces.Repositories;
 using FileUpload.Upload.Application.Interfaces.Services;
+using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
@@ -21,14 +22,14 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories
         private readonly IRedisService _redisService;
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IMapper _mapper;
-        private readonly ICategoryReadRepository _categoryRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GetCategoryByIdQueryRequestHandler(IRedisService redisService, ISharedIdentityService sharedIdentityService, IMapper mapper, ICategoryReadRepository categoryRepository)
+        public GetCategoryByIdQueryRequestHandler(IRedisService redisService, ISharedIdentityService sharedIdentityService, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _redisService = redisService;
             _sharedIdentityService = sharedIdentityService;
             _mapper = mapper;
-            _categoryRepository = categoryRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Response<GetCategoryDto>> Handle(GetCategoryByIdQueryRequest request, CancellationToken cancellationToken)
@@ -41,7 +42,7 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories
                 return Response<GetCategoryDto>.Success(redisData, 200);
             }
 
-            var entity = _categoryRepository.Where(
+            var entity = _unitOfWork.CategoryReadRepository().Where(
                 x => x.Id == request.Id &&
                 x.UserId == _sharedIdentityService.GetUserId,
                 tracking: false);

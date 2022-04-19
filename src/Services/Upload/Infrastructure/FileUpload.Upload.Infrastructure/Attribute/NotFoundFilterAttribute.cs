@@ -1,7 +1,7 @@
 ﻿using FileUpload.Shared.Services;
 using FileUpload.Shared.Wrappers;
-using FileUpload.Upload.Application.Interfaces.Repositories;
 using FileUpload.Upload.Application.Interfaces.Services;
+using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FileUpload.Upload.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -12,13 +12,13 @@ namespace FileUpload.Upload.Filters
 {
     public class NotFoundFilterAttribute<TEntity> : IAsyncActionFilter where TEntity : BaseIdentity
     {
-        private readonly IReadRepository<TEntity> _service;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IHashService _hashService;
 
-        public NotFoundFilterAttribute(IReadRepository<TEntity> service, ISharedIdentityService sharedIdentityService, IHashService hashService)
+        public NotFoundFilterAttribute(IUnitOfWork unitOfWork, ISharedIdentityService sharedIdentityService, IHashService hashService)
         {
-            _service = service;
+            _unitOfWork = unitOfWork;
             _sharedIdentityService = sharedIdentityService;
             _hashService = hashService;
         }
@@ -30,7 +30,7 @@ namespace FileUpload.Upload.Filters
 
             if (decodeId == 0) return false;
 
-            return _service.Any(x => x.Id == decodeId && x.UserId == _sharedIdentityService.GetUserId, tracking: false);
+            return _unitOfWork.ReadRepository<TEntity>().Any(x => x.Id == decodeId && x.UserId == _sharedIdentityService.GetUserId, tracking: false);
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)

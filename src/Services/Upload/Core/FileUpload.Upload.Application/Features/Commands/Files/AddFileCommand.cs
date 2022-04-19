@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using FileUpload.Shared.Dtos.Files;
+﻿using FileUpload.Shared.Dtos.Files;
+using FileUpload.Shared.Services;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
@@ -26,13 +26,13 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
     public class AddFileCommandHandler : IRequestHandler<AddFileCommand, Response<AddFileDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly IHashService _hashService;
         private readonly ISharedIdentityService _sharedIdentityService;
 
-        public AddFileCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ISharedIdentityService sharedIdentityService)
+        public AddFileCommandHandler(IUnitOfWork unitOfWork, IHashService hashService, ISharedIdentityService sharedIdentityService)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _hashService = hashService;
             _sharedIdentityService = sharedIdentityService;
         }
 
@@ -40,22 +40,14 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
         {
             request.File.UserId = _sharedIdentityService.GetUserId;
 
-            var userInfo = await _unitOfWork.UserInfoReadRepository().FirstOrDefaultAsync(x => x.Id == request.File.UserId);
-
-            userInfo.UsedSpace += request.File.Size;
-
-            _unitOfWork.UserInfoWriteRepository().Update(userInfo);
-
-            var data = await _unitOfWork.FileWriteRepository().AddAsync(request.File);
-
-            bool result = await _unitOfWork.SaveChangesAsync() > 0;
+            bool result = await _unitOfWork.FileWriteRepository().AddFileWithSp(request.File);
 
             if (!result)
             {
                 return Response<AddFileDto>.Fail("Dosyanın kaydedilmesi sırasında hata meydana geldi", 500);
             }
 
-            return Response<AddFileDto>.Success(_mapper.Map<AddFileDto>(data), 201);
+            return Response<AddFileDto>.Success($"{request.File.FileName} başarıyla kaydedildi", 200);
         }
     }
 }
