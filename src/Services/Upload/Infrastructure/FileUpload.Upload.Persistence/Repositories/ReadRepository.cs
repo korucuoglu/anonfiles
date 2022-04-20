@@ -21,6 +21,7 @@ namespace FileUpload.Upload.Persistence.Repositories
 
         public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool tracking = true)
         {
+            
             var query = _table.AsQueryable();
             if (!tracking)
                 query = query.AsNoTracking();

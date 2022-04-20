@@ -1,6 +1,7 @@
 ﻿using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Threading;
@@ -11,6 +12,14 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
     public class AddFileCommand : IRequest<Response<NoContent>>
     {
         public IFormFile File { get; set; }
+    }
+
+    public class AddFileCommandValidator : AbstractValidator<AddFileCommand>
+    {
+        public AddFileCommandValidator()
+        {
+            RuleFor(x => x.File.Length).GreaterThan(0).WithMessage("Dolu bir dosya giriniz");
+        }
     }
 
     public class AddFileCommandHandler : IRequestHandler<AddFileCommand, Response<NoContent>>

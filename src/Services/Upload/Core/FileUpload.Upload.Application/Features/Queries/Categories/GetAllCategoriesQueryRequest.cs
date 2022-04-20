@@ -29,7 +29,7 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories
 
         public async Task<Response<List<GetCategoryDto>>> Handle(GetAllCategoriesQueryRequest request, CancellationToken cancellationToken)
         {
-            var data = _unitOfWork.CategoryReadRepository().Where(x => x.UserId == _sharedIdentityService.GetUserId);
+            var data = _unitOfWork.CategoryReadRepository().Where(x => x.UserId == _sharedIdentityService.GetUserId, tracking:false);
 
             return Response<List<GetCategoryDto>>.Success(await _mapper.ProjectTo<GetCategoryDto>(data).ToListAsync(), 200);
 
