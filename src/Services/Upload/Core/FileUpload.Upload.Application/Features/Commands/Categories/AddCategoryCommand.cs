@@ -56,7 +56,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
 
             await _redisService.SetAsync($"categories-{hashId}", dto);
 
-            return Response<string>.Success(data:hashId, 201);
+            return Response<string>.Success(data: hashId, 201);
 
         }
     }

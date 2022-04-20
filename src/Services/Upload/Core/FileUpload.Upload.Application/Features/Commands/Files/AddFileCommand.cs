@@ -1,4 +1,5 @@
-﻿using FileUpload.Shared.Wrappers;
+﻿using FileUpload.Shared.Services;
+using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Interfaces.Services;
 using FileUpload.Upload.Application.Interfaces.UnitOfWork;
 using FluentValidation;

@@ -101,13 +101,13 @@ namespace FileUpload.MVC.Controllers
         }
 
         [HttpGet("[controller]/reset-passwordConfirm")]
-        public async Task<IActionResult> ResetPasswordConfirm([FromQuery][Bind("UserId, Token")] ResetPasswordModel model)
+        public async Task<IActionResult> ResetPasswordConfirm([FromQuery][Bind("UserId, Token")] ResetPasswordConfirmModel model)
         {
             return await Task.FromResult(View(model));
         }
 
         [HttpPost("[controller]/reset-passwordConfirm")]
-        public async Task<IActionResult> PostResetPasswordConfirm([FromBody] ResetPasswordModel model)
+        public async Task<IActionResult> PostResetPasswordConfirm([FromBody] ResetPasswordConfirmModel model)
         {
             var data = await _identityService.ResetPasswordConfirm(model);
 

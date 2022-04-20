@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using FileUpload.Upload.Application.Interfaces.Services;
+using FileUpload.Shared.Services;
 
 namespace FileUpload.Upload.Application.Mapping
 {

@@ -222,7 +222,7 @@ namespace FileUpload.MVC.Infrastructure.Services
                 return JsonConvert.DeserializeObject<Response<NoContent>>(await response.Content.ReadAsStringAsync());
             }
         }
-        public async Task<Response<NoContent>> ResetPasswordConfirm(ResetPasswordModel model)
+        public async Task<Response<NoContent>> ResetPasswordConfirm(ResetPasswordConfirmModel model)
         {
             var clientCredentialsToken = await _clientCredentialTokenService.GetToken();
             var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");

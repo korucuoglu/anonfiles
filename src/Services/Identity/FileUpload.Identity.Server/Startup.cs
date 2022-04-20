@@ -6,6 +6,7 @@ using FileUpload.Data.Entity;
 using FileUpload.Identity.Server.Services;
 using FileUpload.IdentityServer.Services;
 using FileUpload.Shared.Middlewares;
+using FileUpload.Shared.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -37,9 +38,15 @@ namespace FileUpload.IdentityServer
 
             services.AddSingleton<RabbitMQClientService>();
             services.AddSingleton<RabbitMQPublisher>();
+            services.AddScoped<IHashService, HashService>();
+            services.AddScoped<ISharedIdentityService, SharedIdentityService>();
 
             services.AddLocalApiAuthentication(); // Buradan bize otomatik olarak Policy gelmektedir. Bunu User Controller'da kullandık. 
-            services.AddControllersWithViews();
+            services.AddControllers().AddNewtonsoftJson(opt =>
+            {
+                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            });
 
 
             services.AddDbContext<ApplicationDbContext>(opt =>
@@ -75,6 +82,7 @@ namespace FileUpload.IdentityServer
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
+
 
                 options.EmitStaticAudienceClaim = true;
             })

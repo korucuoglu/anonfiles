@@ -3,6 +3,7 @@ using FileUpload.Identity.Server.Services;
 using FileUpload.Shared.Base;
 using FileUpload.Shared.Dtos.User;
 using FileUpload.Shared.Event;
+using FileUpload.Shared.Services;
 using FileUpload.Shared.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,22 +19,20 @@ using static IdentityServer4.IdentityServerConstants;
 namespace FileUpload.IdentityServer.Controllers
 {
     [Authorize(LocalApi.PolicyName)]
-    [Route("api/[controller]/[action]")]
-    [ApiController]
     public class UserController : BaseApiController
     {
         private readonly UserManager<User> _userManager;
-        private readonly IConfiguration configuration;
         private readonly RabbitMQPublisher _rabbitMQPublisher;
+        private readonly IHashService _hashService;
 
-        public UserController(UserManager<User> userManager, IConfiguration configuration, RabbitMQPublisher rabbitMQPublisher)
+        public UserController(UserManager<User> userManager, RabbitMQPublisher rabbitMQPublisher, IHashService hashService)
         {
             _userManager = userManager;
-            this.configuration = configuration;
             _rabbitMQPublisher = rabbitMQPublisher;
+            _hashService = hashService;
         }
 
-        [HttpPost]
+        [HttpPost("signup")]
         public async Task<IActionResult> Signup(SignupInput dto)
         {
             var user = new User()
@@ -48,18 +47,16 @@ namespace FileUpload.IdentityServer.Controllers
             {
                 if (!result.Succeeded)
                 {
-                    var errors = result.Errors.Select(x => x.Description).ToList();
 
-                    return Response<NoContent>.Fail(errors, 500);
+                    return Response<NoContent>.Fail(result.Errors.Select(x => x.Description).ToList(), 500);
                 }
                 await _userManager.AddClaimAsync(user, new Claim("role", "user"));
                 await _userManager.AddClaimAsync(user, new Claim("email", user.Email));
 
-
                 string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 string encodedConfirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 
-                string link = $"{configuration.GetSection("MVCClient").Value}/user/confirmEmail?userId={user.Id}&token={encodedConfirmationToken}";
+                string link = $"http://localhost:5003/user/confirmEmail?userId={_hashService.Encode(user.Id)}&token={encodedConfirmationToken}";
 
                 UserCreatedEvent userCreatedEvent = new()
                 {
@@ -78,16 +75,16 @@ namespace FileUpload.IdentityServer.Controllers
             return Result(data);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ValidateUserEmail([FromQuery] string userId, string token)
+        [HttpGet("validate-mail")]
+        public async Task<IActionResult> ValidateUserEmail(string userId, string token)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(_hashService.Decode(userId).ToString());
 
             async Task<Response<NoContent>> GetResult(User user)
             {
                 if (user == null)
                 {
-                    return Response<NoContent>.Fail("Böyle bir kullanıcı bulunamadı", 404);
+                    return Response<NoContent>.Fail("Geçersiz link", 404);
                 }
 
                 var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
@@ -96,9 +93,9 @@ namespace FileUpload.IdentityServer.Controllers
 
                 if (!result.Succeeded)
                 {
-                    var error = result.Errors.First().Description;
+                    var errors = result.Errors.Select(x => x.Description).ToList();
 
-                    return Response<NoContent>.Fail(error, 500);
+                    return Response<NoContent>.Fail(errors, 500);
                 }
 
                 return Response<NoContent>.Success($"{user.Email} mail adresi doğrulandı", 200);
@@ -107,14 +104,12 @@ namespace FileUpload.IdentityServer.Controllers
             var data = await GetResult(user);
 
             return Result(data);
-
-
         }
 
-        [HttpPost("{email}")]
-        public async Task<IActionResult> ResetPassword([FromRoute] string email)
+        [HttpPost("resetpassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(model.Mail);
 
             async Task<Response<NoContent>> GetResult(User user)
             {
@@ -126,7 +121,7 @@ namespace FileUpload.IdentityServer.Controllers
                 string token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 string encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-                string link = $"{configuration.GetSection("MVCClient").Value}/user/reset-passwordConfirm?userId={user.Id}&token={encodedToken}";
+                string link = $"http://localhost:5003/user/reset-passwordConfirm?userId={_hashService.Encode(user.Id)}&token={encodedToken}";
 
                 UserCreatedEvent userCreatedEvent = new()
                 {
@@ -144,16 +139,16 @@ namespace FileUpload.IdentityServer.Controllers
             return Result(data);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ResetPasswordConfirm(ResetPasswordModel model)
+        [HttpPost("resetpassword-confirm")]
+        public async Task<IActionResult> ResetPasswordConfirm(ResetPasswordConfirmModel model)
         {
-            var user = await _userManager.FindByIdAsync(model.UserId);
+            var user = await _userManager.FindByIdAsync(_hashService.Decode(model.UserId).ToString());
 
             async Task<Response<NoContent>> GetResult(User user)
             {
                 if (user == null)
                 {
-                    return Response<NoContent>.Fail("Sistemde böyle bir mail hesabı bulunamadı", 500);
+                    return Response<NoContent>.Fail("Girilen bilgiler geçersizdir.", 500);
                 }
 
                 var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));

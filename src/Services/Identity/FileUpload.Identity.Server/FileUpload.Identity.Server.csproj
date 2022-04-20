@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.4" />
 
@@ -18,5 +19,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\FileUpload.Shared\FileUpload.Shared.csproj" />
     <ProjectReference Include="..\FileUpload.Identity.Data\FileUpload.Identity.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 </Project>

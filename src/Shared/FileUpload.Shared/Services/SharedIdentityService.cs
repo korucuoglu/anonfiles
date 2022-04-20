@@ -1,9 +1,8 @@
 ﻿using FileUpload.Shared.Const;
-using FileUpload.Upload.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace FileUpload.Upload.Infrastructure.Services
+namespace FileUpload.Shared.Services
 {
     public class SharedIdentityService : ISharedIdentityService
     {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FileUpload.Shared.Dtos.Files;
 using FileUpload.Shared.Dtos.Files.Pager;
+using FileUpload.Shared.Services;
 using FileUpload.Shared.Wrappers;
 using FileUpload.Upload.Application.Helper;
 using FileUpload.Upload.Application.Interfaces.Services;

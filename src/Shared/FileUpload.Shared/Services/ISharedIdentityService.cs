@@ -1,4 +1,4 @@
-﻿namespace FileUpload.Upload.Application.Interfaces.Services
+﻿namespace FileUpload.Shared.Services
 {
     public interface ISharedIdentityService
     {
