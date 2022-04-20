@@ -108,8 +108,6 @@ namespace FileUpload.IdentityServer
             });
 
             app.UseCors("CorsPolicy");
-
-            app.UseStaticFiles();
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthentication();
