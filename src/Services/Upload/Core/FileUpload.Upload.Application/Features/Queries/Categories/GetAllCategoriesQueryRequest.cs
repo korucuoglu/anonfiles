@@ -20,11 +20,11 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories
         private readonly ISharedIdentityService _sharedIdentityService;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        public GetAllCategoriesQueryRequestHandler(ISharedIdentityService sharedIdentityService, IMapper mapper, IUnitOfWork uow)
+        public GetAllCategoriesQueryRequestHandler(ISharedIdentityService sharedIdentityService, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _sharedIdentityService = sharedIdentityService;
             _mapper = mapper;
-            _unitOfWork = uow;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Response<List<GetCategoryDto>>> Handle(GetAllCategoriesQueryRequest request, CancellationToken cancellationToken)
@@ -32,7 +32,6 @@ namespace FileUpload.Upload.Application.Features.Queries.Categories
             var data = _unitOfWork.CategoryReadRepository().Where(x => x.UserId == _sharedIdentityService.GetUserId);
 
             return Response<List<GetCategoryDto>>.Success(await _mapper.ProjectTo<GetCategoryDto>(data).ToListAsync(), 200);
-
 
         }
     }

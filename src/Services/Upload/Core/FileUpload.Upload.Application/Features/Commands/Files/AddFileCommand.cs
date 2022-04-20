@@ -32,7 +32,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
 
             if (!fileKey.IsSuccessful)
             {
-                return Response<NoContent>.Fail("Dosyanın kaydedilmesi sırasında hata meydana geldi", 500);
+                return Response<NoContent>.Fail(fileKey.Errors, 500);
             }
 
             bool result = await _unitOfWork.FileWriteRepository().
@@ -43,7 +43,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
                 return Response<NoContent>.Fail("Dosyanın kaydedilmesi sırasında hata meydana geldi", 500);
             }
 
-            return Response<NoContent>.Success($"{request.File.FileName} başarıyla kaydedildi", 200);
+            return Response<NoContent>.Success($"{request.File.FileName} başarıyla kaydedildi", 201);
         }
     }
 }

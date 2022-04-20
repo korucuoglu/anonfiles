@@ -61,7 +61,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
                 return Response<NoContent>.Fail("Silme sırasında hata meydana geldi", 500);
             }
 
-            return Response<NoContent>.Success(200);
+            return Response<NoContent>.Success(204);
         }
     }
 }

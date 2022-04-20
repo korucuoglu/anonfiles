@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Application.Features.Commands.Categories
 {
-    public class AddCategoryCommand : IRequest<Response<int>>
+    public class AddCategoryCommand : IRequest<Response<string>>
     {
         public string Title { get; set; }
     }
@@ -24,7 +24,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
         }
     }
 
-    public class AddCategoryCommandHandler : IRequestHandler<AddCategoryCommand, Response<int>>
+    public class AddCategoryCommandHandler : IRequestHandler<AddCategoryCommand, Response<string>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRedisService _redisService;
@@ -39,7 +39,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
             _hashService = hashService;
         }
 
-        public async Task<Response<int>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Response<string>> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = _mapper.Map<Category>(request);
             await _unitOfWork.CategoryWriteRepository().AddAsync(category);
@@ -47,7 +47,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
 
             if (!result)
             {
-                return Response<int>.Fail("Kayıt sırasında hata meydana geldi");
+                return Response<string>.Fail("Kayıt sırasında hata meydana geldi");
             }
 
             var dto = _mapper.Map<GetCategoryDto>(category);
@@ -56,7 +56,7 @@ namespace FileUpload.Upload.Application.Features.Commands.Categories
 
             await _redisService.SetAsync($"categories-{hashId}", dto);
 
-            return Response<int>.Success(hashId, 201);
+            return Response<string>.Success(data:hashId, 201);
 
         }
     }

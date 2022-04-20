@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Controllers
 {
-
     public class FilesController : BaseApiController
     {
         private readonly IMediator _mediator;

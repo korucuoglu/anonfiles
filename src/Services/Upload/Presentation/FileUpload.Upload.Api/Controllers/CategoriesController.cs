@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class CategoriesController : BaseApiController
     {
         private readonly IMediator _mediator;
