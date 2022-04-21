@@ -39,6 +39,7 @@ services:
     container_name: upload.api
     environment:
       - "ServiceApiSettings:IdentityBaseUri=http://identityserver.api"
+      - "MinioAccessInfo:EndPoint=http://minio:9000"
       - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
       - "MinioAccessInfo:AccessKey=minioadmin"
       - "MinioAccessInfo:SecretKey=minioadmin"
@@ -80,6 +81,7 @@ services:
     - identityserver.api
   sendmail.worker:
    container_name: sendmail.worker
+   restart: always
    environment:
     - ASPNETCORE_ENVIRONMENT=Development
     - RabbitMQ=rabbitmq

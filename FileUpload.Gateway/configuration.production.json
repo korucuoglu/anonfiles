@@ -1,5 +1,6 @@
 {
   "Routes": [
+
     {
       "DownstreamPathTemplate": "/{everything}",
       "DownstreamScheme": "http",
@@ -38,7 +39,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "minio",
-          "Port": 80
+          "Port": 9000
         }
       ],
       "UpstreamPathTemplate": "/services/minio/{everything}",
@@ -52,7 +53,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "minio",
-          "Port": 80
+          "Port": 9000
         }
       ],
       "UpstreamPathTemplate": "/services/minio",
