@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FileUpload.Upload.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220418215542_mig1")]
-    partial class mig1
+    [Migration("20220420164510_migration1")]
+    partial class migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,42 +59,42 @@ namespace FileUpload.Upload.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7825),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1511),
                             Title = "Ödevler",
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7826),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1512),
                             Title = "Tasarımlar",
                             UserId = 1
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7827),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1513),
                             Title = "Dosyalar",
                             UserId = 1
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7827),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1514),
                             Title = "Ödevler",
                             UserId = 2
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7828),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1514),
                             Title = "Tasarımlar",
                             UserId = 2
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7828),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1515),
                             Title = "Dosyalar",
                             UserId = 2
                         });
@@ -180,14 +180,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                         .HasDefaultValue(0L)
                         .HasColumnName("used_space");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("userinfo", (string)null);
 
@@ -195,16 +188,14 @@ namespace FileUpload.Upload.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7784),
-                            UsedSpace = 0L,
-                            UserId = 1
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1471),
+                            UsedSpace = 0L
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2022, 4, 18, 21, 55, 42, 46, DateTimeKind.Utc).AddTicks(7787),
-                            UsedSpace = 0L,
-                            UserId = 2
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1474),
+                            UsedSpace = 0L
                         });
                 });
 
@@ -240,14 +231,14 @@ namespace FileUpload.Upload.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "533a3048-fdf2-41e9-bedf-9911f1c3bd5a",
+                            ConcurrencyStamp = "992389cf-ce58-4ffb-ba05-406c629565ab",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "2e7b559f-b2ad-4a05-bd61-acd19d3380f3",
+                            ConcurrencyStamp = "e3e2be4d-d24b-441f-90b1-dfe09b17b279",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -324,15 +315,15 @@ namespace FileUpload.Upload.Persistence.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6e73ce00-d9d8-4586-94c8-17de34d65fad",
+                            ConcurrencyStamp = "b8e3b19e-9be7-4af2-bce1-464c0630b8d9",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGbao2uALrbyAJH4aiDRVTnXVez4750W/6dAgM8kQ6/CMD1j0HYNTI1yhOqEgSujhw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEH3gu3Mtd4IYmMSZ4PWdnuYxSSIKzSrUe3XIQVa9XusjKe2Y1sySPeqs8PRFKzHi7w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fc846c57-a2fe-4a04-be76-cc2f8a094bec",
+                            SecurityStamp = "49dc938f-6bc2-4628-ac81-5ae6aeb2287b",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
@@ -340,15 +331,15 @@ namespace FileUpload.Upload.Persistence.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b8ef2822-9f6b-4d33-a19f-94dd5de5c727",
+                            ConcurrencyStamp = "9a46065e-3d78-440d-9ece-69f40e3af9fb",
                             Email = "user@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@GMAIL.COM",
                             NormalizedUserName = "USER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAwtoeUgNhqfCcd3+C6yzQFHAAq0WvRZYFB7b3DvZLOVD/ypEeBSkOguYYJ4cA+ZNg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECqf0s7P93MHOoreXc4VXkzZh7OYQYUrWwVZsb3JmnTU34MDKkguCVXzNOF8LxB7oA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7c8339f6-ad2d-49fd-bb14-f51f17558dd3",
+                            SecurityStamp = "82461b9a-e1f5-4976-89c5-10e91360bfe3",
                             TwoFactorEnabled = false,
                             UserName = "user"
                         });
@@ -523,7 +514,7 @@ namespace FileUpload.Upload.Persistence.Migrations
                 {
                     b.HasOne("FileUpload.Upload.Persistence.Identity.User", null)
                         .WithOne("UserInfo")
-                        .HasForeignKey("FileUpload.Upload.Domain.Entities.UserInfo", "UserId")
+                        .HasForeignKey("FileUpload.Upload.Domain.Entities.UserInfo", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

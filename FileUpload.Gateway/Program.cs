@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddHealthChecks();
+
 
 builder.Services.AddAuthentication().AddJwtBearer("GatewayAuthenticationScheme", options =>
 {
@@ -24,6 +26,14 @@ builder.Configuration.AddJsonFile($"configuration.{builder.Environment.Environme
 builder.Services.AddOcelot();
 
 var app = builder.Build();
+
+app.UseHealthChecks("/healt", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
+{
+    ResponseWriter = async (context, report) =>
+    {
+        await context.Response.WriteAsync("OK");
+    }
+});
 
 // Configure the HTTP request pipeline.
 

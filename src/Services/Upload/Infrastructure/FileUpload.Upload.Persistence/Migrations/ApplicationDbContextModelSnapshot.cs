@@ -57,42 +57,42 @@ namespace FileUpload.Upload.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2022, 4, 18, 22, 7, 35, 149, DateTimeKind.Utc).AddTicks(5997),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1511),
                             Title = "Ödevler",
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2022, 4, 18, 22, 7, 35, 149, DateTimeKind.Utc).AddTicks(5998),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1512),
                             Title = "Tasarımlar",
                             UserId = 1
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2022, 4, 18, 22, 7, 35, 149, DateTimeKind.Utc).AddTicks(5999),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1513),
                             Title = "Dosyalar",
                             UserId = 1
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2022, 4, 18, 22, 7, 35, 149, DateTimeKind.Utc).AddTicks(6000),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1514),
                             Title = "Ödevler",
                             UserId = 2
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2022, 4, 18, 22, 7, 35, 149, DateTimeKind.Utc).AddTicks(6001),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1514),
                             Title = "Tasarımlar",
                             UserId = 2
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2022, 4, 18, 22, 7, 35, 149, DateTimeKind.Utc).AddTicks(6002),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1515),
                             Title = "Dosyalar",
                             UserId = 2
                         });
@@ -186,13 +186,13 @@ namespace FileUpload.Upload.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2022, 4, 18, 22, 7, 35, 149, DateTimeKind.Utc).AddTicks(5956),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1471),
                             UsedSpace = 0L
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2022, 4, 18, 22, 7, 35, 149, DateTimeKind.Utc).AddTicks(5959),
+                            CreatedDate = new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1474),
                             UsedSpace = 0L
                         });
                 });
@@ -229,14 +229,14 @@ namespace FileUpload.Upload.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "829ea532-61f5-4228-ac74-6f0fc7c38e9d",
+                            ConcurrencyStamp = "992389cf-ce58-4ffb-ba05-406c629565ab",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "693f68bb-920b-4d56-afba-a66effceec7c",
+                            ConcurrencyStamp = "e3e2be4d-d24b-441f-90b1-dfe09b17b279",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -313,15 +313,15 @@ namespace FileUpload.Upload.Persistence.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9c80cec6-8c94-478c-84df-f3e69dec961b",
+                            ConcurrencyStamp = "b8e3b19e-9be7-4af2-bce1-464c0630b8d9",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAtsoGNyzgHE/Q+//B2ocnZBOw3K3P/AdaECxg9N2SOAOiYEXs+gbilEC8dyW0K8gQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEH3gu3Mtd4IYmMSZ4PWdnuYxSSIKzSrUe3XIQVa9XusjKe2Y1sySPeqs8PRFKzHi7w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ff6b1d46-33e4-468b-878b-36d6bce0c1f4",
+                            SecurityStamp = "49dc938f-6bc2-4628-ac81-5ae6aeb2287b",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
@@ -329,15 +329,15 @@ namespace FileUpload.Upload.Persistence.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "78ba930d-c9ed-4bb5-aa64-e1a060bb7dc9",
+                            ConcurrencyStamp = "9a46065e-3d78-440d-9ece-69f40e3af9fb",
                             Email = "user@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@GMAIL.COM",
                             NormalizedUserName = "USER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEM6GVAXFPvCvP3EHa0NmPAu48YAXxdfrXIlxTYkDdmpVUSXdtYnSpOFGfTYzOYT94w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECqf0s7P93MHOoreXc4VXkzZh7OYQYUrWwVZsb3JmnTU34MDKkguCVXzNOF8LxB7oA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e049d158-17b9-48a1-8507-8a44b44b72c1",
+                            SecurityStamp = "82461b9a-e1f5-4976-89c5-10e91360bfe3",
                             TwoFactorEnabled = false,
                             UserName = "user"
                         });

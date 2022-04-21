@@ -3,7 +3,7 @@ services:
   postgresdb:
     image: postgres
   minio: 
-    image: minio/minio
+    image: minio/minio:RELEASE.2022-02-07T08-17-33Z
   redisdb: 
     image: redis 
   rabbitmq:
@@ -12,12 +12,12 @@ services:
     image: upload.api_image
     build:
       context: .
-      dockerfile: /src/Services/Upload/Presentation/FileUpload.Upload.Api/Dockerfile
+      dockerfile: src/Services/Upload/Presentation/FileUpload.Upload.Api/Dockerfile
   identityserver.api:
     image: identityserver.api_image
     build:
       context: .
-      dockerfile: /src/Services/Identity/FileUpload.Identity.Server/Dockerfile
+      dockerfile: src/Services/Identity/FileUpload.Identity.Server/Dockerfile
   aspnetcoremvc.web:
     image: aspnetcoremvc.web_image
     build:

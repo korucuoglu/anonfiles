@@ -1,6 +1,20 @@
 {
   "Routes": [
     {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identityserver.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/services/auth/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "UpstreamScheme": "http"
+    },
+
+    {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -30,7 +44,23 @@
       "UpstreamPathTemplate": "/services/minio/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "UpstreamScheme": "http"
+    },
+
+    {
+      "DownstreamPathTemplate": "/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "minio",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/services/minio",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Head" ],
+      "UpstreamScheme": "http"
     }
+
+
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://gateway.api"

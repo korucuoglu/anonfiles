@@ -21,8 +21,8 @@ services:
       - "9000:9000"
       - "9001:9001"
     volumes:
-      - minio_volume:/minio/data:/data  
-      - minio_volume:/minio/config:/root/.minio  
+      - ./minio/data/:/data
+      - ./minio/conf/:/root/.minio 
     command: server --address ":9000" --console-address ":9001" /data
   redisdb:
     container_name: redisdb
@@ -39,11 +39,9 @@ services:
     container_name: upload.api
     environment:
       - "ServiceApiSettings:IdentityBaseUri=http://identityserver.api"
-      - "ServiceApiSettings:MVCClient=http://aspnetcoremvc.web"
       - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
       - "MinioAccessInfo:AccessKey=minioadmin"
       - "MinioAccessInfo:SecretKey=minioadmin"
-      - "MinioAccessInfo:EndPoint=http://minio:9000"
       - RedisSettings:Port=6379
       - RedisSettings:Host=redisdb
       - ASPNETCORE_ENVIRONMENT=Development
@@ -56,7 +54,6 @@ services:
    container_name: identityserver.api
    restart: on-failure
    environment:
-     - "MVCClient=http://localhost:5003"
      - "ConnectionStrings:DefaultConnection=User ID=sa; Password=AbcUser1234*; Server=postgresdb; Port=5432;Database=anonfiles;Integrated Security=true;Pooling=true"
      - ConnectionStrings:RabbitMQ=rabbitmq
      - ASPNETCORE_ENVIRONMENT=Development
