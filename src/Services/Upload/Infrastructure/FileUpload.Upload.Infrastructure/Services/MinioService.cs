@@ -117,7 +117,7 @@ namespace FileUpload.Upload.Infrastructure.Services
                     Protocol = Protocol.HTTP,
                     Expires = DateTime.Now.AddMinutes(30)
                 };
-                var data = client.GetPreSignedURL(request);
+                var data = client.GetPreSignedURL(request).Replace("http://minio:9000", "http://localhost:5000/services/minio");
 
                 return Response<NoContent>.Success(message: data, 200);
             }

@@ -1,10 +1,7 @@
-﻿CREATE OR REPLACE PROCEDURE public.add_file
-(IN filename text, IN filesize bigint, IN filekey text, IN fileuser_id integer, 
-IN categoryids integer[] DEFAULT '{}'::integer[])
+﻿CREATE OR REPLACE PROCEDURE public.add_file(IN filename text, IN filesize bigint, IN filekey text, IN fileuser_id integer, IN categoryids integer[] DEFAULT '{}'::integer[], INOUT file_id integer DEFAULT NULL::integer)
  LANGUAGE plpgsql
 AS $procedure$
 
-DECLARE file_id int;
 DECLARE _categoryid int;
 	BEGIN
 		
@@ -25,7 +22,3 @@ DECLARE _categoryid int;
 	END;
 $procedure$
 ;
-
-
-CALL add_file('1.txt', 50, '11', 1, '{1,4}');
-			

@@ -38,6 +38,14 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
 
         public async Task<Response<NoContent>> Handle(DeleteFileCommand request, CancellationToken cancellationToken)
         {
+            bool result = await _unitOfWork.FileWriteRepository().
+                DeleteFileWithSp(_hashService.Decode(request.FileId), _sharedIdentityService.GetUserId);
+
+            if (!result)
+            {
+                return Response<NoContent>.Fail("Silme sırasında hata meydana geldi", 500);
+            }
+            
             var fileKey = await _unitOfWork.FileReadRepository().
                 GetFileKey(_hashService.Decode(request.FileId), _sharedIdentityService.GetUserId);
 
@@ -46,22 +54,8 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
                 return Response<NoContent>.Fail("Böyle bir dosya bulunamadı", 500);
             }
 
-            var minioResult = await _minioService.Remove(fileKey);
+            return await _minioService.Remove(fileKey);
 
-            if (!minioResult.IsSuccessful)
-            {
-                return minioResult;
-            }
-
-            bool result = await _unitOfWork.FileWriteRepository().
-                DeleteFileWithSp(_hashService.Decode(request.FileId), _sharedIdentityService.GetUserId);
-
-            if (!result)
-            {
-                return Response<NoContent>.Fail("Silme sırasında hata meydana geldi", 500);
-            }
-
-            return Response<NoContent>.Success(204);
         }
     }
 }

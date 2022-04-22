@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FileUpload.Upload.Application.Features.Commands.Files
 {
-    public class AddFileCommand : IRequest<Response<NoContent>>
+    public class AddFileCommand : IRequest<Response<string>>
     {
         public IFormFile File { get; set; }
     }
@@ -23,37 +23,39 @@ namespace FileUpload.Upload.Application.Features.Commands.Files
         }
     }
 
-    public class AddFileCommandHandler : IRequestHandler<AddFileCommand, Response<NoContent>>
+    public class AddFileCommandHandler : IRequestHandler<AddFileCommand, Response<string>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHashService _hashService;
         private readonly IMinioService _minioService;
         private readonly ISharedIdentityService _sharedIdentityService;
 
-        public AddFileCommandHandler(IUnitOfWork unitOfWork, ISharedIdentityService sharedIdentityService, IMinioService minioService)
+        public AddFileCommandHandler(IUnitOfWork unitOfWork, ISharedIdentityService sharedIdentityService, IMinioService minioService, IHashService hashService)
         {
             _unitOfWork = unitOfWork;
             _sharedIdentityService = sharedIdentityService;
             _minioService = minioService;
+            _hashService = hashService;
         }
 
-        public async Task<Response<NoContent>> Handle(AddFileCommand request, CancellationToken cancellationToken)
+        public async Task<Response<string>> Handle(AddFileCommand request, CancellationToken cancellationToken)
         {
             var fileKey = await _minioService.Upload(request.File);
 
             if (!fileKey.IsSuccessful)
             {
-                return Response<NoContent>.Fail(fileKey.Errors, 500);
+                return fileKey;
             }
 
-            bool result = await _unitOfWork.FileWriteRepository().
+            int fileId = await _unitOfWork.FileWriteRepository().
                 AddFileWithSp(request.File.FileName, request.File.Length, fileKey.Value, _sharedIdentityService.GetUserId);
 
-            if (!result)
+            if (fileId <= 0)
             {
-                return Response<NoContent>.Fail("Dosyanın kaydedilmesi sırasında hata meydana geldi", 500);
+                return Response<string>.Fail("Dosyanın kaydedilmesi sırasında hata meydana geldi", 500);
             }
 
-            return Response<NoContent>.Success($"{request.File.FileName} başarıyla kaydedildi", 201);
+            return Response<string>.Success(data: $"{request.File.FileName} başarıyla kaydedildi", 201);
         }
     }
 }

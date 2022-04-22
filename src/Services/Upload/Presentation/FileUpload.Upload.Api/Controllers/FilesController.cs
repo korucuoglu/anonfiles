@@ -24,7 +24,7 @@ namespace FileUpload.Upload.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload([FromForm] IFormFile[] files)
         {
-            List<Response<NoContent>> result = new();
+            List<Response<string>> result = new();
 
             foreach (var file in files)
             {

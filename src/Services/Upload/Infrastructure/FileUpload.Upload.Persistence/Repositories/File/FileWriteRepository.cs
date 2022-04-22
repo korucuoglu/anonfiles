@@ -15,18 +15,22 @@ namespace FileUpload.Upload.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<bool> AddFileWithSp(string fileName, long size, string fileKey, int userId)
+        public async Task<int> AddFileWithSp(string fileName, long size, string fileKey, int userId)
         {
+
             try
             {
-                await _context.Database.ExecuteSqlRawAsync("call add_file ({0}, {1}, {2}, {3})",
-                fileName, size, fileKey, userId);
-                return true;
+
+                var data = await _context.Database.ExecuteSqlRawAsync("call add_file ({0}, {1}, {2}, {3}, {4})",
+                fileName, size, fileKey, userId, null);
+
+                return 1;
+
             }
 
             catch
             {
-                return false;
+                return 0;
             }
         }
 

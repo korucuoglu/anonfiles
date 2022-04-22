@@ -35,9 +35,8 @@ namespace FileUpload.Upload.Application.Features.Queries.Files
                 return Response<NoContent>.Fail("Böyle bir veri bulunamadı", 500);
             }
 
-            var link = await _minioService.Download(fileKey);
+            return await _minioService.Download(fileKey);
 
-            return Response<NoContent>.Success(message: link.Message, statusCode: 200);
         }
 
 
