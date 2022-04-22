@@ -109,10 +109,8 @@ services:
    environment:
     - ASPNETCORE_ENVIRONMENT=Development
     - RabbitMQ=rabbitmq
-    - MailSettings:MailAdress=***REMOVED***
-    - MailSettings:MailPassword=***REMOVED***
-    - MailSettings:Host=smtp.gmail.com
-    - MailSettings:Port=587
+    - MailSettings:MailAdress=****
+    - MailSettings:MailPassword=****
    depends_on:
     - rabbitmq
 volumes:
