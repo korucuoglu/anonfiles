@@ -5,7 +5,7 @@ AS $procedure$
 	DECLARE usedspace int;
 	BEGIN
 		
-		SELECT "size" INTO usedspace  FROM files WHERE files.id = fileid;
+		SELECT size INTO usedspace  FROM files WHERE files.id = fileid;
 	
 		DELETE FROM files WHERE files.id = fileid AND files.user_id = userid;
 			

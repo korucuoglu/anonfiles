@@ -5,7 +5,7 @@ AS $procedure$
 DECLARE _categoryid int;
 	BEGIN
 		
-		INSERT INTO files (file_name, "size", file_key, user_id) 
+		INSERT INTO files (file_name, size, file_key, user_id) 
 			values(filename, filesize, filekey, fileuser_id) RETURNING id INTO file_id;
 			
 		UPDATE userinfo SET used_space=used_space+filesize WHERE id = fileuser_id;

@@ -1,17 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using System;
 
 #nullable disable
 
 namespace FileUpload.Upload.Persistence.Migrations
 {
-    public partial class migration1 : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var sql = @"CREATE OR REPLACE PROCEDURE public.add_file (IN filename text, IN filesize bigint, IN filekey text, IN fileuser_id integer, IN categoryids integer[] DEFAULT '{}'::integer[]) LANGUAGE plpgsql AS $procedure$ DECLARE file_id int; DECLARE _categoryid int; BEGIN INSERT INTO files (file_name, size, file_key, user_id) values(filename, filesize, filekey, fileuser_id) RETURNING id INTO file_id; UPDATE userinfo SET used_space=used_space+filesize WHERE id = fileuser_id; FOR _categoryid IN SELECT unnest(categoryids) LOOP IF EXISTS (SELECT 1 FROM categories c WHERE c.id = _categoryid AND user_id = fileuser_id) THEN INSERT INTO filecategory (category_id, file_id) VALUES (_categoryid, file_id); ELSE CONTINUE; END IF; END LOOP; COMMIT; END; $procedure$;";
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -253,8 +251,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "992389cf-ce58-4ffb-ba05-406c629565ab", "Admin", "ADMIN" },
-                    { 2, "e3e2be4d-d24b-441f-90b1-dfe09b17b279", "User", "USER" }
+                    { 1, "32bc2039-56dc-418a-959c-877f8aaf65f5", "Admin", "ADMIN" },
+                    { 2, "b0a6e693-f3e5-4666-ae5c-e3306bfd30c2", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -262,8 +260,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { 1, 0, "b8e3b19e-9be7-4af2-bce1-464c0630b8d9", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEH3gu3Mtd4IYmMSZ4PWdnuYxSSIKzSrUe3XIQVa9XusjKe2Y1sySPeqs8PRFKzHi7w==", null, false, "49dc938f-6bc2-4628-ac81-5ae6aeb2287b", false, "admin" },
-                    { 2, 0, "9a46065e-3d78-440d-9ece-69f40e3af9fb", "user@gmail.com", true, false, null, "USER@GMAIL.COM", "USER", "AQAAAAEAACcQAAAAECqf0s7P93MHOoreXc4VXkzZh7OYQYUrWwVZsb3JmnTU34MDKkguCVXzNOF8LxB7oA==", null, false, "82461b9a-e1f5-4976-89c5-10e91360bfe3", false, "user" }
+                    { 1, 0, "4fbb71bf-8f79-421f-83f7-5cc1ac21ad24", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEMUbnvDYl5IgxXItfcTW+LxFBhTyyLYkkOP/UqBtyAubmdPFzxUkGwnVkxa4R0ST4A==", null, false, "3095adb9-6eff-4462-a724-271cf15268d9", false, "admin" },
+                    { 2, 0, "ff04aa2e-b9d6-4c73-b4e1-2dcd9faa8963", "user@gmail.com", true, false, null, "USER@GMAIL.COM", "USER", "AQAAAAEAACcQAAAAEJGam2RiPWSbU7FtXx0wkDaY9PuoKAIubIQuo9NFYNv1nNC5XfhoyKSh58ihgGZvyQ==", null, false, "fdb540d3-5e19-414c-a9b4-cd86b479cec3", false, "user" }
                 });
 
             migrationBuilder.InsertData(
@@ -280,12 +278,12 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "id", "created_date", "title", "user_id" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1511), "Ödevler", 1 },
-                    { 2, new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1512), "Tasarımlar", 1 },
-                    { 3, new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1513), "Dosyalar", 1 },
-                    { 4, new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1514), "Ödevler", 2 },
-                    { 5, new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1514), "Tasarımlar", 2 },
-                    { 6, new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1515), "Dosyalar", 2 }
+                    { 1, new DateTime(2022, 4, 22, 18, 1, 22, 451, DateTimeKind.Utc).AddTicks(5729), "Ödevler", 1 },
+                    { 2, new DateTime(2022, 4, 22, 18, 1, 22, 451, DateTimeKind.Utc).AddTicks(5734), "Tasarımlar", 1 },
+                    { 3, new DateTime(2022, 4, 22, 18, 1, 22, 451, DateTimeKind.Utc).AddTicks(5735), "Dosyalar", 1 },
+                    { 4, new DateTime(2022, 4, 22, 18, 1, 22, 451, DateTimeKind.Utc).AddTicks(5735), "Ödevler", 2 },
+                    { 5, new DateTime(2022, 4, 22, 18, 1, 22, 451, DateTimeKind.Utc).AddTicks(5738), "Tasarımlar", 2 },
+                    { 6, new DateTime(2022, 4, 22, 18, 1, 22, 451, DateTimeKind.Utc).AddTicks(5738), "Dosyalar", 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -293,8 +291,8 @@ namespace FileUpload.Upload.Persistence.Migrations
                 columns: new[] { "id", "created_date" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1471) },
-                    { 2, new DateTime(2022, 4, 20, 16, 45, 10, 39, DateTimeKind.Utc).AddTicks(1474) }
+                    { 1, new DateTime(2022, 4, 22, 18, 1, 22, 451, DateTimeKind.Utc).AddTicks(5690) },
+                    { 2, new DateTime(2022, 4, 22, 18, 1, 22, 451, DateTimeKind.Utc).AddTicks(5693) }
                 });
 
             migrationBuilder.CreateIndex(
